@@ -148,7 +148,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
       </Link>
 
       {/* Vendor header */}
-      <div className="glass-card p-5 flex items-start gap-4">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-5 flex items-start gap-4">
         {cover ? (
           <Image
             src={cover.url}
@@ -184,7 +184,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
       </div>
 
       {/* Status timeline */}
-      <div className="glass-card p-4">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-4">
         <div className="flex items-center gap-0">
           {TIMELINE_STEPS.map((step, index) => {
             const isActive = index === activeStep;
@@ -228,7 +228,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
       {/* Two-column grid */}
       <div className="grid sm:grid-cols-2 gap-4">
         {/* Left: Your Request */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
           <h3 className="text-white font-semibold">Your Request</h3>
           <div className="space-y-3 text-sm">
             {quote.event?.title && <InfoRow label="Event" value={quote.event.title} />}
@@ -271,7 +271,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
         </div>
 
         {/* Right: Vendor Response */}
-        <div className="glass-card p-5 space-y-4">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
           <h3 className="text-white font-semibold">Vendor Response</h3>
 
           {/* Converted */}
@@ -374,7 +374,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
 
       {/* Action buttons (only when status=responded) */}
       {canAct && (
-        <div className="glass-card p-5 space-y-3">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-3">
           {error && (
             <div className="flex items-center gap-2 text-red-400 text-sm">
               <AlertCircle className="w-4 h-4" />

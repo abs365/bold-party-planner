@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X, Check, Loader2 } from "lucide-react";
@@ -107,7 +107,7 @@ export function AvailabilityCalendar({ vendorId }: { vendorId?: string }) {
   const monthName = new Date(year, month - 1).toLocaleString("en-GB", { month: "long", year: "numeric" });
 
   return (
-    <div className="glass-card p-5">
+    <div className="bg-white/4 border border-white/6 rounded-xl p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-white/10 text-white/60 hover:text-white"><ChevronLeft className="w-4 h-4" /></button>
@@ -167,7 +167,7 @@ export function AvailabilityCalendar({ vendorId }: { vendorId?: string }) {
       {/* Block reason modal */}
       {selectedDate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-          <div className="glass-card p-5 w-full max-w-sm">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5 w-full max-w-sm">
             <h4 className="text-white font-semibold mb-3">Block {selectedDate}?</h4>
             <input
               className="input-field mb-3"

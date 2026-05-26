@@ -20,7 +20,7 @@ const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
   classic: {
     bg: "bg-gradient-to-br from-[#0a0a0f] via-[#0f0f1e] to-[#0a0a0f]",
     accent: "gradient-brand",
-    cardBg: "glass-card",
+    cardBg: "bg-white/4 border rounded-2xl",
     border: "border-white/10",
     headingClass: "gradient-brand-text",
     badge: "bg-brand-500/15 text-brand-300 border-brand-500/20",
@@ -28,7 +28,7 @@ const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
   elegant: {
     bg: "bg-gradient-to-br from-[#0f0a14] via-[#150f20] to-[#0f0a14]",
     accent: "bg-gradient-to-r from-purple-600 to-violet-600",
-    cardBg: "glass-card",
+    cardBg: "bg-white/4 border rounded-2xl",
     border: "border-purple-500/15",
     headingClass: "bg-gradient-to-r from-purple-300 to-violet-300 bg-clip-text text-transparent",
     badge: "bg-purple-500/15 text-purple-300 border-purple-500/20",
@@ -36,7 +36,7 @@ const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
   playful: {
     bg: "bg-gradient-to-br from-[#0a0f14] via-[#0f140a] to-[#14080f]",
     accent: "bg-gradient-to-r from-pink-500 to-orange-500",
-    cardBg: "glass-card",
+    cardBg: "bg-white/4 border rounded-2xl",
     border: "border-pink-500/15",
     headingClass: "bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent",
     badge: "bg-pink-500/15 text-pink-300 border-pink-500/20",
@@ -44,7 +44,7 @@ const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
   minimal: {
     bg: "bg-[#0d0d0d]",
     accent: "bg-white",
-    cardBg: "glass-card",
+    cardBg: "bg-white/4 border rounded-2xl",
     border: "border-white/8",
     headingClass: "text-white",
     badge: "bg-white/10 text-slate-300 border-white/15",
@@ -52,7 +52,7 @@ const TEMPLATE_THEMES: Record<string, TemplateTheme> = {
   luxury: {
     bg: "bg-gradient-to-br from-[#0a0800] via-[#120f00] to-[#0a0800]",
     accent: "bg-gradient-to-r from-gold-500 to-gold-400",
-    cardBg: "glass-card",
+    cardBg: "bg-white/4 border rounded-2xl",
     border: "border-gold-500/20",
     headingClass: "gradient-gold-text",
     badge: "bg-gold-500/15 text-gold-400 border-gold-500/20",
@@ -137,7 +137,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
   if (step === "thanks") {
     return (
       <div className={cn("min-h-screen flex items-center justify-center p-4", theme.bg)}>
-        <div className="max-w-md w-full glass-card p-10 text-center animate-fade-in-up">
+        <div className="max-w-md w-full bg-white/4 border border-white/8 rounded-2xl p-10 text-center animate-fade-in-up">
           <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5",
             status === "accepted" ? "bg-emerald-500/20" : status === "declined" ? "bg-red-500/20" : "bg-blue-500/20"
           )}>
@@ -176,7 +176,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
       <div className="max-w-xl mx-auto space-y-5">
 
         {/* Cover / Hero */}
-        <div className={cn("glass-card overflow-hidden animate-fade-in-up", theme.border)}>
+        <div className={cn("bg-white/4 border overflow-hidden rounded-2xl animate-fade-in-up", theme.border)}>
           {invitation.cover_image_url ? (
             <div className="relative h-56 w-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -244,7 +244,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
 
         {/* Countdown */}
         {event?.date && new Date(event.date) > new Date() && (
-          <div className="glass-card p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+          <div className="bg-white/4 border border-white/8 rounded-2xl p-5 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
             <p className="text-xs text-slate-500 text-center mb-3 uppercase tracking-wider">Event Countdown</p>
             <div className="flex justify-center gap-6">
               <CountdownUnit value={countdown.days}    label="Days" />
@@ -257,7 +257,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
 
         {/* RSVP Section */}
         {step === "view" && (
-          <div className="glass-card p-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+          <div className="bg-white/4 border border-white/8 rounded-2xl p-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             <h2 className="font-bold text-white mb-4 text-center">Will you be joining us?</h2>
             <div className="grid grid-cols-3 gap-3 mb-5">
               {(["accepted", "tentative", "declined"] as const).map((s) => (
@@ -284,7 +284,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
         )}
 
         {step === "form" && (
-          <div className="glass-card p-6 animate-fade-in-up">
+          <div className="bg-white/4 border border-white/8 rounded-2xl p-6 animate-fade-in-up">
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-bold text-white">Complete your RSVP</h2>
               <button onClick={() => setStep("view")} className="text-xs text-slate-500 hover:text-white transition-colors">

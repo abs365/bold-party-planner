@@ -113,7 +113,7 @@ export function BookingRequestForm({
         {/* Form */}
         <div className="md:col-span-3 space-y-6">
           {/* Vendor Card */}
-          <div className="glass-card p-5 flex items-center gap-4">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5 flex items-center gap-4">
             {cover ? (
               <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
                 <Image src={cover.url} alt={vendor.business_name} fill className="object-cover" sizes="64px" />
@@ -134,7 +134,7 @@ export function BookingRequestForm({
 
           {/* Select Package */}
           {vendor.packages.length > 0 && (
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <label className="block text-sm font-semibold text-white mb-3">Select Package</label>
               <div className="space-y-3">
                 {vendor.packages.map((p) => (
@@ -160,7 +160,7 @@ export function BookingRequestForm({
           )}
 
           {/* Select Event */}
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <label className="block text-sm font-semibold text-white mb-3">
               <Calendar size={14} className="inline mr-1.5 text-brand-400" />Select Event *
             </label>
@@ -195,7 +195,7 @@ export function BookingRequestForm({
           </div>
 
           {/* Notes */}
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <label className="block text-sm font-semibold text-white mb-2">
               <FileText size={14} className="inline mr-1.5 text-brand-400" />Message to Vendor
             </label>
@@ -211,7 +211,7 @@ export function BookingRequestForm({
 
         {/* Summary */}
         <div className="md:col-span-2">
-          <div className="glass-card p-5 sticky top-24 space-y-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5 sticky top-24 space-y-5">
             <h3 className="font-bold text-white flex items-center gap-2">
               <CreditCard size={16} className="text-brand-400" />
               Booking Summary
@@ -252,7 +252,7 @@ export function BookingRequestForm({
             )}
 
             {event && (
-              <div className="glass p-3 rounded-xl text-xs text-slate-400 space-y-1.5">
+              <div className="bg-white/4 border border-white/6 p-3 rounded-xl text-xs text-slate-400 space-y-1.5">
                 <div className="flex items-center gap-1.5"><Calendar size={12} />{formatDate(event.date)}</div>
                 <div className="flex items-center gap-1.5"><MapPin size={12} />{event.city}</div>
                 <div className="flex items-center gap-1.5"><Users size={12} />{event.guest_count} guests</div>

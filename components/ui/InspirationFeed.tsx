@@ -101,12 +101,12 @@ export function InspirationFeed({ vendors }: InspirationFeedProps) {
         <div className="flex items-center justify-between mb-8">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles size={16} className="text-brand-400" />
-              <span className="text-brand-400 text-sm font-semibold uppercase tracking-widest">From Our Vendors</span>
+              <Sparkles size={15} className="text-gray-400" />
+              <span className="text-gray-400 text-sm font-medium">From Our Vendors</span>
             </div>
-            <h2 className="text-3xl font-extrabold text-white">Real Event Moments</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Real Event Moments</h2>
           </div>
-          <Link href="/browse" className="btn-secondary text-sm py-2 px-4 hidden sm:flex">
+          <Link href="/browse" className="btn-secondary-light text-sm py-2 px-4 hidden sm:flex">
             Browse All Vendors <ArrowRight size={14} />
           </Link>
         </div>
@@ -116,11 +116,11 @@ export function InspirationFeed({ vendors }: InspirationFeedProps) {
           {allTiles.map((tile) => (
             <div
               key={tile.id}
-              className="break-inside-avoid group relative rounded-2xl overflow-hidden border border-white/8 hover:border-brand-500/30 transition-all duration-300 cursor-pointer"
+              className="break-inside-avoid group relative rounded-2xl overflow-hidden border border-gray-200 hover:border-brand-300 transition-all duration-300 cursor-pointer"
             >
               {tile.type === "vendor" ? (
                 <Link href={`/vendors/${tile.vendorId}`} className="block">
-                  <div className="relative overflow-hidden bg-white/5">
+                  <div className="relative overflow-hidden bg-gray-100">
                     <Image
                       src={tile.url}
                       alt={tile.caption}
@@ -193,7 +193,7 @@ export function InspirationFeed({ vendors }: InspirationFeedProps) {
         </div>
 
         <div className="text-center mt-10">
-          <Link href="/browse" className="btn-secondary">
+          <Link href="/browse" className="btn-secondary-light">
             Discover More Vendors
             <ArrowRight size={15} />
           </Link>

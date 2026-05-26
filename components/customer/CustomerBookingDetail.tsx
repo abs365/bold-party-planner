@@ -103,7 +103,7 @@ export function CustomerBookingDetail({
       </Link>
 
       {/* Vendor Header */}
-      <div className="glass-card p-6">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6">
         <div className="flex items-start gap-5">
           {vendorMedia ? (
             <div className="relative w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0">
@@ -137,7 +137,7 @@ export function CustomerBookingDetail({
 
       {/* Alerts */}
       {canPayDeposit && (
-        <div className="glass-card p-5 border border-amber-500/30">
+        <div className="bg-white/4 border border-amber-500/30 rounded-xl p-5">
           <div className="flex items-start gap-3">
             <AlertTriangle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
             <div>
@@ -149,7 +149,7 @@ export function CustomerBookingDetail({
       )}
 
       {status === "rejected" ? (
-        <div className="glass-card p-5 border border-red-500/30 flex items-center gap-3">
+        <div className="bg-white/4 border border-red-500/30 rounded-xl p-5 flex items-center gap-3">
           <XCircle size={18} className="text-red-400 flex-shrink-0" />
           <div>
             <p className="text-sm font-semibold text-white">Booking was declined</p>
@@ -163,9 +163,9 @@ export function CustomerBookingDetail({
 
       <div className="grid md:grid-cols-2 gap-5">
         {/* Event Details */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Calendar size={16} className="text-brand-400" />Event
+            <Calendar size={16} className="text-slate-400" />Event
           </h3>
           <dl className="space-y-2.5 text-sm">
             <div className="flex justify-between">
@@ -197,9 +197,9 @@ export function CustomerBookingDetail({
         </div>
 
         {/* Payment Summary */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <CreditCard size={16} className="text-brand-400" />Payment
+            <CreditCard size={16} className="text-slate-400" />Payment
           </h3>
           <dl className="space-y-2.5 text-sm mb-5">
             {pkg && (
@@ -260,9 +260,9 @@ export function CustomerBookingDetail({
 
       {/* Payment History */}
       {payments.length > 0 && (
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <FileText size={16} className="text-brand-400" />Payment History
+            <FileText size={16} className="text-slate-400" />Payment History
           </h3>
           <div className="space-y-2">
             {payments.map((p) => (
@@ -283,9 +283,9 @@ export function CustomerBookingDetail({
 
       {/* Package Includes */}
       {Array.isArray(pkg?.includes) && (pkg.includes as unknown[]).length > 0 && (
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Package size={16} className="text-brand-400" />Package Includes
+            <Package size={16} className="text-slate-400" />Package Includes
           </h3>
           <ul className="space-y-2">
             {(pkg.includes as string[]).map((item, i) => (
@@ -300,9 +300,9 @@ export function CustomerBookingDetail({
 
       {/* Review Section */}
       {isCompleted && (
-        <div className="glass-card p-6">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-6">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Star size={16} className="text-brand-400" />
+            <Star size={16} className="text-slate-400" />
             {review ? "Your Review" : "Leave a Review"}
           </h3>
 

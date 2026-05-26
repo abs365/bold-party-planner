@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+﻿import { cn } from "@/lib/utils";
 
 export function LoadingSpinner({ size = "md", className }: { size?: "sm" | "md" | "lg"; className?: string }) {
   const sizes = { sm: "h-4 w-4 border-2", md: "h-8 w-8 border-2", lg: "h-12 w-12 border-3" };
@@ -26,7 +26,7 @@ export function PageLoader() {
 
 export function SkeletonCard() {
   return (
-    <div className="glass-card p-4 animate-pulse">
+    <div className="bg-white/4 border border-white/6 rounded-xl p-4 animate-pulse">
       <div className="h-48 bg-white/5 rounded-lg mb-4" />
       <div className="h-4 bg-white/5 rounded mb-2 w-3/4" />
       <div className="h-3 bg-white/5 rounded mb-4 w-1/2" />

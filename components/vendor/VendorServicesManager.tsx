@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Plus, Trash2, Edit2, X, Loader2, Check, Package, Star } from "lucide-react";
@@ -138,7 +138,7 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
 
       {/* Form */}
       {showForm && (
-        <div className="glass-card p-6 border border-brand-500/20">
+        <div className="bg-white/4 rounded-xl p-6 border border-brand-500/20">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-bold text-white flex items-center gap-2">
               <Package size={16} className="text-brand-400" />
@@ -242,7 +242,7 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
       {/* Package List */}
       <div className="space-y-4">
         {packages.length === 0 && !showForm ? (
-          <div className="glass-card p-10 text-center">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-10 text-center">
             <Package size={40} className="mx-auto mb-3 text-slate-700" />
             <h3 className="font-bold text-white mb-2">No packages yet</h3>
             <p className="text-slate-400 text-sm mb-5">Customers need clear pricing to make a booking decision. Add your first package now.</p>
@@ -254,7 +254,7 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
         ) : (
           packages.map((pkg) => (
             <div key={pkg.id} className={cn(
-              "glass-card p-5 relative",
+              "bg-white/4 border border-white/6 rounded-xl p-5 relative",
               pkg.is_popular && "border-amber-500/30"
             )}>
               {pkg.is_popular && (

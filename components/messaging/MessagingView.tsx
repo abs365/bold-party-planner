@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -75,7 +75,7 @@ export function MessagingView({ threads: rawThreads, currentUserId, initialThrea
 
   if (threads.length === 0) {
     return (
-      <div className="glass-card p-16 text-center">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
         <MessageSquare className="w-12 h-12 text-white/20 mx-auto mb-3" />
         <h3 className="text-white/60 text-lg">No messages yet</h3>
         <p className="text-white/40 text-sm mt-1">
@@ -90,7 +90,7 @@ export function MessagingView({ threads: rawThreads, currentUserId, initialThrea
   const totalUnread = threads.reduce((sum, t) => sum + getUnreadCount(t), 0);
 
   return (
-    <div className="glass-card overflow-hidden" style={{ height: "600px" }}>
+    <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden" style={{ height: "600px" }}>
       <div className="flex h-full">
         {/* Thread list */}
         <div className={cn(

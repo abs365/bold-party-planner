@@ -75,7 +75,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
           { icon: <Shield size={18} className="text-amber-400" />, label: "Pending Review", value: String(stats?.pending_vendors ?? 0) },
           { icon: <TrendingUp size={18} className="text-blue-400" />, label: "Platform Revenue", value: formatCurrency(Number(stats?.total_revenue ?? 0)) },
         ].map((stat) => (
-          <div key={stat.label} className="glass-card p-4">
+          <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-1">{stat.icon}<span className="text-xs text-slate-400">{stat.label}</span></div>
             <div className="text-xl font-bold text-white">{stat.value}</div>
           </div>
@@ -83,7 +83,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
       </div>
 
       {/* Filters */}
-      <div className="glass-card p-4 flex flex-col sm:flex-row gap-3">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
           <input
@@ -113,7 +113,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
 
       {/* Table */}
       {vendors.length === 0 ? (
-        <div className="glass-card p-12 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
           <Building2 size={36} className="text-slate-600 mx-auto mb-3" />
           <p className="text-slate-400">No vendors found</p>
         </div>
@@ -129,7 +129,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
             const status = String(vendor.status);
 
             return (
-              <div key={vendorId} className="glass-card p-5">
+              <div key={vendorId} className="bg-white/4 border border-white/6 rounded-xl p-5">
                 <div className="flex items-start gap-4">
                   {/* Media */}
                   <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
@@ -241,7 +241,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
 
       {pending && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center pointer-events-none z-50">
-          <div className="glass-card px-6 py-3 text-sm text-white">Loading...</div>
+          <div className="bg-white/4 border border-white/6 rounded-xl px-6 py-3 text-sm text-white">Loading...</div>
         </div>
       )}
     </div>

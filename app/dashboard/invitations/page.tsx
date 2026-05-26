@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -23,7 +23,7 @@ export default async function InvitationsPage() {
           <p className="text-slate-400 text-sm mt-1">Event invitations you&apos;ve received or sent</p>
         </div>
 
-        <div className="glass-card p-12 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
             <Mail size={28} className="text-emerald-400" />
           </div>
@@ -37,7 +37,7 @@ export default async function InvitationsPage() {
           </Link>
         </div>
 
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-semibold text-white mb-3">About Invitations</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {[

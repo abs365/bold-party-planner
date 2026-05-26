@@ -22,7 +22,6 @@ function LoginForm() {
       const supabase = createClient();
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        // Translate common Supabase error codes into friendly messages
         if (error.message.toLowerCase().includes("email not confirmed")) {
           toast.error("Please confirm your email first — check your inbox for the confirmation link.");
         } else if (error.message.toLowerCase().includes("invalid login credentials")) {
@@ -33,7 +32,6 @@ function LoginForm() {
         return;
       }
 
-      // Determine destination based on role
       const { data: profile } = await supabase
         .from("profiles")
         .select("role")
@@ -42,11 +40,8 @@ function LoginForm() {
 
       let dest = redirectTo;
       if (profile?.role === "vendor") dest = "/vendor/dashboard";
-      // Admin email check: if the user email is in ADMIN_EMAILS, go to admin
-      // (We read this from the app — proxy handles it server-side too)
 
       toast.success("Welcome back!");
-      // Hard redirect ensures browser sends fresh session cookies to the server
       window.location.href = dest;
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Sign in failed");
@@ -56,7 +51,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-6">
@@ -65,22 +60,22 @@ function LoginForm() {
             </div>
             <span className="gradient-brand-text">Bold Party</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-          <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
+          <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
         </div>
 
-        <div className="glass-card p-8">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
-                  className="input-field pl-icon"
+                  className="input-light pl-icon"
                   required
                   autoComplete="email"
                 />
@@ -88,22 +83,22 @@ function LoginForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="input-field pl-icon pr-10"
+                  className="input-light pl-icon pr-10"
                   required
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -116,21 +111,20 @@ function LoginForm() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-gray-500 mt-6">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-brand-400 hover:text-brand-300 font-medium">
+            <Link href="/signup" className="text-brand-600 hover:text-brand-700 font-medium">
               Create one free
             </Link>
           </p>
         </div>
 
-        {/* Demo accounts quick reference */}
-        <div className="mt-4 glass p-4 rounded-xl border border-white/6 text-xs text-slate-500">
-          <p className="font-medium text-slate-400 mb-2">Test accounts (after running seed):</p>
+        <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500">
+          <p className="font-medium text-gray-600 mb-2">Test accounts (after running seed):</p>
           <div className="space-y-0.5">
-            <p><span className="text-slate-300">Customer:</span> emily.carter@boldparty.demo</p>
-            <p><span className="text-slate-300">Vendor:</span> james.bennett@boldparty.demo</p>
-            <p><span className="text-slate-300">Password:</span> BoldPartyDemo2026!</p>
+            <p><span className="text-gray-700">Customer:</span> emily.carter@boldparty.demo</p>
+            <p><span className="text-gray-700">Vendor:</span> james.bennett@boldparty.demo</p>
+            <p><span className="text-gray-700">Password:</span> BoldPartyDemo2026!</p>
           </div>
         </div>
       </div>
@@ -141,8 +135,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-slate-400 flex items-center gap-2">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-400 flex items-center gap-2">
           <Loader2 size={16} className="animate-spin" /> Loading...
         </div>
       </div>

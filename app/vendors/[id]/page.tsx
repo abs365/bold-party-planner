@@ -110,8 +110,8 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   };
 
   return (
-    <div className="min-h-screen">
-      <Navbar user={profile} />
+    <div className="min-h-screen bg-white">
+      <Navbar user={profile} lightBg />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -121,9 +121,9 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
 
         {/* Similar vendors */}
         {(similarVendors?.length ?? 0) > 0 && (
-          <section className="py-12 px-4 border-t border-white/8">
+          <section className="py-12 px-4 border-t border-gray-100">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-xl font-bold text-white mb-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">
                 More {cat?.label ?? "Vendors"} Near You
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -136,9 +136,9 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                     <Link
                       key={v.id}
                       href={`/vendors/${v.id}`}
-                      className="glass-card overflow-hidden card-hover group"
+                      className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
                     >
-                      <div className="relative h-32 bg-white/5 overflow-hidden">
+                      <div className="relative h-32 bg-gray-100 overflow-hidden">
                         {cover ? (
                           <Image
                             src={cover.url}
@@ -152,31 +152,31 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                             {vcat?.icon ?? "🎉"}
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                         {v.verified && (
                           <div className="absolute top-2 right-2">
-                            <CheckCircle2 size={14} className="text-brand-400" />
+                            <CheckCircle2 size={14} className="text-white drop-shadow" />
                           </div>
                         )}
                       </div>
                       <div className="p-3">
-                        <h3 className="text-xs font-semibold text-white truncate group-hover:text-brand-400 transition-colors">
+                        <h3 className="text-xs font-semibold text-gray-900 truncate group-hover:text-brand-600 transition-colors">
                           {v.business_name}
                         </h3>
                         <div className="flex items-center justify-between mt-1.5">
-                          <span className="text-xs text-slate-500 flex items-center gap-0.5">
+                          <span className="text-xs text-gray-400 flex items-center gap-0.5">
                             <MapPin size={9} /> {v.city}
                           </span>
                           {v.rating > 0 && (
-                            <span className="text-xs text-white flex items-center gap-0.5">
+                            <span className="text-xs text-gray-700 flex items-center gap-0.5">
                               <Star size={10} className="fill-amber-400 text-amber-400" />
                               {v.rating.toFixed(1)}
                             </span>
                           )}
                         </div>
                         {v.min_price && (
-                          <div className="text-xs text-slate-500 mt-1">
-                            From <span className="text-white font-semibold">£{v.min_price.toLocaleString()}</span>
+                          <div className="text-xs text-gray-400 mt-1">
+                            From <span className="text-gray-900 font-semibold">£{v.min_price.toLocaleString()}</span>
                           </div>
                         )}
                       </div>

@@ -47,7 +47,7 @@ export default async function VendorPayoutsPage() {
             { label: "Deposits Received", value: fmt(depositRevenue), icon: CheckCircle2, color: "text-brand-400", bg: "bg-brand-500/10 border-brand-500/20" },
             { label: "Pending Deposits", value: fmt(pendingRevenue), icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
           ].map((stat) => (
-            <div key={stat.label} className="glass-card p-5">
+            <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-5">
               <div className={`w-10 h-10 rounded-xl ${stat.bg} border flex items-center justify-center mb-3`}>
                 <stat.icon size={18} className={stat.color} />
               </div>
@@ -58,8 +58,8 @@ export default async function VendorPayoutsPage() {
         </div>
 
         {/* Platform earnings note */}
-        <div className="glass-card p-4 flex items-start gap-3">
-          <Wallet size={18} className="text-brand-400 mt-0.5 flex-shrink-0" />
+        <div className="bg-white/4 border border-white/6 rounded-xl p-4 flex items-start gap-3">
+          <Wallet size={18} className="text-slate-400 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-semibold text-white mb-0.5">Your earnings rate: 90%</p>
             <p className="text-xs text-slate-400">Bold Party retains a 10% platform fee on each confirmed booking. Payouts are processed within 7 business days of event completion via your connected bank account.</p>
@@ -67,7 +67,7 @@ export default async function VendorPayoutsPage() {
         </div>
 
         {/* Booking breakdown */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h2 className="font-bold text-white mb-4">Booking Revenue</h2>
           {(bookings ?? []).length === 0 ? (
             <div className="text-center py-8">
@@ -108,7 +108,7 @@ export default async function VendorPayoutsPage() {
         </div>
 
         {/* Payout setup placeholder */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-white">Bank Account</h2>
             <span className="text-xs bg-amber-500/15 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20">Setup Required</span>

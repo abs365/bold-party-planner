@@ -62,24 +62,21 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   };
 
   return (
-    <div className="min-h-screen">
-      <Navbar user={profile} />
+    <div className="min-h-screen bg-white">
+      <Navbar user={profile} lightBg />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       {/* Hero */}
-      <section className="pt-28 pb-16 px-4 text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-600/8 rounded-full blur-[120px]" />
-        </div>
-        <div className="relative z-10 max-w-3xl mx-auto">
+      <section className="pt-28 pb-16 px-4 text-center">
+        <div className="max-w-3xl mx-auto">
           <div className="text-5xl mb-4">{cat.icon}</div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Hire a <span className="gradient-brand-text">{cat.label}</span> for Your Event
           </h1>
-          <p className="text-lg text-slate-400 mb-8 max-w-xl mx-auto">
+          <p className="text-lg text-gray-500 mb-8 max-w-xl mx-auto">
             Browse {vendorList.length > 0 ? `${vendorList.length}+` : "verified"} {cat.label.toLowerCase()}s across the UK. Real portfolios, honest reviews, secure booking.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -88,7 +85,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               Browse All {cat.label}s
               <ArrowRight size={15} />
             </Link>
-            <Link href="/dashboard/create-event" className="btn-secondary">
+            <Link href="/dashboard/create-event" className="btn-secondary-light">
               Get Smart Recommendations
             </Link>
           </div>
@@ -96,11 +93,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       </section>
 
       {/* Trust bar */}
-      <div className="border-y border-white/8 bg-white/2 py-4 px-4">
-        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-6 text-sm text-slate-400">
+      <div className="border-y border-gray-100 bg-gray-50 py-4 px-4">
+        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-6 text-sm text-gray-500">
           {["Verified vendors only", "Secure Stripe payments", "Real portfolio photos", "Genuine customer reviews", "Free to browse"].map((item) => (
             <div key={item} className="flex items-center gap-1.5">
-              <CheckCircle2 size={13} className="text-brand-400" />
+              <CheckCircle2 size={13} className="text-brand-600" />
               {item}
             </div>
           ))}
@@ -110,29 +107,29 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       {/* Vendor Grid */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
         {vendorList.length === 0 ? (
-          <div className="glass-card p-16 text-center">
+          <div className="bg-white border border-gray-100 rounded-2xl p-16 text-center">
             <div className="text-5xl mb-4">{cat.icon}</div>
-            <h2 className="text-xl font-bold text-white mb-2">No {cat.label}s listed yet</h2>
-            <p className="text-slate-400 text-sm mb-6">We&apos;re growing fast. Check back soon or browse all vendor categories.</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">No {cat.label}s listed yet</h2>
+            <p className="text-gray-500 text-sm mb-6">We&apos;re growing fast. Check back soon or browse all vendor categories.</p>
             <Link href="/browse" className="btn-primary">Browse All Categories</Link>
           </div>
         ) : (
           <>
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-semibold text-gray-900">
                 {vendorList.length} {cat.label}{vendorList.length !== 1 ? "s" : ""} Available
               </h2>
-              <Link href={`/browse?category=${category}`} className="text-sm text-brand-400 hover:text-brand-300 flex items-center gap-1">
+              <Link href={`/browse?category=${category}`} className="text-sm text-brand-600 hover:text-brand-700 flex items-center gap-1">
                 Advanced search <ArrowRight size={13} />
               </Link>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {vendorList.map((v) => (
                 <Link
                   key={v.id}
                   href={`/vendors/${v.id}`}
-                  className="glass-card p-6 card-hover group relative"
+                  className="bg-white border border-gray-100 rounded-xl p-6 hover:shadow-md hover:border-gray-200 transition-all group relative"
                 >
                   {v.subscription_plan === "featured" && (
                     <div className="absolute top-3 right-3">
@@ -140,14 +137,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                     </div>
                   )}
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-brand-500/15 flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center text-2xl flex-shrink-0">
                       {cat.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-white text-sm truncate group-hover:text-brand-400 transition-colors">
+                      <h3 className="font-semibold text-gray-900 text-sm truncate group-hover:text-brand-600 transition-colors">
                         {v.business_name}
                       </h3>
-                      <div className="flex items-center gap-1 mt-1 text-slate-500">
+                      <div className="flex items-center gap-1 mt-1 text-gray-400">
                         <MapPin size={11} />
                         <span className="text-xs">{v.city}</span>
                       </div>
@@ -155,7 +152,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                   </div>
 
                   {v.description && (
-                    <p className="text-xs text-slate-500 line-clamp-2 mb-3">{v.description}</p>
+                    <p className="text-xs text-gray-500 line-clamp-2 mb-3">{v.description}</p>
                   )}
 
                   <div className="flex items-center justify-between">
@@ -163,19 +160,19 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                       {v.rating > 0 && (
                         <div className="flex items-center gap-1">
                           <Star size={12} className="fill-amber-400 text-amber-400" />
-                          <span className="text-xs text-white font-medium">{v.rating.toFixed(1)}</span>
-                          {v.review_count > 0 && <span className="text-xs text-slate-500">({v.review_count})</span>}
+                          <span className="text-xs text-gray-900 font-medium">{v.rating.toFixed(1)}</span>
+                          {v.review_count > 0 && <span className="text-xs text-gray-400">({v.review_count})</span>}
                         </div>
                       )}
                       {v.verified && (
-                        <div className="flex items-center gap-1 text-emerald-400">
+                        <div className="flex items-center gap-1 text-emerald-600">
                           <CheckCircle2 size={11} />
                           <span className="text-xs">Verified</span>
                         </div>
                       )}
                     </div>
                     {v.starting_price > 0 && (
-                      <span className="text-sm font-bold text-white">From £{v.starting_price.toLocaleString()}</span>
+                      <span className="text-sm font-bold text-gray-900">From £{v.starting_price.toLocaleString()}</span>
                     )}
                   </div>
                 </Link>
@@ -183,7 +180,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             </div>
 
             <div className="text-center mt-10">
-              <Link href={`/browse?category=${category}`} className="btn-secondary">
+              <Link href={`/browse?category=${category}`} className="btn-secondary-light">
                 View All {cat.label}s with Filters
                 <ArrowRight size={15} />
               </Link>
@@ -192,10 +189,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         )}
       </section>
 
-      {/* FAQ / Why Bold Party */}
-      <section className="py-16 px-4 bg-gradient-to-b from-transparent via-brand-950/10 to-transparent">
+      {/* Why Bold Party */}
+      <section className="py-16 px-4 bg-gray-50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
             Why Book a {cat.label} on Bold Party?
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -205,12 +202,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               { title: "Secure payments", desc: "Pay your deposit safely via Stripe. Your money is fully protected." },
               { title: "Free to browse", desc: `No account needed to browse ${cat.label.toLowerCase()}s. Only sign up when ready to book.` },
             ].map((item) => (
-              <div key={item.title} className="glass-card p-5">
-                <h3 className="text-sm font-bold text-white mb-1.5 flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-brand-400" />
+              <div key={item.title} className="bg-white border border-gray-100 rounded-xl p-5">
+                <h3 className="text-sm font-semibold text-gray-900 mb-1.5 flex items-center gap-2">
+                  <CheckCircle2 size={14} className="text-brand-600" />
                   {item.title}
                 </h3>
-                <p className="text-xs text-slate-400">{item.desc}</p>
+                <p className="text-xs text-gray-500">{item.desc}</p>
               </div>
             ))}
           </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -78,7 +78,7 @@ Do not suggest categories the customer already has. Be specific to the event typ
 
   if (!recs && !loading) {
     return (
-      <div className="glass-card p-5 border border-brand-500/15">
+      <div className="bg-white/4 rounded-xl p-5 border border-brand-500/15">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-white" />
@@ -100,7 +100,7 @@ Do not suggest categories the customer already has. Be specific to the event typ
   }
 
   return (
-    <div className="glass-card p-5 border border-brand-500/15">
+    <div className="bg-white/4 rounded-xl p-5 border border-brand-500/15">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -71,7 +71,7 @@ export function AdminPayoutsView({ payouts }: AdminPayoutsViewProps) {
         </select>
       </div>
 
-      <div className="glass-card overflow-hidden">
+      <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -127,7 +127,7 @@ export function AdminPayoutsView({ payouts }: AdminPayoutsViewProps) {
 
 function StatCard({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className={`glass-card p-4 ${highlight ? "border border-yellow-500/30" : ""}`}>
+    <div className={`bg-white/4 border rounded-xl p-4 ${highlight ? "border-yellow-500/30" : "border-white/6"}`}>
       <div className="flex items-center gap-2 mb-1">
         <Wallet className={`w-4 h-4 ${highlight ? "text-yellow-400" : "text-purple-400"}`} />
         <span className="text-white/50 text-xs">{label}</span>

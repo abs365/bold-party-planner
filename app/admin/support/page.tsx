@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { HelpCircle, MessageSquare, AlertCircle, Mail } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function AdminSupportPage() {
             { label: "Escalations", value: "0", icon: AlertCircle, color: "text-red-400" },
             { label: "Avg. Response", value: "—", icon: HelpCircle, color: "text-emerald-400" },
           ].map((stat) => (
-            <div key={stat.label} className="glass-card p-4">
+            <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <stat.icon size={18} className={`${stat.color} mb-2`} />
               <div className="text-xl font-bold text-white">{stat.value}</div>
               <div className="text-xs text-slate-400 mt-0.5">{stat.label}</div>
@@ -38,7 +38,7 @@ export default async function AdminSupportPage() {
           ))}
         </div>
 
-        <div className="glass-card p-12 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
           <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
             <HelpCircle size={28} className="text-slate-400" />
           </div>
@@ -54,7 +54,7 @@ export default async function AdminSupportPage() {
           </div>
         </div>
 
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-semibold text-white mb-3">Quick support actions</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {[

@@ -32,17 +32,17 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
 
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="glass-card p-4 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-4 text-center">
           <TrendingUp size={18} className="text-brand-400 mx-auto mb-1" />
           <div className="text-xl font-bold text-white">{formatCurrency(totalSpent)}</div>
           <div className="text-xs text-slate-400 mt-0.5">Total Spent</div>
         </div>
-        <div className="glass-card p-4 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-4 text-center">
           <CreditCard size={18} className="text-green-400 mx-auto mb-1" />
           <div className="text-xl font-bold text-white">{payments.filter((p) => p.status === "succeeded").length}</div>
           <div className="text-xs text-slate-400 mt-0.5">Payments</div>
         </div>
-        <div className="glass-card p-4 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-4 text-center">
           <Clock size={18} className="text-amber-400 mx-auto mb-1" />
           <div className="text-xl font-bold text-white">{formatCurrency(pendingAmount)}</div>
           <div className="text-xs text-slate-400 mt-0.5">Outstanding</div>
@@ -65,7 +65,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
       {tab === "payments" && (
         <div className="space-y-3">
           {payments.length === 0 ? (
-            <div className="glass-card p-12 text-center">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
               <CreditCard size={36} className="text-slate-600 mx-auto mb-3" />
               <p className="text-slate-400">No payments yet</p>
             </div>
@@ -78,7 +78,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
               const status = String(payment.status);
 
               return (
-                <div key={String(payment.id)} className="glass-card p-4 flex items-center gap-4">
+                <div key={String(payment.id)} className="bg-white/4 border border-white/6 rounded-xl p-4 flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${status === "succeeded" ? "bg-green-500/15" : status === "pending" ? "bg-amber-500/15" : "bg-red-500/15"}`}>
                     {status === "succeeded" ? (
                       <CheckCircle2 size={18} className="text-green-400" />
@@ -115,7 +115,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
       {tab === "invoices" && (
         <div className="space-y-3">
           {invoices.length === 0 ? (
-            <div className="glass-card p-12 text-center">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
               <FileText size={36} className="text-slate-600 mx-auto mb-3" />
               <p className="text-slate-400">No invoices yet</p>
             </div>
@@ -126,7 +126,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
               const event = booking?.event as Record<string, string> | null;
 
               return (
-                <div key={String(invoice.id)} className="glass-card p-4 flex items-center gap-4">
+                <div key={String(invoice.id)} className="bg-white/4 border border-white/6 rounded-xl p-4 flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-brand-500/15 flex items-center justify-center flex-shrink-0">
                     <FileText size={18} className="text-brand-400" />
                   </div>

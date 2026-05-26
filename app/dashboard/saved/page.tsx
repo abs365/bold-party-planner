@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -41,7 +41,7 @@ export default async function SavedVendorsPage() {
 
         {vendors.length === 0 ? (
           <>
-            <div className="glass-card p-12 text-center">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
               <div className="w-16 h-16 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
                 <Heart size={28} className="text-brand-400" />
               </div>
@@ -61,7 +61,7 @@ export default async function SavedVendorsPage() {
               </div>
             </div>
 
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <h3 className="font-semibold text-white mb-3">How saving works</h3>
               <div className="grid sm:grid-cols-3 gap-4">
                 {[
@@ -84,7 +84,7 @@ export default async function SavedVendorsPage() {
               const vendor = v as { id: string; business_name: string; category: string; city: string; rating: number; review_count: number; media?: { url: string; is_cover: boolean }[]; saved_at: string };
               const cover = vendor.media?.find((m) => m.is_cover)?.url;
               return (
-                <Link key={vendor.id} href={`/vendors/${vendor.id}`} className="glass-card p-4 flex gap-4 hover:bg-white/5 transition-colors">
+                <Link key={vendor.id} href={`/vendors/${vendor.id}`} className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors">
                   <div className="w-16 h-16 rounded-xl bg-brand-500/15 flex-shrink-0 overflow-hidden">
                     {cover ? (
                       <img src={cover} alt={vendor.business_name} className="w-full h-full object-cover" />

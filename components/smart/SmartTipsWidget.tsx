@@ -75,20 +75,19 @@ export function SmartTipsWidget() {
   const colorCls = CATEGORY_COLOR[tip.category] ?? "bg-white/10 text-white/60";
 
   return (
-    <div className="glass-card p-5 border border-brand-500/15 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/5 rounded-full -translate-y-8 translate-x-8 pointer-events-none" />
+    <div className="bg-white/4 border border-white/6 rounded-xl p-5">
       <div className="flex items-start gap-3">
         <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center flex-shrink-0">
           <LightbulbIcon className="w-4 h-4 text-white" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-semibold text-white/70">Smart Tip of the Day</span>
+            <span className="text-xs font-semibold text-slate-400">Smart Tip</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${colorCls}`}>
               {tip.category}
             </span>
           </div>
-          <p className="text-sm text-white/80 leading-relaxed mb-3">{tip.tip}</p>
+          <p className="text-sm text-slate-300 leading-relaxed mb-3">{tip.tip}</p>
           <Link href={tip.href} className="inline-flex items-center gap-1.5 text-xs text-brand-400 hover:text-brand-300 font-medium transition-colors">
             <Sparkles className="w-3 h-3" />
             {tip.cta}

@@ -105,7 +105,7 @@ export function VendorSubscriptionView() {
   return (
     <div className="space-y-6">
       {subscription?.plan !== "free" && (
-        <div className="glass-card p-4 border border-purple-500/30 flex items-center justify-between">
+        <div className="bg-white/4 border border-purple-500/30 rounded-xl p-4 flex items-center justify-between">
           <div>
             <p className="text-white font-medium">Current plan: <span className="text-purple-300 capitalize">{currentPlan}</span></p>
             {subscription?.current_period_end && (
@@ -127,7 +127,7 @@ export function VendorSubscriptionView() {
           const isCurrent = currentPlan === plan.id;
           const isUpgrading = upgrading === plan.id;
           return (
-            <div key={plan.id} className={cn("glass-card p-6 border flex flex-col relative", plan.color, isCurrent && "ring-2 ring-brand-500/50")}>
+            <div key={plan.id} className={cn("bg-white/4 border rounded-xl p-6 flex flex-col relative", plan.color, isCurrent && "ring-2 ring-brand-500/50")}>
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="gradient-brand text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">{plan.badge}</span>
@@ -178,7 +178,7 @@ export function VendorSubscriptionView() {
       <p className="text-white/30 text-xs text-center">Subscriptions are billed monthly. Cancel anytime. Secure payments via Stripe.</p>
 
       {/* Plan comparison table */}
-      <div className="glass-card p-6 overflow-x-auto">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6 overflow-x-auto">
         <h3 className="text-white font-semibold mb-4">Plan Feature Comparison</h3>
         <table className="w-full text-sm">
           <thead>

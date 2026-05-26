@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { Mail, Share2, Copy, Eye, Plus, Clock, Check, ExternalLink, QrCode, MessageCircle } from "lucide-react";
@@ -114,7 +114,7 @@ export function InvitationBuilder({
 
       {/* Create Form */}
       {showCreate && (
-        <div className="glass-card p-6 border border-brand-500/20 animate-fade-in-up">
+        <div className="bg-white/4 rounded-xl p-6 border border-brand-500/20 animate-fade-in-up">
           <h3 className="font-bold text-white mb-5">New Invitation</h3>
 
           {/* Template Picker */}
@@ -190,7 +190,7 @@ export function InvitationBuilder({
 
       {/* Invitation Cards */}
       {invitations.length === 0 && !showCreate ? (
-        <div className="glass-card p-16 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
           <div className="w-16 h-16 rounded-2xl gradient-brand flex items-center justify-center text-3xl mx-auto mb-4">
             ✉️
           </div>
@@ -213,7 +213,7 @@ export function InvitationBuilder({
             const isActive  = activeInv?.id === inv.id;
 
             return (
-              <div key={inv.id} className="glass-card overflow-hidden">
+              <div key={inv.id} className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">

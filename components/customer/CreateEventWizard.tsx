@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -359,7 +359,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
         ))}
       </div>
 
-      <div className="glass-card p-6 sm:p-8">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6 sm:p-8">
         {/* ── STEP 1: Event Type ── */}
         {step === 1 && (
           <div className="space-y-6">
@@ -517,7 +517,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                   onChange={(e) => update("guest_count", Number(e.target.value))}
                   className="flex-1 accent-brand-500"
                 />
-                <div className="w-20 text-center glass px-3 py-2 rounded-lg text-white font-bold text-lg">
+                <div className="w-20 text-center bg-white/8 border border-white/10 px-3 py-2 rounded-lg text-white font-bold text-lg">
                   {data.guest_count}
                 </div>
               </div>
@@ -710,7 +710,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
 
                     {/* Budget breakdown */}
                     {aiPlan.budget_breakdown?.length > 0 && (
-                      <div className="glass-card p-4">
+                      <div className="bg-white/4 border border-white/6 rounded-xl p-4">
                         <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
                           <span>💷</span> Budget Breakdown
                         </h4>

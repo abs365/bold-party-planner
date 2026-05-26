@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -131,7 +131,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       </div>
 
       {/* Tips */}
-      <div className="glass-card p-5 border border-brand-500/20">
+      <div className="bg-white/4 border border-brand-500/20 rounded-xl p-5">
         <h3 className="text-sm font-semibold text-brand-400 mb-3 flex items-center gap-2">
           <CheckCircle2 size={14} /> Tips for more bookings
         </h3>
@@ -263,7 +263,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       {/* Caption Modal */}
       {editingCaption && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-          <div className="glass-card p-6 w-full max-w-sm">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6 w-full max-w-sm">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-bold text-white">Edit Caption</h3>
               <button onClick={() => setEditingCaption(null)} className="p-1 rounded-lg hover:bg-white/8">

@@ -65,7 +65,7 @@ export function AdminAnalytics({ stats, recentPayments, bookings, vendors }: Adm
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {statCards.map((card) => (
-          <div key={card.label} className="glass-card p-5">
+          <div key={card.label} className="bg-white/4 border border-white/6 rounded-xl p-5">
             <div className="flex items-center gap-3 mb-3">{card.icon}<span className="text-xs text-slate-400">{card.label}</span></div>
             <div className="text-2xl font-bold text-white mb-1">{card.value}</div>
             <div className="text-xs text-slate-500">{card.sub}</div>
@@ -75,9 +75,9 @@ export function AdminAnalytics({ stats, recentPayments, bookings, vendors }: Adm
 
       <div className="grid md:grid-cols-2 gap-5">
         {/* Booking Status Breakdown */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <ShoppingBag size={16} className="text-brand-400" />Booking Status Breakdown
+            <ShoppingBag size={16} className="text-slate-400" />Booking Status Breakdown
           </h3>
           <div className="space-y-3">
             {bookingStatuses.map(({ key, label, color }) => {
@@ -99,9 +99,9 @@ export function AdminAnalytics({ stats, recentPayments, bookings, vendors }: Adm
         </div>
 
         {/* Top Vendor Categories */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Building2 size={16} className="text-brand-400" />Top Vendor Categories
+            <Building2 size={16} className="text-slate-400" />Top Vendor Categories
           </h3>
           {sortedCats.length === 0 ? (
             <p className="text-slate-500 text-sm">No approved vendors yet</p>
@@ -128,9 +128,9 @@ export function AdminAnalytics({ stats, recentPayments, bookings, vendors }: Adm
       </div>
 
       {/* Recent Payments */}
-      <div className="glass-card p-5">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-5">
         <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-          <CreditCard size={16} className="text-brand-400" />Recent Payments (last 30)
+          <CreditCard size={16} className="text-slate-400" />Recent Payments (last 30)
         </h3>
         {recentPayments.length === 0 ? (
           <div className="text-center py-8">

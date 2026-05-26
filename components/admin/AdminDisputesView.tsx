@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -103,7 +103,7 @@ export function AdminDisputesView({ disputes }: AdminDisputesViewProps) {
             const isExpanded = expanded === dispute.id;
             const isResolving = resolving === dispute.id;
             return (
-              <div key={dispute.id} className="glass-card overflow-hidden">
+              <div key={dispute.id} className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
                 <div
                   className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5"
                   onClick={() => setExpanded(isExpanded ? null : dispute.id)}

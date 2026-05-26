@@ -147,7 +147,7 @@ export default async function VendorDashboardPage() {
 
         {/* ─── Profile Completion ───────────────────────────────────── */}
         {profileCompletion < 5 && (
-          <div className="glass-card p-5 border border-amber-500/20 animate-fade-in-up">
+          <div className="bg-white/4 border border-amber-500/25 rounded-xl p-5 animate-fade-in-up">
             <div className="flex items-center gap-3 mb-3">
               <AlertCircle size={16} className="text-amber-400 flex-shrink-0" />
               <span className="font-semibold text-white text-sm">
@@ -219,12 +219,12 @@ export default async function VendorDashboardPage() {
               key={label}
               href={href}
               className={cn_cls(
-                "glass-card p-5 card-hover hover:border-brand-500/20 transition-all group",
-                urgent ? "border border-amber-500/25" : ""
+                "bg-white/4 border rounded-xl p-5 hover:border-white/10 transition-colors group",
+                urgent ? "border-amber-500/25" : "border-white/6"
               )}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-slate-500 uppercase tracking-wider">{label}</span>
+                <span className="text-xs text-slate-500">{label}</span>
                 <Icon size={16} className={color} />
               </div>
               <div className="text-2xl font-bold text-white mb-1">{value}</div>
@@ -240,7 +240,7 @@ export default async function VendorDashboardPage() {
             { label: "Quote Requests",  value: quoteRequests,  icon: TrendingUp, color: "text-purple-400",  href: "/vendor/quotes" },
             { label: "Conversion Rate", value: `${conversionRate}%`, icon: BarChart2, color: "text-emerald-400", href: "/vendor/analytics" },
           ].map(({ label, value, icon: Icon, color, href }) => (
-            <Link key={label} href={href} className="glass-card p-4 border border-white/5 hover:border-brand-500/15 transition-all group">
+            <Link key={label} href={href} className="bg-white/4 border border-white/6 rounded-xl p-4 hover:border-white/10 transition-colors group">
               <div className="flex items-center gap-2 mb-2">
                 <Icon size={13} className={color} />
                 <span className="text-xs text-slate-500">{label}</span>
@@ -257,16 +257,16 @@ export default async function VendorDashboardPage() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* ─── Pending Bookings ──────────────────────────────── */}
           <div className="lg:col-span-2 space-y-5">
-            <div className="glass-card p-6">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-6">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-bold text-white flex items-center gap-2">
-                  <ShoppingBag size={16} className="text-brand-400" />
+                  <ShoppingBag size={16} className="text-slate-400" />
                   Booking Requests
                   {pending.length > 0 && (
                     <span className="badge bg-amber-500/20 text-amber-400 border border-amber-500/20">{pending.length}</span>
                   )}
                 </h3>
-                <Link href="/vendor/bookings" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+                <Link href="/vendor/bookings" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
                   View all <ArrowRight size={11} />
                 </Link>
               </div>
@@ -329,7 +329,7 @@ export default async function VendorDashboardPage() {
 
             {/* Pending Quotes Alert */}
             {pendingQuotes.length > 0 && (
-              <div className="glass-card p-5 border border-purple-500/20 animate-fade-in-up">
+              <div className="bg-white/4 border border-purple-500/25 rounded-xl p-5 animate-fade-in-up">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-purple-500/15 flex items-center justify-center">
@@ -353,9 +353,9 @@ export default async function VendorDashboardPage() {
           {/* ─── Right Panel: Quick Actions + Reviews ──────────── */}
           <div className="space-y-5">
             {/* Quick Actions */}
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <h3 className="font-semibold text-white mb-4 flex items-center gap-2 text-sm">
-                <Zap size={14} className="text-brand-400" />Quick Actions
+                <Zap size={14} className="text-slate-400" />Quick Actions
               </h3>
               <div className="space-y-2">
                 {[
@@ -380,12 +380,12 @@ export default async function VendorDashboardPage() {
             </div>
 
             {/* Recent Reviews */}
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-white flex items-center gap-2 text-sm">
                   <Star size={14} className="text-gold-400" />Recent Reviews
                 </h3>
-                <Link href="/vendor/reviews" className="text-xs text-brand-400 hover:text-brand-300">
+                <Link href="/vendor/reviews" className="text-xs text-slate-400 hover:text-slate-300">
                   All <ArrowRight size={11} className="inline" />
                 </Link>
               </div>
@@ -421,9 +421,9 @@ export default async function VendorDashboardPage() {
 
             {/* Upcoming Events */}
             {upcoming.length > 0 && (
-              <div className="glass-card p-5">
+              <div className="bg-white/4 border border-white/6 rounded-xl p-5">
                 <h3 className="font-semibold text-white flex items-center gap-2 mb-4 text-sm">
-                  <Calendar size={14} className="text-brand-400" />Upcoming Events
+                  <Calendar size={14} className="text-slate-400" />Upcoming Events
                 </h3>
                 <div className="space-y-2">
                   {upcoming.slice(0, 3).map((booking) => {
@@ -453,7 +453,7 @@ export default async function VendorDashboardPage() {
 
             {/* Subscription Upgrade */}
             {vendor.subscription_plan === "free" && (
-              <div className="glass-card p-5 border border-gold-500/20 bg-gradient-to-br from-gold-500/5 to-transparent">
+              <div className="bg-white/4 border border-gold-500/20 rounded-xl p-5">
                 <div className="flex items-start gap-3">
                   <Award size={18} className="text-gold-400 flex-shrink-0 mt-0.5" />
                   <div>
@@ -472,15 +472,15 @@ export default async function VendorDashboardPage() {
         </div>
 
         {/* Platform Stats Footer */}
-        <div className="glass-card p-5 border border-white/5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Users size={14} className="text-brand-400" />
+              <Users size={14} className="text-slate-400" />
               <span className="text-sm text-slate-400">Your profile has received</span>
               <span className="font-bold text-white">{vendor.profile_views ?? 0}</span>
               <span className="text-sm text-slate-400">total views</span>
             </div>
-            <Link href="/vendor/analytics" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+            <Link href="/vendor/analytics" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
               Full analytics <ArrowRight size={11} />
             </Link>
           </div>

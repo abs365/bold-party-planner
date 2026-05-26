@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -27,7 +27,7 @@ export default async function AccountSettingsPage() {
         </div>
 
         {/* Profile card */}
-        <div className="glass-card p-6">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-full gradient-brand flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
               {typedProfile.full_name?.[0]?.toUpperCase() ?? "U"}
@@ -58,7 +58,7 @@ export default async function AccountSettingsPage() {
         </div>
 
         {/* Account Actions */}
-        <div className="glass-card p-6">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-6">
           <h3 className="font-bold text-white mb-4">Account Actions</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             <Link

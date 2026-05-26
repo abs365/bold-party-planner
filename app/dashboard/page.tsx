@@ -7,7 +7,7 @@ import { CustomerEventHub } from "@/components/customer/CustomerEventHub";
 import { formatCurrency, formatDate, daysUntilEvent } from "@/lib/utils";
 import {
   Calendar, ShoppingBag, CreditCard, Sparkles, ArrowRight,
-  TrendingUp, CheckCircle2, Plus,
+  CheckCircle2, Plus,
 } from "lucide-react";
 import { SmartTipsWidget } from "@/components/smart/SmartTipsWidget";
 import type { Event, Booking } from "@/types";
@@ -82,10 +82,10 @@ export default async function CustomerDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="glass-card p-5">
+            <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm text-slate-400">{label}</span>
-                <Icon size={18} className={color} />
+                <Icon size={17} className={color} />
               </div>
               <div className="text-2xl font-bold text-white">{value}</div>
             </div>
@@ -94,12 +94,11 @@ export default async function CustomerDashboard() {
 
         {/* Smart Planner CTA — shown when no events */}
         {upcomingEvents.length === 0 && (
-          <div className="glass-card p-8 text-center relative overflow-hidden">
-            <div className="absolute inset-0 gradient-brand opacity-5 pointer-events-none" />
-            <div className="w-16 h-16 rounded-2xl gradient-brand flex items-center justify-center mx-auto mb-4">
-              <Sparkles size={28} className="text-white" />
+          <div className="bg-white/4 border border-white/6 rounded-2xl p-8 text-center">
+            <div className="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center mx-auto mb-4">
+              <Sparkles size={24} className="text-white" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Start Planning Your First Event</h2>
+            <h2 className="text-xl font-semibold text-white mb-2">Start Planning Your First Event</h2>
             <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
               Our Smart Planner creates a complete event plan in seconds — vendors, budget, timeline and checklist included.
             </p>
@@ -120,13 +119,13 @@ export default async function CustomerDashboard() {
           )}
 
           {/* Upcoming Events */}
-          <div className="glass-card p-6">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-bold text-white flex items-center gap-2">
-                <Calendar size={17} className="text-brand-400" />
+              <h3 className="font-semibold text-white flex items-center gap-2">
+                <Calendar size={16} className="text-slate-400" />
                 Upcoming Events
               </h3>
-              <Link href="/dashboard/events" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+              <Link href="/dashboard/events" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
                 View all <ArrowRight size={12} />
               </Link>
             </div>
@@ -167,10 +166,10 @@ export default async function CustomerDashboard() {
           </div>
 
           {/* Recent Bookings */}
-          <div className="glass-card p-6">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-bold text-white flex items-center gap-2">
-                <ShoppingBag size={17} className="text-brand-400" />
+              <h3 className="font-semibold text-white flex items-center gap-2">
+                <ShoppingBag size={16} className="text-slate-400" />
                 Recent Bookings
               </h3>
               <Link href="/dashboard/bookings" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
@@ -218,11 +217,8 @@ export default async function CustomerDashboard() {
 
         {/* Quick Actions */}
         <div>
-          <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <TrendingUp size={17} className="text-brand-400" />
-            Quick Actions
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <h3 className="font-semibold text-slate-300 mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { href: "/dashboard/create-event", icon: "✨", label: "Plan New Event" },
               { href: "/browse", icon: "🔍", label: "Browse Vendors" },
@@ -232,10 +228,10 @@ export default async function CustomerDashboard() {
               <Link
                 key={action.href}
                 href={action.href}
-                className="glass-card p-4 text-center hover:border-brand-500/30 card-hover transition-all group"
+                className="bg-white/4 border border-white/6 rounded-xl p-4 text-center hover:bg-white/6 hover:border-white/10 transition-colors group"
               >
-                <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">{action.icon}</div>
-                <div className="text-xs font-medium text-slate-300">{action.label}</div>
+                <div className="text-xl mb-2">{action.icon}</div>
+                <div className="text-xs font-medium text-slate-400 group-hover:text-slate-300">{action.label}</div>
               </Link>
             ))}
           </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -46,7 +46,7 @@ function TrendingVendorCard({ vendor, rank }: { vendor: Vendor; rank: number }) 
 
   return (
     <Link href={`/vendors/${vendor.id}`} className="flex-shrink-0 w-60 sm:w-auto block group">
-      <div className="glass-card overflow-hidden card-hover border border-white/8 hover:border-brand-500/30 relative">
+      <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden card-hover hover:border-brand-500/30 transition-colors relative">
         {/* Rank badge */}
         <div className="absolute top-3 left-3 z-10">
           <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-extrabold ${
@@ -172,7 +172,7 @@ export function LiveActivityWidget() {
   ];
 
   return (
-    <div className="glass-card p-5">
+    <div className="bg-white/4 border border-white/6 rounded-xl p-5">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
         <span className="text-sm font-bold text-white">Live Activity</span>

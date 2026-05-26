@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AvailabilityCalendar } from "@/components/vendor/AvailabilityCalendar";
@@ -25,7 +25,7 @@ export default async function VendorAvailabilityPage() {
           <p className="text-white/60 mt-1">Block dates when you&apos;re unavailable so customers only request bookings on available days</p>
         </div>
         <AvailabilityCalendar />
-        <div className="glass-card p-4 mt-4 text-sm text-white/50 space-y-1">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-4 mt-4 text-sm text-white/50 space-y-1">
           <p><strong className="text-white/70">How it works:</strong></p>
           <p>• Click any future date to block it as unavailable</p>
           <p>• Click a blocked date to unblock it</p>

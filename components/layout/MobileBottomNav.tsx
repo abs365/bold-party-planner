@@ -45,7 +45,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
   if (user.role === "admin") return null;
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-white/8 safe-area-bottom" style={{ background: "rgba(10,10,15,0.92)", backdropFilter: "blur(20px)" }}>
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-white/6 safe-area-bottom" style={{ background: "rgba(13,13,24,0.97)" }}>
       <div className="flex items-stretch h-16">
         {tabs.map(({ href, label, icon: Icon, exact, highlight }) => {
           const active = exact
@@ -58,7 +58,7 @@ export function MobileBottomNav({ user }: MobileBottomNavProps) {
                 href={href}
                 className="flex-1 flex flex-col items-center justify-center gap-1 py-2"
               >
-                <div className="w-11 h-11 rounded-2xl gradient-brand flex items-center justify-center shadow-lg shadow-brand-500/40 -mt-4">
+                <div className="w-11 h-11 rounded-2xl gradient-brand flex items-center justify-center shadow-md -mt-4">
                   <Icon size={20} className="text-white" />
                 </div>
                 <span className="text-xs font-semibold text-brand-400 mt-0.5">{label}</span>

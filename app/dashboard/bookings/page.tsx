@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -55,7 +55,7 @@ export default async function BookingsListPage() {
         </div>
 
         {allBookings.length === 0 ? (
-          <div className="glass-card p-12 text-center">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
             <div className="text-5xl mb-4">📦</div>
             <h3 className="text-lg font-bold text-white mb-2">No bookings yet</h3>
             <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
@@ -81,7 +81,7 @@ export default async function BookingsListPage() {
                         <Link
                           key={booking.id}
                           href={`/dashboard/bookings/${booking.id}`}
-                          className="glass-card p-5 flex items-center justify-between hover:border-brand-500/30 transition-all card-hover group"
+                          className="bg-white/4 border border-white/6 rounded-xl p-5 flex items-center justify-between hover:border-brand-500/30 transition-all card-hover group"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-brand-500/15 flex items-center justify-center text-xl flex-shrink-0">

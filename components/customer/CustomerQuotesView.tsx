@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -81,7 +81,7 @@ export function CustomerQuotesView({ quotes }: CustomerQuotesViewProps) {
           <Link
             key={quote.id}
             href={`/dashboard/quotes/${quote.id}`}
-            className={`glass-card p-4 flex gap-4 card-hover block relative overflow-hidden${isNewResponse ? " border border-blue-500/30" : ""}`}
+            className={`bg-white/4 border rounded-xl p-4 flex gap-4 card-hover block relative overflow-hidden${isNewResponse ? " border-blue-500/30" : " border-white/6"}`}
           >
             {/* New response highlight bar */}
             {isNewResponse && (

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { BadgeCheck, TrendingUp, Users, Wallet } from "lucide-react";
@@ -42,7 +42,7 @@ export default async function AdminSubscriptionsPage() {
             { label: "Featured Plan", value: featuredSubs.length, icon: Users, color: "text-amber-400" },
             { label: "Est. MRR", value: `£${mrr}`, icon: Wallet, color: "text-blue-400" },
           ].map((stat) => (
-            <div key={stat.label} className="glass-card p-4">
+            <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <stat.icon size={18} className={`${stat.color} mb-2`} />
               <div className="text-xl font-bold text-white">{stat.value}</div>
               <div className="text-xs text-slate-400 mt-0.5">{stat.label}</div>
@@ -50,7 +50,7 @@ export default async function AdminSubscriptionsPage() {
           ))}
         </div>
 
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h2 className="font-bold text-white mb-4">All Subscriptions</h2>
           {(subs ?? []).length === 0 ? (
             <p className="text-slate-400 text-sm text-center py-8">No subscriptions yet.</p>

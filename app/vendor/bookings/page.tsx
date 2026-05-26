@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -43,7 +43,7 @@ export default async function VendorBookingsPage() {
             const count = s === "all" ? allBookings.length : allBookings.filter((b) => b.status === s).length;
             if (s !== "all" && count === 0) return null;
             return (
-              <div key={s} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium glass border border-white/10">
+              <div key={s} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/6 border border-white/10">
                 <span className="capitalize">{s}</span>
                 <span className="badge bg-white/10 text-slate-300 text-xs">{count}</span>
               </div>
@@ -53,7 +53,7 @@ export default async function VendorBookingsPage() {
 
         <div className="space-y-3">
           {allBookings.length === 0 ? (
-            <div className="glass-card p-12 text-center">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
               <ShoppingBag size={40} className="mx-auto mb-3 text-slate-700" />
               <h3 className="font-bold text-white mb-2">No bookings yet</h3>
               <p className="text-slate-400 text-sm">Complete your profile and upload photos to attract more customers</p>
@@ -66,7 +66,7 @@ export default async function VendorBookingsPage() {
                 <Link
                   key={booking.id}
                   href={`/vendor/bookings/${booking.id}`}
-                  className="glass-card p-5 flex items-center justify-between hover:border-brand-500/30 transition-all group"
+                  className="bg-white/4 border border-white/6 rounded-xl p-5 flex items-center justify-between hover:border-brand-500/30 transition-all group"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">

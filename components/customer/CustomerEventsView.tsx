@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Calendar, MapPin, Users, Plus, ChevronRight, CheckSquare } from "lucide-react";
@@ -25,7 +25,7 @@ export function CustomerEventsView({ events }: CustomerEventsViewProps) {
       .reduce((sum, b) => sum + Number(b.total_amount ?? 0), 0);
 
     return (
-      <Link href={`/dashboard/events/${String(event.id)}`} className="glass-card p-5 card-hover block group">
+      <Link href={`/dashboard/events/${String(event.id)}`} className="bg-white/4 border border-white/6 rounded-xl p-5 card-hover block group">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="text-3xl">{eventType?.icon ?? "🎉"}</div>
@@ -93,7 +93,7 @@ export function CustomerEventsView({ events }: CustomerEventsViewProps) {
       </div>
 
       {events.length === 0 ? (
-        <div className="glass-card p-16 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
           <div className="text-5xl mb-4">🎉</div>
           <h3 className="font-bold text-white mb-2">No events yet</h3>
           <p className="text-slate-400 text-sm mb-6">Create your first event and let our Smart Planner guide you through every detail.</p>

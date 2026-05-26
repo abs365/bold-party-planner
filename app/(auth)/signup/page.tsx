@@ -15,7 +15,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [confirmed, setConfirmed] = useState(false); // email confirmation pending state
+  const [confirmed, setConfirmed] = useState(false);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -38,14 +38,11 @@ export default function SignupPage() {
       if (error) throw error;
 
       if (data.session) {
-        // Email confirmation is disabled — user is logged in immediately
         toast.success("Account created! Welcome to Bold Party.");
-        // Hard redirect so server picks up the new session cookie
         window.location.href = role === "vendor" ? "/vendor/apply" : "/dashboard";
         return;
       }
 
-      // Email confirmation is required — show the confirmation pending state
       setConfirmed(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Signup failed";
@@ -59,44 +56,41 @@ export default function SignupPage() {
     }
   }
 
-  // Email confirmation pending state
   if (confirmed) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-16">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-md text-center">
-          <div className="glass-card p-10">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center mx-auto mb-5">
-              <Mail size={28} className="text-emerald-400" />
+          <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-5">
+              <Mail size={28} className="text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Check Your Email</h2>
-            <p className="text-slate-400 text-sm mb-2">
-              We sent a confirmation link to
-            </p>
-            <p className="text-brand-400 font-semibold mb-6">{email}</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h2>
+            <p className="text-gray-500 text-sm mb-2">We sent a confirmation link to</p>
+            <p className="text-brand-600 font-semibold mb-6">{email}</p>
             <div className="space-y-3 text-left mb-6">
               {[
                 "Open the email from Bold Party",
                 "Click the confirmation link",
                 "You'll be automatically signed in",
               ].map((step, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-slate-300">
-                  <div className="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/30 flex items-center justify-center text-xs font-bold text-brand-400 flex-shrink-0">
+                <div key={i} className="flex items-center gap-3 text-sm text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
                     {i + 1}
                   </div>
                   {step}
                 </div>
               ))}
             </div>
-            <p className="text-xs text-slate-500 mb-4">
+            <p className="text-xs text-gray-400 mb-4">
               Didn&apos;t receive it? Check your spam folder or{" "}
               <button
                 onClick={() => setConfirmed(false)}
-                className="text-brand-400 hover:text-brand-300 underline"
+                className="text-brand-600 hover:text-brand-700 underline"
               >
                 try a different email
               </button>
             </p>
-            <Link href="/login" className="btn-secondary w-full">
+            <Link href="/login" className="btn-secondary-light w-full">
               Back to Sign In <ArrowRight size={14} />
             </Link>
           </div>
@@ -105,8 +99,10 @@ export default function SignupPage() {
     );
   }
 
+  const strength = Math.min(4, Math.floor(password.length / 3) + ((/[A-Z]/.test(password) ? 1 : 0) + (/[0-9!@#$%^&*]/.test(password) ? 1 : 0)));
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-6">
@@ -115,11 +111,11 @@ export default function SignupPage() {
             </div>
             <span className="gradient-brand-text">Bold Party</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white">Create your account</h1>
-          <p className="text-slate-400 text-sm mt-1">Join thousands planning better events</p>
+          <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
+          <p className="text-gray-500 text-sm mt-1">Join thousands planning better events</p>
         </div>
 
-        <div className="glass-card p-8">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
           {/* Role Toggle */}
           <div className="flex gap-3 mb-6">
             {(["customer", "vendor"] as Role[]).map((r) => (
@@ -130,8 +126,8 @@ export default function SignupPage() {
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all",
                   role === r
-                    ? "gradient-brand text-white shadow-lg"
-                    : "bg-white/5 text-slate-400 hover:bg-white/8 border border-white/8"
+                    ? "gradient-brand text-white shadow-sm"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
                 )}
               >
                 {r === "customer" ? <User size={16} /> : <Store size={16} />}
@@ -142,52 +138,52 @@ export default function SignupPage() {
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
+                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
-                  className="input-field pl-icon"
+                  className="input-light pl-icon"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
-                  className="input-field pl-icon"
+                  className="input-light pl-icon"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min. 8 characters"
-                  className="input-field pl-icon pr-10"
+                  className="input-light pl-icon pr-10"
                   required
                   minLength={8}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -195,23 +191,20 @@ export default function SignupPage() {
               {password.length > 0 && (
                 <div className="mt-2">
                   <div className="flex gap-1">
-                    {[1, 2, 3, 4].map((level) => {
-                      const strength = Math.min(4, Math.floor(password.length / 3) + ((/[A-Z]/.test(password) ? 1 : 0) + (/[0-9!@#$%^&*]/.test(password) ? 1 : 0)));
-                      return (
-                        <div
-                          key={level}
-                          className={cn("flex-1 h-1 rounded-full transition-all", {
-                            "bg-red-500": strength >= level && strength <= 1,
-                            "bg-amber-500": strength >= level && strength === 2,
-                            "bg-yellow-400": strength >= level && strength === 3,
-                            "bg-emerald-500": strength >= level && strength >= 4,
-                            "bg-white/10": strength < level,
-                          })}
-                        />
-                      );
-                    })}
+                    {[1, 2, 3, 4].map((level) => (
+                      <div
+                        key={level}
+                        className={cn("flex-1 h-1 rounded-full transition-all", {
+                          "bg-red-500": strength >= level && strength <= 1,
+                          "bg-amber-500": strength >= level && strength === 2,
+                          "bg-yellow-400": strength >= level && strength === 3,
+                          "bg-emerald-500": strength >= level && strength >= 4,
+                          "bg-gray-200": strength < level,
+                        })}
+                      />
+                    ))}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-gray-400 mt-1">
                     {password.length < 8 ? "Too short" : password.length < 10 ? "Weak — add numbers or symbols" : password.length < 14 ? "Good password" : "Strong password"}
                   </p>
                 </div>
@@ -219,8 +212,8 @@ export default function SignupPage() {
             </div>
 
             {role === "vendor" && (
-              <div className="p-3 rounded-xl bg-brand-500/8 border border-brand-500/20 text-xs text-brand-300 flex items-start gap-2">
-                <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0" />
+              <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-700 flex items-start gap-2">
+                <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0 text-blue-500" />
                 After confirming your email, you&apos;ll complete your vendor profile. Free to join — keep 90% of earnings.
               </div>
             )}
@@ -231,15 +224,15 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <p className="text-center text-xs text-slate-600 mt-4">
+          <p className="text-center text-xs text-gray-400 mt-4">
             By signing up you agree to our{" "}
-            <Link href="/terms" className="text-slate-400 hover:text-white">Terms</Link> and{" "}
-            <Link href="/privacy" className="text-slate-400 hover:text-white">Privacy Policy</Link>
+            <Link href="/terms" className="text-gray-600 hover:text-gray-900">Terms</Link> and{" "}
+            <Link href="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
           </p>
 
-          <p className="text-center text-sm text-slate-500 mt-4">
+          <p className="text-center text-sm text-gray-500 mt-4">
             Already have an account?{" "}
-            <Link href="/login" className="text-brand-400 hover:text-brand-300 font-medium">Sign in</Link>
+            <Link href="/login" className="text-brand-600 hover:text-brand-700 font-medium">Sign in</Link>
           </p>
         </div>
       </div>

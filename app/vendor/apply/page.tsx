@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Sparkles, Loader2, Store, MapPin, FileText } from "lucide-react";
@@ -79,7 +79,7 @@ export default function VendorApplyPage() {
           </p>
         </div>
 
-        <div className="glass-card p-8">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-8">
           {step === 1 && (
             <div className="space-y-5">
               <div>
@@ -168,7 +168,7 @@ export default function VendorApplyPage() {
                     onChange={(e) => update("travel_radius_km", Number(e.target.value))}
                     className="flex-1 accent-brand-500"
                   />
-                  <span className="text-white font-bold w-16 text-center glass px-3 py-1.5 rounded-lg">
+                  <span className="text-white font-bold w-16 text-center bg-white/8 border border-white/10 px-3 py-1.5 rounded-lg">
                     {formData.travel_radius_km}km
                   </span>
                 </div>
@@ -217,7 +217,7 @@ export default function VendorApplyPage() {
                 <input type="url" value={formData.website_url} onChange={(e) => update("website_url", e.target.value)} placeholder="https://yourbusiness.com" className="input-field" />
               </div>
 
-              <div className="glass p-4 rounded-xl border border-brand-500/20 text-sm text-slate-400">
+              <div className="bg-white/4 border border-brand-500/20 rounded-xl p-4 text-sm text-slate-400">
                 <Sparkles size={14} className="inline text-brand-400 mr-1.5" />
                 After submission, our team reviews your application within 24–48 hours. You&apos;ll receive an email once approved.
               </div>

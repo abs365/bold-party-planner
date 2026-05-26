@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,9 +9,10 @@ import type { Profile } from "@/types";
 
 interface NavbarProps {
   user?: Profile | null;
+  lightBg?: boolean;
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ user, lightBg = false }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
@@ -44,8 +45,31 @@ export function Navbar({ user }: NavbarProps) {
     window.location.href = "/login";
   }
 
+  const headerClass = lightBg
+    ? "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200"
+    : "fixed top-0 left-0 right-0 z-50 bg-white/4 border-b border-white/8";
+
+  const linkClass = (href: string) => cn(
+    "text-sm font-medium transition-colors",
+    lightBg
+      ? (pathname === href ? "text-gray-900" : "text-gray-500 hover:text-gray-900")
+      : (pathname === href ? "text-brand-400" : "text-slate-400 hover:text-white")
+  );
+
+  const dropdownClass = lightBg
+    ? "absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-lg"
+    : "absolute right-0 top-full mt-2 w-48 bg-white/4 border border-white/6 rounded-xl rounded-xl overflow-hidden shadow-2xl";
+
+  const dropdownItemClass = lightBg
+    ? "flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+    : "flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors";
+
+  const mobileMenuClass = lightBg
+    ? "md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3"
+    : "md:hidden bg-white/4 border-t border-white/8 px-4 py-4 space-y-3";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/8">
+    <header className={headerClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
@@ -58,14 +82,7 @@ export function Navbar({ user }: NavbarProps) {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors",
-                pathname === link.href ? "text-brand-400" : "text-slate-400 hover:text-white"
-              )}
-            >
+            <Link key={link.href} href={link.href} className={linkClass(link.href)}>
               {link.label}
             </Link>
           ))}
@@ -80,67 +97,86 @@ export function Navbar({ user }: NavbarProps) {
                 Plan Event
               </Link>
               {user.role === "customer" && (
-                <Link href="/vendor/apply" className="text-sm text-slate-400 hover:text-white transition-colors font-medium">
+                <Link
+                  href="/vendor/apply"
+                  className={cn(
+                    "text-sm font-medium transition-colors",
+                    lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
+                  )}
+                >
                   Become a Vendor
                 </Link>
               )}
-
-              <Link href="/dashboard/notifications" className="relative p-2 rounded-lg hover:bg-white/5 transition-colors">
-                <Bell size={18} className="text-slate-400" />
+              <Link
+                href="/dashboard/notifications"
+                className={cn(
+                  "relative p-2 rounded-lg transition-colors",
+                  lightBg ? "hover:bg-gray-100" : "hover:bg-white/5"
+                )}
+              >
+                <Bell size={18} className={lightBg ? "text-gray-500" : "text-slate-400"} />
                 <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-500 rounded-full" />
               </Link>
 
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                  className={cn(
+                    "flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-lg transition-colors",
+                    lightBg ? "hover:bg-gray-100" : "hover:bg-white/5"
+                  )}
                 >
                   <div className="w-7 h-7 rounded-full gradient-brand flex items-center justify-center text-xs font-bold text-white">
                     {user.full_name?.[0]?.toUpperCase() ?? "U"}
                   </div>
-                  <span className="text-sm text-slate-300">{user.full_name?.split(" ")[0]}</span>
-                  <ChevronDown size={14} className="text-slate-500" />
+                  <span className={cn("text-sm", lightBg ? "text-gray-700" : "text-slate-300")}>
+                    {user.full_name?.split(" ")[0]}
+                  </span>
+                  <ChevronDown size={14} className={lightBg ? "text-gray-400" : "text-slate-500"} />
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 glass-card rounded-xl overflow-hidden shadow-2xl">
+                  <div className={dropdownClass}>
                     <Link
                       href={dashboardLink}
-                      className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors"
+                      className={dropdownItemClass}
                       onClick={() => setProfileOpen(false)}
                     >
-                      <LayoutDashboard size={15} className="text-brand-400" />
+                      <LayoutDashboard size={15} className="text-brand-500" />
                       Dashboard
                     </Link>
                     {user.role === "customer" && (
                       <Link
                         href="/vendor/apply"
-                        className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors"
+                        className={dropdownItemClass}
                         onClick={() => setProfileOpen(false)}
                       >
-                        <Store size={15} className="text-brand-400" />
+                        <Store size={15} className="text-brand-500" />
                         Become a Vendor
                       </Link>
                     )}
                     <Link
                       href="/inspire"
-                      className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors"
+                      className={dropdownItemClass}
                       onClick={() => setProfileOpen(false)}
                     >
-                      <Compass size={15} className="text-brand-400" />
+                      <Compass size={15} className="text-brand-500" />
                       Inspiration
                     </Link>
                     <Link
                       href={user.role === "vendor" ? "/vendor/profile" : user.role === "admin" ? "/admin" : "/dashboard/settings"}
-                      className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-white/5 transition-colors"
+                      className={dropdownItemClass}
                       onClick={() => setProfileOpen(false)}
                     >
-                      <User size={15} className="text-brand-400" />
+                      <User size={15} className="text-brand-500" />
                       Account Settings
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors border-t border-white/5"
+                      className={cn(
+                        "w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 transition-colors border-t",
+                        lightBg ? "hover:bg-red-50 border-gray-100" : "hover:bg-red-500/10 border-white/5"
+                      )}
                     >
                       <LogOut size={15} />
                       Sign Out
@@ -151,22 +187,44 @@ export function Navbar({ user }: NavbarProps) {
             </>
           ) : (
             <>
-              <Link href="/vendor/apply" className="text-sm text-slate-400 hover:text-white transition-colors font-medium hidden lg:block">
+              <Link
+                href="/vendor/apply"
+                className={cn(
+                  "text-sm font-medium transition-colors hidden lg:block",
+                  lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
+                )}
+              >
                 List Your Services
               </Link>
-              <Link href="/login" className="btn-secondary text-sm py-2 px-4">
-                Sign In
-              </Link>
-              <Link href="/signup" className="btn-primary text-sm py-2 px-4">
-                Get Started Free
-              </Link>
+              {lightBg ? (
+                <>
+                  <Link href="/login" className="btn-secondary-light text-sm py-2 px-4">
+                    Sign In
+                  </Link>
+                  <Link href="/signup" className="btn-primary text-sm py-2 px-4">
+                    Get Started
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="btn-secondary text-sm py-2 px-4">
+                    Sign In
+                  </Link>
+                  <Link href="/signup" className="btn-primary text-sm py-2 px-4">
+                    Get Started Free
+                  </Link>
+                </>
+              )}
             </>
           )}
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-white/5"
+          className={cn(
+            "md:hidden p-2 rounded-lg transition-colors",
+            lightBg ? "hover:bg-gray-100 text-gray-700" : "hover:bg-white/5 text-slate-300"
+          )}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -175,21 +233,24 @@ export function Navbar({ user }: NavbarProps) {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-white/8 px-4 py-4 space-y-3">
+        <div className={mobileMenuClass}>
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="block text-sm text-slate-300 py-2"
+              className={cn(
+                "block text-sm py-2",
+                lightBg ? "text-gray-700" : "text-slate-300"
+              )}
               onClick={() => setMobileOpen(false)}
             >
               {link.label}
             </Link>
           ))}
-          <div className="pt-2 border-t border-white/8 flex flex-col gap-2">
+          <div className={cn("pt-2 border-t flex flex-col gap-2", lightBg ? "border-gray-100" : "border-white/8")}>
             {user ? (
               <>
-                <Link href={dashboardLink} className="btn-secondary text-sm" onClick={() => setMobileOpen(false)}>
+                <Link href={dashboardLink} className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Dashboard
                 </Link>
                 <Link href="/dashboard/create-event" className="btn-primary text-sm" onClick={() => setMobileOpen(false)}>
@@ -198,14 +259,21 @@ export function Navbar({ user }: NavbarProps) {
               </>
             ) : (
               <>
-                <Link href="/vendor/apply" className="block text-sm text-slate-300 py-2 border-b border-white/8 mb-1" onClick={() => setMobileOpen(false)}>
-                  List Your Services →
+                <Link
+                  href="/vendor/apply"
+                  className={cn(
+                    "block text-sm py-2 border-b mb-1",
+                    lightBg ? "text-gray-600 border-gray-100" : "text-slate-300 border-white/8"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  List Your Services
                 </Link>
-                <Link href="/login" className="btn-secondary text-sm" onClick={() => setMobileOpen(false)}>
+                <Link href="/login" className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Sign In
                 </Link>
                 <Link href="/signup" className="btn-primary text-sm" onClick={() => setMobileOpen(false)}>
-                  Get Started Free
+                  Get Started
                 </Link>
               </>
             )}

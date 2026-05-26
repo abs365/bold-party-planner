@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
@@ -27,7 +27,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
       return (
-        <div className="glass-card p-8 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-8 text-center">
           <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
           <h3 className="text-white font-semibold mb-2">Something went wrong</h3>
           <p className="text-white/50 text-sm mb-4">An unexpected error occurred. Please try refreshing.</p>
@@ -43,7 +43,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
 export function ErrorState({ message, onRetry }: { message?: string; onRetry?: () => void }) {
   return (
-    <div className="glass-card p-8 text-center">
+    <div className="bg-white/4 border border-white/6 rounded-xl p-8 text-center">
       <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
       <h3 className="text-white font-semibold mb-2">Unable to load</h3>
       <p className="text-white/50 text-sm mb-4">{message ?? "Something went wrong. Please try again."}</p>

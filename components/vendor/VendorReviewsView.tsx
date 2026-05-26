@@ -54,7 +54,7 @@ export function VendorReviewsView({ reviews, vendorRating, totalReviews }: Vendo
       </div>
 
       {/* Rating Summary */}
-      <div className="glass-card p-6">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6">
         <div className="flex items-center gap-6">
           <div className="text-center">
             <div className="text-5xl font-bold text-white">{vendorRating > 0 ? vendorRating.toFixed(1) : "—"}</div>
@@ -81,7 +81,7 @@ export function VendorReviewsView({ reviews, vendorRating, totalReviews }: Vendo
 
       {/* Reviews List */}
       {localReviews.length === 0 ? (
-        <div className="glass-card p-16 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
           <Star size={36} className="text-slate-600 mx-auto mb-3" />
           <h3 className="font-bold text-white mb-1">No reviews yet</h3>
           <p className="text-slate-400 text-sm">Reviews appear here after customers complete bookings.</p>
@@ -95,7 +95,7 @@ export function VendorReviewsView({ reviews, vendorRating, totalReviews }: Vendo
             const isResponding = respondingTo === reviewId;
 
             return (
-              <div key={reviewId} className="glass-card p-5 space-y-4">
+              <div key={reviewId} className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
                 {/* Review Header */}
                 <div className="flex items-start gap-3">
                   {customer?.avatar_url ? (

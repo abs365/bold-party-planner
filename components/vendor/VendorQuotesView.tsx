@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -87,7 +87,7 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
             const isExpanded = expanded === quote.id;
             const isResponding = responding === quote.id;
             return (
-              <div key={quote.id} className="glass-card overflow-hidden">
+              <div key={quote.id} className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
                 <div
                   className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors"
                   onClick={() => setExpanded(isExpanded ? null : quote.id)}

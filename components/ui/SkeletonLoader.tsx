@@ -1,6 +1,6 @@
-export function SkeletonCard({ className = "" }: { className?: string }) {
+﻿export function SkeletonCard({ className = "" }: { className?: string }) {
   return (
-    <div className={`glass-card p-5 animate-pulse ${className}`}>
+    <div className={`bg-white/4 border border-white/6 rounded-xl p-5 animate-pulse ${className}`}>
       <div className="h-4 bg-white/10 rounded w-3/4 mb-3" />
       <div className="h-3 bg-white/10 rounded w-1/2 mb-2" />
       <div className="h-3 bg-white/10 rounded w-2/3" />
@@ -10,7 +10,7 @@ export function SkeletonCard({ className = "" }: { className?: string }) {
 
 export function SkeletonVendorCard() {
   return (
-    <div className="glass-card overflow-hidden animate-pulse">
+    <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden animate-pulse">
       <div className="h-48 bg-white/10" />
       <div className="p-4 space-y-3">
         <div className="h-4 bg-white/10 rounded w-3/4" />
@@ -51,7 +51,7 @@ export function SkeletonStats() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="glass-card p-5 animate-pulse">
+        <div key={i} className="bg-white/4 border border-white/6 rounded-xl p-5 animate-pulse">
           <div className="h-3 bg-white/10 rounded w-1/2 mb-4" />
           <div className="h-7 bg-white/10 rounded w-1/3" />
         </div>

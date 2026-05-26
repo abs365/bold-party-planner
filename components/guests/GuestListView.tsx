@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { Users, Plus, Crown, ChevronDown, Trash2, Mail, Phone, Check, X, Clock, HelpCircle, Download, Search, UserCheck } from "lucide-react";
@@ -149,7 +149,7 @@ export function GuestListView({ eventId, initialGuests, initialStats }: GuestLis
             { label: "Pending",      value: stats.pending,      color: "text-amber-400" },
             { label: "VIPs",         value: stats.vip_count,    color: "text-gold-400" },
           ].map(({ label, value, color }) => (
-            <div key={label} className="glass-card p-4 text-center">
+            <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4 text-center">
               <div className={cn("text-2xl font-bold", color)}>{value}</div>
               <div className="text-xs text-slate-500 mt-0.5">{label}</div>
             </div>
@@ -201,7 +201,7 @@ export function GuestListView({ eventId, initialGuests, initialStats }: GuestLis
 
       {/* Add/Edit Form */}
       {showAdd && (
-        <div className="glass-card p-6 border border-brand-500/20 animate-fade-in-up">
+        <div className="bg-white/4 border border-brand-500/20 rounded-xl p-6 animate-fade-in-up">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
             <UserCheck size={16} className="text-brand-400" />
             {editId ? "Edit Guest" : "Add Guest"}
@@ -255,7 +255,7 @@ export function GuestListView({ eventId, initialGuests, initialStats }: GuestLis
       )}
 
       {/* Guest Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
         {filtered.length === 0 ? (
           <div className="text-center py-16">
             <Users size={40} className="mx-auto mb-3 text-slate-700" />

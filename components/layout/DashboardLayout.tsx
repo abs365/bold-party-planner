@@ -73,15 +73,15 @@ interface SidebarContentProps {
 function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: SidebarContentProps) {
   return (
     <div className="flex flex-col h-full">
-      <Link href="/" className="flex items-center gap-2.5 px-6 py-5 border-b border-white/8">
+      <Link href="/" className="flex items-center gap-2.5 px-6 py-5 border-b border-white/6">
         <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
           <Sparkles size={15} className="text-white" />
         </div>
         <span className="font-bold text-sm gradient-brand-text">Bold Party</span>
       </Link>
 
-      <div className="px-4 py-4 border-b border-white/8">
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/4">
+      <div className="px-4 py-4 border-b border-white/6">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
           <div className="w-9 h-9 rounded-full gradient-brand flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
             {user.full_name?.[0]?.toUpperCase() ?? "U"}
           </div>
@@ -92,7 +92,7 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {nav.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
@@ -101,42 +101,41 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
               href={href}
               onClick={onClose}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                 active
-                  ? "bg-brand-500/15 text-brand-400 border border-brand-500/20"
-                  : "text-slate-400 hover:bg-white/5 hover:text-white"
+                  ? "bg-brand-500/12 text-brand-400"
+                  : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
               )}
             >
-              <Icon size={17} className={active ? "text-brand-400" : "text-slate-500 group-hover:text-slate-300"} />
+              <Icon size={16} className={active ? "text-brand-400" : "text-slate-500"} />
               {label}
-              {active && <ChevronRight size={13} className="ml-auto text-brand-500" />}
             </Link>
           );
         })}
       </nav>
 
-      <div className="px-3 py-4 border-t border-white/8 space-y-1">
+      <div className="px-3 py-4 border-t border-white/6 space-y-0.5">
         <Link
           href="/dashboard/notifications"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-colors"
           onClick={onClose}
         >
-          <Bell size={17} className="text-slate-500" />
+          <Bell size={16} className="text-slate-500" />
           Notifications
         </Link>
         <Link
           href="/inspire"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-colors"
           onClick={onClose}
         >
-          <Sparkles size={17} className="text-slate-500" />
+          <Sparkles size={16} className="text-slate-500" />
           Inspiration Feed
         </Link>
         <button
           onClick={onSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-500 hover:bg-white/5 hover:text-red-400 transition-colors"
         >
-          <LogOut size={17} />
+          <LogOut size={16} />
           Sign Out
         </button>
       </div>
@@ -177,18 +176,18 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen overflow-hidden bg-[#0a0a0f]">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-white/8 glass flex-shrink-0">
+      <aside className="hidden lg:flex flex-col w-60 border-r border-white/6 bg-[#0d0d18] flex-shrink-0">
         <SidebarContent {...sidebarProps} />
       </aside>
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="fixed inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
-          <aside className="relative w-72 h-full glass border-r border-white/8 flex flex-col">
+          <div className="fixed inset-0 bg-black/70" onClick={() => setSidebarOpen(false)} />
+          <aside className="relative w-68 h-full bg-[#0d0d18] border-r border-white/6 flex flex-col">
             <button
               onClick={() => setSidebarOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-white/8"
+              className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-white/6 text-slate-400"
             >
               <X size={18} />
             </button>
@@ -200,30 +199,30 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="flex items-center justify-between px-6 h-16 border-b border-white/8 glass flex-shrink-0">
+        <header className="flex items-center justify-between px-6 h-14 border-b border-white/6 bg-[#0a0a0f] flex-shrink-0">
           <button
-            className="lg:hidden p-2 rounded-lg hover:bg-white/5"
+            className="lg:hidden p-2 rounded-lg hover:bg-white/5 text-slate-400"
             onClick={() => setSidebarOpen(true)}
           >
-            <Menu size={20} />
+            <Menu size={19} />
           </button>
 
           <div className="hidden lg:flex items-center gap-2 text-sm text-slate-500">
-            <span className="text-slate-600">Portal</span>
-            <ChevronRight size={14} />
-            <span className="text-white capitalize">{user.role}</span>
+            <span>Portal</span>
+            <ChevronRight size={13} />
+            <span className="text-slate-300 capitalize">{user.role}</span>
           </div>
 
           <div className="flex items-center gap-3">
             {user.role === "customer" && (
-              <Link href="/dashboard/create-event" className="btn-primary text-xs py-2 px-4">
-                <Sparkles size={13} />
+              <Link href="/dashboard/create-event" className="btn-primary text-xs py-1.5 px-3.5">
+                <Sparkles size={12} />
                 Plan Event
               </Link>
             )}
             <Link href="/dashboard/notifications" className="relative p-2 rounded-lg hover:bg-white/5">
-              <Bell size={18} className="text-slate-400" />
-              <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-500 rounded-full" />
+              <Bell size={17} className="text-slate-400" />
+              <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full" />
             </Link>
           </div>
         </header>

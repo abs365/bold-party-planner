@@ -111,9 +111,9 @@ export default async function AdminDashboard() {
             { label: "Total Events",      value: eventsRes.count ?? 0,       icon: Calendar,  color: "text-emerald-400", href: "/admin/bookings" },
             { label: "Platform Revenue",  value: formatCurrency(totalRevenue), icon: CreditCard, color: "text-gold-400", href: "/admin/payouts" },
           ].map(({ label, value, icon: Icon, color, href }) => (
-            <Link key={label} href={href} className="glass-card p-5 hover:border-brand-500/20 transition-all card-hover group">
+            <Link key={label} href={href} className="bg-white/4 border border-white/6 rounded-xl p-5 hover:border-white/10 transition-colors group">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-slate-500 uppercase tracking-wider">{label}</span>
+                <span className="text-xs text-slate-500">{label}</span>
                 <Icon size={16} className={color} />
               </div>
               <div className="text-2xl font-bold text-white">{value}</div>
@@ -131,7 +131,7 @@ export default async function AdminDashboard() {
             { label: "Monthly Revenue",      value: formatCurrency(monthlyRevenue), sub: `${monthlyBookings.length} bookings`, icon: BarChart2, color: "text-brand-400" },
             { label: "Weekly GMV",           value: formatCurrency(weeklyVolume),   sub: "Gross merchandise value",           icon: CreditCard, color: "text-purple-400" },
           ].map(({ label, value, sub, icon: Icon, color }) => (
-            <div key={label} className="glass-card p-4 border border-white/5">
+            <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Icon size={13} className={color} />
                 <span className="text-xs text-slate-500">{label}</span>
@@ -144,7 +144,7 @@ export default async function AdminDashboard() {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Pending Vendor Approvals */}
-          <div className="glass-card p-6">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-bold text-white flex items-center gap-2">
                 <AlertCircle size={16} className="text-amber-400" />
@@ -153,7 +153,7 @@ export default async function AdminDashboard() {
                   <span className="badge bg-amber-500/20 text-amber-400 border border-amber-500/20">{pendingVendors.length}</span>
                 )}
               </h3>
-              <Link href="/admin/vendors?status=pending" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+              <Link href="/admin/vendors?status=pending" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
                 View all <ArrowRight size={11} />
               </Link>
             </div>
@@ -206,13 +206,13 @@ export default async function AdminDashboard() {
           </div>
 
           {/* Recent Bookings + Status Overview */}
-          <div className="glass-card p-6">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-bold text-white flex items-center gap-2">
-                <TrendingUp size={16} className="text-brand-400" />
+                <TrendingUp size={16} className="text-slate-400" />
                 Booking Activity
               </h3>
-              <Link href="/admin/bookings" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+              <Link href="/admin/bookings" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
                 View all <ArrowRight size={11} />
               </Link>
             </div>
@@ -256,7 +256,7 @@ export default async function AdminDashboard() {
         {/* Quick Management Links */}
         <div>
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Eye size={16} className="text-brand-400" />Quick Management
+            <Eye size={16} className="text-slate-400" />Quick Management
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {[
@@ -270,7 +270,7 @@ export default async function AdminDashboard() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="glass-card p-4 text-center hover:border-brand-500/25 card-hover transition-all group relative"
+                className="bg-white/4 border border-white/6 rounded-xl p-4 text-center hover:border-white/10 transition-colors group relative"
               >
                 {link.badge ? (
                   <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-500 text-black text-xs font-bold flex items-center justify-center">
@@ -285,7 +285,7 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Platform Health */}
-        <div className="glass-card p-6 border border-white/5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-6">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
             <Shield size={16} className="text-emerald-400" />Platform Health
           </h3>

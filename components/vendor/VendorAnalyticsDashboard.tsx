@@ -66,16 +66,16 @@ export function VendorAnalyticsDashboard() {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => <div key={i} className="glass-card p-4 animate-pulse h-24" />)}
+          {[...Array(6)].map((_, i) => <div key={i} className="bg-white/4 border border-white/6 rounded-xl p-4 animate-pulse h-24" />)}
         </div>
-        <div className="glass-card p-5 animate-pulse h-52" />
-        <div className="glass-card p-5 animate-pulse h-44" />
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 animate-pulse h-52" />
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 animate-pulse h-44" />
       </div>
     );
   }
 
   if (!data) {
-    return <div className="glass-card p-8 text-center text-white/40">Unable to load analytics</div>;
+    return <div className="bg-white/4 border border-white/6 rounded-xl p-8 text-center text-white/40">Unable to load analytics</div>;
   }
 
   const { summary, chart } = data;
@@ -113,7 +113,7 @@ export function VendorAnalyticsDashboard() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {stats.map(({ label, value, icon: Icon, color, bg, sub }) => (
-          <div key={label} className="glass-card p-4">
+          <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
               <span className="text-white/50 text-xs">{label}</span>
               <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center`}>
@@ -127,7 +127,7 @@ export function VendorAnalyticsDashboard() {
       </div>
 
       {/* Profile views area chart */}
-      <div className="glass-card p-5">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-5">
         <div className="flex items-center justify-between mb-5">
           <div>
             <h3 className="text-white font-semibold text-sm">Profile Views</h3>
@@ -179,7 +179,7 @@ export function VendorAnalyticsDashboard() {
       </div>
 
       {/* Bookings bar chart */}
-      <div className="glass-card p-5">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-5">
         <div className="flex items-center justify-between mb-5">
           <div>
             <h3 className="text-white font-semibold text-sm">Bookings</h3>
@@ -217,7 +217,7 @@ export function VendorAnalyticsDashboard() {
       </div>
 
       {/* Smart insights */}
-      <div className="glass-card p-5 border border-brand-500/15">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-5">
         <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
           <TrendingUp className="w-4 h-4 text-brand-400" />
           Smart Insights

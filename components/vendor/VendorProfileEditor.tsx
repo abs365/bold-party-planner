@@ -84,7 +84,7 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
       </div>
 
       {/* Basic Info */}
-      <div className="glass-card p-6 space-y-4">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-4">
         <h2 className="font-bold text-white">Basic Information</h2>
 
         <div>
@@ -127,7 +127,7 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
       </div>
 
       {/* Location & Contact */}
-      <div className="glass-card p-6 space-y-4">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-4">
         <h2 className="font-bold text-white">Location & Contact</h2>
 
         <div className="grid grid-cols-2 gap-4">
@@ -158,7 +158,7 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
       </div>
 
       {/* Pricing */}
-      <div className="glass-card p-6 space-y-4">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-4">
         <h2 className="font-bold text-white">Pricing & Experience</h2>
 
         <div className="grid grid-cols-2 gap-4">
@@ -201,7 +201,7 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
       </div>
 
       {/* Event Types */}
-      <div className="glass-card p-6">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6">
         <h2 className="font-bold text-white mb-4">Event Types You Cover</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {Object.entries(EVENT_TYPES).map(([key, type]) => {

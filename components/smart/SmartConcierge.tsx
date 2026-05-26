@@ -130,7 +130,7 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
       {/* Chat Window */}
       {open && (
         <div className={cn(
-          "fixed bottom-6 right-6 z-50 flex flex-col rounded-2xl glass border border-white/10 shadow-2xl transition-all duration-200",
+          "fixed bottom-6 right-6 z-50 flex flex-col rounded-2xl bg-[#13131f] border border-white/10 shadow-2xl transition-all duration-200",
           minimised ? "w-72 h-14" : "w-80 sm:w-96 h-[520px]"
         )}>
           {/* Header */}

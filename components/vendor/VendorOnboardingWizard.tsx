@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -155,7 +155,7 @@ export function VendorOnboardingWizard() {
         })}
       </div>
 
-      <div className="glass-card p-6">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-6">
         {/* Step 0: Business Info */}
         {step === 0 && (
           <div className="space-y-4">

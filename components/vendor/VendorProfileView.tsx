@@ -61,14 +61,14 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 pb-28 lg:pb-10">
-      {/* Lightbox */}
+      {/* Lightbox — intentionally dark overlay */}
       {lightboxIndex !== null && mediaList[lightboxIndex] && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeLightbox}>
           <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20">
-            <X size={20} />
+            <X size={20} className="text-white" />
           </button>
           <button onClick={(e) => { e.stopPropagation(); prevMedia(); }} className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20">
-            <ChevronLeft size={20} />
+            <ChevronLeft size={20} className="text-white" />
           </button>
           <div className="max-w-4xl max-h-[80vh] relative" onClick={(e) => e.stopPropagation()}>
             {mediaList[lightboxIndex].type === "image" ? (
@@ -87,7 +87,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
             )}
           </div>
           <button onClick={(e) => { e.stopPropagation(); nextMedia(); }} className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20">
-            <ChevronRight size={20} />
+            <ChevronRight size={20} className="text-white" />
           </button>
           <div className="absolute bottom-4 text-sm text-slate-500">
             {lightboxIndex + 1} / {mediaList.length}
@@ -101,7 +101,6 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
           {/* Media Gallery */}
           {mediaList.length > 0 ? (
             <div>
-              {/* Main image */}
               <div
                 className="relative h-96 rounded-2xl overflow-hidden cursor-pointer group"
                 onClick={() => openLightbox(0)}
@@ -124,7 +123,6 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 </div>
               </div>
 
-              {/* Thumbnails */}
               {mediaList.length > 1 && (
                 <div className="grid grid-cols-5 gap-2 mt-2">
                   {mediaList.slice(1, 6).map((media, i) => (
@@ -136,8 +134,8 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                       {media.type === "image" ? (
                         <Image src={media.url} alt="" fill className="object-cover group-hover:opacity-80 transition-opacity" sizes="20vw" />
                       ) : (
-                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                          <Play size={20} className="text-white" />
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                          <Play size={20} className="text-gray-500" />
                         </div>
                       )}
                       {i === 4 && mediaList.length > 6 && (
@@ -151,27 +149,27 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               )}
             </div>
           ) : (
-            <div className="h-64 rounded-2xl bg-white/5 flex items-center justify-center">
+            <div className="h-64 rounded-2xl bg-gray-100 flex items-center justify-center">
               <span className="text-6xl">{cat?.icon}</span>
             </div>
           )}
 
           {/* Vendor Info */}
-          <div className="glass-card p-6">
+          <div className="bg-white border border-gray-100 rounded-xl p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <div className="flex items-center gap-2 text-sm text-brand-400 mb-1">
+                <div className="flex items-center gap-2 text-sm text-brand-600 mb-1">
                   <span>{cat?.icon}</span>
                   <span className="font-medium">{cat?.label}</span>
                 </div>
-                <h1 className="text-2xl font-bold text-white">{vendor.business_name}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">{vendor.business_name}</h1>
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex items-center gap-1.5">
-                    <MapPin size={14} className="text-slate-500" />
-                    <span className="text-sm text-slate-400">{vendor.city}</span>
+                    <MapPin size={14} className="text-gray-400" />
+                    <span className="text-sm text-gray-500">{vendor.city}</span>
                   </div>
                   {vendor.travel_radius_km && (
-                    <span className="text-sm text-slate-500">· Travels up to {vendor.travel_radius_km}km</span>
+                    <span className="text-sm text-gray-400">· Travels up to {vendor.travel_radius_km}km</span>
                   )}
                 </div>
               </div>
@@ -196,10 +194,10 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     }
                   }}
                   disabled={savePending}
-                  className={cn("p-2.5 rounded-xl transition-all", saved ? "bg-red-500/20 border border-red-500/30" : "bg-white/5 hover:bg-white/8")}
+                  className={cn("p-2.5 rounded-xl transition-all", saved ? "bg-red-50 border border-red-200" : "bg-gray-100 hover:bg-gray-200")}
                   title={saved ? "Unsave vendor" : "Save vendor"}
                 >
-                  <Heart size={18} className={saved ? "fill-red-400 text-red-400" : "text-slate-400"} />
+                  <Heart size={18} className={saved ? "fill-red-500 text-red-500" : "text-gray-500"} />
                 </button>
                 <button
                   onClick={() => {
@@ -210,10 +208,10 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                       toast.success("Link copied to clipboard!");
                     }
                   }}
-                  className="p-2.5 rounded-xl bg-white/5 hover:bg-white/8 transition-colors"
+                  className="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors"
                   title="Share this vendor"
                 >
-                  <Share2 size={18} className="text-slate-400" />
+                  <Share2 size={18} className="text-gray-500" />
                 </button>
               </div>
             </div>
@@ -229,7 +227,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 <Badge variant="gold">⭐ Featured</Badge>
               )}
               {vendor.subscription_plan === "pro" && !vendor.featured && (
-                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-medium">
+                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-medium">
                   <CheckCircle2 size={11} /> Pro Vendor
                 </span>
               )}
@@ -243,7 +241,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   href={vendor.instagram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-medium hover:bg-pink-500/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-pink-200 bg-pink-50 text-pink-600 text-xs font-medium hover:bg-pink-100 transition-colors"
                 >
                   <span className="font-bold text-[10px] leading-none">IG</span> Instagram
                 </a>
@@ -252,9 +250,9 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
             {/* Rating Summary */}
             {reviews.length > 0 && (
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-amber-500/8 border border-amber-500/15 mb-5">
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-amber-50 border border-amber-200 mb-5">
                 <div className="text-center">
-                  <div className="text-3xl font-extrabold text-white">{avgRating.toFixed(1)}</div>
+                  <div className="text-3xl font-bold text-gray-900">{avgRating.toFixed(1)}</div>
                   <StarRating rating={avgRating} size={14} className="justify-center mt-1" />
                 </div>
                 <div className="flex-1">
@@ -262,21 +260,21 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     const count = reviews.filter((r) => Math.floor(r.rating) === n).length;
                     return (
                       <div key={n} className="flex items-center gap-2 text-xs">
-                        <span className="text-slate-500 w-2">{n}</span>
-                        <div className="flex-1 bg-white/5 rounded-full h-1.5">
+                        <span className="text-gray-400 w-2">{n}</span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-1.5">
                           <div
                             className="bg-amber-400 h-1.5 rounded-full"
                             style={{ width: reviews.length > 0 ? `${(count / reviews.length) * 100}%` : "0%" }}
                           />
                         </div>
-                        <span className="text-slate-600 w-4">{count}</span>
+                        <span className="text-gray-400 w-4">{count}</span>
                       </div>
                     );
                   })}
                 </div>
                 <div className="text-center">
-                  <div className="text-sm font-semibold text-white">{reviews.length}</div>
-                  <div className="text-xs text-slate-500">reviews</div>
+                  <div className="text-sm font-semibold text-gray-900">{reviews.length}</div>
+                  <div className="text-xs text-gray-400">reviews</div>
                 </div>
               </div>
             )}
@@ -284,46 +282,46 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
             {/* Bio */}
             {vendor.bio && (
               <div>
-                <h3 className="text-sm font-semibold text-white mb-2">About</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{vendor.bio}</p>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">About</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{vendor.bio}</p>
               </div>
             )}
           </div>
 
           {/* Social / Event Highlights */}
-          <div className="glass-card p-6">
+          <div className="bg-white border border-gray-100 rounded-xl p-6">
             <VendorSocialFeed vendorName={vendor.business_name} />
           </div>
 
           {/* Reviews */}
           {reviews.length > 0 && (
-            <div className="glass-card p-6">
-              <h3 className="font-bold text-white mb-5 flex items-center gap-2">
-                <MessageCircle size={17} className="text-brand-400" />
+            <div className="bg-white border border-gray-100 rounded-xl p-6">
+              <h3 className="font-bold text-gray-900 mb-5 flex items-center gap-2">
+                <MessageCircle size={17} className="text-brand-600" />
                 Customer Reviews ({reviews.length})
               </h3>
               <div className="space-y-5">
                 {reviews.slice(0, 5).map((review) => (
-                  <div key={review.id} className="border-b border-white/8 pb-5 last:border-0 last:pb-0">
+                  <div key={review.id} className="border-b border-gray-100 pb-5 last:border-0 last:pb-0">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2.5">
                         <div className="w-9 h-9 rounded-full gradient-brand flex items-center justify-center text-sm font-bold text-white">
                           {review.profile?.full_name?.[0]?.toUpperCase() ?? "?"}
                         </div>
                         <div>
-                          <div className="text-sm font-semibold text-white">{review.profile?.full_name ?? "Anonymous"}</div>
-                          <div className="text-xs text-slate-600">{formatDate(review.created_at)}</div>
+                          <div className="text-sm font-semibold text-gray-900">{review.profile?.full_name ?? "Anonymous"}</div>
+                          <div className="text-xs text-gray-400">{formatDate(review.created_at)}</div>
                         </div>
                       </div>
                       <StarRating rating={review.rating} size={13} />
                     </div>
                     {review.comment && (
-                      <p className="text-slate-400 text-sm leading-relaxed mt-2">{review.comment}</p>
+                      <p className="text-gray-500 text-sm leading-relaxed mt-2">{review.comment}</p>
                     )}
                     {review.response && (
-                      <div className="mt-3 ml-4 p-3 rounded-xl bg-white/4 border-l-2 border-brand-500/40">
-                        <div className="text-xs font-semibold text-brand-400 mb-1">Vendor reply:</div>
-                        <p className="text-slate-400 text-sm">{review.response}</p>
+                      <div className="mt-3 ml-4 p-3 rounded-xl bg-gray-50 border-l-2 border-gray-200">
+                        <div className="text-xs font-semibold text-brand-600 mb-1">Vendor reply:</div>
+                        <p className="text-gray-500 text-sm">{review.response}</p>
                       </div>
                     )}
                   </div>
@@ -335,10 +333,9 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
         {/* Right: Booking Panel (desktop) */}
         <div className="space-y-5">
-          {/* Packages */}
-          <div className="glass-card p-5 sticky top-24">
-            <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-              <Package size={17} className="text-brand-400" />
+          <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm sticky top-24">
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Package size={17} className="text-brand-600" />
               Packages & Pricing
             </h3>
 
@@ -351,22 +348,22 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     className={cn(
                       "p-4 rounded-xl border cursor-pointer transition-all",
                       selectedPackage === pkg.id
-                        ? "border-brand-500/40 bg-brand-500/10"
-                        : "border-white/10 bg-white/4 hover:border-white/20"
+                        ? "border-brand-300 bg-brand-50"
+                        : "border-gray-200 bg-gray-50 hover:border-gray-300"
                     )}
                   >
                     <div className="flex justify-between items-start mb-1">
                       <div>
-                        <div className="text-sm font-semibold text-white">{pkg.name}</div>
+                        <div className="text-sm font-semibold text-gray-900">{pkg.name}</div>
                         {pkg.is_popular && (
-                          <span className="text-xs text-amber-400 font-medium">Most Popular</span>
+                          <span className="text-xs text-amber-600 font-medium">Most Popular</span>
                         )}
                       </div>
-                      <div className="text-lg font-bold text-white">{formatCurrency(pkg.price)}</div>
+                      <div className="text-lg font-bold text-gray-900">{formatCurrency(pkg.price)}</div>
                     </div>
-                    <p className="text-xs text-slate-500 mb-2">{pkg.description}</p>
+                    <p className="text-xs text-gray-500 mb-2">{pkg.description}</p>
                     {pkg.duration_hours && (
-                      <div className="flex items-center gap-1 text-xs text-slate-600">
+                      <div className="flex items-center gap-1 text-xs text-gray-400">
                         <Clock size={11} />
                         {pkg.duration_hours}h
                       </div>
@@ -374,8 +371,8 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     {pkg.includes.length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {pkg.includes.slice(0, 3).map((item, i) => (
-                          <li key={i} className="flex items-center gap-1.5 text-xs text-slate-400">
-                            <CheckCircle2 size={11} className="text-brand-400" />
+                          <li key={i} className="flex items-center gap-1.5 text-xs text-gray-500">
+                            <CheckCircle2 size={11} className="text-brand-600" />
                             {item}
                           </li>
                         ))}
@@ -385,19 +382,19 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 ))}
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-white/4 border border-white/8 mb-5 text-center">
+              <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 mb-5 text-center">
                 {vendor.min_price ? (
                   <div>
-                    <div className="text-sm text-slate-400">Starting from</div>
-                    <div className="text-2xl font-bold text-white mt-1">
+                    <div className="text-sm text-gray-500">Starting from</div>
+                    <div className="text-2xl font-bold text-gray-900 mt-1">
                       {formatCurrency(vendor.min_price)}
                     </div>
                     {vendor.max_price && (
-                      <div className="text-xs text-slate-500">up to {formatCurrency(vendor.max_price)}</div>
+                      <div className="text-xs text-gray-400">up to {formatCurrency(vendor.max_price)}</div>
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm text-slate-400">Contact for pricing</p>
+                  <p className="text-sm text-gray-500">Contact for pricing</p>
                 )}
               </div>
             )}
@@ -407,9 +404,9 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               const pkg = packages.find((p) => p.id === selectedPackage);
               if (!pkg) return null;
               return (
-                <div className="p-3 rounded-xl bg-brand-500/10 border border-brand-500/20 mb-4 flex items-center justify-between">
-                  <div className="text-xs text-slate-400 truncate mr-2">{pkg.name}</div>
-                  <div className="text-lg font-bold text-white flex-shrink-0">{formatCurrency(pkg.price)}</div>
+                <div className="p-3 rounded-xl bg-brand-50 border border-brand-200 mb-4 flex items-center justify-between">
+                  <div className="text-xs text-gray-500 truncate mr-2">{pkg.name}</div>
+                  <div className="text-lg font-bold text-gray-900 flex-shrink-0">{formatCurrency(pkg.price)}</div>
                 </div>
               );
             })()}
@@ -436,18 +433,18 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 }
                 router.push(`/dashboard/quotes/new?vendor=${vendor.id}&name=${encodeURIComponent(vendor.business_name)}`);
               }}
-              className="btn-secondary w-full py-3 mt-2 text-sm"
+              className="btn-secondary-light w-full py-3 mt-2 text-sm"
             >
               <MessageCircle size={14} />
               Request Free Quote
             </button>
 
-            <p className="text-center text-xs text-slate-600 mt-3">
+            <p className="text-center text-xs text-gray-400 mt-3">
               You won&apos;t be charged until the vendor confirms
             </p>
 
             {/* Quick trust signals */}
-            <div className="border-t border-white/8 mt-5 pt-5 space-y-3">
+            <div className="border-t border-gray-100 mt-5 pt-5 space-y-3">
               {[
                 {
                   icon: Zap,
@@ -456,8 +453,8 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 { icon: CheckCircle2, text: "Free to request a quote" },
                 { icon: Star, text: "Money-back guarantee" },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-2.5 text-xs text-slate-400">
-                  <Icon size={14} className="text-brand-400" />
+                <div key={text} className="flex items-center gap-2.5 text-xs text-gray-500">
+                  <Icon size={14} className="text-brand-600" />
                   {text}
                 </div>
               ))}
@@ -470,15 +467,15 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
       </div>
 
       {/* Mobile sticky CTA bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 glass border-t border-white/10 px-4 py-3 flex items-center gap-3">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg px-4 py-3 flex items-center gap-3">
         {vendor.min_price ? (
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-slate-500">From</div>
-            <div className="text-base font-bold text-white">{formatCurrency(vendor.min_price)}</div>
+            <div className="text-xs text-gray-400">From</div>
+            <div className="text-base font-bold text-gray-900">{formatCurrency(vendor.min_price)}</div>
           </div>
         ) : (
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold text-white truncate">{vendor.business_name}</div>
+            <div className="text-sm font-semibold text-gray-900 truncate">{vendor.business_name}</div>
           </div>
         )}
         <button
@@ -486,7 +483,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
             if (!currentUser) { toast.error("Please sign in"); router.push("/login"); return; }
             router.push(`/dashboard/quotes/new?vendor=${vendor.id}&name=${encodeURIComponent(vendor.business_name)}`);
           }}
-          className="btn-secondary py-2.5 px-4 text-sm flex-shrink-0"
+          className="btn-secondary-light py-2.5 px-4 text-sm flex-shrink-0"
         >
           Quote
         </button>

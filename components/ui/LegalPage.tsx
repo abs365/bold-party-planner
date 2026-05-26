@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { createClient } from "@/lib/supabase/server";
@@ -62,7 +62,7 @@ export async function LegalPage({ title, subtitle, lastUpdated, sections }: Lega
         </div>
 
         {/* Contact */}
-        <div className="mt-16 glass-card p-6 border border-brand-500/15">
+        <div className="mt-16 bg-white/4 rounded-xl p-6 border border-brand-500/15">
           <p className="text-white/60 text-sm">
             Questions about this document? Contact us at{" "}
             <a href="mailto:legal@boldparty.co.uk" className="text-brand-400 hover:text-brand-300 transition-colors">

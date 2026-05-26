@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -99,7 +99,7 @@ export default function AdminVerificationsPage() {
               onClick={() => { setLoading(true); setStatusFilter(s); }}
               className={cn(
                 "px-4 py-2 rounded-xl text-sm font-medium capitalize transition-colors",
-                statusFilter === s ? "gradient-brand text-white" : "glass text-white/60 hover:text-white"
+                statusFilter === s ? "gradient-brand text-white" : "bg-white/6 text-white/60 hover:text-white"
               )}
             >
               {s}
@@ -112,7 +112,7 @@ export default function AdminVerificationsPage() {
             <Loader2 className="w-8 h-8 animate-spin text-white/40" />
           </div>
         ) : verifications.length === 0 ? (
-          <div className="glass-card p-16 text-center">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
             <CheckCircle2 className="w-12 h-12 text-white/20 mx-auto mb-3" />
             <p className="text-white/60 text-lg">No {statusFilter} verifications</p>
             <p className="text-white/30 text-sm mt-1">All caught up!</p>
@@ -123,7 +123,7 @@ export default function AdminVerificationsPage() {
               const TypeIcon = TYPE_ICON[v.type] ?? FileText;
               const isProcessing = processing === v.id;
               return (
-                <div key={v.id} className="glass-card p-5 space-y-4">
+                <div key={v.id} className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-brand-500/15 flex items-center justify-center flex-shrink-0">

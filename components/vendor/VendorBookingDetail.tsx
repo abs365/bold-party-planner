@@ -86,9 +86,9 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
 
       <div className="grid md:grid-cols-2 gap-5">
         {/* Event Details */}
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-            <Calendar size={16} className="text-brand-400" />Event Details
+            <Calendar size={16} className="text-slate-400" />Event Details
           </h3>
           <dl className="space-y-3">
             <div>
@@ -135,9 +135,9 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
 
         {/* Customer + Payment */}
         <div className="space-y-5">
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-              <Users size={16} className="text-brand-400" />Customer
+              <Users size={16} className="text-slate-400" />Customer
             </h3>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full gradient-brand flex items-center justify-center text-sm font-bold text-white">
@@ -151,9 +151,9 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
             </div>
           </div>
 
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-              <DollarSign size={16} className="text-brand-400" />Payment
+              <DollarSign size={16} className="text-slate-400" />Payment
             </h3>
             <dl className="space-y-2 text-sm">
               {pkg && <div className="text-slate-400">{String(pkg.name)} package</div>}
@@ -179,9 +179,9 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
 
       {/* Customer Notes */}
       {booking.notes && (
-        <div className="glass-card p-5">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h3 className="font-bold text-white mb-2 flex items-center gap-2">
-            <MessageSquare size={16} className="text-brand-400" />Message from Customer
+            <MessageSquare size={16} className="text-slate-400" />Message from Customer
           </h3>
           <p className="text-slate-400 text-sm italic">{booking.notes}</p>
         </div>
@@ -189,9 +189,9 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
 
       {/* Action Buttons */}
       {booking.status === "pending" && (
-        <div className="glass-card p-5 space-y-4">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
           <h3 className="font-bold text-white flex items-center gap-2">
-            <FileText size={16} className="text-brand-400" />Respond to Request
+            <FileText size={16} className="text-slate-400" />Respond to Request
           </h3>
           <textarea
             value={responseNote}

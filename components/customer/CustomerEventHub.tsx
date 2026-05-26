@@ -52,7 +52,7 @@ export function CustomerEventHub({ event, bookings }: CustomerEventHubProps) {
   const progressPct = Math.round((checklistDone / CHECKLIST_ITEMS.length) * 100);
 
   return (
-    <div className="glass-card p-6 space-y-6">
+    <div className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-6">
       {/* Event Header */}
       <div className="flex items-start justify-between">
         <div>
@@ -86,7 +86,7 @@ export function CustomerEventHub({ event, bookings }: CustomerEventHubProps) {
           <span className="text-xs font-semibold text-slate-400">Planning Progress</span>
           <span className="text-xs font-bold text-brand-400">{progressPct}%</span>
         </div>
-        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
           <div
             className="h-full gradient-brand rounded-full transition-all duration-500"
             style={{ width: `${progressPct}%` }}
@@ -138,7 +138,7 @@ export function CustomerEventHub({ event, bookings }: CustomerEventHubProps) {
               {formatCurrency(totalSpent)} / {formatCurrency(totalBudget)}
             </span>
           </div>
-          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 budgetPct >= 90 ? "bg-red-500" : budgetPct >= 70 ? "bg-amber-500" : "bg-emerald-500"

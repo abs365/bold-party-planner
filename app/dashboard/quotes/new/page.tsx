@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -72,7 +72,7 @@ function NewQuoteForm() {
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="glass-card p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-5">
           {/* Message */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1.5 flex items-center gap-2">

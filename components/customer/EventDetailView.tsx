@@ -114,8 +114,8 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
       {/* Days Counter */}
       {daysLeft >= 0 && (
         <div className={cn(
-          "glass-card p-4 flex items-center gap-4",
-          daysLeft <= 7 ? "border border-amber-500/30" : daysLeft <= 30 ? "border border-blue-500/20" : ""
+          "bg-white/4 border rounded-xl p-4 flex items-center gap-4",
+          daysLeft <= 7 ? "border-amber-500/30" : daysLeft <= 30 ? "border-blue-500/20" : "border-white/6"
         )}>
           <div className={cn(
             "w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-extrabold flex-shrink-0",
@@ -147,10 +147,10 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
         <div className="lg:col-span-2 space-y-6">
           {/* Checklist */}
           {checklist.length > 0 && (
-            <div className="glass-card p-6">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 size={17} className="text-brand-400" />
+                  <CheckCircle2 size={17} className="text-slate-400" />
                   Event Checklist
                 </h3>
                 <div className="text-sm text-slate-400">
@@ -221,10 +221,10 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
           )}
 
           {/* Bookings */}
-          <div className="glass-card p-6">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-bold text-white flex items-center gap-2">
-                <ShoppingBag size={17} className="text-brand-400" />
+                <ShoppingBag size={17} className="text-slate-400" />
                 Vendor Bookings ({bookings.length})
               </h3>
               <Link
@@ -287,9 +287,9 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
 
           {/* Smart Timeline */}
           {aiPlan?.timeline && aiPlan.timeline.length > 0 && (
-            <div className="glass-card p-6">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-6">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Clock size={17} className="text-brand-400" />
+                <Clock size={17} className="text-slate-400" />
                 Event Timeline
               </h3>
               <div className="space-y-3">
@@ -313,7 +313,7 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
 
           {/* Smart Tips & Risks */}
           {aiPlan?.risks && aiPlan.risks.length > 0 && (
-            <div className="glass-card p-6">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-6">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2">
                 <AlertTriangle size={17} className="text-amber-400" />
                 Risks to Watch
@@ -333,9 +333,9 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
         {/* Right Column: Stats + Smart Plan Summary */}
         <div className="space-y-5">
           {/* Budget Card */}
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-              <DollarSign size={16} className="text-brand-400" />Budget
+              <DollarSign size={16} className="text-slate-400" />Budget
             </h3>
             <div className="mb-3">
               <div className="flex justify-between text-sm mb-1">
@@ -365,9 +365,9 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
 
           {/* Smart Budget Breakdown */}
           {aiPlan?.budget_breakdown && (
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles size={16} className="text-brand-400" />Smart Budget Estimate
+                <Sparkles size={16} className="text-slate-400" />Smart Budget Estimate
               </h3>
               <div className="space-y-2">
                 {aiPlan.budget_breakdown.slice(0, 7).map((item, i) => (
@@ -389,9 +389,9 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
           )}
 
           {/* Quick Stats */}
-          <div className="glass-card p-5">
+          <div className="bg-white/4 border border-white/6 rounded-xl p-5">
             <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-              <TrendingUp size={16} className="text-brand-400" />Summary
+              <TrendingUp size={16} className="text-slate-400" />Summary
             </h3>
             <div className="space-y-3">
               {[
@@ -410,9 +410,9 @@ export function EventDetailView({ event, bookings, checklist: initialChecklist }
 
           {/* Smart Vendor Suggestions */}
           {aiPlan?.vendors_needed && (
-            <div className="glass-card p-5">
+            <div className="bg-white/4 border border-white/6 rounded-xl p-5">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles size={16} className="text-brand-400" />Recommended Vendors
+                <Sparkles size={16} className="text-slate-400" />Recommended Vendors
               </h3>
               <div className="space-y-2">
                 {aiPlan.vendors_needed.slice(0, 6).map((v, i) => {

@@ -68,8 +68,8 @@ export default async function BrowsePage({
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen">
-      <Navbar user={profile} />
+    <div className="min-h-screen bg-white">
+      <Navbar user={profile} lightBg />
       <div className="pt-16">
         {!params.category && !params.search && !params.city && trendingVendors.length > 0 && (
           <TrendingVendors vendors={trendingVendors} />

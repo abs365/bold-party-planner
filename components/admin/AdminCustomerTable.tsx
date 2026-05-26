@@ -53,7 +53,7 @@ export function AdminCustomerTable({ customers, events, bookings, payments, curr
           { icon: <ShoppingBag size={18} className="text-green-400" />, label: "Total Bookings", value: bookings.length },
           { icon: <TrendingUp size={18} className="text-amber-400" />, label: "Revenue (GBP)", value: formatCurrency(totalRevenue) },
         ].map((stat) => (
-          <div key={stat.label} className="glass-card p-4">
+          <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-1">{stat.icon}<span className="text-xs text-slate-400">{stat.label}</span></div>
             <div className="text-xl font-bold text-white">{stat.value}</div>
           </div>
@@ -61,7 +61,7 @@ export function AdminCustomerTable({ customers, events, bookings, payments, curr
       </div>
 
       {/* Search */}
-      <div className="glass-card p-4 flex gap-3">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-3">
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500/60 pointer-events-none" />
           <input
@@ -78,12 +78,12 @@ export function AdminCustomerTable({ customers, events, bookings, payments, curr
 
       {/* Customer List */}
       {customers.length === 0 ? (
-        <div className="glass-card p-12 text-center">
+        <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
           <Users size={36} className="text-slate-600 mx-auto mb-3" />
           <p className="text-slate-400">No customers found</p>
         </div>
       ) : (
-        <div className="glass-card overflow-hidden">
+        <div className="bg-white/4 border border-white/6 rounded-xl overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/8">

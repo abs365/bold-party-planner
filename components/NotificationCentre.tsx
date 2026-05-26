@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
@@ -73,7 +73,7 @@ export function NotificationCentre({ notifications: initial }: { notifications: 
 
   if (notifications.length === 0) {
     return (
-      <div className="glass-card p-16 text-center">
+      <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
         <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
           <Bell className="w-7 h-7 text-white/20" />
         </div>
@@ -111,7 +111,7 @@ export function NotificationCentre({ notifications: initial }: { notifications: 
           const Content = (
             <div
               className={cn(
-                "glass-card p-4 flex gap-3 transition-all cursor-pointer hover:bg-white/4",
+                "bg-white/4 border border-white/6 rounded-xl p-4 flex gap-3 transition-all cursor-pointer hover:bg-white/4",
                 !n.read && "border-l-2 border-l-brand-500 bg-brand-500/3"
               )}
               onClick={() => { if (!n.read) void markRead(n.id); }}
