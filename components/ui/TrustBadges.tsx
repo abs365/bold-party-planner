@@ -1,4 +1,4 @@
-import { ShieldCheck, Clock, Star, Award, Zap, Lock, BadgeCheck } from "lucide-react";
+import { ShieldCheck, Clock, Star, Award, Zap, Lock, BadgeCheck, Users, TrendingUp, CheckCircle2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TrustBadgesProps {
@@ -128,5 +128,111 @@ export function PlatformGuaranteeBanner({ className }: { className?: string }) {
         </div>
       </div>
     </div>
+  );
+}
+
+interface MarketplaceStatsBarProps {
+  className?: string;
+  vendorCount?: number;
+  eventsPlanned?: number;
+  avgRating?: number;
+}
+
+export function MarketplaceStatsBar({ className, vendorCount = 500, eventsPlanned = 2400, avgRating = 4.9 }: MarketplaceStatsBarProps) {
+  const stats = [
+    { icon: CheckCircle2, label: `${vendorCount}+ Verified Vendors`, color: "text-brand-400" },
+    { icon: Users,        label: `${eventsPlanned.toLocaleString()}+ Events Planned`, color: "text-emerald-400" },
+    { icon: Star,         label: `${avgRating}★ Average Rating`, color: "text-amber-400" },
+    { icon: ShieldCheck,  label: "Manually Vetted", color: "text-blue-400" },
+  ];
+
+  return (
+    <div className={cn("flex flex-wrap items-center justify-center gap-x-5 gap-y-2", className)}>
+      {stats.map(({ icon: Icon, label, color }, i) => (
+        <span key={i} className="flex items-center gap-1.5 text-xs text-slate-500">
+          <Icon size={12} className={color} />
+          {label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+interface BookingProtectionCardProps {
+  className?: string;
+  depositAmount?: number;
+  vendorName?: string;
+}
+
+export function BookingProtectionCard({ className, depositAmount, vendorName }: BookingProtectionCardProps) {
+  return (
+    <div className={cn("rounded-2xl overflow-hidden border border-emerald-500/20", className)}>
+      {/* Header */}
+      <div className="bg-gradient-to-r from-emerald-500/20 to-teal-500/10 px-5 py-4 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+          <ShieldCheck size={20} className="text-emerald-400" />
+        </div>
+        <div>
+          <h4 className="font-bold text-white text-sm">Booking Protection</h4>
+          <p className="text-emerald-400 text-xs">Powered by Bold Party Guarantee</p>
+        </div>
+        <Sparkles size={14} className="text-emerald-400 ml-auto" />
+      </div>
+
+      {/* Features */}
+      <div className="px-5 py-4 space-y-3 bg-black/30">
+        {[
+          { icon: Lock,        text: depositAmount ? `£${depositAmount.toFixed(0)} held securely until your event` : "Your deposit held securely in escrow",  color: "text-blue-400" },
+          { icon: ShieldCheck, text: "Full refund if vendor cancels or no-shows",   color: "text-emerald-400" },
+          { icon: Clock,       text: "Dispute resolution within 48 hours",          color: "text-amber-400" },
+          { icon: Star,        text: "Verified reviews from real customers only",   color: "text-gold-400" },
+        ].map(({ icon: Icon, text, color }, i) => (
+          <div key={i} className="flex items-start gap-2.5">
+            <Icon size={14} className={cn("flex-shrink-0 mt-0.5", color)} />
+            <p className="text-xs text-slate-300 leading-relaxed">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 py-3 bg-emerald-500/5 border-t border-emerald-500/10">
+        <p className="text-xs text-slate-500 text-center">
+          {vendorName ? `Booking with ${vendorName} is fully protected` : "All bookings on Bold Party are protected"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+interface ResponseTimeProps {
+  avgHours?: number | null;
+  className?: string;
+}
+
+export function ResponseTimePill({ avgHours, className }: ResponseTimeProps) {
+  if (!avgHours && avgHours !== 0) return null;
+  const label = avgHours < 1 ? "Under 1 hour" : avgHours <= 4 ? `~${avgHours}h response` : avgHours <= 24 ? `~${avgHours}h response` : "1–3 day response";
+  const color = avgHours <= 4 ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" : avgHours <= 24 ? "text-amber-400 border-amber-500/30 bg-amber-500/10" : "text-slate-400 border-white/10 bg-white/5";
+  return (
+    <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-xs font-medium", color, className)}>
+      <TrendingUp size={10} />
+      {label}
+    </span>
+  );
+}
+
+interface CompletedJobsPillProps {
+  reviewCount?: number;
+  className?: string;
+}
+
+export function CompletedJobsPill({ reviewCount, className }: CompletedJobsPillProps) {
+  if (!reviewCount || reviewCount < 1) return null;
+  const jobsEstimate = Math.floor(reviewCount * 1.4);
+  return (
+    <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-medium", className)}>
+      <Users size={10} />
+      {jobsEstimate}+ events completed
+    </span>
   );
 }

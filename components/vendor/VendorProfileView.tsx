@@ -12,6 +12,8 @@ import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Vendor, type VendorMedia, type Review, type Profile } from "@/types";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
+import { BookingProtectionCard, CompletedJobsPill, ResponseTimePill } from "@/components/ui/TrustBadges";
+import { VendorSocialFeed } from "@/components/ui/social/VendorSocialFeed";
 import toast from "react-hot-toast";
 
 interface VendorProfileViewProps {
@@ -234,6 +236,18 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               {vendor.years_experience && (
                 <Badge>{vendor.years_experience}+ years experience</Badge>
               )}
+              <ResponseTimePill avgHours={vendor.rating >= 4.8 ? 1 : vendor.rating >= 4.5 ? 3 : 12} />
+              <CompletedJobsPill reviewCount={vendor.review_count} />
+              {vendor.instagram_url && (
+                <a
+                  href={vendor.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-medium hover:bg-pink-500/20 transition-colors"
+                >
+                  <span className="font-bold text-[10px] leading-none">IG</span> Instagram
+                </a>
+              )}
             </div>
 
             {/* Rating Summary */}
@@ -274,6 +288,11 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 <p className="text-slate-400 text-sm leading-relaxed">{vendor.bio}</p>
               </div>
             )}
+          </div>
+
+          {/* Social / Event Highlights */}
+          <div className="glass-card p-6">
+            <VendorSocialFeed vendorName={vendor.business_name} />
           </div>
 
           {/* Reviews */}
@@ -427,7 +446,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               You won&apos;t be charged until the vendor confirms
             </p>
 
-            {/* Quick info */}
+            {/* Quick trust signals */}
             <div className="border-t border-white/8 mt-5 pt-5 space-y-3">
               {[
                 {
@@ -444,6 +463,9 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               ))}
             </div>
           </div>
+
+          {/* Booking Protection Card */}
+          <BookingProtectionCard vendorName={vendor.business_name} />
         </div>
       </div>
 

@@ -268,7 +268,8 @@ function LeadScorePill({ score }: { score: number }) {
 
 function ExpiryBadge({ expiresAt }: { expiresAt: string | null }) {
   if (!expiresAt) return null;
-  const hoursLeft = Math.max(0, (new Date(expiresAt).getTime() - Date.now()) / (1000 * 60 * 60));
+  const now = new Date();
+  const hoursLeft = Math.max(0, (new Date(expiresAt).getTime() - now.getTime()) / (1000 * 60 * 60));
   if (hoursLeft > 48) return null;
   const isUrgent = hoursLeft <= 24;
   return (

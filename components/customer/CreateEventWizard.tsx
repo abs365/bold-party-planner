@@ -4,12 +4,29 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Sparkles, ArrowRight, ArrowLeft, Loader2, Calendar, MapPin, Users,
-  Palette, FileText, CheckCircle2, Zap, Home, Sun, Cloud,
-  Send, Star,
+  Palette, FileText, CheckCircle2, Home, Sun, Cloud,
+  Send, Star, PartyPopper, Heart, Baby, GraduationCap,
+  Briefcase, Gift, Music2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EVENT_TYPES, VENDOR_CATEGORIES, type EventType, type VendorCategory, type AIEventPlan } from "@/types";
 import toast from "react-hot-toast";
+
+const EVENT_MOOD: Record<EventType, { gradient: string; emoji: string; headline: string; sub: string; icon: React.ElementType }> = {
+  birthday:       { gradient: "from-pink-500 via-rose-500 to-orange-500",   emoji: "🎂", headline: "Let's plan the ultimate birthday!",    sub: "Balloons, music, and memories await",    icon: PartyPopper },
+  wedding:        { gradient: "from-purple-500 via-pink-500 to-rose-400",   emoji: "💍", headline: "Your perfect day starts here",          sub: "Crafting once-in-a-lifetime moments",    icon: Heart },
+  corporate:      { gradient: "from-blue-600 via-indigo-500 to-violet-600", emoji: "💼", headline: "Impress, connect, celebrate",           sub: "Professional events, perfectly executed", icon: Briefcase },
+  baby_shower:    { gradient: "from-sky-400 via-cyan-400 to-teal-400",      emoji: "👶", headline: "Welcome a new little one",              sub: "Soft, sweet, and unforgettable",          icon: Baby },
+  anniversary:    { gradient: "from-rose-500 via-red-400 to-pink-400",      emoji: "💕", headline: "Celebrate your love story",             sub: "Years of memories, one perfect night",   icon: Heart },
+  graduation:     { gradient: "from-amber-500 via-yellow-400 to-lime-400",  emoji: "🎓", headline: "You earned this celebration!",          sub: "Mark the milestone in style",            icon: GraduationCap },
+  naming_ceremony:{ gradient: "from-teal-400 via-emerald-400 to-green-400", emoji: "🌟", headline: "Celebrate a beautiful beginning",       sub: "A ceremony full of love and joy",        icon: Star },
+  funeral:        { gradient: "from-slate-500 via-gray-500 to-zinc-500",    emoji: "🌹", headline: "A dignified, heartfelt farewell",       sub: "Handled with care and respect",          icon: Heart },
+  charity:        { gradient: "from-emerald-500 via-teal-500 to-cyan-500",  emoji: "❤️", headline: "Make a difference, together",           sub: "Events that inspire and give back",      icon: Heart },
+  conference:     { gradient: "from-indigo-600 via-blue-500 to-cyan-500",   emoji: "📋", headline: "Ideas that move the world forward",     sub: "Seamless, professional, impactful",      icon: Briefcase },
+  engagement:     { gradient: "from-violet-500 via-purple-500 to-fuchsia-500", emoji: "💎", headline: "Say yes to the perfect party!",    sub: "The first celebration of forever",       icon: Gift },
+  gender_reveal:  { gradient: "from-pink-400 via-purple-400 to-blue-400",   emoji: "🎉", headline: "Pink or blue — let's celebrate you!",  sub: "A surprise moment everyone will love",  icon: PartyPopper },
+  other:          { gradient: "from-brand-500 via-purple-500 to-indigo-500", emoji: "✨", headline: "Every event is worth celebrating",     sub: "Let's make it extraordinary",           icon: Music2 },
+};
 
 interface WizardData {
   title: string;
@@ -36,11 +53,11 @@ const STEPS = [
 ];
 
 const LOADING_STEPS = [
-  "Analysing your event type...",
-  "Calculating budget breakdown...",
-  "Curating vendor recommendations...",
-  "Building your timeline...",
-  "Finalising your Smart Plan...",
+  { label: "Analysing your event type...",       icon: "🎯" },
+  { label: "Calculating budget breakdown...",    icon: "💷" },
+  { label: "Curating vendor recommendations...", icon: "🤝" },
+  { label: "Building your timeline...",          icon: "📅" },
+  { label: "Finalising your Smart Plan...",      icon: "✨" },
 ];
 
 const BUDGETS = [
@@ -99,7 +116,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
   const [generatingPlan, setGeneratingPlan] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-  const [rfqCount, setRfqCount] = useState(0);
+  const [, setRfqCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -288,11 +305,35 @@ export function CreateEventWizard({ userId }: { userId: string }) {
     }
   }
 
+  const mood = EVENT_MOOD[data.event_type];
+
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-1">Plan a New Event</h1>
-        <p className="text-slate-400 text-sm">Our Smart Planner builds a complete plan and sends quote requests to vetted vendors automatically.</p>
+      {/* Dynamic event mood banner */}
+      <div className={cn(
+        "relative rounded-2xl p-6 mb-8 overflow-hidden transition-all duration-700",
+        `bg-gradient-to-r ${mood.gradient} opacity-90`
+      )}>
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <p className="text-white/80 text-sm font-medium mb-1">Smart Planner</p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+              {mood.headline}
+            </h1>
+            <p className="text-white/70 text-sm mt-1">{mood.sub}</p>
+          </div>
+          <div className="text-5xl sm:text-6xl flex-shrink-0 ml-4 drop-shadow-lg">
+            {mood.emoji}
+          </div>
+        </div>
+        {/* Progress bar */}
+        <div className="relative z-10 mt-4 h-1 bg-white/20 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-white/70 rounded-full transition-all duration-500"
+            style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
+          />
+        </div>
       </div>
 
       {/* Step indicator */}
@@ -600,29 +641,34 @@ export function CreateEventWizard({ userId }: { userId: string }) {
           <div className="space-y-6">
             {generatingPlan ? (
               <div className="text-center py-10">
-                <div className="relative w-20 h-20 mx-auto mb-6">
-                  <div className="absolute inset-0 rounded-full gradient-brand opacity-20 animate-ping" />
-                  <div className="relative w-20 h-20 rounded-2xl gradient-brand flex items-center justify-center shadow-xl shadow-brand-500/40">
-                    <Sparkles size={32} className="text-white" />
+                {/* Premium animated icon */}
+                <div className="relative w-24 h-24 mx-auto mb-6">
+                  <div className="absolute inset-0 rounded-full gradient-brand opacity-15 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <div className="absolute inset-2 rounded-full gradient-brand opacity-25 animate-ping" style={{ animationDuration: "2s", animationDelay: "0.3s" }} />
+                  <div className="relative w-24 h-24 rounded-2xl gradient-brand flex items-center justify-center shadow-2xl shadow-brand-500/50">
+                    <Sparkles size={36} className="text-white drop-shadow-lg" />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-1">Building Your Smart Plan</h3>
-                <p className="text-slate-500 text-sm mb-8">Powered by AI · Takes about 15 seconds</p>
-                <div className="space-y-3 max-w-xs mx-auto text-left">
-                  {LOADING_STEPS.map((label, i) => (
-                    <div key={i} className={cn(
-                      "flex items-center gap-3 text-sm transition-all duration-500",
-                      i < loadingStep ? "text-emerald-400" :
-                      i === loadingStep ? "text-white" : "text-slate-600"
-                    )}>
-                      {i < loadingStep ? (
-                        <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                      ) : i === loadingStep ? (
-                        <Loader2 size={16} className="animate-spin text-brand-400 flex-shrink-0" />
-                      ) : (
-                        <div className="w-4 h-4 rounded-full border border-white/10 flex-shrink-0" />
+                <h3 className="text-2xl font-extrabold text-white mb-1">Building Your Smart Plan</h3>
+                <p className="text-brand-400 text-sm font-medium mb-8">Personalised for your {EVENT_TYPES[data.event_type]?.label ?? "event"} · Usually under 15 seconds</p>
+
+                {/* Animated step list */}
+                <div className="space-y-2.5 max-w-sm mx-auto text-left">
+                  {LOADING_STEPS.map((item, i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-500",
+                        i < loadingStep ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-300" :
+                        i === loadingStep ? "bg-brand-500/15 border border-brand-500/30 text-white shadow-lg shadow-brand-500/10" :
+                        "bg-white/3 border border-white/5 text-slate-600"
                       )}
-                      {label}
+                    >
+                      <span className="text-base flex-shrink-0">
+                        {i < loadingStep ? "✅" : i === loadingStep ? item.icon : "⬜"}
+                      </span>
+                      {i === loadingStep && <Loader2 size={14} className="animate-spin text-brand-400 flex-shrink-0 -ml-1" />}
+                      {item.label}
                     </div>
                   ))}
                 </div>
@@ -631,28 +677,55 @@ export function CreateEventWizard({ userId }: { userId: string }) {
               <div>
                 {aiPlan ? (
                   <div className="space-y-5">
-                    {/* Summary */}
-                    <div className="p-4 rounded-xl bg-brand-500/8 border border-brand-500/20">
-                      <div className="flex items-center gap-2 text-brand-400 text-sm font-semibold mb-2">
-                        <Sparkles size={14} />
-                        Smart Plan Summary
+                    {/* Plan ready header */}
+                    <div className={cn(
+                      "relative rounded-2xl p-5 overflow-hidden",
+                      `bg-gradient-to-r ${mood.gradient} opacity-95`
+                    )}>
+                      <div className="absolute inset-0 bg-black/40" />
+                      <div className="relative z-10">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sparkles size={16} className="text-white" />
+                          <span className="text-white font-bold text-sm uppercase tracking-wide">Smart Plan Ready</span>
+                        </div>
+                        <p className="text-white/90 text-sm leading-relaxed">{aiPlan.summary}</p>
+                        <div className="flex flex-wrap gap-3 mt-3">
+                          <span className="text-white/80 text-xs font-medium bg-white/10 px-2.5 py-1 rounded-full">
+                            {EVENT_TYPES[data.event_type]?.icon} {EVENT_TYPES[data.event_type]?.label}
+                          </span>
+                          <span className="text-white/80 text-xs font-medium bg-white/10 px-2.5 py-1 rounded-full">
+                            👥 {data.guest_count} guests
+                          </span>
+                          <span className="text-white/80 text-xs font-medium bg-white/10 px-2.5 py-1 rounded-full">
+                            💷 £{data.budget.toLocaleString()} budget
+                          </span>
+                          {data.city && (
+                            <span className="text-white/80 text-xs font-medium bg-white/10 px-2.5 py-1 rounded-full">
+                              📍 {data.city}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-slate-300 text-sm leading-relaxed">{aiPlan.summary}</p>
                     </div>
 
                     {/* Budget breakdown */}
                     {aiPlan.budget_breakdown?.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-white mb-3">Budget Breakdown</h4>
-                        <div className="space-y-2">
+                      <div className="glass-card p-4">
+                        <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                          <span>💷</span> Budget Breakdown
+                        </h4>
+                        <div className="space-y-2.5">
                           {aiPlan.budget_breakdown.slice(0, 5).map((item) => (
-                            <div key={item.category} className="flex items-center justify-between text-sm">
-                              <span className="text-slate-400">{item.category}</span>
-                              <div className="flex items-center gap-3">
-                                <div className="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                  <div className="h-full gradient-brand rounded-full" style={{ width: `${item.percentage}%` }} />
+                            <div key={item.category} className="flex items-center justify-between text-sm gap-3">
+                              <span className="text-slate-400 min-w-0 truncate flex-1">{item.category}</span>
+                              <div className="flex items-center gap-3 flex-shrink-0">
+                                <div className="w-20 h-1.5 rounded-full bg-white/8 overflow-hidden">
+                                  <div
+                                    className="h-full gradient-brand rounded-full transition-all duration-1000"
+                                    style={{ width: `${item.percentage}%` }}
+                                  />
                                 </div>
-                                <span className="text-white font-medium w-16 text-right">£{item.amount.toLocaleString()}</span>
+                                <span className="text-white font-semibold w-16 text-right tabular-nums">£{item.amount.toLocaleString()}</span>
                               </div>
                             </div>
                           ))}
@@ -660,25 +733,30 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                       </div>
                     )}
 
-                    {/* Vendors needed */}
+                    {/* Vendors needed — premium cards */}
                     {aiPlan.vendors_needed?.length > 0 && (
                       <div>
-                        <h4 className="text-sm font-semibold text-white mb-3">Recommended Vendors</h4>
+                        <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                          <span>🤝</span> Recommended Vendors
+                        </h4>
                         <div className="grid sm:grid-cols-2 gap-2">
                           {aiPlan.vendors_needed.slice(0, 6).map((v) => {
                             const cat = VENDOR_CATEGORIES[v.category as VendorCategory];
+                            const isEssential = v.priority === "essential";
                             return (
                               <div key={v.category} className={cn(
-                                "flex items-center gap-2 px-3 py-2 rounded-lg border text-xs",
-                                v.priority === "essential" ? "border-brand-500/30 bg-brand-500/8" :
-                                v.priority === "recommended" ? "border-white/10 bg-white/4" :
-                                "border-white/6 bg-white/2"
+                                "flex items-center gap-3 px-3.5 py-3 rounded-xl border transition-all",
+                                isEssential
+                                  ? "border-brand-500/40 bg-brand-500/10 shadow-sm shadow-brand-500/10"
+                                  : v.priority === "recommended"
+                                    ? "border-white/12 bg-white/4"
+                                    : "border-white/6 bg-white/2"
                               )}>
-                                <span>{cat?.icon ?? "🎯"}</span>
-                                <div>
-                                  <span className="font-medium text-white">{cat?.label ?? v.category}</span>
-                                  <span className={cn("ml-1.5 text-xs", v.priority === "essential" ? "text-brand-400" : "text-slate-500")}>
-                                    {v.priority}
+                                <span className="text-xl flex-shrink-0">{cat?.icon ?? "🎯"}</span>
+                                <div className="min-w-0 flex-1">
+                                  <span className="font-semibold text-white text-sm block truncate">{cat?.label ?? v.category}</span>
+                                  <span className={cn("text-xs", isEssential ? "text-brand-400" : "text-slate-500")}>
+                                    {isEssential ? "⭐ Essential" : v.priority === "recommended" ? "Recommended" : "Optional"}
                                   </span>
                                 </div>
                               </div>
@@ -688,15 +766,27 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                       </div>
                     )}
 
+                    {/* Top tips */}
+                    {aiPlan.tips?.length > 0 && (
+                      <div className="p-4 rounded-xl bg-amber-500/8 border border-amber-500/20">
+                        <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wide mb-2">💡 Smart Tips</h4>
+                        <ul className="space-y-1">
+                          {aiPlan.tips.slice(0, 2).map((tip, i) => (
+                            <li key={i} className="text-slate-400 text-xs leading-relaxed">• {tip}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     {/* RFQ summary if vendor needs selected */}
                     {data.vendor_needs.length > 0 && (
                       <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                        <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold mb-1">
+                        <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold mb-1">
                           <Send size={13} />
                           Quote Requests Ready to Send
                         </div>
                         <p className="text-slate-400 text-sm">
-                          Clicking &quot;Create Event&quot; will automatically send quote requests to up to <strong className="text-white">{data.vendor_needs.length * 3} vendors</strong>. Check your Quotes section to track responses.
+                          We&apos;ll contact up to <strong className="text-white">{data.vendor_needs.length * 3} vendors</strong> across {data.vendor_needs.length} categor{data.vendor_needs.length === 1 ? "y" : "ies"} the moment you create your event. Most vendors respond within 24 hours.
                         </p>
                       </div>
                     )}

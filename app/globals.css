@@ -81,8 +81,8 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .card-hover:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 60px rgba(217, 70, 239, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(217, 70, 239, 0.08);
   }
 
   .input-field {
@@ -189,8 +189,8 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(217, 70, 239, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(217, 70, 239, 0.6); }
+  0%, 100% { box-shadow: 0 0 12px rgba(217, 70, 239, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(217, 70, 239, 0.32); }
 }
 
 .animate-fade-in-up {
@@ -273,7 +273,7 @@
 
 /* Hover glow on cards */
 .hover-glow:hover {
-  box-shadow: 0 0 30px rgba(217,70,239,0.12), 0 8px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 0 20px rgba(217,70,239,0.06);
 }
 
 /* Trust badge pill */
@@ -327,8 +327,8 @@ table { border-collapse: collapse; width: 100%; }
   transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s ease;
 }
 .social-card-hover:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 24px 60px rgba(217, 70, 239, 0.18), 0 8px 24px rgba(0,0,0,0.4);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 4px 20px rgba(217, 70, 239, 0.08);
 }
 
 /* Gradient text — gold variant */
