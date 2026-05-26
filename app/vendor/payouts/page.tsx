@@ -116,7 +116,7 @@ export default async function VendorPayoutsPage() {
           <p className="text-sm text-slate-400 mb-4">Connect your bank account to receive payouts directly. Stripe Connect setup will be available in the next release.</p>
           <button disabled className="btn-secondary opacity-50 cursor-not-allowed">
             <ArrowUpRight size={15} />
-            Connect Bank Account — Coming Soon
+            Connect Bank Account (Coming Soon)
           </button>
         </div>
       </div>

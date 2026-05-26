@@ -231,7 +231,7 @@ export function CustomerBookingDetail({
               className="btn-primary w-full py-3 mb-2"
             >
               {payingType === "deposit" ? <Loader2 size={15} className="animate-spin" /> : <CreditCard size={15} />}
-              Pay Deposit — {formatCurrency(depositAmount)}
+              Pay Deposit · {formatCurrency(depositAmount)}
             </button>
           )}
 
@@ -242,7 +242,7 @@ export function CustomerBookingDetail({
               className="btn-primary w-full py-3 mb-2"
             >
               {payingType === "full" ? <Loader2 size={15} className="animate-spin" /> : <CreditCard size={15} />}
-              Pay Balance — {formatCurrency(totalAmount - depositAmount)}
+              Pay Balance · {formatCurrency(totalAmount - depositAmount)}
             </button>
           )}
 
@@ -310,7 +310,7 @@ export function CustomerBookingDetail({
             <div>
               <StarRating rating={Number(review.rating)} size={20} className="mb-3" />
               {!!review.comment && <p className="text-slate-400 text-sm italic">&ldquo;{String(review.comment)}&rdquo;</p>}
-              <p className="text-xs text-slate-600 mt-2">Review submitted — thank you!</p>
+              <p className="text-xs text-slate-600 mt-2">Review submitted. Thank you!</p>
             </div>
           ) : showReview ? (
             <div className="space-y-4">

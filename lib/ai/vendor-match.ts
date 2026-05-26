@@ -5,7 +5,6 @@
 // Each vendor profile + event description should be embedded and compared via cosine similarity.
 
 import { createClient } from "@/lib/supabase/server";
-import { scoreVendor } from "./scoring";
 
 export interface VendorMatchParams {
   eventType: string;

@@ -96,6 +96,11 @@ export interface Vendor {
   subscription_plan: "free" | "pro" | "featured";
   profile_views: number;
   service_areas: string[] | null;
+  verification_level: number;
+  response_rate: number | null;
+  completed_jobs_count: number;
+  cancellation_rate: number | null;
+  suspicious_flag: boolean;
   created_at: string;
   updated_at: string | null;
   profile?: Profile;

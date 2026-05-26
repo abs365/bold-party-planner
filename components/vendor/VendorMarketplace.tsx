@@ -135,7 +135,7 @@ export function VendorMarketplace({
             Find your event vendors
           </h1>
           <p className="text-gray-500 mb-8">
-            Browse verified professionals across 19 categories — real photos, real reviews.
+            Browse verified professionals across 19 categories. Real photos, real reviews.
           </p>
 
           <div className="flex gap-3 max-w-xl mx-auto">
@@ -516,7 +516,8 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
               )}
               {vendor.verified && (
                 <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
-                  <CheckCircle2 size={10} /> Verified
+                  <CheckCircle2 size={10} />
+                  {vendor.verification_level >= 2 ? "Business Verified" : "Verified"}
                 </span>
               )}
               {isHot && !vendor.featured && (

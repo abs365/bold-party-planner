@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Bold Party",
+  title: "Terms of Service | Bold Party",
   description: "Terms and conditions for using the Bold Party event marketplace.",
 };
 
@@ -21,7 +21,7 @@ export default function TermsOfService() {
           title: "2. Description of Service",
           content: [
             "Bold Party is an online marketplace that connects event hosts (customers) with event service providers (vendors) across the United Kingdom.",
-            "We provide tools for event planning, vendor discovery, booking management, payment processing, and communication. We are a marketplace platform — we do not directly provide event services.",
+            "We provide tools for event planning, vendor discovery, booking management, payment processing, and communication. We are a marketplace platform and do not directly provide event services.",
             "We reserve the right to modify, suspend, or discontinue any aspect of the Platform at any time with reasonable notice.",
           ],
         },

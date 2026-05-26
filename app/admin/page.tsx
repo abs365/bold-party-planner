@@ -7,7 +7,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import {
   Users, Store, Calendar, CreditCard, TrendingUp, AlertCircle,
   ArrowRight, CheckCircle2, Shield, BarChart2, Eye, Clock,
-  MessageSquare, ChevronRight,
+  MessageSquare, ChevronRight, Bell,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +29,7 @@ export default async function AdminDashboard() {
     customersRes, vendorsRes, eventsRes,
     bookingsRes, pendingVendorsRes, disputesRes,
     weeklyBookingsRes, pendingVerificationsRes,
+    openReportsRes, alertsRes,
   ] = await Promise.all([
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer"),
     supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
@@ -41,16 +42,26 @@ export default async function AdminDashboard() {
     supabase.from("bookings").select("id, total_amount, commission_amount, created_at")
       .gte("created_at", cutoff7.toISOString()).order("created_at", { ascending: false }),
     supabase.from("vendor_verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase.from("content_reports").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.from("admin_alerts").select("id, type, title, body, severity, created_at, read, vendor_id")
+      .eq("read", false).order("created_at", { ascending: false }).limit(8),
   ]);
+
+  const flaggedVendors = (await supabase
+    .from("vendors")
+    .select("id", { count: "exact", head: true })
+    .eq("suspicious_flag", true)).count ?? 0;
 
   const allBookings      = bookingsRes.data ?? [];
   const weeklyBookings   = weeklyBookingsRes.data ?? [];
+  const recentAlerts     = alertsRes.data ?? [];
   const pendingVendors   = pendingVendorsRes.data ?? [];
   const totalRevenue     = allBookings.reduce((sum, b) => sum + (b.commission_amount ?? 0), 0);
   const weeklyRevenue    = weeklyBookings.reduce((sum, b) => sum + (b.commission_amount ?? 0), 0);
   const weeklyVolume     = weeklyBookings.reduce((sum, b) => sum + (b.total_amount ?? 0), 0);
   const disputeCount     = disputesRes.count ?? 0;
   const pendingVerif     = pendingVerificationsRes.count ?? 0;
+  const openReports      = openReportsRes.count ?? 0;
 
   const monthlyBookings  = allBookings.filter((b) => new Date(b.created_at) >= cutoff30);
   const monthlyRevenue   = monthlyBookings.reduce((sum, b) => sum + (b.commission_amount ?? 0), 0);
@@ -77,7 +88,7 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Alert Bar */}
-        {(pendingVendors.length > 0 || disputeCount > 0 || pendingVerif > 0) && (
+        {(pendingVendors.length > 0 || disputeCount > 0 || pendingVerif > 0 || openReports > 0 || flaggedVendors > 0 || recentAlerts.length > 0) && (
           <div className="flex flex-wrap gap-3">
             {pendingVendors.length > 0 && (
               <Link href="/admin/vendors?status=pending" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-400 text-sm hover:bg-amber-500/15 transition-colors">
@@ -97,6 +108,27 @@ export default async function AdminDashboard() {
               <Link href="/admin/verifications" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/25 text-blue-400 text-sm hover:bg-blue-500/15 transition-colors">
                 <Shield size={14} />
                 <span className="font-semibold">{pendingVerif}</span> verifications pending
+                <ChevronRight size={13} />
+              </Link>
+            )}
+            {flaggedVendors > 0 && (
+              <Link href="/admin/verifications?status=all" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-sm hover:bg-red-500/15 transition-colors">
+                <Shield size={14} />
+                <span className="font-semibold">{flaggedVendors}</span> flagged vendor{flaggedVendors !== 1 ? "s" : ""}
+                <ChevronRight size={13} />
+              </Link>
+            )}
+            {openReports > 0 && (
+              <Link href="/admin/moderation" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-sm hover:bg-rose-500/15 transition-colors">
+                <Eye size={14} />
+                <span className="font-semibold">{openReports}</span> content reports open
+                <ChevronRight size={13} />
+              </Link>
+            )}
+            {recentAlerts.length > 0 && (
+              <Link href="/admin/verifications" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-500/10 border border-brand-500/25 text-brand-400 text-sm hover:bg-brand-500/15 transition-colors">
+                <Bell size={14} />
+                <span className="font-semibold">{recentAlerts.length}</span> unread system alerts
                 <ChevronRight size={13} />
               </Link>
             )}
@@ -258,14 +290,15 @@ export default async function AdminDashboard() {
           <h3 className="font-bold text-white mb-4 flex items-center gap-2">
             <Eye size={16} className="text-slate-400" />Quick Management
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3">
             {[
               { href: "/admin/vendors",       icon: "🏪", label: "Vendors",        badge: pendingVendors.length > 0 ? pendingVendors.length : null },
               { href: "/admin/customers",     icon: "👥", label: "Customers",      badge: null },
               { href: "/admin/bookings",      icon: "📋", label: "Bookings",       badge: pendingAll > 0 ? pendingAll : null },
               { href: "/admin/disputes",      icon: "⚠️", label: "Disputes",       badge: disputeCount > 0 ? disputeCount : null },
               { href: "/admin/payouts",       icon: "💳", label: "Payouts",        badge: null },
-              { href: "/admin/verifications", icon: "🛡️", label: "Verifications",  badge: pendingVerif > 0 ? pendingVerif : null },
+              { href: "/admin/verifications", icon: "🛡️", label: "Verifications",  badge: (pendingVerif + flaggedVendors) > 0 ? pendingVerif + flaggedVendors : null },
+              { href: "/admin/moderation",   icon: "🔍", label: "Moderation",     badge: openReports > 0 ? openReports : null },
             ].map((link) => (
               <Link
                 key={link.href}
@@ -283,6 +316,43 @@ export default async function AdminDashboard() {
             ))}
           </div>
         </div>
+
+        {/* System Alerts */}
+        {recentAlerts.length > 0 && (
+          <div className="bg-white/4 border border-white/6 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-white flex items-center gap-2">
+                <Bell size={16} className="text-brand-400" />
+                System Alerts
+                <span className="badge bg-brand-500/20 text-brand-400 border border-brand-500/20">{recentAlerts.length} unread</span>
+              </h3>
+              <Link href="/admin/verifications" className="text-xs text-slate-400 hover:text-slate-300 flex items-center gap-1">
+                View all <ArrowRight size={11} />
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {recentAlerts.map((alert) => {
+                const severityStyle = alert.severity === "danger"
+                  ? "bg-red-500/8 border-red-500/20 text-red-400"
+                  : alert.severity === "warning"
+                  ? "bg-amber-500/8 border-amber-500/20 text-amber-400"
+                  : "bg-white/4 border-white/8 text-slate-400";
+                return (
+                  <div key={alert.id} className={`flex items-start gap-3 rounded-xl border p-3 ${severityStyle}`}>
+                    <Bell size={13} className="flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-white font-medium">{alert.title}</p>
+                      {alert.body && <p className="text-xs text-slate-500 mt-0.5">{alert.body}</p>}
+                    </div>
+                    <span className="text-xs text-slate-600 flex-shrink-0">
+                      {new Date(alert.created_at as string).toLocaleDateString()}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Platform Health */}
         <div className="bg-white/4 border border-white/6 rounded-xl p-6">

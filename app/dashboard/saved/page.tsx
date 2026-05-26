@@ -1,5 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Heart, Store, Search } from "lucide-react";
@@ -87,7 +88,7 @@ export default async function SavedVendorsPage() {
                 <Link key={vendor.id} href={`/vendors/${vendor.id}`} className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors">
                   <div className="w-16 h-16 rounded-xl bg-brand-500/15 flex-shrink-0 overflow-hidden">
                     {cover ? (
-                      <img src={cover} alt={vendor.business_name} className="w-full h-full object-cover" />
+                      <Image src={cover} alt={vendor.business_name} width={64} height={64} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-brand-400 text-2xl">
                         {vendor.business_name[0]}

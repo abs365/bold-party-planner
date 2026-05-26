@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Community Guidelines — Bold Party",
+  title: "Community Guidelines | Bold Party",
   description: "Bold Party's community standards for customers and vendors.",
 };
 
@@ -17,7 +17,7 @@ export default function CommunityGuidelines() {
           title: "Our Community Values",
           content: [
             "Bold Party is built on trust between event hosts and event professionals. Our community thrives when everyone acts with honesty, respect, and professionalism.",
-            "These guidelines apply to all users — customers, vendors, and anyone who interacts with our platform.",
+            "These guidelines apply to all users: customers, vendors, and anyone who interacts with our platform.",
           ],
         },
         {
@@ -43,11 +43,11 @@ export default function CommunityGuidelines() {
         {
           title: "For Vendors",
           content: [
-            "Be professional at all times — in communications, at events, and in your profile content.",
+            "Be professional at all times: in communications, at events, and in your profile content.",
             "Only accept bookings you can genuinely fulfil. Cancelling confirmed bookings hurts real people's events.",
             "Respond to enquiries within 48 hours. Slow response times result in lost bookings.",
             "Photos on your profile must represent your actual work. Using others' work or stock photos is prohibited.",
-            "Treat every customer as if they're your most important client — because for them, their event is exactly that.",
+            "Treat every customer as if their event is the most important in the world. For them, it is.",
           ],
         },
         {

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   if (!cat) return { title: "Category Not Found" };
 
   const title = `${cat.label}s for Hire in the UK | Bold Party`;
-  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews, and book securely on Bold Party — the UK's trusted event marketplace.`;
+  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews and book securely on Bold Party, the UK's trusted event marketplace.`;
 
   return {
     title,

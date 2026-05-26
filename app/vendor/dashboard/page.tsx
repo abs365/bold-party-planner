@@ -131,7 +131,7 @@ export default async function VendorDashboardPage() {
             {vendor.status === "pending" && (
               <p className="text-xs text-amber-400 mt-2 flex items-center gap-1.5">
                 <Clock size={11} />
-                Your application is under review — usually approved within 24 hours.
+                Your application is under review. We usually approve within 24 hours.
               </p>
             )}
           </div>
@@ -280,7 +280,7 @@ export default async function VendorDashboardPage() {
                   <p className="text-slate-600 text-xs">
                     {profileCompletion < 5
                       ? "Complete your profile to start attracting customers"
-                      : "Your profile is ready — customers can now discover you"}
+                      : "Your profile is live. Customers can now find and book you."}
                   </p>
                   {profileCompletion < 5 && (
                     <Link href="/vendor/profile" className="btn-primary text-xs mt-4 inline-flex py-2 px-4">

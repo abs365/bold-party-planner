@@ -42,7 +42,7 @@ export default async function AdminSupportPage() {
           <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
             <HelpCircle size={28} className="text-slate-400" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Support ticketing — coming soon</h2>
+          <h2 className="text-lg font-bold text-white mb-2">Support ticketing: coming soon</h2>
           <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
             A full in-app support queue with ticket assignment, SLA tracking, and response templates is planned for the next phase.
           </p>

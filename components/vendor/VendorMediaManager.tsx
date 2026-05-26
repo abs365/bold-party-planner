@@ -126,7 +126,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       <div>
         <h1 className="text-2xl font-bold text-white mb-1">Photos & Videos</h1>
         <p className="text-slate-400 text-sm">
-          High-quality media is the #1 factor in getting bookings. Upload your best work — events you&apos;ve done, setups, highlights.
+          High-quality media is the #1 factor in getting bookings. Upload your best work: events you&apos;ve done, setups and highlights.
         </p>
       </div>
 
@@ -139,7 +139,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
           {[
             { icon: "📸", tip: "Upload 8–15 high-quality photos of your best work" },
             { icon: "🎥", tip: "Add a 1–2 minute highlight video to stand out" },
-            { icon: "⭐", tip: "Set your best photo as the cover — first impressions matter" },
+            { icon: "⭐", tip: "Set your best photo as the cover. First impressions matter." },
           ].map(({ icon, tip }) => (
             <div key={tip} className="flex gap-2.5 text-xs text-slate-400">
               <span className="text-base flex-shrink-0">{icon}</span>
@@ -288,7 +288,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       {media.length === 0 && (
         <div className="text-center py-12 text-slate-500">
           <ImageIcon size={40} className="mx-auto mb-3 text-slate-700" />
-          <p>No photos or videos yet — upload your first one above</p>
+          <p>No photos or videos yet. Upload your first one above.</p>
         </div>
       )}
     </div>

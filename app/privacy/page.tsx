@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Bold Party",
+  title: "Privacy Policy | Bold Party",
   description: "How Bold Party collects, uses, and protects your personal data.",
 };
 
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
           content: [
             "Account information: your name, email address, phone number, and profile photo when you register.",
             "Event data: event details, guest lists, preferences, and planning information you enter on our platform.",
-            "Payment information: we do not store card details — all payments are processed by Stripe, who handle payment data securely under PCI-DSS compliance.",
+            "Payment information: we do not store card details. All payments are processed by Stripe, who handle payment data securely under PCI-DSS compliance.",
             "Vendor information: business name, description, location, portfolio photos and videos, packages, and pricing.",
             "Usage data: pages visited, features used, booking history, and interactions on the platform.",
             "Communications: messages sent between customers and vendors through our platform.",

@@ -9,10 +9,10 @@ import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Bold Party — Plan, Book & Celebrate | UK Event Marketplace",
+  title: "Bold Party | Plan, Book & Celebrate | UK Event Marketplace",
   description: "The UK's trusted event marketplace. Book verified DJs, photographers, caterers, decorators and 15 more vendor categories. Smart planning tools included. Start free.",
   openGraph: {
-    title: "Bold Party — Plan, Book & Celebrate",
+    title: "Bold Party | Plan, Book & Celebrate",
     description: "Book verified UK event vendors. Smart planning, secure payments, guaranteed experience.",
     type: "website",
   },
@@ -88,7 +88,7 @@ export default async function Home() {
           </h1>
 
           <p className="text-lg text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
-            Find verified DJs, photographers, caterers, decorators and 15 more categories — with smart planning tools built in.
+            Find verified DJs, photographers, caterers, decorators and 15+ more categories. Smart planning tools included.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
@@ -97,7 +97,7 @@ export default async function Home() {
               <ArrowRight size={16} />
             </Link>
             <Link href="/vendor/apply" className="btn-secondary-light text-base py-3.5 px-8">
-              Become a Vendor
+              Join as a Vendor
             </Link>
           </div>
 
@@ -274,7 +274,7 @@ export default async function Home() {
               },
               {
                 title: "Birthday Party",
-                desc: "DJ, decorator, photobooth, celebration cake — any age, any scale.",
+                desc: "DJ, decorator, photobooth and celebration cake for any age and scale.",
                 emoji: "🎂",
                 href: "/browse?event=birthday",
                 budget: "Budgets from £500",

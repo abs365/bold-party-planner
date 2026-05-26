@@ -131,7 +131,7 @@ export default function SignupPage() {
                 )}
               >
                 {r === "customer" ? <User size={16} /> : <Store size={16} />}
-                {r === "customer" ? "Plan Events" : "List Services"}
+                {r === "customer" ? "Book Vendors" : "Join as a Vendor"}
               </button>
             ))}
           </div>
@@ -205,7 +205,7 @@ export default function SignupPage() {
                     ))}
                   </div>
                   <p className="text-xs text-gray-400 mt-1">
-                    {password.length < 8 ? "Too short" : password.length < 10 ? "Weak — add numbers or symbols" : password.length < 14 ? "Good password" : "Strong password"}
+                    {password.length < 8 ? "Too short" : password.length < 10 ? "Weak, try adding numbers or symbols" : password.length < 14 ? "Good password" : "Strong password"}
                   </p>
                 </div>
               )}
@@ -214,7 +214,7 @@ export default function SignupPage() {
             {role === "vendor" && (
               <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-700 flex items-start gap-2">
                 <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0 text-blue-500" />
-                After confirming your email, you&apos;ll complete your vendor profile. Free to join — keep 90% of earnings.
+                After confirming your email, you&apos;ll complete your vendor profile. Free to join and you keep 90% of every booking.
               </div>
             )}
 

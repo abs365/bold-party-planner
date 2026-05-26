@@ -623,14 +623,14 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                   Auto-RFQ Preview
                 </div>
                 <p className="text-slate-400 text-sm">
-                  We&apos;ll send quote requests to up to <strong className="text-white">{data.vendor_needs.length * 3} vendors</strong> across {data.vendor_needs.length} categor{data.vendor_needs.length === 1 ? "y" : "ies"} — {data.vendor_needs.map((c) => VENDOR_CATEGORIES[c]?.label ?? c).join(", ")}. Vendors typically respond within 24 hours.
+                  We&apos;ll send quote requests to up to <strong className="text-white">{data.vendor_needs.length * 3} vendors</strong> across {data.vendor_needs.length} categor{data.vendor_needs.length === 1 ? "y" : "ies"}: {data.vendor_needs.map((c) => VENDOR_CATEGORIES[c]?.label ?? c).join(", ")}. Vendors typically respond within 24 hours.
                 </p>
               </div>
             )}
 
             {data.vendor_needs.length === 0 && (
               <p className="text-slate-500 text-sm text-center py-2">
-                Skip this step if you haven&apos;t decided yet — you can request quotes individually from vendor profiles.
+                Skip this step if you haven&apos;t decided yet. You can request quotes from individual vendor profiles at any time.
               </p>
             )}
           </div>

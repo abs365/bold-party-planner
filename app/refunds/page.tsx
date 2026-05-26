@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Refund Policy — Bold Party",
+  title: "Refund Policy | Bold Party",
   description: "Bold Party's cancellation, refund, and dispute resolution policy.",
 };
 

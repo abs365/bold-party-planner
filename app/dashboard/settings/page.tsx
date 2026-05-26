@@ -87,7 +87,7 @@ export default async function AccountSettingsPage() {
               <Shield size={18} className="text-slate-500" />
               <div>
                 <div className="text-sm font-semibold text-slate-400">Security</div>
-                <div className="text-xs text-slate-600">Password management — coming soon</div>
+                <div className="text-xs text-slate-600">Password management: coming soon</div>
               </div>
             </div>
 

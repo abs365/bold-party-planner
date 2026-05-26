@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { updateVendorMetrics } from "@/lib/verification-automation";
 
 export async function PATCH(
   request: Request,
@@ -46,6 +47,11 @@ export async function PATCH(
         .single();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+      // Refresh metrics when a booking is completed or cancelled
+      if (status === "completed" || status === "cancelled") {
+        void updateVendorMetrics(vendor.id, supabase);
+      }
 
       const event = booking.event as Record<string, string>;
       const customer = booking.customer as Record<string, string>;

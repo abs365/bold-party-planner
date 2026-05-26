@@ -223,7 +223,7 @@ export function InspirationPreview() {
           <div>
             <p className="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-2">Get Inspired</p>
             <h2 className="text-3xl font-extrabold text-white">Trending Event Styles</h2>
-            <p className="text-slate-400 mt-1 text-sm">Browse ideas from real UK events — then plan yours in one click.</p>
+            <p className="text-slate-400 mt-1 text-sm">Browse ideas from real UK events, then plan yours in one click.</p>
           </div>
           <Link href="/inspire" className="hidden sm:flex items-center gap-1.5 text-sm text-brand-400 hover:text-brand-300 font-medium">
             See all <ArrowRight size={14} />

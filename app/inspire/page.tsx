@@ -131,7 +131,7 @@ export default async function InspirePage() {
             Find Your <span className="gradient-brand-text">Perfect Vision</span>
           </h1>
           <p className="text-gray-500 text-lg max-w-xl mx-auto mb-8">
-            Stunning event ideas, trending themes, and beautiful setups — curated for every occasion and style.
+            Stunning event ideas, trending themes and beautiful setups, curated for every occasion and style.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/dashboard/create-event" className="btn-primary py-3 px-8">
@@ -245,7 +245,7 @@ export default async function InspirePage() {
             ))}
           </div>
           <p className="text-center text-xs text-gray-400 mt-6">
-            Each palette links to matching vendors who specialise in that style — browse and book directly.
+            Each palette links to matching vendors who specialise in that style. Browse and book directly.
           </p>
         </div>
       </section>
@@ -321,7 +321,7 @@ export default async function InspirePage() {
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Emily &amp; Tom&apos;s Garden Wedding</h2>
                 <p className="text-gray-500 text-sm mb-4 max-w-lg">
-                  A breathtaking outdoor celebration at Kensington Gardens — featuring a 12-piece orchestra, bespoke floral arches, and a 5-star catered feast for 120 guests.
+                  A breathtaking outdoor celebration at Kensington Gardens, featuring a 12-piece orchestra, bespoke floral arches and a 5-star catered feast for 120 guests.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-5">
                   {["Live Orchestra", "Floral Arch", "Marquee", "Photographer", "Catering"].map((tag) => (
@@ -349,7 +349,7 @@ export default async function InspirePage() {
             Love What You See?
           </h2>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            Let our Smart Planner build you a complete event plan inspired by your favourite styles — vendors, budget, and timeline included.
+            Let our Smart Planner build a complete event plan based on your favourite styles: vendors, budget and timeline included.
           </p>
           <Link href="/dashboard/create-event" className="btn-primary text-base py-3 px-8 inline-flex">
             <Sparkles size={16} />

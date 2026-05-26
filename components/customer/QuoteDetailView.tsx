@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { formatDistanceToNow, differenceInHours, differenceInDays } from "date-fns";
+import { differenceInHours, differenceInDays } from "date-fns";
 import {
   Star,
   MapPin,

@@ -25,7 +25,7 @@ export default async function HowItWorksPage() {
             How <span className="gradient-brand-text">Bold Party</span> Works
           </h1>
           <p className="text-gray-500 max-w-xl mx-auto">
-            From idea to celebration — our platform handles everything automatically so you can focus on enjoying your event.
+            Our platform handles everything automatically, so you can focus on enjoying your event.
           </p>
         </div>
 
@@ -37,9 +37,9 @@ export default async function HowItWorksPage() {
           <div className="space-y-4">
             {[
               { step: "1", title: "Create your event", desc: "Enter event type, date, city, guest count, and budget. Takes 2 minutes.", icon: Calendar },
-              { step: "2", title: "Get your Smart Plan", desc: "Our Smart Planner instantly creates a complete event plan — vendors needed, budget breakdown, timeline, and checklist.", icon: Zap },
+              { step: "2", title: "Get your Smart Plan", desc: "Our Smart Planner instantly creates a complete event plan: vendors, budget breakdown, timeline and checklist.", icon: Zap },
               { step: "3", title: "Browse and book vendors", desc: "Browse verified vendors with real photos and videos. See reviews, compare packages, check availability, and book instantly.", icon: Star },
-              { step: "4", title: "Pay securely", desc: "Pay the 30% deposit to confirm. Full payment is due before the event. All via Stripe — fully protected.", icon: CreditCard },
+              { step: "4", title: "Pay securely", desc: "Pay the 30% deposit to confirm. Full payment is due before the event. All payments go through Stripe, fully protected.", icon: CreditCard },
               { step: "5", title: "Relax and celebrate", desc: "We handle reminders, confirmations, and post-event reviews. You just show up and enjoy.", icon: CheckCircle2 },
             ].map(({ step, title, desc, icon: Icon }) => (
               <div key={step} className="flex gap-5 bg-white border border-gray-100 rounded-xl p-5">
@@ -67,7 +67,7 @@ export default async function HowItWorksPage() {
             {[
               { step: "1", title: "Apply for free", desc: "Submit your vendor application in minutes. We review and approve within 24–48 hours." },
               { step: "2", title: "Build your profile", desc: "Upload photos and videos of your work, add service packages with clear pricing." },
-              { step: "3", title: "Receive booking requests", desc: "Customers send requests through the platform. Accept or decline — you're always in control." },
+              { step: "3", title: "Receive booking requests", desc: "Customers send requests through the platform. Accept or decline bookings. You are always in control." },
               { step: "4", title: "Get paid automatically", desc: "Payments go through Stripe. You receive 90% of the booking value directly to your account." },
               { step: "5", title: "Build your reputation", desc: "Collect reviews after every event. Higher ratings = more bookings and featured placement." },
             ].map(({ step, title, desc }) => (
@@ -93,7 +93,7 @@ export default async function HowItWorksPage() {
             {[
               { icon: "🔒", title: "Secure Payments", desc: "All payments through Stripe. Deposit protection and refund system built in." },
               { icon: "✅", title: "Verified Vendors", desc: "Every vendor is reviewed and approved before appearing on our marketplace." },
-              { icon: "⭐", title: "Transparent Reviews", desc: "All reviews are from real, verified bookings. No fake ratings — ever." },
+              { icon: "⭐", title: "Transparent Reviews", desc: "All reviews are from real, verified bookings. No fake ratings, ever." },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="text-center">
                 <div className="text-4xl mb-3">{icon}</div>

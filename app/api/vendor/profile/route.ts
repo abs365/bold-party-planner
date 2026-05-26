@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { tryUpgradeLevel1 } from "@/lib/verification-automation";
 
 export async function PATCH(req: Request) {
   const supabase = await createClient();
@@ -34,5 +35,11 @@ export async function PATCH(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Check level 1 eligibility after profile update (fire-and-forget)
+  if (data.verification_level === 0) {
+    void tryUpgradeLevel1(data.id, user.id, supabase);
+  }
+
   return NextResponse.json(data);
 }

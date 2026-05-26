@@ -90,7 +90,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-white capitalize">
-                      {String(payment.type)} Payment — {cat?.icon} {String(vendor?.business_name ?? "Vendor")}
+                      {String(payment.type)} Payment · {cat?.icon} {String(vendor?.business_name ?? "Vendor")}
                     </div>
                     <div className="text-xs text-slate-400 mt-0.5">
                       {event?.title ?? "Event"} · {formatDate(String(payment.created_at))}
@@ -132,7 +132,7 @@ export function CustomerPaymentsView({ payments, invoices }: CustomerPaymentsVie
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-white">
-                      Invoice #{String(invoice.invoice_number)} — {String(vendor?.business_name ?? "Vendor")}
+                      Invoice #{String(invoice.invoice_number)} · {String(vendor?.business_name ?? "Vendor")}
                     </div>
                     <div className="text-xs text-slate-400 mt-0.5">
                       {event?.title ?? "Event"} · {formatDate(String(invoice.created_at))}

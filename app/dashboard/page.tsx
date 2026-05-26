@@ -100,7 +100,7 @@ export default async function CustomerDashboard() {
             </div>
             <h2 className="text-xl font-semibold text-white mb-2">Start Planning Your First Event</h2>
             <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
-              Our Smart Planner creates a complete event plan in seconds — vendors, budget, timeline and checklist included.
+              Our Smart Planner builds a complete event plan: vendors, budget, timeline and checklist.
             </p>
             <Link href="/dashboard/create-event" className="btn-primary">
               <Sparkles size={15} />

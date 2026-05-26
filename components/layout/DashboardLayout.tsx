@@ -8,7 +8,7 @@ import {
   Bell, Menu, X, LogOut, User, ChevronRight, Star,
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
-  Inbox, Heart, Mail, HelpCircle,
+  Inbox, Heart, Mail, HelpCircle, Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -46,6 +46,7 @@ const VENDOR_NAV: NavItem[] = [
   { href: "/vendor/analytics", label: "Analytics", icon: TrendingUp },
   { href: "/vendor/payouts", label: "Revenue & Payouts", icon: Wallet },
   { href: "/vendor/subscription", label: "Subscription", icon: BadgeCheck },
+  { href: "/vendor/verification", label: "Get Verified", icon: Shield },
 ];
 
 const ADMIN_NAV: NavItem[] = [
@@ -56,6 +57,7 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/payouts", label: "Payouts", icon: Wallet },
   { href: "/admin/disputes", label: "Disputes", icon: AlertCircle },
   { href: "/admin/verifications", label: "Verifications", icon: BadgeCheck },
+  { href: "/admin/moderation", label: "Moderation", icon: Shield },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: BadgeCheck },
   { href: "/admin/support", label: "Support", icon: HelpCircle },

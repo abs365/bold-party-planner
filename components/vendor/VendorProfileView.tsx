@@ -13,6 +13,7 @@ import { VENDOR_CATEGORIES, type Vendor, type VendorMedia, type Review, type Pro
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { BookingProtectionCard, CompletedJobsPill, ResponseTimePill } from "@/components/ui/TrustBadges";
+import { VendorTrustBadges } from "@/components/vendor/VendorTrustBadges";
 import { VendorSocialFeed } from "@/components/ui/social/VendorSocialFeed";
 import toast from "react-hot-toast";
 
@@ -223,6 +224,12 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   <CheckCircle2 size={12} /> Verified Vendor
                 </Badge>
               )}
+              <VendorTrustBadges
+                verificationLevel={vendor.verification_level}
+                verified={vendor.verified}
+                completedJobsCount={vendor.completed_jobs_count}
+                compact
+              />
               {(vendor.subscription_plan === "featured" || vendor.featured) && (
                 <Badge variant="gold">⭐ Featured</Badge>
               )}
@@ -442,6 +449,17 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
             <p className="text-center text-xs text-gray-400 mt-3">
               You won&apos;t be charged until the vendor confirms
             </p>
+
+            {/* Verification & trust badges */}
+            <VendorTrustBadges
+              verificationLevel={vendor.verification_level}
+              verified={vendor.verified}
+              responseRate={vendor.response_rate}
+              completedJobsCount={vendor.completed_jobs_count}
+              yearsExperience={vendor.years_experience}
+              cancellationRate={vendor.cancellation_rate}
+              className="mt-5"
+            />
 
             {/* Quick trust signals */}
             <div className="border-t border-gray-100 mt-5 pt-5 space-y-3">

@@ -11,7 +11,7 @@ export default function PaymentCancelPage() {
 
         <h1 className="text-2xl font-bold text-white mb-3">Payment Cancelled</h1>
         <p className="text-slate-400 mb-8">
-          Your payment was cancelled and no charge was made. Your booking request is still active — you can try again.
+          Your payment was cancelled and no charge was made. Your booking request is still active and you can try again.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3">

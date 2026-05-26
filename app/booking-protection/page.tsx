@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Booking Protection — Bold Party",
+  title: "Booking Protection | Bold Party",
   description: "How Bold Party protects your bookings and payments.",
 };
 
@@ -68,7 +68,7 @@ export default function BookingProtection() {
         },
         {
           title: "Our Commitment",
-          content: "We only earn when you have a successful event. Our business model aligns with your success — which means we are motivated to ensure every booking goes smoothly.",
+          content: "We only earn when you have a successful event. Our business model is designed to align with your success, which means we work hard to ensure every booking goes smoothly.",
         },
       ]}
     />

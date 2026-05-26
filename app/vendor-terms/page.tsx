@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Vendor Terms — Bold Party",
+  title: "Vendor Terms | Bold Party",
   description: "Terms and conditions for vendors listing services on the Bold Party marketplace.",
 };
 

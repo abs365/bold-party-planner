@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!vendor) return { title: "Vendor Not Found" };
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
-  const title = `${vendor.business_name} — ${cat?.label ?? vendor.category} in ${vendor.city} | Bold Party`;
+  const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | Bold Party`;
   const description = vendor.description?.slice(0, 160) ??
     `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on Bold Party.`;
 

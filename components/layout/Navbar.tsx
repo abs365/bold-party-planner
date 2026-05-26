@@ -94,7 +94,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
             <>
               <Link href="/dashboard/create-event" className="btn-primary text-sm py-2 px-4">
                 <Sparkles size={14} />
-                Plan Event
+                Create Event
               </Link>
               {user.role === "customer" && (
                 <Link
@@ -104,7 +104,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                     lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
                   )}
                 >
-                  Become a Vendor
+                  Join as a Vendor
                 </Link>
               )}
               <Link
@@ -152,7 +152,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                         onClick={() => setProfileOpen(false)}
                       >
                         <Store size={15} className="text-brand-500" />
-                        Become a Vendor
+                        Join as a Vendor
                       </Link>
                     )}
                     <Link
@@ -194,7 +194,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                   lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
                 )}
               >
-                List Your Services
+                Join as a Vendor
               </Link>
               {lightBg ? (
                 <>
@@ -254,7 +254,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                   Dashboard
                 </Link>
                 <Link href="/dashboard/create-event" className="btn-primary text-sm" onClick={() => setMobileOpen(false)}>
-                  Plan Event
+                  Create Event
                 </Link>
               </>
             ) : (
@@ -267,7 +267,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                   )}
                   onClick={() => setMobileOpen(false)}
                 >
-                  List Your Services
+                  Join as a Vendor
                 </Link>
                 <Link href="/login" className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Sign In
