@@ -28,26 +28,16 @@ type FeaturedVendor = Pick<
   media?: Array<{ url: string; type: string; is_cover: boolean }>;
 };
 
-// Diamond mark — inline SVG for server rendering, no icon library dependency
-function DiamondMark({ size = 28, color = "#C9A84C" }: { size?: number; color?: string }) {
-  const s = size;
-  const h = s / 2;
+function ElboldMark({ size = 40 }: { size?: number }) {
   return (
-    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} fill="none" aria-hidden="true">
-      <polygon
-        points={`${h},${s * 0.04} ${s * 0.96},${h} ${h},${s * 0.96} ${s * 0.04},${h}`}
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <polygon
-        points={`${h},${s * 0.27} ${s * 0.73},${h} ${h},${s * 0.73} ${s * 0.27},${h}`}
-        stroke={color}
-        strokeWidth="1"
-        fill="none"
-        opacity="0.5"
-      />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/brand/elbold-mark.svg"
+      width={size}
+      height={size}
+      alt="ELBOLD"
+      style={{ display: "block" }}
+    />
   );
 }
 
@@ -101,7 +91,7 @@ export default async function Home() {
 
           {/* Brand mark — acts as a centrepiece, not just a nav logo */}
           <div className="flex flex-col items-center mb-14">
-            <DiamondMark size={48} color="#C9A84C" />
+            <ElboldMark size={72} />
             <div className="mt-5 flex items-center gap-3">
               <div className="h-px w-10" style={{ background: "rgba(201,168,76,0.35)" }} />
               <span
@@ -194,13 +184,8 @@ export default async function Home() {
 
             {/* Planner path */}
             <div className="border border-gray-100 rounded-2xl p-10 flex flex-col bg-white hover:border-gray-200 hover:shadow-lg transition-all duration-300">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-7"
-                style={{ background: "#0D1B3E" }}
-              >
-                <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                  <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                </svg>
+              <div className="mb-7">
+                <ElboldMark size={40} />
               </div>
               <p
                 className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
@@ -231,14 +216,8 @@ export default async function Home() {
               className="rounded-2xl p-10 flex flex-col hover:shadow-lg transition-all duration-300"
               style={{ background: "#0D1B3E" }}
             >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-7"
-                style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)" }}
-              >
-                <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                  <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                  <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.5"/>
-                </svg>
+              <div className="mb-7">
+                <ElboldMark size={40} />
               </div>
               <p
                 className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
@@ -328,7 +307,7 @@ export default async function Home() {
                           className="w-full h-full flex items-center justify-center"
                           style={{ background: "#0D1B3E" }}
                         >
-                          <DiamondMark size={40} color="rgba(201,168,76,0.25)" />
+                          <ElboldMark size={40} />
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

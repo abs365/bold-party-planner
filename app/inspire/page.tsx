@@ -1,27 +1,27 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { InspirationFeed } from "@/components/ui/InspirationFeed";
-import { Sparkles, ArrowRight, TrendingUp, Palette, Heart, Star, BadgeCheck, ExternalLink } from "lucide-react";
+import { ArrowRight, Star, BadgeCheck, Heart, ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Inspiration | ELBOLD Events",
-  description: "Discover stunning event ideas, trending themes, and beautiful decorations. Get inspired for your next celebration.",
+  title: "Event Inspiration",
+  description: "Discover stunning event ideas, colour palettes and themes for weddings, birthdays and extraordinary celebrations.",
 };
 
 export const dynamic = "force-dynamic";
 
 const TRENDING_THEMES = [
-  { emoji: "ðŸŒ¸", label: "Garden Party", count: "2.4k saves", href: "/browse?event=wedding" },
-  { emoji: "ðŸŽ­", label: "Masquerade Ball", count: "1.8k saves", href: "/browse?event=birthday" },
-  { emoji: "ðŸŒ´", label: "Tropical Paradise", count: "1.6k saves", href: "/browse?event=birthday" },
-  { emoji: "âœ¨", label: "Enchanted Forest", count: "1.4k saves", href: "/browse?event=wedding" },
-  { emoji: "ðŸ–¤", label: "Black & Gold Luxe", count: "1.2k saves", href: "/browse?event=corporate" },
-  { emoji: "ðŸŽ ", label: "Vintage Carousel", count: "980 saves", href: "/browse?event=birthday" },
-  { emoji: "ðŸŒ¿", label: "Boho Greenhouse", count: "870 saves", href: "/browse?event=wedding" },
-  { emoji: "ðŸŽª", label: "Circus Spectacular", count: "760 saves", href: "/browse?event=birthday" },
+  { label: "Garden Party", count: "2.4k saves", href: "/browse?event=wedding" },
+  { label: "Masquerade Ball", count: "1.8k saves", href: "/browse?event=birthday" },
+  { label: "Tropical Paradise", count: "1.6k saves", href: "/browse?event=birthday" },
+  { label: "Enchanted Forest", count: "1.4k saves", href: "/browse?event=wedding" },
+  { label: "Black & Gold Luxe", count: "1.2k saves", href: "/browse?event=corporate" },
+  { label: "Vintage Carousel", count: "980 saves", href: "/browse?event=birthday" },
+  { label: "Boho Greenhouse", count: "870 saves", href: "/browse?event=wedding" },
+  { label: "Circus Spectacular", count: "760 saves", href: "/browse?event=birthday" },
 ];
 
 const COLOUR_PALETTES = [
@@ -29,7 +29,7 @@ const COLOUR_PALETTES = [
     name: "Rose Gold & Ivory",
     colors: ["#B76E79", "#F5E6D3", "#D4AF8C", "#F8F4F0"],
     saves: "3.2k",
-    style: "Wedding Â· Anniversary",
+    style: "Wedding · Anniversary",
     mood: "Romantic & Timeless",
     href: "/browse?category=decorator&event=wedding",
     vendors: "Decorators & Florists",
@@ -38,7 +38,7 @@ const COLOUR_PALETTES = [
     name: "Midnight Navy & Gold",
     colors: ["#1B2A4A", "#C9A84C", "#0D1B2A", "#E8D5A0"],
     saves: "2.8k",
-    style: "Corporate Â· Gala",
+    style: "Corporate · Gala",
     mood: "Bold & Sophisticated",
     href: "/browse?category=lighting_stage&event=corporate",
     vendors: "Lighting & Staging",
@@ -47,7 +47,7 @@ const COLOUR_PALETTES = [
     name: "Sage & Terracotta",
     colors: ["#87A878", "#C4714F", "#F2E8DF", "#5C4033"],
     saves: "2.1k",
-    style: "Boho Â· Garden Party",
+    style: "Boho · Garden Party",
     mood: "Natural & Earthy",
     href: "/browse?category=decorator&event=wedding",
     vendors: "Decorators & Florists",
@@ -56,7 +56,7 @@ const COLOUR_PALETTES = [
     name: "Dusty Lavender",
     colors: ["#C8B8D8", "#9B8AA3", "#F0EBF5", "#6E5F80"],
     saves: "1.9k",
-    style: "Baby Shower Â· Wedding",
+    style: "Baby Shower · Wedding",
     mood: "Soft & Dreamy",
     href: "/browse?category=balloon_decorator&event=baby_shower",
     vendors: "Balloon Decorators",
@@ -65,7 +65,7 @@ const COLOUR_PALETTES = [
     name: "Emerald & Champagne",
     colors: ["#2D6A4F", "#F0E5B0", "#1B4332", "#C8B460"],
     saves: "1.7k",
-    style: "Anniversary Â· Wedding",
+    style: "Anniversary · Wedding",
     mood: "Luxurious & Rich",
     href: "/browse?category=decorator&event=anniversary",
     vendors: "Decorators & Styling",
@@ -74,7 +74,7 @@ const COLOUR_PALETTES = [
     name: "Blush & Burgundy",
     colors: ["#FFB6C1", "#800020", "#FFF0F3", "#4A0010"],
     saves: "1.5k",
-    style: "Wedding Â· Engagement",
+    style: "Wedding · Engagement",
     mood: "Passionate & Elegant",
     href: "/browse?category=decorator&event=engagement",
     vendors: "Decorators & Florists",
@@ -82,12 +82,12 @@ const COLOUR_PALETTES = [
 ];
 
 const INSPIRATION_COLLECTIONS = [
-  { title: "Wedding Wonderland", count: 48, emoji: "ðŸ’", bg: "bg-rose-50", border: "border-rose-100", href: "/browse?category=decorator&event=wedding" },
-  { title: "Birthday Extravaganza", count: 62, emoji: "ðŸŽ‚", bg: "bg-purple-50", border: "border-purple-100", href: "/browse?event=birthday" },
-  { title: "Corporate Excellence", count: 34, emoji: "ðŸ¢", bg: "bg-blue-50", border: "border-blue-100", href: "/browse?event=corporate" },
-  { title: "Baby Shower Dreams", count: 29, emoji: "ðŸ‘¶", bg: "bg-amber-50", border: "border-amber-100", href: "/browse?event=baby_shower" },
-  { title: "Table Styling", count: 55, emoji: "ðŸŒ¸", bg: "bg-emerald-50", border: "border-emerald-100", href: "/browse?category=decorator" },
-  { title: "Lighting & Atmosphere", count: 41, emoji: "ðŸ’¡", bg: "bg-orange-50", border: "border-orange-100", href: "/browse?category=lighting_stage" },
+  { title: "Wedding", count: 48, href: "/browse?category=decorator&event=wedding" },
+  { title: "Birthday", count: 62, href: "/browse?event=birthday" },
+  { title: "Corporate", count: 34, href: "/browse?event=corporate" },
+  { title: "Baby Shower", count: 29, href: "/browse?event=baby_shower" },
+  { title: "Table Styling", count: 55, href: "/browse?category=decorator" },
+  { title: "Lighting", count: 41, href: "/browse?category=lighting_stage" },
 ];
 
 export default async function InspirePage() {
@@ -118,55 +118,87 @@ export default async function InspirePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar user={profile} lightBg />
+      <Navbar user={profile} />
 
-      {/* Hero */}
-      <section className="pt-28 pb-16 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-sm font-medium mb-6">
-            <Sparkles size={13} />
-            Event Inspiration Hub
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Find Your <span className="gradient-brand-text">Perfect Vision</span>
-          </h1>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto mb-8">
-            Stunning event ideas, trending themes and beautiful setups, curated for every occasion and style.
+      {/* Aspirational hero — dark luxury */}
+      <section className="pt-16 relative overflow-hidden" style={{ background: "#0D1B3E" }}>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 90% 55% at 50% 20%, rgba(201,168,76,0.055) 0%, transparent 65%)" }}
+        />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 pt-20 pb-16 text-center">
+          <p
+            className="text-xs tracking-[0.35em] font-semibold mb-10 uppercase"
+            style={{ color: "rgba(201,168,76,0.6)" }}
+          >
+            Inspiration
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/dashboard/create-event" className="btn-primary py-3 px-8">
-              <Sparkles size={15} />
+
+          <h1
+            className="font-light tracking-tight leading-tight mb-6"
+            style={{ fontSize: "clamp(2.5rem, 7vw, 4.5rem)", color: "rgba(255,255,255,0.92)" }}
+          >
+            Extraordinary.
+            <br />
+            <span style={{ color: "#C9A84C" }}>Imagined.</span> Celebrated.
+          </h1>
+
+          <p
+            className="text-base font-light leading-relaxed max-w-xl mx-auto mb-12"
+            style={{ color: "rgba(255,255,255,0.45)" }}
+          >
+            Discover stunning ideas, colour palettes and themes for weddings,
+            birthdays and every extraordinary occasion.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/dashboard/create-event" className="btn-luxury">
               Plan This Style
             </Link>
-            <Link href="/browse" className="btn-secondary-light py-3 px-8">
-              Find Vendors
-              <ArrowRight size={15} />
+            <Link href="/browse" className="btn-luxury-outline">
+              Find Vendors <ArrowRight size={14} />
             </Link>
           </div>
+        </div>
+
+        {/* Colour palette preview strip — teaser of what's below */}
+        <div className="flex gap-0 overflow-hidden" aria-hidden="true">
+          {["#B76E79", "#F5E6D3", "#1B2A4A", "#C9A84C", "#87A878", "#C4714F", "#C8B8D8", "#9B8AA3", "#2D6A4F", "#F0E5B0"].map((color, i) => (
+            <div
+              key={i}
+              className="flex-1 h-2"
+              style={{ background: color, opacity: 0.65 }}
+            />
+          ))}
         </div>
       </section>
 
       {/* Trending Themes */}
-      <section className="py-12 px-4 border-y border-gray-100 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <TrendingUp size={16} className="text-gray-500" />
-            <h2 className="text-base font-semibold text-gray-900">Trending Themes</h2>
-            <span className="text-sm text-gray-400">This week&apos;s most-saved ideas</span>
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <p
+                className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                style={{ color: "rgba(201,168,76,0.7)" }}
+              >
+                Most Saved
+              </p>
+              <h2 className="text-2xl font-light text-gray-900 tracking-tight">Trending Themes</h2>
+            </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {TRENDING_THEMES.map((theme) => (
               <Link
                 key={theme.label}
                 href={theme.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-gray-100 hover:border-brand-200 hover:bg-brand-50 transition-all group"
+                className="flex items-center justify-between px-4 py-3.5 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group"
               >
-                <span className="text-xl flex-shrink-0">{theme.emoji}</span>
-                <div className="min-w-0">
-                  <div className="text-sm font-medium text-gray-900 truncate">{theme.label}</div>
-                  <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                    <Heart size={9} className="text-brand-500 fill-brand-500 flex-shrink-0" /> {theme.count}
-                  </div>
+                <span className="text-sm font-medium text-gray-900">{theme.label}</span>
+                <div className="flex items-center gap-1">
+                  <Heart size={9} className="text-gray-300 group-hover:text-gray-400 transition-colors" />
+                  <span className="text-xs text-gray-400 font-light">{theme.count.split(" ")[0]}</span>
                 </div>
               </Link>
             ))}
@@ -174,24 +206,33 @@ export default async function InspirePage() {
         </div>
       </section>
 
-      {/* Collections */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 mb-2">
-            <Palette size={15} className="text-gray-400" />
-            <span className="text-gray-400 text-sm font-medium">Collections</span>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Browse by Theme</h2>
+      {/* Browse by Occasion */}
+      <section className="py-16 px-4" style={{ background: "#f8f7f5" }}>
+        <div className="max-w-6xl mx-auto">
+          <p
+            className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+            style={{ color: "rgba(201,168,76,0.7)" }}
+          >
+            Collections
+          </p>
+          <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-10">Browse by Occasion</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {INSPIRATION_COLLECTIONS.map((col) => (
               <Link
                 key={col.title}
                 href={col.href}
-                className={`${col.bg} border ${col.border} rounded-xl p-5 hover:shadow-md transition-shadow group text-center`}
+                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-gray-200 hover:shadow-md transition-all group text-center"
               >
-                <div className="text-3xl mb-3">{col.emoji}</div>
-                <div className="font-medium text-gray-900 text-sm mb-1 leading-tight">{col.title}</div>
-                <div className="text-xs text-gray-400">{col.count} ideas</div>
+                <div
+                  className="w-10 h-10 rounded-lg mx-auto mb-3 flex items-center justify-center"
+                  style={{ background: "#0D1B3E" }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                    <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  </svg>
+                </div>
+                <div className="font-medium text-gray-900 text-sm mb-1">{col.title}</div>
+                <div className="text-xs text-gray-400 font-light">{col.count} ideas</div>
               </Link>
             ))}
           </div>
@@ -199,44 +240,48 @@ export default async function InspirePage() {
       </section>
 
       {/* Colour Palettes */}
-      <section className="py-16 px-4 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 mb-2">
-            <Palette size={15} className="text-gray-400" />
-            <span className="text-gray-400 text-sm font-medium">Trending Palettes</span>
-          </div>
-          <div className="flex items-end justify-between mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">Colour Inspiration</h2>
-            <p className="text-gray-400 text-xs hidden sm:block">Click a palette to discover matching vendors</p>
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p
+                className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                style={{ color: "rgba(201,168,76,0.7)" }}
+              >
+                Colour Inspiration
+              </p>
+              <h2 className="text-2xl font-light text-gray-900 tracking-tight">Palette & Mood</h2>
+            </div>
+            <p className="text-gray-400 text-xs hidden sm:block font-light">Click a palette to browse matching vendors</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {COLOUR_PALETTES.map((palette) => (
               <Link
                 key={palette.name}
                 href={palette.href}
-                className="bg-white border border-gray-100 rounded-xl p-5 hover:shadow-md hover:border-gray-200 transition-all group"
+                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-gray-200 hover:shadow-md transition-all group"
               >
-                <div className="flex gap-1.5 mb-4">
+                <div className="flex gap-1.5 mb-5">
                   {palette.colors.map((color, i) => (
                     <div
                       key={i}
-                      className="flex-1 h-14 rounded-lg"
+                      className="flex-1 h-12 rounded-lg"
                       style={{ backgroundColor: color }}
                     />
                   ))}
                 </div>
-                <div className="mb-3">
+                <div className="mb-4">
                   <div className="text-sm font-semibold text-gray-900">{palette.name}</div>
-                  <div className="text-xs text-gray-400 mt-0.5">{palette.mood}</div>
+                  <div className="text-xs text-gray-400 mt-0.5 font-light">{palette.mood}</div>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <span className="text-xs text-gray-400">{palette.style}</span>
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid #f3f4f6" }}>
+                  <span className="text-xs text-gray-400 font-light">{palette.style}</span>
+                  <div className="flex items-center gap-2.5">
                     <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <Heart size={9} className="fill-brand-500 text-brand-500" />
+                      <Heart size={9} />
                       {palette.saves}
                     </div>
-                    <span className="flex items-center gap-1 text-xs text-brand-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#0D1B3E" }}>
                       {palette.vendors} <ExternalLink size={10} />
                     </span>
                   </div>
@@ -244,27 +289,25 @@ export default async function InspirePage() {
               </Link>
             ))}
           </div>
-          <p className="text-center text-xs text-gray-400 mt-6">
-            Each palette links to matching vendors who specialise in that style. Browse and book directly.
-          </p>
         </div>
       </section>
 
       {/* Vendor Spotlight */}
       {(spotlightVendors?.length ?? 0) > 0 && (
-        <section className="py-16 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
+        <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-end justify-between mb-12">
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <BadgeCheck size={15} className="text-gray-400" />
-                  <span className="text-gray-400 text-sm font-medium">Community</span>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">Vendor Spotlight</h2>
-                <p className="text-gray-500 text-sm mt-1">Exceptional professionals trusted by hundreds of hosts</p>
+                <p
+                  className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                  style={{ color: "rgba(201,168,76,0.7)" }}
+                >
+                  Vendor Spotlight
+                </p>
+                <h2 className="text-2xl font-light text-gray-900 tracking-tight">Exceptional Professionals</h2>
               </div>
-              <Link href="/browse" className="btn-secondary-light text-sm py-2 px-4 hidden sm:inline-flex">
-                View All <ArrowRight size={14} />
+              <Link href="/browse" className="text-sm font-light text-gray-400 hover:text-gray-900 flex items-center gap-1.5 transition-colors hidden sm:flex">
+                View All <ArrowRight size={13} />
               </Link>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -275,30 +318,35 @@ export default async function InspirePage() {
                   <Link
                     key={vendor.id}
                     href={`/vendors/${vendor.id}`}
-                    className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
+                    className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-gray-200 hover:shadow-md transition-all group"
                   >
-                    <div className="h-40 relative overflow-hidden bg-gray-100">
+                    <div className="h-44 relative overflow-hidden" style={{ background: "#0D1B3E" }}>
                       {cover?.url ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={cover.url} alt={vendor.business_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img src={cover.url} alt={vendor.business_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-4xl">ðŸŽ‰</div>
+                        <div className="w-full h-full flex items-center justify-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/brand/elbold-mark.svg" width="40" height="40" alt="" />
+                        </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                       {vendor.verified && (
-                        <div className="absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-white/90">
-                          <BadgeCheck size={10} className="text-brand-600" />
-                          <span className="text-xs text-brand-700 font-medium">Verified</span>
+                        <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-full bg-white/90 backdrop-blur-sm">
+                          <BadgeCheck size={10} style={{ color: "#0D1B3E" }} />
+                          <span className="text-xs font-semibold" style={{ color: "#0D1B3E" }}>Verified</span>
                         </div>
                       )}
                     </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 text-sm group-hover:text-brand-600 transition-colors truncate">{vendor.business_name}</h3>
-                      <p className="text-xs text-gray-400 capitalize mt-0.5">{vendor.category?.replace("_", " ")} Â· {vendor.city}</p>
-                      <div className="flex items-center gap-1 mt-2">
+                      <h3 className="font-semibold text-gray-900 text-sm truncate">{vendor.business_name}</h3>
+                      <p className="text-xs text-gray-400 capitalize mt-0.5 font-light">
+                        {vendor.category?.replace("_", " ")} · {vendor.city}
+                      </p>
+                      <div className="flex items-center gap-1 mt-2.5">
                         <Star size={11} className="fill-amber-400 text-amber-400" />
                         <span className="text-xs font-semibold text-gray-900">{(vendor.rating ?? 0).toFixed(1)}</span>
-                        <span className="text-xs text-gray-400">({vendor.review_count ?? 0})</span>
+                        <span className="text-xs text-gray-400 font-light">({vendor.review_count ?? 0})</span>
                       </div>
                     </div>
                   </Link>
@@ -309,27 +357,49 @@ export default async function InspirePage() {
         </section>
       )}
 
-      {/* Featured Event of the Week */}
-      <section className="py-10 px-4 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10">
+      {/* Featured event */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div
+            className="rounded-2xl p-10 md:p-12"
+            style={{ background: "#0D1B3E" }}
+          >
             <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
-              <div className="text-6xl flex-shrink-0">ðŸ’</div>
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)" }}
+              >
+                <span style={{ color: "#C9A84C", fontSize: "28px" }}>&#x2665;</span>
+              </div>
               <div className="flex-1">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium mb-3">
-                  <Star size={10} className="fill-amber-500" /> Event of the Week
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Emily &amp; Tom&apos;s Garden Wedding</h2>
-                <p className="text-gray-500 text-sm mb-4 max-w-lg">
-                  A breathtaking outdoor celebration at Kensington Gardens, featuring a 12-piece orchestra, bespoke floral arches and a 5-star catered feast for 120 guests.
+                <p
+                  className="text-xs tracking-[0.2em] font-semibold mb-3 uppercase"
+                  style={{ color: "rgba(201,168,76,0.6)" }}
+                >
+                  Event of the Week
                 </p>
-                <div className="flex flex-wrap gap-2 mb-5">
+                <h2
+                  className="text-2xl font-light mb-3 tracking-tight"
+                  style={{ color: "rgba(255,255,255,0.9)" }}
+                >
+                  Emily & Tom&apos;s Garden Wedding
+                </h2>
+                <p className="text-sm font-light leading-relaxed mb-5 max-w-lg" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  A breathtaking outdoor celebration featuring a 12-piece orchestra, bespoke floral arches
+                  and a 5-star catered feast for 120 guests.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
                   {["Live Orchestra", "Floral Arch", "Marquee", "Photographer", "Catering"].map((tag) => (
-                    <span key={tag} className="text-xs px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-600">{tag}</span>
+                    <span
+                      key={tag}
+                      className="text-xs px-2.5 py-1 rounded font-light"
+                      style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)", color: "rgba(201,168,76,0.7)" }}
+                    >
+                      {tag}
+                    </span>
                   ))}
                 </div>
-                <Link href="/dashboard/create-event" className="btn-primary text-sm py-2.5 px-6">
-                  <Sparkles size={14} />
+                <Link href="/dashboard/create-event" className="btn-luxury text-sm py-3 px-6">
                   Plan Something Like This
                 </Link>
               </div>
@@ -338,23 +408,31 @@ export default async function InspirePage() {
         </div>
       </section>
 
-      {/* Vendor Inspiration Feed */}
+      {/* Vendor feed */}
       <InspirationFeed vendors={featuredVendors ?? []} />
 
-      {/* CTA */}
-      <section className="py-20 px-4 bg-gray-50 border-t border-gray-100">
+      {/* Final CTA */}
+      <section className="py-24 px-4" style={{ background: "#0D1B3E" }}>
         <div className="max-w-2xl mx-auto text-center">
-          <div className="text-4xl mb-4">âœ¨</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <div className="flex justify-center mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="56" height="56" alt="ELBOLD" />
+          </div>
+          <h2 className="text-3xl font-light tracking-tight mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
             Love What You See?
           </h2>
-          <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            Let our Smart Planner build a complete event plan based on your favourite styles: vendors, budget and timeline included.
+          <p className="font-light leading-relaxed mb-10 max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
+            Let our Smart Planner build a complete event plan based on your favourite styles.
+            Vendors, budget and timeline included.
           </p>
-          <Link href="/dashboard/create-event" className="btn-primary text-base py-3 px-8 inline-flex">
-            <Sparkles size={16} />
-            Start Planning for Free
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/dashboard/create-event" className="btn-luxury">
+              Start Planning for Free
+            </Link>
+            <Link href="/browse" className="btn-luxury-outline">
+              Browse Vendors
+            </Link>
+          </div>
         </div>
       </section>
 

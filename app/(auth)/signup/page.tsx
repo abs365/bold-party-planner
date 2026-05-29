@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sparkles, Mail, Lock, User, Store, Eye, EyeOff, Loader2, CheckCircle2, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, Store, Eye, EyeOff, Loader2, CheckCircle2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -58,40 +58,50 @@ export default function SignupPage() {
 
   if (confirmed) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md text-center">
-          <div className="bg-white border border-gray-200 rounded-2xl p-10 shadow-sm">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-5">
-              <Mail size={28} className="text-emerald-600" />
+      <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "#0D1B3E" }}>
+        <div className="w-full max-w-sm text-center">
+          <div className="flex justify-center mb-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="64" height="64" alt="ELBOLD" />
+          </div>
+          <div className="bg-white rounded-2xl p-10">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
+              style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}
+            >
+              <Mail size={24} className="text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h2>
-            <p className="text-gray-500 text-sm mb-2">We sent a confirmation link to</p>
-            <p className="text-brand-600 font-semibold mb-6">{email}</p>
+            <h2 className="text-xl font-light text-gray-900 mb-2 tracking-tight">Check Your Email</h2>
+            <p className="text-gray-400 text-sm mb-1 font-light">We sent a confirmation link to</p>
+            <p className="font-semibold text-gray-900 mb-6 text-sm">{email}</p>
             <div className="space-y-3 text-left mb-6">
               {[
                 "Open the email from ELBOLD",
                 "Click the confirmation link",
-                "You'll be automatically signed in",
+                "You will be automatically signed in",
               ].map((step, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-gray-700">
-                  <div className="w-6 h-6 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 flex-shrink-0">
+                <div key={i} className="flex items-center gap-3 text-sm text-gray-600 font-light">
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                    style={{ background: "rgba(13,27,62,0.06)", border: "1px solid rgba(13,27,62,0.12)", color: "#0D1B3E" }}
+                  >
                     {i + 1}
                   </div>
                   {step}
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-400 mb-4">
+            <p className="text-xs text-gray-400 mb-4 font-light">
               Didn&apos;t receive it? Check your spam folder or{" "}
               <button
                 onClick={() => setConfirmed(false)}
-                className="text-brand-600 hover:text-brand-700 underline"
+                className="text-gray-900 underline hover:opacity-70"
               >
                 try a different email
               </button>
             </p>
-            <Link href="/login" className="btn-secondary-light w-full">
-              Back to Sign In <ArrowRight size={14} />
+            <Link href="/login" className="btn-secondary-light w-full text-sm py-3">
+              Back to Sign In <ArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -102,45 +112,88 @@ export default function SignupPage() {
   const strength = Math.min(4, Math.floor(password.length / 3) + ((/[A-Z]/.test(password) ? 1 : 0) + (/[0-9!@#$%^&*]/.test(password) ? 1 : 0)));
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-6">
-            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center">
-              <Sparkles size={18} className="text-white" />
-            </div>
-            <span className="gradient-brand-text">ELBOLD</span>
+    <div className="min-h-screen flex">
+
+      {/* Left panel */}
+      <div
+        className="hidden lg:flex flex-col items-center justify-center w-[42%] flex-shrink-0 px-12 relative overflow-hidden"
+        style={{ background: "#0D1B3E" }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.04) 0%, transparent 70%)" }}
+        />
+
+        <div className="relative z-10 text-center max-w-xs">
+          <div className="flex justify-center mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="ELBOLD" />
+          </div>
+          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>ELBOLD</p>
+          <p
+            className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
+            style={{ color: "rgba(201,168,76,0.45)" }}
+          >
+            Events
+          </p>
+          <h2 className="text-2xl font-light leading-snug mb-4" style={{ color: "rgba(255,255,255,0.85)" }}>
+            {role === "vendor"
+              ? "Grow your bookings with trusted clients."
+              : "Find vendors for your extraordinary celebration."}
+          </h2>
+          <p className="text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+            {role === "vendor"
+              ? "Free to join. Keep 90% of every booking. Founding Vendor places available now."
+              : "Verified DJs, photographers, caterers, decorators and 15 more categories across the UK."}
+          </p>
+        </div>
+      </div>
+
+      {/* Right panel */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 bg-white overflow-y-auto">
+
+        {/* Mobile logo */}
+        <div className="lg:hidden mb-8 text-center">
+          <Link href="/" className="inline-flex flex-col items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="ELBOLD" />
+            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>ELBOLD</span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Join trusted vendors and event hosts across the UK</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          {/* Role Toggle */}
-          <div className="flex gap-3 mb-6">
+        <div className="w-full max-w-sm">
+          <div className="mb-8">
+            <h1 className="text-2xl font-light text-gray-900 tracking-tight">Create your account</h1>
+            <p className="text-gray-400 text-sm mt-1 font-light">Join trusted vendors and event hosts across the UK</p>
+          </div>
+
+          {/* Role toggle */}
+          <div className="flex gap-2 mb-7 p-1 rounded-xl bg-gray-100 border border-gray-200">
             {(["customer", "vendor"] as Role[]).map((r) => (
               <button
                 key={r}
                 type="button"
                 onClick={() => setRole(r)}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all",
+                  "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all",
                   role === r
-                    ? "gradient-brand text-white shadow-sm"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 )}
               >
-                {r === "customer" ? <User size={16} /> : <Store size={16} />}
-                {r === "customer" ? "Book Vendors" : "Join as a Vendor"}
+                {r === "customer" ? <User size={14} /> : <Store size={14} />}
+                {r === "customer" ? "Book Vendors" : "Join as Vendor"}
               </button>
             ))}
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Full Name
+              </label>
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input
                   id="full-name"
                   type="text"
@@ -155,9 +208,11 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Email
+              </label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input
                   id="signup-email"
                   type="email"
@@ -172,9 +227,11 @@ export default function SignupPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Password
+              </label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input
                   id="signup-password"
                   type={showPassword ? "text" : "password"}
@@ -189,9 +246,9 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
               {password.length > 0 && (
@@ -200,9 +257,9 @@ export default function SignupPage() {
                     {[1, 2, 3, 4].map((level) => (
                       <div
                         key={level}
-                        className={cn("flex-1 h-1 rounded-full transition-all", {
-                          "bg-red-500": strength >= level && strength <= 1,
-                          "bg-amber-500": strength >= level && strength === 2,
+                        className={cn("flex-1 h-0.5 rounded-full transition-all", {
+                          "bg-red-400": strength >= level && strength <= 1,
+                          "bg-amber-400": strength >= level && strength === 2,
                           "bg-yellow-400": strength >= level && strength === 3,
                           "bg-emerald-500": strength >= level && strength >= 4,
                           "bg-gray-200": strength < level,
@@ -210,35 +267,37 @@ export default function SignupPage() {
                       />
                     ))}
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {password.length < 8 ? "Too short" : password.length < 10 ? "Weak, try adding numbers or symbols" : password.length < 14 ? "Good password" : "Strong password"}
-                  </p>
                 </div>
               )}
             </div>
 
             {role === "vendor" && (
-              <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-700 flex items-start gap-2">
-                <CheckCircle2 size={13} className="mt-0.5 flex-shrink-0 text-blue-500" />
-                After confirming your email, you&apos;ll complete your vendor profile. Free to join and you keep 90% of every booking.
+              <div
+                className="p-3 rounded-xl text-xs flex items-start gap-2 font-light"
+                style={{ background: "rgba(13,27,62,0.04)", border: "1px solid rgba(13,27,62,0.1)", color: "#374151" }}
+              >
+                <CheckCircle2 size={12} className="mt-0.5 flex-shrink-0 text-gray-400" />
+                Free to join. Keep 90% of every booking. Complete your vendor profile after confirming email.
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-2">
-              {loading ? <Loader2 size={16} className="animate-spin" /> : null}
+            <button type="submit" disabled={loading} className="btn-luxury-dark w-full py-3 mt-1">
+              {loading ? <Loader2 size={15} className="animate-spin" /> : null}
               {loading ? "Creating account..." : role === "vendor" ? "Create Vendor Account" : "Create Free Account"}
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-400 mt-4">
+          <p className="text-center text-xs text-gray-400 mt-5 font-light">
             By signing up you agree to our{" "}
             <Link href="/terms" className="text-gray-600 hover:text-gray-900">Terms</Link> and{" "}
             <Link href="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
           </p>
 
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <p className="text-center text-sm text-gray-400 mt-3 font-light">
             Already have an account?{" "}
-            <Link href="/login" className="text-brand-600 hover:text-brand-700 font-medium">Sign in</Link>
+            <Link href="/login" className="text-gray-900 hover:opacity-70 font-semibold transition-opacity">
+              Sign in
+            </Link>
           </p>
         </div>
       </div>

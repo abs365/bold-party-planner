@@ -39,14 +39,9 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-5">
-              <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.5"/>
-              </svg>
-              <span
-                className="font-bold tracking-[0.18em] text-sm"
-                style={{ color: "#C9A84C" }}
-              >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/elbold-mark.svg" width="30" height="30" alt="ELBOLD" />
+              <span className="font-bold tracking-[0.18em] text-sm" style={{ color: "#C9A84C" }}>
                 ELBOLD
               </span>
             </Link>
@@ -60,9 +55,7 @@ export function Footer() {
               className="flex items-center gap-2 text-xs mb-6 font-light"
               style={{ color: "rgba(201,168,76,0.45)" }}
             >
-              <svg width="12" height="12" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                <polygon points="13,1 25,13 13,25 1,13" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-              </svg>
+              <span style={{ color: "#C9A84C", opacity: 0.6 }}>&#x2605;</span>
               Stripe-secured payments
             </div>
             <div className="flex gap-3">

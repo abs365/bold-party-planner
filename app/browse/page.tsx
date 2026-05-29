@@ -69,8 +69,36 @@ export default async function BrowsePage({
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar user={profile} lightBg />
-      <div className="pt-16">
+      <Navbar user={profile} />
+
+      {/* Navy page header */}
+      <div className="pt-16" style={{ background: "#0D1B3E" }}>
+        <div className="max-w-4xl mx-auto px-4 py-14 text-center">
+          <p
+            className="text-xs tracking-[0.3em] font-semibold mb-4 uppercase"
+            style={{ color: "rgba(201,168,76,0.6)" }}
+          >
+            ELBOLD Events
+          </p>
+          <h1
+            className="text-3xl sm:text-4xl font-light tracking-tight mb-3"
+            style={{ color: "rgba(255,255,255,0.92)" }}
+          >
+            {params.category
+              ? `${params.category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}s`
+              : "Browse Vendors"}
+          </h1>
+          <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.4)" }}>
+            {params.search
+              ? `Results for "${params.search}"`
+              : params.city
+              ? `Vendors in ${params.city}`
+              : "Verified event professionals across the United Kingdom"}
+          </p>
+        </div>
+      </div>
+
+      <div>
         {!params.category && !params.search && !params.city && trendingVendors.length > 0 && (
           <TrendingVendors vendors={trendingVendors} />
         )}

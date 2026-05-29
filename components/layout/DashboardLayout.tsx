@@ -81,10 +81,8 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
   return (
     <div className="flex flex-col h-full">
       <Link href="/" className="flex items-center gap-2.5 px-6 py-5 border-b border-white/6">
-        <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-          <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-          <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.6"/>
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/elbold-mark.svg" width="28" height="28" alt="ELBOLD" />
         <span className="font-bold text-sm tracking-[0.18em]" style={{ color: "#C9A84C" }}>ELBOLD</span>
       </Link>
 

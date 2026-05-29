@@ -3,7 +3,7 @@
 import { useState, useEffect, useActionState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Sparkles, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { loginAction } from "@/app/actions/login";
 
@@ -21,27 +21,97 @@ function LoginForm() {
   }, [state?.error]);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl mb-6">
-            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center">
-              <Sparkles size={18} className="text-white" />
-            </div>
-            <span className="gradient-brand-text">ELBOLD</span>
+    <div className="min-h-screen flex">
+
+      {/* Left panel — dark navy brand */}
+      <div
+        className="hidden lg:flex flex-col items-center justify-center w-[42%] flex-shrink-0 px-12 relative overflow-hidden"
+        style={{ background: "#0D1B3E" }}
+      >
+        {/* Subtle glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.04) 0%, transparent 70%)" }}
+        />
+
+        <div className="relative z-10 text-center max-w-xs">
+          {/* Mark */}
+          <div className="flex justify-center mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="ELBOLD" />
+          </div>
+
+          {/* Brand */}
+          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>
+            ELBOLD
+          </p>
+          <p
+            className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
+            style={{ color: "rgba(201,168,76,0.45)" }}
+          >
+            Events
+          </p>
+
+          <h2
+            className="text-2xl font-light leading-snug mb-4"
+            style={{ color: "rgba(255,255,255,0.85)" }}
+          >
+            Extraordinary celebrations start here.
+          </h2>
+          <p
+            className="text-sm font-light leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.35)" }}
+          >
+            The UK&apos;s premium marketplace for trusted event vendors.
+          </p>
+
+          {/* Trust pills */}
+          <div className="mt-10 space-y-3">
+            {[
+              "Verified vendors",
+              "Stripe-secured payments",
+              "Full dispute protection",
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-2.5 justify-center">
+                <span style={{ color: "rgba(201,168,76,0.5)", fontSize: "10px" }}>&#x2605;</span>
+                <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.3)" }}>
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right panel — white form */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 bg-white">
+
+        {/* Mobile logo only */}
+        <div className="lg:hidden mb-8 text-center">
+          <Link href="/" className="inline-flex flex-col items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="ELBOLD" />
+            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>
+              ELBOLD
+            </span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+        <div className="w-full max-w-sm">
+          <div className="mb-8">
+            <h1 className="text-2xl font-light text-gray-900 tracking-tight">Welcome back</h1>
+            <p className="text-gray-400 text-sm mt-1 font-light">Sign in to your account</p>
+          </div>
+
           <form action={formAction} className="space-y-5">
             <input type="hidden" name="redirectTo" value={redirectTo} />
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Email
+              </label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input
                   id="email"
                   name="email"
@@ -56,9 +126,11 @@ function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label htmlFor="password" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                Password
+              </label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input
                   id="password"
                   name="password"
@@ -72,33 +144,44 @@ function LoginForm() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
 
-            <button type="submit" disabled={isPending} className="btn-primary w-full py-3">
-              {isPending ? <Loader2 size={16} className="animate-spin" /> : null}
-              {isPending ? "Signing in..." : "Sign In"}
+            <button
+              type="submit"
+              disabled={isPending}
+              className="btn-luxury-dark w-full py-3 mt-2"
+            >
+              {isPending ? <Loader2 size={15} className="animate-spin" /> : null}
+              {isPending ? "Signing in..." : (
+                <>Sign In <ArrowRight size={14} /></>
+              )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-400 mt-6 font-light">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-brand-600 hover:text-brand-700 font-medium">
+            <Link href="/signup" className="text-gray-900 hover:opacity-70 font-semibold transition-opacity">
               Create one free
             </Link>
           </p>
-        </div>
 
-        <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500">
-          <p className="font-medium text-gray-600 mb-2">Test accounts (after running seed):</p>
-          <div className="space-y-0.5">
-            <p><span className="text-gray-700">Customer:</span> emily.carter@elbold.demo</p>
-            <p><span className="text-gray-700">Vendor:</span> james.bennett@elbold.demo</p>
-            <p><span className="text-gray-700">Password:</span> ElboldDemo2026!</p>
+          <div
+            className="mt-8 rounded-xl p-4 text-xs"
+            style={{ background: "#f8f7f5", border: "1px solid #f0ede8" }}
+          >
+            <p className="font-semibold text-gray-500 mb-2 tracking-wide uppercase" style={{ fontSize: "10px" }}>
+              Test accounts
+            </p>
+            <div className="space-y-1 text-gray-400 font-light">
+              <p><span className="text-gray-600">Customer:</span> emily.carter@elbold.demo</p>
+              <p><span className="text-gray-600">Vendor:</span> james.bennett@elbold.demo</p>
+              <p><span className="text-gray-600">Password:</span> ElboldDemo2026!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +193,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-400 flex items-center gap-2">
+        <div className="text-gray-300 flex items-center gap-2">
           <Loader2 size={16} className="animate-spin" /> Loading...
         </div>
       </div>
