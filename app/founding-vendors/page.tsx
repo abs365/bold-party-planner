@@ -65,31 +65,47 @@ export default async function FoundingVendorsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar user={profile} lightBg />
+      <Navbar user={profile} />
 
       {/* Hero */}
-      <section className="pt-28 pb-20 px-4 bg-[#0d1b3e]">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C] text-sm font-semibold mb-8">
-            <Award size={14} />
+      <section className="pt-16 pb-24 px-4" style={{ background: "#0D1B3E" }}>
+        <div className="max-w-4xl mx-auto text-center pt-20">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-10 tracking-[0.2em] uppercase"
+            style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)" }}
+          >
+            <Award size={12} />
             Founding Vendor Programme
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
+          <h1
+            className="text-4xl sm:text-5xl font-light tracking-tight mb-6 leading-tight"
+            style={{ color: "rgba(255,255,255,0.92)" }}
+          >
             Be part of something
-            <span style={{ color: "#C9A84C" }}> extraordinary.</span>
+            <br />
+            <span style={{ color: "#C9A84C" }}>extraordinary.</span>
           </h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto mb-10">
-            ELBOLD Events is launching. We&apos;re selecting our first 20 trusted vendors — event professionals who will form the foundation of the UK&apos;s most trusted event marketplace.
+          <p
+            className="text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.5)" }}
+          >
+            ELBOLD Events is launching. We are selecting our first 20 trusted vendors —
+            event professionals who will form the foundation of the UK&apos;s most trusted event marketplace.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/vendor/apply" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-[#0d1b3e] font-bold text-base" style={{ background: "#C9A84C" }}>
+            <Link href="/vendor/apply" className="btn-luxury">
               Apply as a Founding Vendor
             </Link>
-            <Link href="/browse" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-white/20 text-white font-semibold text-base hover:bg-white/5 transition-colors">
+            <Link href="/browse" className="btn-luxury-outline">
               Browse the Marketplace
             </Link>
           </div>
-          <p className="text-white/40 text-sm mt-6">Limited to the first 20 approved vendors. No credit card required.</p>
+          <p
+            className="text-xs font-light mt-7"
+            style={{ color: "rgba(255,255,255,0.25)" }}
+          >
+            Limited to the first 20 approved vendors. No credit card required.
+          </p>
         </div>
       </section>
 
@@ -148,16 +164,35 @@ export default async function FoundingVendorsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4" style={{ background: "#0d1b3e" }}>
+      <section className="py-24 px-4" style={{ background: "#0D1B3E" }}>
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to be a Founding Vendor?</h2>
-          <p className="text-white/60 mb-8">
-            Join in the next few minutes. Your profile goes live within 48 hours.
+          <p
+            className="text-xs tracking-[0.3em] font-semibold mb-6 uppercase"
+            style={{ color: "rgba(201,168,76,0.55)" }}
+          >
+            Limited Places Available
           </p>
-          <Link href="/vendor/apply" className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl text-[#0d1b3e] font-bold text-base" style={{ background: "#C9A84C" }}>
+          <h2
+            className="text-3xl font-light tracking-tight mb-4"
+            style={{ color: "rgba(255,255,255,0.92)" }}
+          >
+            Ready to be a Founding Vendor?
+          </h2>
+          <p
+            className="font-light mb-10 leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.45)" }}
+          >
+            Apply in minutes. Your profile goes live within 48 hours.
+          </p>
+          <Link href="/vendor/apply" className="btn-luxury">
             Apply Now — It&apos;s Free
           </Link>
-          <p className="text-white/30 text-sm mt-5">No credit card · No monthly fees · Keep 90% of bookings</p>
+          <p
+            className="text-xs font-light mt-6"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            No credit card · No monthly fees · Keep 90% of bookings
+          </p>
         </div>
       </section>
 

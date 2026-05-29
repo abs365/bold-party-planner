@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sparkles, Loader2, Store, MapPin, FileText, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2 } from "lucide-react";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
@@ -83,31 +83,41 @@ export default function VendorApplyPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar lightBg />
+      <Navbar />
 
-      <div className="pt-24 pb-20 px-4">
-        <div className="max-w-5xl mx-auto">
+      {/* Luxury page header — navy */}
+      <div className="pt-16" style={{ background: "#0D1B3E" }}>
+        <div className="max-w-5xl mx-auto px-4 py-20 text-center">
+          <p
+            className="text-xs tracking-[0.3em] font-semibold mb-5 uppercase"
+            style={{ color: "rgba(201,168,76,0.65)" }}
+          >
+            Vendor Application
+          </p>
+          <h1
+            className="text-3xl sm:text-4xl font-light tracking-tight mb-4"
+            style={{ color: "rgba(255,255,255,0.92)" }}
+          >
+            Join ELBOLD Events as a Vendor
+          </h1>
+          <p
+            className="max-w-lg mx-auto text-base font-light leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.45)" }}
+          >
+            Reach event hosts across the UK. Free to join, no monthly fees, and you keep 90% of every booking.
+          </p>
+        </div>
+      </div>
 
-          {/* Page header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-sm font-medium mb-6">
-              <Store size={13} />
-              Vendor Application
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-              Join ELBOLD Events as a Vendor
-            </h1>
-            <p className="text-gray-500 max-w-lg mx-auto">
-              Reach thousands of event hosts across the UK. Free to join, no monthly fees, and you keep 90% of every booking.
-            </p>
-          </div>
+      <div className="pb-20 px-4">
+        <div className="max-w-5xl mx-auto -mt-0 pt-12">
 
           <div className="grid lg:grid-cols-5 gap-10">
 
             {/* Left sidebar — benefits */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
-                <h2 className="text-base font-semibold text-gray-900 mb-4">Why join ELBOLD Events?</h2>
+                <h2 className="text-base font-semibold text-gray-900 mb-4">Why join ELBOLD?</h2>
                 <div className="space-y-3">
                   {BENEFITS.map((b) => (
                     <div key={b.label} className="flex items-center gap-3">
@@ -128,7 +138,10 @@ export default function VendorApplyPage() {
                     { n: "4", label: "Start receiving bookings", sub: "Customers discover and book you" },
                   ].map(({ n, label, sub }) => (
                     <div key={n} className="flex gap-3">
-                      <div className="w-6 h-6 rounded-full bg-brand-100 border border-brand-200 flex items-center justify-center text-xs font-bold text-brand-700 flex-shrink-0 mt-0.5">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
+                        style={{ background: "rgba(13,27,62,0.08)", border: "1px solid rgba(13,27,62,0.15)", color: "#0D1B3E" }}
+                      >
                         {n}
                       </div>
                       <div>
@@ -142,7 +155,7 @@ export default function VendorApplyPage() {
 
               <p className="text-xs text-gray-400 text-center">
                 Already have an account?{" "}
-                <Link href="/login" className="text-brand-600 hover:underline">Sign in here</Link>
+                <Link href="/login" className="text-gray-600 hover:text-gray-900 underline">Sign in here</Link>
               </p>
             </div>
 
@@ -152,14 +165,13 @@ export default function VendorApplyPage() {
               <div className="flex items-center gap-2 mb-6">
                 {[1, 2, 3].map((s) => (
                   <div key={s} className="flex items-center gap-2">
-                    <div className={cn(
-                      "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors",
-                      step > s
-                        ? "bg-green-500 text-white"
-                        : step === s
-                        ? "bg-brand-600 text-white"
-                        : "bg-gray-100 text-gray-400"
-                    )}>
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
+                      style={{
+                        background: step > s ? "#22c55e" : step === s ? "#0D1B3E" : "#f3f4f6",
+                        color: step > s || step === s ? "white" : "#9ca3af",
+                      }}
+                    >
                       {step > s ? <CheckCircle2 size={14} /> : s}
                     </div>
                     <span className={cn(
@@ -198,12 +210,10 @@ export default function VendorApplyPage() {
                             key={key}
                             type="button"
                             onClick={() => update("category", key)}
-                            className={cn(
-                              "flex items-center gap-2.5 p-3 rounded-xl text-left text-sm transition-all border",
-                              formData.category === key
-                                ? "bg-brand-50 border-brand-300 text-brand-800"
-                                : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300"
-                            )}
+                            className="flex items-center gap-2.5 p-3 rounded-xl text-left text-sm transition-all border"
+                            style={formData.category === key
+                              ? { background: "rgba(13,27,62,0.06)", borderColor: "rgba(13,27,62,0.25)", color: "#0D1B3E" }
+                              : { background: "white", borderColor: "#e5e7eb", color: "#374151" }}
                           >
                             <span className="text-lg flex-shrink-0">{icon}</span>
                             <div className="min-w-0">
@@ -223,7 +233,7 @@ export default function VendorApplyPage() {
                         }
                         setStep(2);
                       }}
-                      className="btn-primary w-full"
+                      className="btn-luxury-dark w-full"
                     >
                       Continue <ArrowRight size={15} />
                     </button>
@@ -265,7 +275,7 @@ export default function VendorApplyPage() {
                           type="range" min={5} max={200} step={5}
                           value={formData.travel_radius_km}
                           onChange={(e) => update("travel_radius_km", Number(e.target.value))}
-                          className="flex-1 accent-brand-600"
+                          className="flex-1 accent-gray-700"
                         />
                         <span className="text-sm font-semibold text-gray-700 w-16 text-center bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-lg flex-shrink-0">
                           {formData.travel_radius_km}km
@@ -291,7 +301,7 @@ export default function VendorApplyPage() {
 
                     <div className="flex gap-3">
                       <button onClick={() => setStep(1)} className="btn-secondary-light flex-1">Back</button>
-                      <button onClick={() => setStep(3)} className="btn-primary flex-1">Continue <ArrowRight size={15} /></button>
+                      <button onClick={() => setStep(3)} className="btn-luxury-dark flex-1">Continue <ArrowRight size={15} /></button>
                     </div>
                   </div>
                 )}
@@ -322,17 +332,19 @@ export default function VendorApplyPage() {
                       <input type="url" value={formData.website_url} onChange={(e) => update("website_url", e.target.value)} placeholder="https://yourbusiness.com" className="input-light" />
                     </div>
 
-                    <div className="bg-brand-50 border border-brand-200 rounded-xl p-4">
-                      <p className="text-sm text-brand-800">
-                        <Sparkles size={13} className="inline mr-1.5 text-brand-600" />
-                        After submission, our team reviews your application within 24–48 hours. You&apos;ll receive a confirmation email immediately and an approval email once reviewed.
+                    <div
+                      className="rounded-xl p-4"
+                      style={{ background: "rgba(13,27,62,0.04)", border: "1px solid rgba(13,27,62,0.1)" }}
+                    >
+                      <p className="text-sm text-gray-600 font-light">
+                        Our team reviews your application within 24–48 hours. You will receive a confirmation email immediately and an approval notification once reviewed.
                       </p>
                     </div>
 
                     <div className="flex gap-3">
                       <button onClick={() => setStep(2)} className="btn-secondary-light flex-1">Back</button>
-                      <button onClick={handleSubmit} disabled={submitting} className="btn-primary flex-1">
-                        {submitting ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
+                      <button onClick={handleSubmit} disabled={submitting} className="btn-luxury-dark flex-1">
+                        {submitting ? <Loader2 size={15} className="animate-spin" /> : null}
                         {submitting ? "Submitting..." : "Submit Application"}
                       </button>
                     </div>

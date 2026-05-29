@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Sparkles, Shield } from "lucide-react";
 
 const PLATFORM_LINKS = [
   { label: "Browse Vendors", href: "/browse" },
@@ -33,98 +32,103 @@ const SUPPORT_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="bg-gray-50 border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+    <footer style={{ background: "#091529", borderTop: "1px solid rgba(201,168,76,0.1)" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl mb-4">
-              <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
-                <Sparkles size={16} className="text-white" />
-              </div>
-              <span className="gradient-brand-text">ELBOLD</span>
+            <Link href="/" className="flex items-center gap-2.5 mb-5">
+              <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.5"/>
+              </svg>
+              <span
+                className="font-bold tracking-[0.18em] text-sm"
+                style={{ color: "#C9A84C" }}
+              >
+                ELBOLD
+              </span>
             </Link>
-            <p className="text-gray-500 text-sm leading-relaxed mb-5">
-              ELBOLD Events — trusted vendors for extraordinary celebrations across the UK.
+            <p
+              className="text-sm leading-relaxed mb-5 font-light"
+              style={{ color: "rgba(255,255,255,0.35)" }}
+            >
+              Trusted vendors for extraordinary celebrations across the United Kingdom.
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-400 mb-5">
-              <Shield size={12} className="text-gray-400" />
+            <div
+              className="flex items-center gap-2 text-xs mb-6 font-light"
+              style={{ color: "rgba(201,168,76,0.45)" }}
+            >
+              <svg width="12" height="12" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                <polygon points="13,1 25,13 13,25 1,13" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              </svg>
               Stripe-secured payments
             </div>
             <div className="flex gap-3">
               {["IG", "X", "FB"].map((label) => (
                 <div
                   key={label}
-                  className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded flex items-center justify-center cursor-pointer transition-colors"
+                  style={{
+                    border: "1px solid rgba(201,168,76,0.2)",
+                    background: "rgba(201,168,76,0.05)",
+                  }}
                 >
-                  <span className="text-xs font-bold text-gray-500">{label}</span>
+                  <span
+                    className="text-xs font-bold"
+                    style={{ color: "rgba(201,168,76,0.5)" }}
+                  >
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Platform</h4>
-            <ul className="space-y-2.5">
-              {PLATFORM_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="text-gray-500 text-sm hover:text-gray-900 transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Vendors</h4>
-            <ul className="space-y-2.5">
-              {VENDOR_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="text-gray-500 text-sm hover:text-gray-900 transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Legal</h4>
-            <ul className="space-y-2.5">
-              {LEGAL_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="text-gray-500 text-sm hover:text-gray-900 transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Support</h4>
-            <ul className="space-y-2.5">
-              {SUPPORT_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <Link href={href} className="text-gray-500 text-sm hover:text-gray-900 transition-colors">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {[
+            { heading: "Platform", links: PLATFORM_LINKS },
+            { heading: "Vendors", links: VENDOR_LINKS },
+            { heading: "Legal", links: LEGAL_LINKS },
+            { heading: "Support", links: SUPPORT_LINKS },
+          ].map(({ heading, links }) => (
+            <div key={heading}>
+              <h4
+                className="text-xs tracking-[0.2em] font-semibold mb-5 uppercase"
+                style={{ color: "rgba(201,168,76,0.6)" }}
+              >
+                {heading}
+              </h4>
+              <ul className="space-y-3">
+                {links.map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="footer-link">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-sm">
+        <div
+          className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <p
+            className="text-xs font-light"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
             &copy; {new Date().getFullYear()} ELBOLD Ltd. All rights reserved. Registered in England and Wales.
           </p>
-          <div className="flex items-center gap-4 text-gray-400 text-xs">
-            <Link href="/privacy" className="hover:text-gray-600 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-gray-600 transition-colors">Terms</Link>
-            <Link href="/refunds" className="hover:text-gray-600 transition-colors">Refunds</Link>
-            <span>Powered by Stripe</span>
+          <div
+            className="flex items-center gap-5 text-xs font-light"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            <Link href="/privacy" className="hover:opacity-60 transition-opacity">Privacy</Link>
+            <Link href="/terms" className="hover:opacity-60 transition-opacity">Terms</Link>
+            <Link href="/refunds" className="hover:opacity-60 transition-opacity">Refunds</Link>
           </div>
         </div>
       </div>

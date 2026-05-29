@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  Sparkles, LayoutDashboard, Calendar, ShoppingBag, CreditCard,
-  Bell, Menu, X, LogOut, User, ChevronRight, Star,
+  LayoutDashboard, Calendar, ShoppingBag, CreditCard,
+  Bell, Menu, X, LogOut, User, ChevronRight, Star, Sparkles,
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign,
@@ -81,10 +81,11 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
   return (
     <div className="flex flex-col h-full">
       <Link href="/" className="flex items-center gap-2.5 px-6 py-5 border-b border-white/6">
-        <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
-          <Sparkles size={15} className="text-white" />
-        </div>
-        <span className="font-bold text-sm gradient-brand-text">ELBOLD</span>
+        <svg width="22" height="22" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+          <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.6"/>
+        </svg>
+        <span className="font-bold text-sm tracking-[0.18em]" style={{ color: "#C9A84C" }}>ELBOLD</span>
       </Link>
 
       <div className="px-4 py-4 border-b border-white/6">

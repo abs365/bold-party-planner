@@ -72,11 +72,17 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
     <header className={headerClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
-            <Sparkles size={16} className="text-white" />
-          </div>
-          <span className="gradient-brand-text">ELBOLD</span>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <polygon points="13,1 25,13 13,25 1,13" stroke={lightBg ? "#0D1B3E" : "#C9A84C"} strokeWidth="1.5" fill="none"/>
+            <polygon points="13,7 19,13 13,19 7,13" stroke={lightBg ? "#0D1B3E" : "#C9A84C"} strokeWidth="1" fill="none" opacity="0.6"/>
+          </svg>
+          <span
+            className="font-bold tracking-[0.18em] text-sm"
+            style={{ color: lightBg ? "#0D1B3E" : "#C9A84C" }}
+          >
+            ELBOLD
+          </span>
         </Link>
 
         {/* Desktop Nav */}

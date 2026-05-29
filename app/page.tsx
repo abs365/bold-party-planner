@@ -4,43 +4,21 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowRight, Star, CheckCircle2, Shield, Lock, Clock, Award, MapPin } from "lucide-react";
+import { ArrowRight, Star, CheckCircle2, MapPin } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
   title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
-  description: "The UK's trusted event vendor marketplace. Book verified DJs, photographers, caterers, decorators and more for weddings, birthdays, and corporate events. Start free.",
+  description: "The UK's premium event vendor marketplace. Book verified DJs, photographers, caterers, decorators and more for weddings, birthdays, and corporate events.",
   openGraph: {
     title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
-    description: "Book verified UK event vendors. Secure payments, guaranteed experience.",
+    description: "Trusted vendors for extraordinary celebrations across the United Kingdom.",
     type: "website",
   },
 };
 
 export const dynamic = "force-dynamic";
-
-const TRUST_ITEMS = [
-  { icon: Lock, label: "Stripe-secured payments" },
-  { icon: Award, label: "Manually verified vendors" },
-  { icon: Shield, label: "Full dispute protection" },
-  { icon: Clock, label: "24/7 support team" },
-];
-
-const CATEGORY_GRADIENTS: Record<string, string> = {
-  dj: "from-purple-700 to-violet-800",
-  photographer: "from-blue-700 to-cyan-800",
-  caterer: "from-amber-700 to-orange-800",
-  mc: "from-emerald-700 to-teal-800",
-  decorator: "from-rose-700 to-pink-800",
-  transport: "from-indigo-700 to-blue-800",
-  cake_maker: "from-pink-700 to-rose-800",
-  live_band: "from-violet-700 to-purple-800",
-  venue: "from-slate-700 to-zinc-800",
-  florist: "from-green-700 to-emerald-800",
-  hair_makeup: "from-fuchsia-700 to-pink-800",
-  entertainment: "from-orange-700 to-red-800",
-};
 
 type FeaturedVendor = Pick<
   Vendor,
@@ -49,6 +27,29 @@ type FeaturedVendor = Pick<
 > & {
   media?: Array<{ url: string; type: string; is_cover: boolean }>;
 };
+
+// Diamond mark — inline SVG for server rendering, no icon library dependency
+function DiamondMark({ size = 28, color = "#C9A84C" }: { size?: number; color?: string }) {
+  const s = size;
+  const h = s / 2;
+  return (
+    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} fill="none" aria-hidden="true">
+      <polygon
+        points={`${h},${s * 0.04} ${s * 0.96},${h} ${h},${s * 0.96} ${s * 0.04},${h}`}
+        stroke={color}
+        strokeWidth="1.5"
+        fill="none"
+      />
+      <polygon
+        points={`${h},${s * 0.27} ${s * 0.73},${h} ${h},${s * 0.73} ${s * 0.27},${h}`}
+        stroke={color}
+        strokeWidth="1"
+        fill="none"
+        opacity="0.5"
+      />
+    </svg>
+  );
+}
 
 export default async function Home() {
   const supabase = await createClient();
@@ -71,164 +72,295 @@ export default async function Home() {
   const vendors = (featuredRes.data ?? []) as FeaturedVendor[];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar user={profile} lightBg />
+    <div className="min-h-screen">
+      {/* Dark navbar sits over the dark navy hero */}
+      <Navbar user={profile} />
 
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="pt-16">
-        <div className="max-w-3xl mx-auto px-4 pt-24 pb-20 text-center">
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-gray-200 text-gray-500 text-sm mb-8">
-            UK event marketplace
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+        style={{ background: "#0D1B3E" }}
+      >
+        {/* Subtle radial gold glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 90% 55% at 50% 25%, rgba(201,168,76,0.055) 0%, transparent 65%)",
+          }}
+        />
+
+        {/* Very subtle lower-left dark vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 60% 50% at 0% 100%, rgba(6,10,20,0.4) 0%, transparent 60%)",
+          }}
+        />
+
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6 py-32">
+
+          {/* Brand mark — acts as a centrepiece, not just a nav logo */}
+          <div className="flex flex-col items-center mb-14">
+            <DiamondMark size={48} color="#C9A84C" />
+            <div className="mt-5 flex items-center gap-3">
+              <div className="h-px w-10" style={{ background: "rgba(201,168,76,0.35)" }} />
+              <span
+                className="text-xs tracking-[0.35em] font-semibold"
+                style={{ color: "rgba(201,168,76,0.7)" }}
+              >
+                ELBOLD EVENTS
+              </span>
+              <div className="h-px w-10" style={{ background: "rgba(201,168,76,0.35)" }} />
+            </div>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.08] tracking-tight mb-6 text-gray-900">
-            Plan your event.
+          {/* Headline */}
+          <h1
+            className="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[1.06] text-white mb-8"
+          >
+            Extraordinary
             <br />
-            <span className="gradient-brand-text">Book trusted vendors.</span>
+            Celebrations{" "}
+            <span style={{ color: "#C9A84C" }}>Start Here.</span>
           </h1>
 
-          <p className="text-lg text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed">
-            Find verified DJs, photographers, caterers, decorators and 15+ more categories. Smart planning tools included.
+          {/* Subline */}
+          <p
+            className="text-lg font-light leading-relaxed max-w-xl mx-auto mb-12"
+            style={{ color: "rgba(255,255,255,0.55)" }}
+          >
+            Find trusted vendors for weddings, birthdays, corporate events
+            and unforgettable moments across the United Kingdom.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/browse" className="btn-primary text-base py-3.5 px-8">
-              Browse Vendors
-              <ArrowRight size={16} />
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Link href="/browse" className="btn-luxury">
+              Find Vendors
+              <ArrowRight size={15} />
             </Link>
-            <Link href="/vendor/apply" className="btn-secondary-light text-base py-3.5 px-8">
-              Join as a Vendor
+            <Link href="/founding-vendors" className="btn-luxury-outline">
+              Founding Vendor Programme
             </Link>
           </div>
 
-          <p className="text-sm text-gray-400">
-            Trusted by event hosts across London, Manchester, Birmingham &amp; beyond
-          </p>
+          {/* Trust micro-line */}
+          <div
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-light tracking-wide"
+            style={{ color: "rgba(255,255,255,0.3)" }}
+          >
+            {["Verified Vendors", "Stripe Secured", "Dispute Protected", "Free to Join"].map((item, i) => (
+              <span key={item} className="flex items-center gap-2">
+                {i > 0 && <span style={{ color: "rgba(201,168,76,0.3)" }}>·</span>}
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs tracking-widest font-light animate-bounce"
+          style={{ color: "rgba(201,168,76,0.35)" }}
+          aria-hidden="true"
+        >
+          ↓
         </div>
       </section>
 
-      {/* ── TRUST BAR ─────────────────────────────────────────────────────── */}
-      <section className="bg-gray-50 border-y border-gray-100 py-4 px-4">
-        <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10">
-          {TRUST_ITEMS.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-2 text-gray-500 text-sm">
-              <Icon size={14} className="text-gray-400" />
-              {label}
+      {/* ── TRUST STRIP ────────────────────────────────────────────────────── */}
+      <section style={{ background: "#091529", borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+        <div className="max-w-5xl mx-auto px-4 py-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
+          {[
+            { icon: "✦", label: "Manually verified vendors" },
+            { icon: "✦", label: "Stripe-secured payments" },
+            { icon: "✦", label: "Full dispute protection" },
+            { icon: "✦", label: "Free to list your services" },
+          ].map(({ icon, label }) => (
+            <div key={label} className="flex items-center gap-2.5">
+              <span className="text-xs" style={{ color: "rgba(201,168,76,0.6)" }}>{icon}</span>
+              <span className="text-sm font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
+                {label}
+              </span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── QUICK USER PATHS ──────────────────────────────────────────────── */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid sm:grid-cols-2 gap-5">
-            <div className="bg-white border border-gray-100 rounded-2xl p-8 flex flex-col shadow-sm">
-              <div className="text-3xl mb-5">🎉</div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Planning an event?</h2>
-              <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">
-                Browse verified vendors across 19 categories. Use the Smart Planner to build a complete plan with budget, timeline, and vendor shortlist.
+      {/* ── USER PATHS ─────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 gap-6">
+
+            {/* Planner path */}
+            <div className="border border-gray-100 rounded-2xl p-10 flex flex-col bg-white hover:border-gray-200 hover:shadow-lg transition-all duration-300">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-7"
+                style={{ background: "#0D1B3E" }}
+              >
+                <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                  <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                </svg>
+              </div>
+              <p
+                className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                style={{ color: "#C9A84C" }}
+              >
+                For Hosts
               </p>
-              <div className="flex flex-col gap-2">
-                <Link href="/browse" className="btn-primary text-sm py-2.5 px-5">
+              <h2 className="text-2xl font-light text-gray-900 mb-4 tracking-tight">
+                Planning an event?
+              </h2>
+              <p className="text-gray-400 text-sm leading-relaxed mb-8 flex-1 font-light">
+                Browse verified DJs, photographers, caterers, decorators and
+                19 more categories. Every vendor is individually reviewed before
+                joining the platform.
+              </p>
+              <div className="flex flex-col gap-3">
+                <Link href="/browse" className="btn-luxury-dark text-sm py-3">
                   Browse Vendors <ArrowRight size={14} />
                 </Link>
-                <Link href="/dashboard/create-event" className="btn-secondary-light text-sm py-2.5 px-5">
-                  Use Smart Planner
+                <Link href="/dashboard/create-event" className="btn-secondary-light text-sm py-3">
+                  Plan with Smart Planner
                 </Link>
               </div>
             </div>
 
-            <div className="bg-white border border-gray-100 rounded-2xl p-8 flex flex-col shadow-sm">
-              <div className="text-3xl mb-5">💼</div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Are you a vendor?</h2>
-              <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">
-                Join event professionals growing their bookings through ELBOLD Events. Free to join and keep 90% of every booking.
+            {/* Vendor path */}
+            <div
+              className="rounded-2xl p-10 flex flex-col hover:shadow-lg transition-all duration-300"
+              style={{ background: "#0D1B3E" }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-7"
+                style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)" }}
+              >
+                <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                  <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  <polygon points="13,7 19,13 13,19 7,13" stroke="#C9A84C" strokeWidth="1" fill="none" opacity="0.5"/>
+                </svg>
+              </div>
+              <p
+                className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                style={{ color: "rgba(201,168,76,0.65)" }}
+              >
+                For Vendors
               </p>
-              <div className="flex flex-col gap-2">
-                <Link href="/vendor/apply" className="btn-primary text-sm py-2.5 px-5">
-                  Apply as a Vendor <ArrowRight size={14} />
+              <h2
+                className="text-2xl font-light mb-4 tracking-tight"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                Grow your bookings.
+              </h2>
+              <p
+                className="text-sm leading-relaxed mb-8 flex-1 font-light"
+                style={{ color: "rgba(255,255,255,0.45)" }}
+              >
+                Join a platform built for premium event professionals.
+                Free to list. Keep 90% of every booking.
+                Currently accepting Founding Vendors with priority placement.
+              </p>
+              <div className="flex flex-col gap-3">
+                <Link href="/founding-vendors" className="btn-luxury text-sm py-3">
+                  Founding Vendor Programme <ArrowRight size={14} />
                 </Link>
-                <Link href="/how-it-works" className="btn-secondary-light text-sm py-2.5 px-5">
-                  How It Works
+                <Link
+                  href="/vendor/apply"
+                  className="btn-luxury-outline text-sm py-3"
+                  style={{ fontSize: "0.8rem" }}
+                >
+                  Apply as a Vendor
                 </Link>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ── FEATURED VENDORS ──────────────────────────────────────────────── */}
+      {/* ── FEATURED VENDORS ─────────────────────────────────────────────── */}
       {vendors.length > 0 && (
-        <section className="py-16 px-4 bg-gray-50 border-y border-gray-100">
+        <section className="py-24 px-4" style={{ background: "#f8f7f5" }}>
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-end justify-between mb-10">
+            <div className="flex items-end justify-between mb-12">
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900">Featured Vendors</h2>
-                <p className="text-gray-500 text-sm mt-1">
-                  Hand-picked professionals with outstanding reviews.
+                <p
+                  className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+                  style={{ color: "#C9A84C" }}
+                >
+                  Our Vendors
                 </p>
+                <h2 className="text-3xl font-light text-gray-900 tracking-tight">
+                  Trusted Professionals
+                </h2>
               </div>
               <Link
                 href="/browse"
-                className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1 transition-colors"
+                className="text-sm text-gray-400 hover:text-gray-900 flex items-center gap-1.5 transition-colors font-light"
               >
                 View all <ArrowRight size={13} />
               </Link>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {vendors.map((v) => {
                 const cat = VENDOR_CATEGORIES[v.category as keyof typeof VENDOR_CATEGORIES];
                 const coverMedia =
                   v.media?.find((m) => m.is_cover && m.type === "image") ??
                   v.media?.find((m) => m.type === "image");
-                const gradient = CATEGORY_GRADIENTS[v.category] ?? "from-brand-700 to-violet-800";
                 return (
                   <Link
                     key={v.id}
                     href={`/vendors/${v.id}`}
-                    className="bg-white border border-gray-100 rounded-xl overflow-hidden group hover:border-gray-200 hover:shadow-md transition-all"
+                    className="bg-white border border-gray-100 rounded-xl overflow-hidden group hover:border-gray-200 hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="relative h-44 overflow-hidden">
+                    <div className="relative h-52 overflow-hidden">
                       {coverMedia ? (
                         <Image
                           src={coverMedia.url}
                           alt={v.business_name}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="object-cover group-hover:scale-105 transition-transform duration-700"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                       ) : (
-                        <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-                          <span className="text-5xl opacity-30">{cat?.icon ?? "🎉"}</span>
+                        <div
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ background: "#0D1B3E" }}
+                        >
+                          <DiamondMark size={40} color="rgba(201,168,76,0.25)" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <div className="absolute top-3 left-3 flex gap-1.5">
                         {v.subscription_plan === "featured" && (
-                          <span className="badge bg-amber-500/90 text-amber-900 text-xs font-bold">Featured</span>
+                          <span
+                            className="text-xs font-semibold px-2.5 py-1 rounded"
+                            style={{ background: "#C9A84C", color: "#0D1B3E" }}
+                          >
+                            Featured
+                          </span>
                         )}
                         {v.verified && (
-                          <span className="badge bg-black/40 border border-white/20 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+                          <span className="badge bg-white/15 border border-white/20 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
                             <CheckCircle2 size={10} /> Verified
                           </span>
                         )}
                       </div>
                       {(v.starting_price ?? 0) > 0 && (
-                        <div className="absolute bottom-3 right-3 bg-black/55 px-2.5 py-1 rounded-lg backdrop-blur-sm">
-                          <span className="text-xs text-white/70">From </span>
+                        <div className="absolute bottom-3 right-3 bg-black/55 px-2.5 py-1 rounded backdrop-blur-sm">
+                          <span className="text-xs text-white/60">From </span>
                           <span className="text-sm font-semibold text-white">
                             £{(v.starting_price ?? 0).toLocaleString()}
                           </span>
                         </div>
                       )}
                     </div>
-                    <div className="p-4">
+                    <div className="p-5">
                       <h3 className="font-semibold text-gray-900 text-sm truncate">{v.business_name}</h3>
-                      <p className="text-xs text-gray-400 mt-0.5 capitalize">{cat?.label ?? v.category}</p>
-                      <div className="flex items-center justify-between mt-2.5">
-                        <div className="flex items-center gap-1 text-xs text-gray-400">
+                      <p className="text-xs text-gray-400 mt-0.5 capitalize font-light">{cat?.label ?? v.category}</p>
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center gap-1 text-xs text-gray-400 font-light">
                           <MapPin size={10} /> {v.city}
                         </div>
                         {v.rating > 0 && (
@@ -244,93 +376,137 @@ export default async function Home() {
               })}
             </div>
 
-            <div className="text-center mt-8 sm:hidden">
-              <Link href="/browse" className="btn-secondary-light text-sm">
-                View All Vendors <ArrowRight size={14} />
+            <div className="text-center mt-10">
+              <Link href="/browse" className="btn-luxury-dark text-sm">
+                Browse All Vendors <ArrowRight size={14} />
               </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* ── WHAT ARE YOU PLANNING ─────────────────────────────────────────── */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold text-gray-900">What are you planning?</h2>
-            <p className="text-gray-500 text-sm mt-1">
-              Get inspired and browse vendors for your occasion.
+      {/* ── OCCASIONS ──────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12">
+            <p
+              className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              Occasions
             </p>
+            <h2 className="text-3xl font-light text-gray-900 tracking-tight">
+              What are you celebrating?
+            </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               {
                 title: "Wedding",
-                desc: "Floral arches, live music, catering, photography and full coordination.",
-                emoji: "💍",
+                desc: "Floral design, photography, catering, live music and full coordination for the perfect day.",
+                from: "Packages from £3,000",
                 href: "/browse?event=wedding",
-                budget: "Budgets from £3,000",
               },
               {
-                title: "Birthday Party",
-                desc: "DJ, decorator, photobooth and celebration cake for any age and scale.",
-                emoji: "🎂",
+                title: "Birthday",
+                desc: "DJ, decoration, cake and photo experiences for birthdays of any scale or style.",
+                from: "Packages from £500",
                 href: "/browse?event=birthday",
-                budget: "Budgets from £500",
               },
               {
-                title: "Corporate Event",
-                desc: "AV and lighting, catering, MC, logistics handled end to end.",
-                emoji: "🏢",
+                title: "Corporate",
+                desc: "AV, catering, MC and end-to-end logistics for conferences, launches and team events.",
+                from: "Packages from £1,500",
                 href: "/browse?event=corporate",
-                budget: "Budgets from £1,500",
               },
             ].map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
-                className="bg-gray-50 border border-gray-100 rounded-xl p-6 group hover:bg-white hover:border-gray-200 hover:shadow-sm transition-all"
+                className="group border border-gray-100 rounded-xl p-7 hover:border-gray-200 hover:shadow-md transition-all duration-300 bg-white"
               >
-                <div className="text-3xl mb-4">{item.emoji}</div>
-                <h3 className="text-base font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-4">{item.desc}</p>
-                <p className="text-xs text-gray-400 mb-4">{item.budget}</p>
-                <div className="flex items-center gap-1 text-gray-400 group-hover:text-gray-900 text-xs font-medium transition-colors">
+                <p
+                  className="text-xs tracking-[0.2em] font-semibold mb-4 uppercase"
+                  style={{ color: "rgba(201,168,76,0.7)" }}
+                >
+                  {item.title}
+                </p>
+                <p className="text-gray-500 text-sm leading-relaxed mb-5 font-light">{item.desc}</p>
+                <p className="text-xs text-gray-300 mb-5 font-light">{item.from}</p>
+                <div
+                  className="flex items-center gap-1.5 text-xs font-semibold tracking-wide group-hover:gap-2.5 transition-all"
+                  style={{ color: "#0D1B3E" }}
+                >
                   Browse vendors <ArrowRight size={11} />
                 </div>
               </Link>
             ))}
           </div>
-
-          <div className="mt-8 text-center">
-            <Link href="/inspire" className="btn-secondary-light text-sm">
-              Browse All Inspiration <ArrowRight size={14} />
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* ── SOCIAL PROOF ──────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 bg-gray-50 border-t border-gray-100">
+      <section
+        className="py-24 px-4"
+        style={{ background: "#0D1B3E" }}
+      >
         <div className="max-w-2xl mx-auto text-center">
-          <div className="bg-white border border-gray-100 rounded-2xl p-8 md:p-10 shadow-sm">
-            <div className="flex justify-center gap-1 mb-5">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
-              ))}
+          {/* Gold stars */}
+          <div className="flex justify-center gap-1.5 mb-8">
+            {Array.from({ length: 5 }, (_, i) => (
+              <svg key={i} width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"
+                  fill="#C9A84C"
+                />
+              </svg>
+            ))}
+          </div>
+
+          <blockquote
+            className="text-xl font-light leading-relaxed mb-8"
+            style={{ color: "rgba(255,255,255,0.8)" }}
+          >
+            &ldquo;ELBOLD Events made planning my 30th birthday effortless.
+            The DJ and decorator were incredible, and everything ran perfectly
+            on the day. I couldn&apos;t have done it without this platform.&rdquo;
+          </blockquote>
+
+          <div className="flex items-center justify-center gap-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+              style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}
+            >
+              AJ
             </div>
-            <p className="text-gray-700 text-lg leading-relaxed mb-6">
-              &ldquo;ELBOLD Events made planning my 30th birthday effortless. It suggested exactly what I needed, the DJ and decorator were incredible, and everything ran perfectly.&rdquo;
+            <div className="text-left">
+              <div className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.85)" }}>
+                Amara Johnson
+              </div>
+              <div
+                className="text-xs font-light"
+                style={{ color: "rgba(255,255,255,0.3)" }}
+              >
+                30th Birthday · London
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-12" style={{ borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+            <p
+              className="text-xs tracking-[0.25em] font-light mb-6"
+              style={{ color: "rgba(201,168,76,0.45)" }}
+            >
+              READY TO BEGIN?
             </p>
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-9 h-9 rounded-full gradient-brand flex items-center justify-center text-sm font-bold text-white shrink-0">
-                AJ
-              </div>
-              <div className="text-left">
-                <div className="text-sm font-semibold text-gray-900">Amara Johnson</div>
-                <div className="text-xs text-gray-400">30th Birthday · London</div>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/browse" className="btn-luxury">
+                Find Vendors
+              </Link>
+              <Link href="/founding-vendors" className="btn-luxury-outline">
+                Join as a Vendor
+              </Link>
             </div>
           </div>
         </div>

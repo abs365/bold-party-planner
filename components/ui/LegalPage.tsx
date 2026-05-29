@@ -35,7 +35,7 @@ export async function LegalPage({ title, subtitle, lastUpdated, sections }: Lega
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-24">
         {/* Header */}
         <div className="mb-12">
-          <Link href="/" className="text-brand-400 text-sm hover:text-brand-300 transition-colors mb-6 inline-block">
+          <Link href="/" className="text-gray-400 text-sm hover:text-gray-600 transition-colors mb-6 inline-block">
             ← Back to ELBOLD
           </Link>
           <h1 className="text-3xl font-extrabold text-white mb-3">{title}</h1>
