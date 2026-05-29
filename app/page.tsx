@@ -223,32 +223,32 @@ export default async function Home() {
                 className="text-xs tracking-[0.25em] font-semibold mb-3 uppercase"
                 style={{ color: "rgba(201,168,76,0.65)" }}
               >
-                For Vendors
+                For Event Professionals
               </p>
               <h2
                 className="text-2xl font-light mb-4 tracking-tight"
                 style={{ color: "rgba(255,255,255,0.92)" }}
               >
-                Grow your bookings.
+                Get found. Get booked.
               </h2>
               <p
                 className="text-sm leading-relaxed mb-8 flex-1 font-light"
                 style={{ color: "rgba(255,255,255,0.45)" }}
               >
-                Join a platform built for premium event professionals.
-                Free to list. Keep 90% of every booking.
-                Currently accepting Founding Vendors with priority placement.
+                Event hosts in your area are searching for vendors right now.
+                List your services free, set your own pricing, and keep 90% of
+                every booking you receive. No monthly fees. Cancel anytime.
               </p>
               <div className="flex flex-col gap-3">
                 <Link href="/founding-vendors" className="btn-luxury text-sm py-3">
-                  Founding Vendor Programme <ArrowRight size={14} />
+                  Get Listed Free <ArrowRight size={14} />
                 </Link>
                 <Link
-                  href="/vendor/apply"
+                  href="/founding-vendors"
                   className="btn-luxury-outline text-sm py-3"
                   style={{ fontSize: "0.8rem" }}
                 >
-                  Apply as a Vendor
+                  See Founding Vendor Benefits
                 </Link>
               </div>
             </div>

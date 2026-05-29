@@ -10,10 +10,10 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 const BENEFITS = [
-  { icon: "💰", label: "Keep 90% of every booking" },
-  { icon: "🎯", label: "Free to join, no monthly fees" },
-  { icon: "📈", label: "Reach thousands of event hosts" },
-  { icon: "⭐", label: "Build reviews and reputation" },
+  { icon: "💰", label: "Keep 90% of every booking you receive" },
+  { icon: "🎯", label: "Free to join — no monthly fees, no contract" },
+  { icon: "📈", label: "Get found by customers searching for your category" },
+  { icon: "⭐", label: "Verified reviews after every booking build your profile" },
 ];
 
 export default function VendorApplyPage() {
@@ -98,13 +98,13 @@ export default function VendorApplyPage() {
             className="text-3xl sm:text-4xl font-light tracking-tight mb-4"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            Join ELBOLD Events as a Vendor
+            Get your business in front of customers searching for vendors like you.
           </h1>
           <p
             className="max-w-lg mx-auto text-base font-light leading-relaxed"
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
-            Reach event hosts across the UK. Free to join, no monthly fees, and you keep 90% of every booking.
+            Free to join. No monthly fees. You keep 90% of every booking you receive.
           </p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function VendorApplyPage() {
             {/* Left sidebar — benefits */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
-                <h2 className="text-base font-semibold text-gray-900 mb-4">Why join ELBOLD?</h2>
+                <h2 className="text-base font-semibold text-gray-900 mb-4">What you get</h2>
                 <div className="space-y-3">
                   {BENEFITS.map((b) => (
                     <div key={b.label} className="flex items-center gap-3">
@@ -132,10 +132,10 @@ export default function VendorApplyPage() {
                 <h2 className="text-base font-semibold text-gray-900 mb-3">What happens next?</h2>
                 <div className="space-y-4">
                   {[
-                    { n: "1", label: "Submit your application", sub: "Takes about 5 minutes" },
-                    { n: "2", label: "We review and approve", sub: "Usually within 24–48 hours" },
-                    { n: "3", label: "Set up your profile", sub: "Add photos, packages and pricing" },
-                    { n: "4", label: "Start receiving bookings", sub: "Customers discover and book you" },
+                    { n: "1", label: "Submit your application", sub: "Takes about 5 minutes — nothing complicated" },
+                    { n: "2", label: "We verify and activate you", sub: "Usually within 24–48 hours" },
+                    { n: "3", label: "Complete your profile", sub: "Photos, packages and pricing — better profiles get more enquiries" },
+                    { n: "4", label: "Start receiving enquiries", sub: "Customers searching in your category find and contact you" },
                   ].map(({ n, label, sub }) => (
                     <div key={n} className="flex gap-3">
                       <div
@@ -283,14 +283,16 @@ export default function VendorApplyPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Min Price (£)</label>
-                        <input type="number" value={formData.min_price} onChange={(e) => update("min_price", e.target.value)} placeholder="e.g. 200" className="input-light" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Max Price (£)</label>
-                        <input type="number" value={formData.max_price} onChange={(e) => update("max_price", e.target.value)} placeholder="e.g. 2000" className="input-light" />
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-0.5">Price Range (£)</label>
+                      <p className="text-xs text-gray-400 mb-2 font-light">Used to match you with relevant customer budgets. Not shown publicly — you set exact prices in your packages later.</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <input type="number" value={formData.min_price} onChange={(e) => update("min_price", e.target.value)} placeholder="From, e.g. 200" className="input-light" />
+                        </div>
+                        <div>
+                          <input type="number" value={formData.max_price} onChange={(e) => update("max_price", e.target.value)} placeholder="Up to, e.g. 2000" className="input-light" />
+                        </div>
                       </div>
                     </div>
 
@@ -310,13 +312,16 @@ export default function VendorApplyPage() {
                 {step === 3 && (
                   <div className="space-y-5">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
                         <FileText size={13} className="inline mr-1 text-gray-400" />About Your Business
                       </label>
+                      <p className="text-xs text-gray-400 mb-1.5 font-light">
+                        Tell customers what makes your service worth booking. Include your specialisation, experience, awards, and the events you work best for. Profiles with detailed bios receive significantly more enquiries.
+                      </p>
                       <textarea
                         value={formData.bio}
                         onChange={(e) => update("bio", e.target.value)}
-                        placeholder="Describe your service, experience, what makes you unique, and the events you specialise in..."
+                        placeholder="Example: Award-winning DJ with 8 years of experience across weddings, birthday parties and corporate events. Specialist in live mixing and personalised playlists. Full PA and lighting rig included in all packages. Covered 200+ events across London and the South East."
                         rows={5}
                         className="input-light resize-none"
                       />

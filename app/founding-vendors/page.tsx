@@ -13,41 +13,41 @@ export const metadata: Metadata = {
 const BENEFITS = [
   {
     icon: CheckCircle2,
-    title: "Free Profile Forever",
-    description: "Your vendor profile is completely free — no monthly fees, no setup costs. Keep 90% of every booking.",
+    title: "Free to list. Free forever.",
+    description: "Creating and maintaining your profile costs nothing. When a customer books you, you keep 90% of the full payment. No hidden fees, no monthly subscription, no commission creep.",
   },
   {
     icon: Star,
-    title: "Founding Vendor Badge",
-    description: "Your profile displays an exclusive Founding Vendor badge, visible to every customer who views it.",
+    title: "Founding Vendor badge on your profile",
+    description: "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Badged and verified vendors consistently receive more enquiries than unverified listings at comparable prices.",
   },
   {
     icon: TrendingUp,
-    title: "Priority Placement",
-    description: "Founding Vendors appear higher in search results and category pages, giving you a lasting visibility advantage.",
+    title: "Permanent top-of-page placement",
+    description: "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you. Customers typically contact the first 3–5 vendors they see. That set is yours.",
   },
   {
     icon: Zap,
-    title: "Early Access to Features",
-    description: "You'll be first to access new tools, features, and marketplace improvements as ELBOLD grows.",
+    title: "First access to new features",
+    description: "Founding Vendors are first to access new tools as ELBOLD grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
   },
   {
     icon: Shield,
-    title: "Enhanced Visibility",
-    description: "Highlighted on the homepage and featured in our launch marketing campaign to event hosts across the UK.",
+    title: "Stripe-secured payments on every booking",
+    description: "Every booking on ELBOLD goes through Stripe. Your payment is protected, released to you after completion, and covered by our dispute resolution process. You never chase invoices.",
   },
   {
     icon: Award,
-    title: "Founding Vendor Status",
-    description: "As the marketplace scales, Founding Vendors are recognised as the trusted foundation the platform was built on.",
+    title: "Founding Vendor status — permanent",
+    description: "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
   },
 ];
 
 const STEPS = [
-  { n: "1", label: "Apply in minutes", sub: "Complete your vendor profile — takes about 5 minutes" },
-  { n: "2", label: "Our team reviews", sub: "We review and approve within 24–48 hours" },
-  { n: "3", label: "Go live", sub: "Your profile appears on the marketplace immediately" },
-  { n: "4", label: "Receive enquiries", sub: "Customers find and contact you directly" },
+  { n: "1", label: "Apply — takes 5 minutes", sub: "Business name, category, city, pricing. Nothing complicated." },
+  { n: "2", label: "We verify and activate you", sub: "Every vendor is reviewed before going live. Usually 24–48 hours." },
+  { n: "3", label: "Complete your profile", sub: "Add photos, packages and a bio. Better profiles receive more enquiries." },
+  { n: "4", label: "Start receiving enquiries", sub: "Customers searching in your category find your profile and contact you directly." },
 ];
 
 async function getProfile() {
@@ -75,36 +75,37 @@ export default async function FoundingVendorsPage() {
             style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)" }}
           >
             <Award size={12} />
-            Founding Vendor Programme
+            Founding Vendor Programme &nbsp;·&nbsp; 20 places available
           </div>
           <h1
             className="text-4xl sm:text-5xl font-light tracking-tight mb-6 leading-tight"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            Be part of something
+            Get discovered by customers
             <br />
-            <span style={{ color: "#C9A84C" }}>extraordinary.</span>
+            <span style={{ color: "#C9A84C" }}>planning events near you.</span>
           </h1>
           <p
             className="text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed"
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            ELBOLD Events is launching. We are selecting our first 20 trusted vendors —
-            event professionals who will form the foundation of the UK&apos;s most trusted event marketplace.
+            Event hosts use ELBOLD to find and book DJs, photographers, caterers,
+            decorators and more. List your services free, keep 90% of every booking,
+            and start receiving enquiries within days of going live.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
-              Apply as a Founding Vendor
+              Apply Free — Takes 5 Minutes
             </Link>
             <Link href="/browse" className="btn-luxury-outline">
-              Browse the Marketplace
+              See the Marketplace
             </Link>
           </div>
           <p
             className="text-xs font-light mt-7"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            Limited to the first 20 approved vendors. No credit card required.
+            20 founding places available. No credit card. No monthly fees. Cancel anytime.
           </p>
         </div>
       </section>
@@ -113,8 +114,8 @@ export default async function FoundingVendorsPage() {
       <section className="py-20 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">What Founding Vendors receive</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Everything you need to start receiving bookings from day one, with advantages that last.</p>
+            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">What you get as a Founding Vendor</h2>
+            <p className="text-gray-400 max-w-xl mx-auto font-light">Everything you need to start receiving enquiries from day one, with placement advantages that stay with you permanently.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {BENEFITS.map(({ icon: Icon, title, description }) => (
@@ -134,8 +135,8 @@ export default async function FoundingVendorsPage() {
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">How to join</h2>
-            <p className="text-gray-500">Simple, fast, and free.</p>
+            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">From application to first enquiry</h2>
+            <p className="text-gray-400 font-light">Four steps. Free throughout. No commitment required.</p>
           </div>
           <div className="space-y-6">
             {STEPS.map(({ n, label, sub }) => (
@@ -153,13 +154,51 @@ export default async function FoundingVendorsPage() {
         </div>
       </section>
 
-      {/* Testimonial placeholder */}
+      {/* Trust signals — factual, not fabricated */}
       <section className="py-20 px-4 bg-white">
-        <div className="max-w-2xl mx-auto text-center">
-          <blockquote className="text-xl text-gray-700 italic leading-relaxed mb-6">
-            &ldquo;ELBOLD Events gives vendors a professional platform that customers trust. I joined early and I&apos;m already receiving enquiries.&rdquo;
-          </blockquote>
-          <cite className="text-sm text-gray-400 not-italic">— Early access vendor, London</cite>
+        <div className="max-w-3xl mx-auto">
+          <div className="grid sm:grid-cols-3 gap-6">
+
+            <div className="text-center p-6 border border-gray-100 rounded-2xl">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: "#0D1B3E" }}
+              >
+                <CheckCircle2 size={18} style={{ color: "#C9A84C" }} />
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">Every vendor is reviewed</h3>
+              <p className="text-xs text-gray-400 font-light leading-relaxed">
+                We individually verify every vendor before they appear on the platform. Customers know that means something.
+              </p>
+            </div>
+
+            <div className="text-center p-6 border border-gray-100 rounded-2xl">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: "#0D1B3E" }}
+              >
+                <Shield size={18} style={{ color: "#C9A84C" }} />
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">Payments through Stripe</h3>
+              <p className="text-xs text-gray-400 font-light leading-relaxed">
+                Every booking is paid through Stripe. Your earnings are protected and released to you after the event completes.
+              </p>
+            </div>
+
+            <div className="text-center p-6 border border-gray-100 rounded-2xl">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ background: "#0D1B3E" }}
+              >
+                <Award size={18} style={{ color: "#C9A84C" }} />
+              </div>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">No lock-in</h3>
+              <p className="text-xs text-gray-400 font-light leading-relaxed">
+                Your profile is free. There is no contract and no minimum term. If ELBOLD does not work for your business, you can leave at any time.
+              </p>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -170,19 +209,21 @@ export default async function FoundingVendorsPage() {
             className="text-xs tracking-[0.3em] font-semibold mb-6 uppercase"
             style={{ color: "rgba(201,168,76,0.55)" }}
           >
-            Limited Places Available
+            20 founding places · Applications open now
           </p>
           <h2
             className="text-3xl font-light tracking-tight mb-4"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            Ready to be a Founding Vendor?
+            Start receiving booking enquiries.
           </h2>
           <p
-            className="font-light mb-10 leading-relaxed"
+            className="font-light mb-10 leading-relaxed max-w-md mx-auto"
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
-            Apply in minutes. Your profile goes live within 48 hours.
+            Apply in under 5 minutes. We review within 24–48 hours.
+            Your profile goes live immediately upon approval.
+            Once the 20 founding places are filled, new vendors join a standard queue.
           </p>
           <Link href="/vendor/apply" className="btn-luxury">
             Apply Now — It&apos;s Free
@@ -191,7 +232,7 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-6"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            No credit card · No monthly fees · Keep 90% of bookings
+            No credit card &nbsp;·&nbsp; No monthly fees &nbsp;·&nbsp; Keep 90% of every booking &nbsp;·&nbsp; Cancel anytime
           </p>
         </div>
       </section>
