@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { track } from "@/lib/analytics";
 
 // GET /api/saved-vendors?vendor_id=xxx — check if vendor is saved
 export async function GET(req: Request) {
@@ -46,9 +47,11 @@ export async function POST(req: Request) {
 
   if (existing) {
     await supabase.from("saved_vendors").delete().eq("id", existing.id);
+    void track({ event: "marketplace.vendor_unsaved", userId: user.id, properties: { vendor_id } });
     return NextResponse.json({ saved: false });
   }
 
   await supabase.from("saved_vendors").insert({ customer_id: user.id, vendor_id });
+  void track({ event: "marketplace.vendor_saved", userId: user.id, properties: { vendor_id } });
   return NextResponse.json({ saved: true });
 }

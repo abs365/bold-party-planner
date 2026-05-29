@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
 
 const submitSchema = z.object({
   type: z.string().min(1),
@@ -88,6 +90,21 @@ export async function POST(req: Request) {
     .single();
 
   if (verError) return NextResponse.json({ error: verError.message }, { status: 500 });
+
+  // Audit + analytics (fire-and-forget)
+  void createAuditLog({
+    actorUserId: auth.user.id,
+    actorRole: "vendor",
+    action: isResubmission ? "vendor.verification.resubmit" : "vendor.verification.submit",
+    entityType: "vendor_verification",
+    entityId: verification?.id ?? auth.vendor.id,
+    ipAddress: ipFromRequest(req),
+  });
+  void track({
+    event: "vendor.verification.submitted",
+    userId: auth.user.id,
+    properties: { type, isResubmission },
+  });
 
   // Log the activity
   await auth.supabase.from("verification_activity_log").insert({

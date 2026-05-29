@@ -5,7 +5,7 @@ import { VENDOR_CATEGORIES } from "@/types";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://boldparty.co.uk";
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/browse`, priority: 0.9, changeFrequency: "daily", lastModified: now },
     { url: `${base}/how-it-works`, priority: 0.7, changeFrequency: "monthly", lastModified: now },
     { url: `${base}/vendor/apply`, priority: 0.7, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/founding-vendors`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
     { url: `${base}/login`, priority: 0.4, changeFrequency: "yearly", lastModified: now },
     { url: `${base}/signup`, priority: 0.5, changeFrequency: "yearly", lastModified: now },
     // Legal & trust pages

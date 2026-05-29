@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 
 const newThreadSchema = z.object({
   vendor_id: z.string().uuid(),
@@ -39,6 +40,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIp(req);
+  const rl = rateLimit({ ...RATE_LIMITS.messaging, identifier: `msg:${ip}` });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

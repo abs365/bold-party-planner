@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminModerationView } from "@/components/admin/AdminModerationView";
 
@@ -13,11 +13,11 @@ export default async function AdminModerationPage() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const db = await createAdminClient();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
 
-  // Use service role for admin queries — polyfill with regular client if needed
   const [reportsRes, mediaRes] = await Promise.all([
-    supabase
+    db
       .from("content_reports")
       .select(`
         id, content_type, content_id, vendor_id, reason, details, status, created_at,
@@ -27,7 +27,7 @@ export default async function AdminModerationPage() {
       .order("created_at", { ascending: false })
       .limit(100),
 
-    supabase
+    db
       .from("vendor_media")
       .select(`
         id, url, type, caption, moderation_status, created_at,

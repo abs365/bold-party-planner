@@ -1,20 +1,14 @@
 import { NextResponse } from "next/server";
-import { createAdminClient, createClient } from "@/lib/supabase/server";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+import { requireAdmin, forbidden } from "@/lib/auth/guards";
 
 export async function GET(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin();
+  if (!auth) return forbidden();
 
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search");
 
-  const adminSupabase = await createAdminClient();
-  let query = adminSupabase
+  let query = auth.db
     .from("profiles")
     .select("*, events:events(count), bookings:bookings(count)")
     .eq("role", "customer")

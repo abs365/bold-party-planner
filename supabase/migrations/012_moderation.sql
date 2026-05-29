@@ -31,21 +31,14 @@ CREATE TABLE IF NOT EXISTS content_reports (
   created_at       TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. Platform announcements — admin-published, time-bounded notices
-CREATE TABLE IF NOT EXISTS platform_announcements (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  title       TEXT NOT NULL,
-  body        TEXT NOT NULL,
-  type        TEXT NOT NULL DEFAULT 'info'
-    CHECK (type IN ('info', 'warning', 'maintenance', 'feature')),
-  audience    TEXT NOT NULL DEFAULT 'all'
-    CHECK (audience IN ('all', 'vendors', 'customers')),
-  published   BOOLEAN DEFAULT false,
-  starts_at   TIMESTAMPTZ,
-  ends_at     TIMESTAMPTZ,
-  created_by  UUID REFERENCES auth.users(id),
-  created_at  TIMESTAMPTZ DEFAULT NOW()
-);
+-- 3. Platform announcements — table already exists from 006_phase6.sql which used
+--    different column names: is_active (not published), target_role (not audience),
+--    expires_at (not ends_at).  CREATE TABLE IF NOT EXISTS silently no-ops, so the
+--    columns defined there would never be added.
+--    Add only the two columns that 006 genuinely did not include.
+ALTER TABLE platform_announcements
+  ADD COLUMN IF NOT EXISTS starts_at  TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS created_by UUID REFERENCES auth.users(id);
 
 -- 4. Row-level security
 ALTER TABLE content_reports ENABLE ROW LEVEL SECURITY;
@@ -63,11 +56,15 @@ CREATE POLICY "Users can see own reports"
   TO authenticated
   USING (auth.uid() = reporter_id);
 
--- Anyone authenticated can read published, active announcements
+-- Anyone authenticated can read active, non-expired announcements.
+-- Uses is_active and expires_at — the actual column names from 006_phase6.sql
+-- (012 originally assumed published / ends_at which were never created).
+DROP POLICY IF EXISTS "Read published announcements" ON platform_announcements;
+DROP POLICY IF EXISTS "anyone_reads_announcements"   ON platform_announcements;
 CREATE POLICY "Read published announcements"
   ON platform_announcements FOR SELECT
   TO authenticated
-  USING (published = true AND (ends_at IS NULL OR ends_at > NOW()));
+  USING (is_active = true AND (expires_at IS NULL OR expires_at > NOW()));
 
 -- Service role has full access
 CREATE POLICY "Service manages reports"

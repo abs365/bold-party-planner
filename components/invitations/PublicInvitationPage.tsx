@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { Calendar, MapPin, Users, Clock, CheckCircle2, X, HelpCircle, Sparkles, ArrowRight } from "lucide-react";
@@ -186,7 +186,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
           ) : (
             <div className={cn("h-48 flex items-center justify-center text-6xl relative overflow-hidden", theme.accent)}>
               <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white to-transparent" />
-              {eventType?.icon ?? "🎉"}
+              {eventType?.icon ?? "ðŸŽ‰"}
             </div>
           )}
 
@@ -367,7 +367,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
         )}
 
         <p className="text-center text-xs text-slate-700 pb-4">
-          Powered by Bold Party Planner
+          Powered by ELBOLD Events
         </p>
       </div>
     </div>

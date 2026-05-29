@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit, RATE_LIMITS, getClientIp } from "@/lib/rate-limit";
 
-const SYSTEM_PROMPT = `You are the Bold Party Smart Event Concierge — a premium, friendly event planning expert for the UK market.
+const SYSTEM_PROMPT = `You are the ELBOLD Events Smart Event Concierge â€” a premium, friendly event planning expert for the UK market.
 
 You help customers plan exceptional events. You are warm, professional, and knowledgeable about UK event planning, vendors, pricing, and logistics.
 
@@ -17,9 +17,9 @@ Your expertise includes:
 - Etiquette and logistics tips for UK events
 
 Guidelines:
-- Never use the word "AI" — you are the "Smart Concierge"
+- Never use the word "AI" â€” you are the "Smart Concierge"
 - Be warm, concise, and practical
-- Give specific UK-relevant advice (mention £ for prices)
+- Give specific UK-relevant advice (mention Â£ for prices)
 - Suggest categories the platform has: DJ, Photographer, Videographer, Caterer, Decorator, MC, Security, Makeup Artist, Cake Maker, Balloon Decorator, Lighting & Stage, Furniture Rental, Marquee Rental, Live Band, Transport
 - When suggesting vendors, encourage customers to browse and request quotes on the platform
 - Keep responses under 300 words unless asked for detailed plans
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
   if (event_id) {
     const { data: event } = await supabase.from("events").select("title, date, city, guest_count, budget, event_type, notes").eq("id", event_id).eq("customer_id", user.id).single();
     if (event) {
-      eventContext = `\n\nEvent context: "${event.title}" — ${event.event_type} on ${event.date} in ${event.city} for ${event.guest_count} guests with a budget of £${event.budget}. Notes: ${event.notes ?? "none"}.`;
+      eventContext = `\n\nEvent context: "${event.title}" â€” ${event.event_type} on ${event.date} in ${event.city} for ${event.guest_count} guests with a budget of Â£${event.budget}. Notes: ${event.notes ?? "none"}.`;
     }
   }
 

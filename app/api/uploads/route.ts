@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 const MIN_FILE_SIZE = 1024;              // 1 KB — reject empty/corrupt files
@@ -125,6 +128,7 @@ export async function POST(request: Request) {
       });
 
     if (uploadError) {
+      void track({ event: "upload.failed", userId: user.id, properties: { reason: uploadError.message, vendorId } });
       return NextResponse.json(
         { error: `Storage upload failed: ${uploadError.message}` },
         { status: 500 }
@@ -152,9 +156,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: `Database error: ${dbError.message}` }, { status: 500 });
     }
 
+    void createAuditLog({
+      actorUserId: user.id,
+      actorRole: "vendor",
+      action: "vendor.media.upload",
+      entityType: "vendor_media",
+      entityId: mediaRecord.id,
+      ipAddress: ipFromRequest(request),
+    });
+    void track({ event: "upload.completed", userId: user.id, properties: { mediaType, vendorId } });
+
     return NextResponse.json(mediaRecord);
   } catch (err: unknown) {
-    console.error("[uploads] Unexpected error:", err);
+    logger.error("upload.unexpected_error", { err });
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Upload failed" },
       { status: 500 }

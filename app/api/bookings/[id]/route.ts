@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { updateVendorMetrics } from "@/lib/verification-automation";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
 
 export async function PATCH(
   request: Request,
@@ -47,6 +49,21 @@ export async function PATCH(
         .single();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+      void createAuditLog({
+        actorUserId: user.id,
+        actorRole: "vendor",
+        action: "booking.status.change",
+        entityType: "booking",
+        entityId: id,
+        after: { status },
+        ipAddress: ipFromRequest(request),
+      });
+      if (status === "accepted") {
+        void track({ event: "booking.confirmed", userId: user.id, properties: { booking_id: id } });
+      } else if (status === "completed") {
+        void track({ event: "booking.completed", userId: user.id, properties: { booking_id: id } });
+      }
 
       // Refresh metrics when a booking is completed or cancelled
       if (status === "completed" || status === "cancelled") {
@@ -101,6 +118,17 @@ export async function PATCH(
         .single();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+      void createAuditLog({
+        actorUserId: user.id,
+        actorRole: "customer",
+        action: "booking.cancelled",
+        entityType: "booking",
+        entityId: id,
+        ipAddress: ipFromRequest(request),
+      });
+      void track({ event: "booking.cancelled", userId: user.id, properties: { booking_id: id } });
+
       return NextResponse.json(booking);
     }
 

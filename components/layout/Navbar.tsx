@@ -76,7 +76,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
           <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
             <Sparkles size={16} className="text-white" />
           </div>
-          <span className="gradient-brand-text">Bold Party</span>
+          <span className="gradient-brand-text">ELBOLD</span>
         </Link>
 
         {/* Desktop Nav */}

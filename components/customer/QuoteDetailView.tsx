@@ -14,6 +14,9 @@ import {
   ArrowLeft,
   ChevronRight,
   CalendarCheck,
+  Zap,
+  BadgeCheck,
+  Briefcase,
 } from "lucide-react";
 
 interface QuoteResponse {
@@ -47,6 +50,9 @@ interface Quote {
     rating: number;
     review_count: number;
     bio: string | null;
+    verification_level?: number;
+    response_rate?: number | null;
+    completed_jobs_count?: number;
     media: { url: string; is_cover: boolean; type: string }[] | null;
     packages: { id: string; name: string; price: number; includes: string[] | null }[] | null;
   } | null;
@@ -179,6 +185,29 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
               <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
               {quote.vendor?.rating.toFixed(1)}
             </span>
+          </div>
+          {/* Vendor trust signals */}
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {(quote.vendor?.verification_level ?? 0) >= 2 && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
+                <BadgeCheck className="w-3 h-3" /> Business Verified
+              </span>
+            )}
+            {(quote.vendor?.verification_level ?? 0) === 1 && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-300">
+                <BadgeCheck className="w-3 h-3" /> Identity Verified
+              </span>
+            )}
+            {(quote.vendor?.response_rate ?? 0) >= 80 && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/25 text-purple-300">
+                <Zap className="w-3 h-3" /> Fast Responder
+              </span>
+            )}
+            {(quote.vendor?.completed_jobs_count ?? 0) >= 5 && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-white/8 border border-white/12 text-white/60">
+                <Briefcase className="w-3 h-3" /> {quote.vendor?.completed_jobs_count}+ events
+              </span>
+            )}
           </div>
         </div>
       </div>

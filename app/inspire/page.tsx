@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,21 +7,21 @@ import { InspirationFeed } from "@/components/ui/InspirationFeed";
 import { Sparkles, ArrowRight, TrendingUp, Palette, Heart, Star, BadgeCheck, ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Inspiration | Bold Party",
+  title: "Event Inspiration | ELBOLD Events",
   description: "Discover stunning event ideas, trending themes, and beautiful decorations. Get inspired for your next celebration.",
 };
 
 export const dynamic = "force-dynamic";
 
 const TRENDING_THEMES = [
-  { emoji: "🌸", label: "Garden Party", count: "2.4k saves", href: "/browse?event=wedding" },
-  { emoji: "🎭", label: "Masquerade Ball", count: "1.8k saves", href: "/browse?event=birthday" },
-  { emoji: "🌴", label: "Tropical Paradise", count: "1.6k saves", href: "/browse?event=birthday" },
-  { emoji: "✨", label: "Enchanted Forest", count: "1.4k saves", href: "/browse?event=wedding" },
-  { emoji: "🖤", label: "Black & Gold Luxe", count: "1.2k saves", href: "/browse?event=corporate" },
-  { emoji: "🎠", label: "Vintage Carousel", count: "980 saves", href: "/browse?event=birthday" },
-  { emoji: "🌿", label: "Boho Greenhouse", count: "870 saves", href: "/browse?event=wedding" },
-  { emoji: "🎪", label: "Circus Spectacular", count: "760 saves", href: "/browse?event=birthday" },
+  { emoji: "ðŸŒ¸", label: "Garden Party", count: "2.4k saves", href: "/browse?event=wedding" },
+  { emoji: "ðŸŽ­", label: "Masquerade Ball", count: "1.8k saves", href: "/browse?event=birthday" },
+  { emoji: "ðŸŒ´", label: "Tropical Paradise", count: "1.6k saves", href: "/browse?event=birthday" },
+  { emoji: "âœ¨", label: "Enchanted Forest", count: "1.4k saves", href: "/browse?event=wedding" },
+  { emoji: "ðŸ–¤", label: "Black & Gold Luxe", count: "1.2k saves", href: "/browse?event=corporate" },
+  { emoji: "ðŸŽ ", label: "Vintage Carousel", count: "980 saves", href: "/browse?event=birthday" },
+  { emoji: "ðŸŒ¿", label: "Boho Greenhouse", count: "870 saves", href: "/browse?event=wedding" },
+  { emoji: "ðŸŽª", label: "Circus Spectacular", count: "760 saves", href: "/browse?event=birthday" },
 ];
 
 const COLOUR_PALETTES = [
@@ -29,7 +29,7 @@ const COLOUR_PALETTES = [
     name: "Rose Gold & Ivory",
     colors: ["#B76E79", "#F5E6D3", "#D4AF8C", "#F8F4F0"],
     saves: "3.2k",
-    style: "Wedding · Anniversary",
+    style: "Wedding Â· Anniversary",
     mood: "Romantic & Timeless",
     href: "/browse?category=decorator&event=wedding",
     vendors: "Decorators & Florists",
@@ -38,7 +38,7 @@ const COLOUR_PALETTES = [
     name: "Midnight Navy & Gold",
     colors: ["#1B2A4A", "#C9A84C", "#0D1B2A", "#E8D5A0"],
     saves: "2.8k",
-    style: "Corporate · Gala",
+    style: "Corporate Â· Gala",
     mood: "Bold & Sophisticated",
     href: "/browse?category=lighting_stage&event=corporate",
     vendors: "Lighting & Staging",
@@ -47,7 +47,7 @@ const COLOUR_PALETTES = [
     name: "Sage & Terracotta",
     colors: ["#87A878", "#C4714F", "#F2E8DF", "#5C4033"],
     saves: "2.1k",
-    style: "Boho · Garden Party",
+    style: "Boho Â· Garden Party",
     mood: "Natural & Earthy",
     href: "/browse?category=decorator&event=wedding",
     vendors: "Decorators & Florists",
@@ -56,7 +56,7 @@ const COLOUR_PALETTES = [
     name: "Dusty Lavender",
     colors: ["#C8B8D8", "#9B8AA3", "#F0EBF5", "#6E5F80"],
     saves: "1.9k",
-    style: "Baby Shower · Wedding",
+    style: "Baby Shower Â· Wedding",
     mood: "Soft & Dreamy",
     href: "/browse?category=balloon_decorator&event=baby_shower",
     vendors: "Balloon Decorators",
@@ -65,7 +65,7 @@ const COLOUR_PALETTES = [
     name: "Emerald & Champagne",
     colors: ["#2D6A4F", "#F0E5B0", "#1B4332", "#C8B460"],
     saves: "1.7k",
-    style: "Anniversary · Wedding",
+    style: "Anniversary Â· Wedding",
     mood: "Luxurious & Rich",
     href: "/browse?category=decorator&event=anniversary",
     vendors: "Decorators & Styling",
@@ -74,7 +74,7 @@ const COLOUR_PALETTES = [
     name: "Blush & Burgundy",
     colors: ["#FFB6C1", "#800020", "#FFF0F3", "#4A0010"],
     saves: "1.5k",
-    style: "Wedding · Engagement",
+    style: "Wedding Â· Engagement",
     mood: "Passionate & Elegant",
     href: "/browse?category=decorator&event=engagement",
     vendors: "Decorators & Florists",
@@ -82,12 +82,12 @@ const COLOUR_PALETTES = [
 ];
 
 const INSPIRATION_COLLECTIONS = [
-  { title: "Wedding Wonderland", count: 48, emoji: "💍", bg: "bg-rose-50", border: "border-rose-100", href: "/browse?category=decorator&event=wedding" },
-  { title: "Birthday Extravaganza", count: 62, emoji: "🎂", bg: "bg-purple-50", border: "border-purple-100", href: "/browse?event=birthday" },
-  { title: "Corporate Excellence", count: 34, emoji: "🏢", bg: "bg-blue-50", border: "border-blue-100", href: "/browse?event=corporate" },
-  { title: "Baby Shower Dreams", count: 29, emoji: "👶", bg: "bg-amber-50", border: "border-amber-100", href: "/browse?event=baby_shower" },
-  { title: "Table Styling", count: 55, emoji: "🌸", bg: "bg-emerald-50", border: "border-emerald-100", href: "/browse?category=decorator" },
-  { title: "Lighting & Atmosphere", count: 41, emoji: "💡", bg: "bg-orange-50", border: "border-orange-100", href: "/browse?category=lighting_stage" },
+  { title: "Wedding Wonderland", count: 48, emoji: "ðŸ’", bg: "bg-rose-50", border: "border-rose-100", href: "/browse?category=decorator&event=wedding" },
+  { title: "Birthday Extravaganza", count: 62, emoji: "ðŸŽ‚", bg: "bg-purple-50", border: "border-purple-100", href: "/browse?event=birthday" },
+  { title: "Corporate Excellence", count: 34, emoji: "ðŸ¢", bg: "bg-blue-50", border: "border-blue-100", href: "/browse?event=corporate" },
+  { title: "Baby Shower Dreams", count: 29, emoji: "ðŸ‘¶", bg: "bg-amber-50", border: "border-amber-100", href: "/browse?event=baby_shower" },
+  { title: "Table Styling", count: 55, emoji: "ðŸŒ¸", bg: "bg-emerald-50", border: "border-emerald-100", href: "/browse?category=decorator" },
+  { title: "Lighting & Atmosphere", count: 41, emoji: "ðŸ’¡", bg: "bg-orange-50", border: "border-orange-100", href: "/browse?category=lighting_stage" },
 ];
 
 export default async function InspirePage() {
@@ -282,7 +282,7 @@ export default async function InspirePage() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={cover.url} alt={vendor.business_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-4xl">🎉</div>
+                        <div className="w-full h-full flex items-center justify-center text-4xl">ðŸŽ‰</div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                       {vendor.verified && (
@@ -294,7 +294,7 @@ export default async function InspirePage() {
                     </div>
                     <div className="p-4">
                       <h3 className="font-semibold text-gray-900 text-sm group-hover:text-brand-600 transition-colors truncate">{vendor.business_name}</h3>
-                      <p className="text-xs text-gray-400 capitalize mt-0.5">{vendor.category?.replace("_", " ")} · {vendor.city}</p>
+                      <p className="text-xs text-gray-400 capitalize mt-0.5">{vendor.category?.replace("_", " ")} Â· {vendor.city}</p>
                       <div className="flex items-center gap-1 mt-2">
                         <Star size={11} className="fill-amber-400 text-amber-400" />
                         <span className="text-xs font-semibold text-gray-900">{(vendor.rating ?? 0).toFixed(1)}</span>
@@ -314,7 +314,7 @@ export default async function InspirePage() {
         <div className="max-w-7xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-10">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
-              <div className="text-6xl flex-shrink-0">💍</div>
+              <div className="text-6xl flex-shrink-0">ðŸ’</div>
               <div className="flex-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium mb-3">
                   <Star size={10} className="fill-amber-500" /> Event of the Week
@@ -344,7 +344,7 @@ export default async function InspirePage() {
       {/* CTA */}
       <section className="py-20 px-4 bg-gray-50 border-t border-gray-100">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="text-4xl mb-4">✨</div>
+          <div className="text-4xl mb-4">âœ¨</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
             Love What You See?
           </h2>

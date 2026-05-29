@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { VendorAnalyticsDashboard } from "@/components/vendor/VendorAnalyticsDashboard";
+import { VendorAnalyticsDashboardClient } from "@/components/vendor/VendorAnalyticsDashboardClient";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +24,7 @@ export default async function VendorAnalyticsPage() {
           <h1 className="text-2xl font-bold text-white">Analytics</h1>
           <p className="text-white/60 mt-1">Track your profile performance and business growth</p>
         </div>
-        <VendorAnalyticsDashboard />
+        <VendorAnalyticsDashboardClient />
       </div>
     </DashboardLayout>
   );

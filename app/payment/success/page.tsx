@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+﻿import { Suspense } from "react";
 import Link from "next/link";
 import { CheckCircle2, Calendar, Download } from "lucide-react";
 
@@ -44,7 +44,7 @@ function SuccessContent() {
         </div>
 
         <p className="text-gray-400 text-xs mt-6">
-          Need help? Contact support@boldparty.co.uk
+          Need help? Contact support@elbold.com
         </p>
       </div>
     </div>

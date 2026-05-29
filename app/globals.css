@@ -234,6 +234,11 @@
 .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .line-clamp-3 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 
+/* iOS safe-area insets (used by MobileBottomNav and install prompt) */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 /* Mobile tap highlight remove */
 * { -webkit-tap-highlight-color: transparent; }
 

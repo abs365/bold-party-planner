@@ -42,7 +42,7 @@ export default async function BookingsListPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h1 data-testid="bookings" className="text-2xl font-bold text-white flex items-center gap-2">
               <ShoppingBag size={22} className="text-brand-400" />
               My Bookings
             </h1>

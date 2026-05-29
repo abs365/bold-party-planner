@@ -31,14 +31,14 @@ export default async function CustomerDashboard() {
       .limit(5),
     supabase
       .from("bookings")
-      .select("*, vendor:vendors(business_name, category), event:events(title, date)")
+      .select("id, total_amount, payment_status, status, created_at, vendor:vendors(business_name, category), event:events(title, date)")
       .eq("customer_id", user.id)
       .order("created_at", { ascending: false })
       .limit(10),
   ]);
 
   const events = (eventsRes.data ?? []) as Event[];
-  const bookings = (bookingsRes.data ?? []) as Booking[];
+  const bookings = (bookingsRes.data ?? []) as unknown as Booking[];
 
   const upcomingEvents = events.filter((e) => new Date(e.date) >= new Date());
   const nextEvent = upcomingEvents[0] ?? null;

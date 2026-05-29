@@ -9,11 +9,11 @@ import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Bold Party | Plan, Book & Celebrate | UK Event Marketplace",
-  description: "The UK's trusted event marketplace. Book verified DJs, photographers, caterers, decorators and 15 more vendor categories. Smart planning tools included. Start free.",
+  title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
+  description: "The UK's trusted event vendor marketplace. Book verified DJs, photographers, caterers, decorators and more for weddings, birthdays, and corporate events. Start free.",
   openGraph: {
-    title: "Bold Party | Plan, Book & Celebrate",
-    description: "Book verified UK event vendors. Smart planning, secure payments, guaranteed experience.",
+    title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
+    description: "Book verified UK event vendors. Secure payments, guaranteed experience.",
     type: "website",
   },
 };
@@ -143,7 +143,7 @@ export default async function Home() {
               <div className="text-3xl mb-5">💼</div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Are you a vendor?</h2>
               <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">
-                Join event professionals growing their bookings through Bold Party. Free to join and keep 90% of every booking.
+                Join event professionals growing their bookings through ELBOLD Events. Free to join and keep 90% of every booking.
               </p>
               <div className="flex flex-col gap-2">
                 <Link href="/vendor/apply" className="btn-primary text-sm py-2.5 px-5">
@@ -321,7 +321,7 @@ export default async function Home() {
               ))}
             </div>
             <p className="text-gray-700 text-lg leading-relaxed mb-6">
-              &ldquo;Bold Party made planning my 30th birthday effortless. It suggested exactly what I needed, the DJ and decorator were incredible, and everything ran perfectly.&rdquo;
+              &ldquo;ELBOLD Events made planning my 30th birthday effortless. It suggested exactly what I needed, the DJ and decorator were incredible, and everything ran perfectly.&rdquo;
             </p>
             <div className="flex items-center justify-center gap-3">
               <div className="w-9 h-9 rounded-full gradient-brand flex items-center justify-center text-sm font-bold text-white shrink-0">

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -22,7 +22,7 @@ export default async function HowItWorksPage() {
         <div className="text-center mb-16">
           <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-3">Simple & Automated</p>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            How <span className="gradient-brand-text">Bold Party</span> Works
+            How <span className="gradient-brand-text">ELBOLD Events</span> Works
           </h1>
           <p className="text-gray-500 max-w-xl mx-auto">
             Our platform handles everything automatically, so you can focus on enjoying your event.
@@ -65,7 +65,7 @@ export default async function HowItWorksPage() {
           </h2>
           <div className="space-y-4">
             {[
-              { step: "1", title: "Apply for free", desc: "Submit your vendor application in minutes. We review and approve within 24–48 hours." },
+              { step: "1", title: "Apply for free", desc: "Submit your vendor application in minutes. We review and approve within 24â€“48 hours." },
               { step: "2", title: "Build your profile", desc: "Upload photos and videos of your work, add service packages with clear pricing." },
               { step: "3", title: "Receive booking requests", desc: "Customers send requests through the platform. Accept or decline bookings. You are always in control." },
               { step: "4", title: "Get paid automatically", desc: "Payments go through Stripe. You receive 90% of the booking value directly to your account." },
@@ -87,13 +87,13 @@ export default async function HowItWorksPage() {
         {/* Trust signals */}
         <div className="bg-gray-50 border border-gray-100 rounded-2xl p-8 mb-10">
           <h2 className="text-xl font-bold text-gray-900 text-center mb-6 flex items-center justify-center gap-2">
-            <Shield size={20} className="text-brand-600" /> Why Trust Bold Party?
+            <Shield size={20} className="text-brand-600" /> Why Trust ELBOLD Events?
           </h2>
           <div className="grid sm:grid-cols-3 gap-6">
             {[
-              { icon: "🔒", title: "Secure Payments", desc: "All payments through Stripe. Deposit protection and refund system built in." },
-              { icon: "✅", title: "Verified Vendors", desc: "Every vendor is reviewed and approved before appearing on our marketplace." },
-              { icon: "⭐", title: "Transparent Reviews", desc: "All reviews are from real, verified bookings. No fake ratings, ever." },
+              { icon: "ðŸ”’", title: "Secure Payments", desc: "All payments through Stripe. Deposit protection and refund system built in." },
+              { icon: "âœ…", title: "Verified Vendors", desc: "Every vendor is reviewed and approved before appearing on our marketplace." },
+              { icon: "â­", title: "Transparent Reviews", desc: "All reviews are from real, verified bookings. No fake ratings, ever." },
             ].map(({ icon, title, desc }) => (
               <div key={title} className="text-center">
                 <div className="text-4xl mb-3">{icon}</div>

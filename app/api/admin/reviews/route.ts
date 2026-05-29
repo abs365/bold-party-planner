@@ -1,0 +1,119 @@
+import { NextResponse } from "next/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+
+async function assertAdmin(req?: Request) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) return null;
+  return user;
+}
+
+// GET /api/admin/reviews
+// ?status=flagged   — returns flagged reviews (default)
+// ?status=all       — returns all
+// ?status=removed   — returns removed
+export async function GET(request: Request) {
+  const admin = await assertAdmin();
+  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const db = await createAdminClient();
+  const { searchParams } = new URL(request.url);
+  const status = searchParams.get("status") ?? "flagged";
+
+  let query = db
+    .from("reviews")
+    .select(`
+      id, booking_id, vendor_id, customer_id, rating, comment, response, response_at,
+      communication_rating, professionalism_rating, punctuality_rating, quality_rating, value_rating,
+      moderation_status, moderation_notes, moderated_by, moderated_at,
+      is_verified, verified_at, created_at,
+      vendor:vendors(id, business_name),
+      customer:profiles!reviews_customer_id_fkey(full_name, email),
+      reports:review_reports(id, reason, status)
+    `)
+    .order("created_at", { ascending: false })
+    .limit(200);
+
+  if (status !== "all") {
+    query = query.eq("moderation_status", status);
+  }
+
+  const { data: reviews, error } = await query;
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json({ reviews: reviews ?? [] });
+}
+
+// POST /api/admin/reviews
+// body: { action: "approve"|"flag"|"remove", review_id, notes? }
+export async function POST(request: Request) {
+  const admin = await assertAdmin();
+  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  const db = await createAdminClient();
+  const { action, review_id, notes } = await request.json() as {
+    action: "approve" | "flag" | "remove";
+    review_id: string;
+    notes?: string;
+  };
+
+  if (!action || !review_id) {
+    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+  }
+
+  const statusMap = { approve: "approved", flag: "flagged", remove: "removed" } as const;
+  const newStatus = statusMap[action];
+  if (!newStatus) return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+
+  const { data: review } = await db
+    .from("reviews")
+    .select("id, vendor_id, moderation_status, rating")
+    .eq("id", review_id)
+    .single();
+
+  if (!review) return NextResponse.json({ error: "Review not found" }, { status: 404 });
+
+  const { error } = await db
+    .from("reviews")
+    .update({
+      moderation_status: newStatus,
+      moderation_notes:  notes ?? null,
+      moderated_by:      admin.id,
+      moderated_at:      new Date().toISOString(),
+    })
+    .eq("id", review_id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // If resolving reports, close open ones
+  if (action !== "flag") {
+    await db
+      .from("review_reports")
+      .update({ status: action === "remove" ? "resolved" : "dismissed", resolved_by: admin.id, resolved_at: new Date().toISOString() })
+      .eq("review_id", review_id)
+      .eq("status", "open");
+  }
+
+  void createAuditLog({
+    actorUserId: admin.id,
+    actorRole:   "admin",
+    action:      "admin.media.approve",
+    entityType:  "review",
+    entityId:    review_id,
+    before:      { moderation_status: review.moderation_status },
+    after:       { moderation_status: newStatus },
+    ipAddress:   ipFromRequest(request),
+  });
+
+  void track({
+    event:  "governance.warning_resolved",
+    userId: admin.id,
+    properties: { entity_type: "review", review_id, action, vendor_id: review.vendor_id },
+  });
+
+  return NextResponse.json({ success: true });
+}

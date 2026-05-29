@@ -115,7 +115,7 @@ export function PlatformGuaranteeBanner({ className }: { className?: string }) {
       <div className="flex items-start gap-3">
         <ShieldCheck size={20} className="text-emerald-400 flex-shrink-0 mt-0.5" />
         <div>
-          <h4 className="font-semibold text-white text-sm mb-1">Bold Party Protection</h4>
+          <h4 className="font-semibold text-white text-sm mb-1">ELBOLD Events Protection</h4>
           <p className="text-xs text-slate-400 leading-relaxed">
             All bookings are protected. Your deposit is held securely until service delivery.
             Full refund available if vendor cancels. Dispute resolution within 48 hours.
@@ -173,7 +173,7 @@ export function BookingProtectionCard({ className, depositAmount, vendorName }: 
         </div>
         <div>
           <h4 className="font-semibold text-gray-900 text-sm">Booking Protection</h4>
-          <p className="text-emerald-700 text-xs">Bold Party Guarantee</p>
+          <p className="text-emerald-700 text-xs">ELBOLD Events Guarantee</p>
         </div>
         <Sparkles size={13} className="text-emerald-500 ml-auto" />
       </div>
@@ -194,7 +194,7 @@ export function BookingProtectionCard({ className, depositAmount, vendorName }: 
 
       <div className="px-5 py-3 bg-gray-50 border-t border-gray-100">
         <p className="text-xs text-gray-400 text-center">
-          {vendorName ? `Booking with ${vendorName} is fully protected` : "All bookings on Bold Party are protected"}
+          {vendorName ? `Booking with ${vendorName} is fully protected` : "All bookings on ELBOLD Events are protected"}
         </p>
       </div>
     </div>

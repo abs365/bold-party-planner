@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" fill="none">
+  <!-- Dark background -->
+  <rect width="240" height="80" rx="12" fill="#0D1B3E"/>
+  <!-- Diamond mark -->
+  <polygon points="28,40 38,28 48,40 38,52" fill="#C9A84C"/>
+  <polygon points="30,40 38,31 46,40 38,49" fill="#0D1B3E"/>
+  <!-- Wordmark -->
+  <text x="62" y="47" font-family="Inter, -apple-system, Arial, sans-serif" font-weight="800" font-size="26" letter-spacing="3" fill="#C9A84C">ELBOLD</text>
+  <!-- Sub-label -->
+  <text x="63" y="62" font-family="Inter, -apple-system, Arial, sans-serif" font-weight="500" font-size="9" letter-spacing="4" fill="rgba(201,168,76,0.55)">EVENTS</text>
+</svg>

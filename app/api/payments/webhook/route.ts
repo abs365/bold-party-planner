@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const rl = rateLimit({ ...RATE_LIMITS.webhook, identifier: `webhook:${ip}` });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const body = await request.text();
   const sig = request.headers.get("stripe-signature");
 
@@ -164,7 +171,6 @@ export async function POST(request: Request) {
     const charge = event.data.object as import("stripe").Stripe.Charge;
     const refundAmount = (charge.amount_refunded ?? 0) / 100;
 
-    // Look up booking via payment intent
     const { data: payment } = await supabase
       .from("payments")
       .select("booking_id")
@@ -185,6 +191,153 @@ export async function POST(request: Request) {
         currency: charge.currency,
         description: "Stripe refund",
       });
+    }
+  }
+
+  // ── Handle customer.subscription.created / updated ────────────────────────
+  if (event.type === "customer.subscription.created" || event.type === "customer.subscription.updated") {
+    const sub = event.data.object as import("stripe").Stripe.Subscription;
+    const meta = sub.metadata ?? {};
+    const vendorId = meta.vendor_id;
+    const planSlug = meta.plan as string;
+
+    if (vendorId && planSlug) {
+      const isFeatured = planSlug === "premium" || planSlug === "elite" || planSlug === "featured";
+      const isActive   = sub.status === "active" || sub.status === "trialing";
+
+      await supabase.from("vendor_subscriptions").upsert({
+        vendor_id:            vendorId,
+        plan:                 planSlug,
+        status:               sub.status,
+        stripe_subscription_id: sub.id,
+        stripe_customer_id:   sub.customer as string,
+        current_period_start: new Date(((sub as unknown as Record<string, number>).current_period_start ?? 0) * 1000).toISOString(),
+        current_period_end:   new Date(((sub as unknown as Record<string, number>).current_period_end   ?? 0) * 1000).toISOString(),
+        cancel_at_period_end: sub.cancel_at_period_end,
+        last_payment_at:      isActive ? new Date().toISOString() : undefined,
+      }, { onConflict: "vendor_id" });
+
+      // Sync subscription_plan + featured flag on the vendor row
+      await supabase.from("vendors").update({
+        subscription_plan: planSlug,
+        featured: isFeatured && isActive,
+      }).eq("id", vendorId);
+
+      // Billing event
+      await supabase.from("subscription_billing_events").insert({
+        vendor_id:   vendorId,
+        stripe_event_id: event.id,
+        event_type:  event.type === "customer.subscription.created" ? "subscription_started" : "subscription_updated",
+        plan_slug:   planSlug,
+      });
+    }
+  }
+
+  // ── Handle customer.subscription.deleted ──────────────────────────────────
+  if (event.type === "customer.subscription.deleted") {
+    const sub = event.data.object as import("stripe").Stripe.Subscription;
+    const meta = sub.metadata ?? {};
+    const vendorId = meta.vendor_id;
+
+    if (vendorId) {
+      await supabase.from("vendor_subscriptions").update({
+        plan: "free", status: "cancelled",
+        cancel_at_period_end: false,
+      }).eq("vendor_id", vendorId);
+
+      await supabase.from("vendors").update({
+        subscription_plan: "free", featured: false,
+      }).eq("id", vendorId);
+
+      await supabase.from("subscription_billing_events").insert({
+        vendor_id: vendorId, stripe_event_id: event.id,
+        event_type: "subscription_cancelled", plan_slug: "free",
+      });
+
+      // Notify vendor
+      const { data: vendor } = await supabase.from("vendors").select("user_id, business_name").eq("id", vendorId).single();
+      if (vendor?.user_id) {
+        void supabase.rpc("notify_user", {
+          p_user_id: vendor.user_id,
+          p_title: "Subscription Cancelled",
+          p_message: "Your paid subscription has ended. Your listing has moved to the Free plan.",
+          p_type: "system",
+          p_link: "/vendor/subscription",
+        });
+      }
+    }
+  }
+
+  // ── Handle invoice.paid (subscription renewal) ────────────────────────────
+  if (event.type === "invoice.paid") {
+    const invoice = event.data.object as unknown as { subscription?: string; amount_paid?: number; id: string };
+    if (invoice.subscription) {
+      const { data: sub } = await supabase
+        .from("vendor_subscriptions")
+        .select("id, vendor_id, plan")
+        .eq("stripe_subscription_id", invoice.subscription)
+        .single();
+
+      if (sub) {
+        await supabase.from("vendor_subscriptions").update({
+          status: "active",
+          failed_payment_count: 0,
+          last_payment_at: new Date().toISOString(),
+        }).eq("id", sub.id);
+
+        await supabase.from("subscription_billing_events").insert({
+          vendor_id: sub.vendor_id,
+          vendor_subscription_id: sub.id,
+          stripe_event_id: event.id,
+          event_type: "payment_succeeded",
+          plan_slug:  sub.plan,
+          amount_gbp: (invoice.amount_paid ?? 0) / 100,
+          stripe_invoice_id: invoice.id,
+        });
+      }
+    }
+  }
+
+  // ── Handle invoice.payment_failed ─────────────────────────────────────────
+  if (event.type === "invoice.payment_failed") {
+    const invoice = event.data.object as unknown as { subscription?: string; amount_due?: number; id: string; last_finalization_error?: Record<string, string> | null };
+    if (invoice.subscription) {
+      const { data: sub } = await supabase
+        .from("vendor_subscriptions")
+        .select("id, vendor_id, plan, failed_payment_count")
+        .eq("stripe_subscription_id", invoice.subscription)
+        .single();
+
+      if (sub) {
+        const failCount = (sub.failed_payment_count ?? 0) + 1;
+        await supabase.from("vendor_subscriptions").update({
+          status: "past_due",
+          failed_payment_count: failCount,
+        }).eq("id", sub.id);
+
+        await supabase.from("subscription_billing_events").insert({
+          vendor_id: sub.vendor_id,
+          vendor_subscription_id: sub.id,
+          stripe_event_id: event.id,
+          event_type: "payment_failed",
+          plan_slug:  sub.plan,
+          amount_gbp: (invoice.amount_due ?? 0) / 100,
+          stripe_invoice_id: invoice.id,
+          failure_reason: (invoice.last_finalization_error as Record<string, string> | null)?.message ?? "Payment failed",
+        });
+
+        // Notify vendor
+        const { data: vendor } = await supabase.from("vendors").select("user_id").eq("id", sub.vendor_id).single();
+        if (vendor?.user_id) {
+          void supabase.rpc("notify_user", {
+            p_user_id: vendor.user_id,
+            p_title: "Payment Failed",
+            p_message: "Your subscription payment failed. Please update your payment method to avoid losing access.",
+            p_type: "system",
+            p_link: "/vendor/subscription",
+          });
+        }
+      }
     }
   }
 

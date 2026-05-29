@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-export async function POST() {
+async function handleSignout(request: Request) {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"), {
-    status: 302,
-  });
+  // Redirect to login at the same origin as the request (works locally and in prod)
+  return NextResponse.redirect(new URL("/login", request.url), { status: 302 });
 }
 
-// Allow GET for simple link-based sign out
-export async function GET() {
-  return POST();
+export async function POST(request: Request) {
+  return handleSignout(request);
+}
+
+export async function GET(request: Request) {
+  return handleSignout(request);
 }

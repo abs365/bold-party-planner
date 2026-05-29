@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Wallet, TrendingUp, Clock, CheckCircle2, AlertCircle, ArrowUpRight } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function VendorPayoutsPage() {
   const pendingBookings = (bookings ?? []).filter((b) => b.status === "pending");
   const pendingRevenue = pendingBookings.reduce((sum, b) => sum + (b.deposit_amount ?? 0), 0);
 
-  const fmt = (n: number) => `£${n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  const fmt = (n: number) => `Â£${n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 
   return (
     <DashboardLayout user={profile as Profile}>
@@ -62,7 +62,7 @@ export default async function VendorPayoutsPage() {
           <Wallet size={18} className="text-slate-400 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-semibold text-white mb-0.5">Your earnings rate: 90%</p>
-            <p className="text-xs text-slate-400">Bold Party retains a 10% platform fee on each confirmed booking. Payouts are processed within 7 business days of event completion via your connected bank account.</p>
+            <p className="text-xs text-slate-400">ELBOLD Events retains a 10% platform fee on each confirmed booking. Payouts are processed within 7 business days of event completion via your connected bank account.</p>
           </div>
         </div>
 

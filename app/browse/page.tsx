@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Browse Event Vendors",
   description: "Find and book verified DJs, caterers, photographers, decorators and more for your event. Search by category, location and budget across the UK.",
   openGraph: {
-    title: "Browse Event Vendors | Bold Party",
+    title: "Browse Event Vendors | ELBOLD Events",
     description: "Find and book verified event vendors across the UK.",
   },
 };

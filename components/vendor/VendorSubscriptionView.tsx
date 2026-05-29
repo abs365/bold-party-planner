@@ -1,173 +1,263 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, Zap, Star, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
+import { Sparkles, Zap, Star, Crown, CheckCircle, ArrowRight, Loader2, ExternalLink, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface Subscription {
-  plan: "free" | "pro" | "featured";
-  status: string;
-  current_period_end?: string;
-  cancel_at_period_end?: boolean;
+interface PlanRow {
+  slug: string;
+  name: string;
+  monthly_price: number;
+  annual_price: number;
+  visibility_boost: number;
+  max_images: number;
+  max_packages: number;
+  analytics_tier: string;
+  featured_eligible: boolean;
+  priority_support: boolean;
+  features_json: { tagline?: string; highlights?: string[] };
+  sort_order: number;
 }
 
-const PLANS = [
-  {
-    id: "free",
-    name: "Free",
-    price: "£0",
-    period: "forever",
-    icon: Star,
-    color: "border-white/20",
-    badge: "",
-    features: [
-      "Basic vendor profile",
-      "Up to 5 portfolio photos",
-      "Standard search listing",
-      "Quote requests",
-      "1 service package",
-    ],
-    missing: ["Featured placement", "Priority search ranking", "Smart lead boosts", "Analytics dashboard", "Unlimited media"],
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "£29",
-    period: "/month",
-    icon: Zap,
-    color: "border-purple-500/50",
-    badge: "Most Popular",
-    features: [
-      "Everything in Free",
-      "Up to 20 portfolio photos & videos",
-      "Priority search ranking",
-      "Full analytics dashboard",
-      "Unlimited service packages",
-      "Smart lead boosts",
-      "Pro badge on profile",
-      "Booking performance insights",
-    ],
-    missing: ["Featured listing placement", "Homepage showcase"],
-  },
-  {
-    id: "featured",
-    name: "Featured",
-    price: "£79",
-    period: "/month",
-    icon: Sparkles,
-    color: "border-amber-500/50",
-    badge: "Maximum Visibility",
-    features: [
-      "Everything in Pro",
-      "Featured listing on homepage",
-      "Top placement in category search",
-      "Featured badge on profile",
-      "Priority customer support",
-      "Quarterly business review",
-      "Custom profile URL",
-    ],
-    missing: [],
-  },
+interface Subscription {
+  plan: string;
+  status: string;
+  billing_cycle?: string;
+  current_period_end?: string;
+  cancel_at_period_end?: boolean;
+  stripe_customer_id?: string;
+  failed_payment_count?: number;
+}
+
+const PLAN_ICONS: Record<string, React.ElementType> = {
+  free:     Star,
+  pro:      Zap,
+  premium:  Sparkles,
+  featured: Sparkles,
+  elite:    Crown,
+};
+
+const PLAN_COLORS: Record<string, { border: string; icon: string; bg: string; badge?: string; badgeText?: string }> = {
+  free:     { border: "border-white/20",      icon: "text-white/60",   bg: "bg-white/10" },
+  pro:      { border: "border-purple-500/50", icon: "text-purple-400", bg: "bg-purple-500/20", badge: "Most Popular",       badgeText: "gradient-brand text-white" },
+  premium:  { border: "border-amber-500/50",  icon: "text-amber-400",  bg: "bg-amber-500/20",  badge: "Maximum Visibility", badgeText: "bg-amber-500 text-white" },
+  featured: { border: "border-amber-500/50",  icon: "text-amber-400",  bg: "bg-amber-500/20" },
+  elite:    { border: "border-rose-500/50",   icon: "text-rose-400",   bg: "bg-rose-500/20",   badge: "Elite",              badgeText: "bg-gradient-to-r from-rose-500 to-purple-600 text-white" },
+};
+
+const FEATURE_COMPARISON = [
+  { feature: "Portfolio photos", free: "5", pro: "20", premium: "50", elite: "Unlimited" },
+  { feature: "Video portfolio",  free: "—", pro: "✓",  premium: "✓",  elite: "✓" },
+  { feature: "Service packages", free: "1", pro: "Unlimited", premium: "Unlimited", elite: "Unlimited" },
+  { feature: "Analytics dashboard", free: "Basic", pro: "Full", premium: "Advanced", elite: "Advanced" },
+  { feature: "Search ranking boost", free: "—", pro: "+3", premium: "+6", elite: "+10" },
+  { feature: "Smart lead boosts",   free: "—", pro: "✓", premium: "✓", elite: "✓" },
+  { feature: "Category featured",   free: "—", pro: "—", premium: "✓", elite: "✓" },
+  { feature: "Homepage featured",   free: "—", pro: "—", premium: "✓", elite: "✓" },
+  { feature: "Priority support",    free: "—", pro: "—", premium: "—", elite: "✓" },
+  { feature: "Business insights",   free: "—", pro: "—", premium: "—", elite: "✓" },
 ];
 
 export function VendorSubscriptionView() {
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [data, setData] = useState<{ subscription: Subscription | null; plans: PlanRow[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState<string | null>(null);
+  const [openingPortal, setOpeningPortal] = useState(false);
+  const [annual, setAnnual] = useState(false);
 
   useEffect(() => {
     fetch("/api/vendor/subscription")
       .then((r) => r.json())
-      .then((d) => { setSubscription(d as Subscription); setLoading(false); })
+      .then((d) => { setData(d as typeof data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
-  async function choosePlan(planId: string) {
-    if (planId === subscription?.plan) return;
-    setUpgrading(planId);
+  async function choosePlan(slug: string) {
+    const currentPlan = data?.subscription?.plan ?? "free";
+    if (slug === currentPlan) return;
+    setUpgrading(slug);
     try {
       const res = await fetch("/api/vendor/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
+        body: JSON.stringify({ plan: slug, billing_cycle: annual ? "annual" : "monthly" }),
       });
-      const data = await res.json() as { checkout_url?: string; success?: boolean; plan?: string };
-      if (data.checkout_url) window.location.assign(data.checkout_url);
-      else if (data.success) setSubscription((s) => ({ ...s!, plan: data.plan as "free" | "pro" | "featured" }));
-    } catch { /* empty */ }
+      const result = await res.json() as { checkout_url?: string; success?: boolean; plan?: string };
+      if (result.checkout_url) window.location.assign(result.checkout_url);
+      else if (result.success) {
+        setData((prev) => prev ? { ...prev, subscription: { ...prev.subscription!, plan: result.plan ?? "free" } } : prev);
+      }
+    } catch { /* silent */ }
     setUpgrading(null);
   }
 
-  if (loading) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-white/40" /></div>;
+  async function openPortal() {
+    setOpeningPortal(true);
+    try {
+      const res = await fetch("/api/subscriptions/portal", { method: "POST" });
+      const { url } = await res.json() as { url?: string };
+      if (url) window.location.assign(url);
+    } catch { /* silent */ }
+    setOpeningPortal(false);
+  }
 
-  const currentPlan = subscription?.plan ?? "free";
+  if (loading) {
+    return (
+      <div className="flex justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-white/40" />
+      </div>
+    );
+  }
+
+  const sub         = data?.subscription;
+  const plans       = data?.plans ?? [];
+  const currentPlan = sub?.plan ?? "free";
+  const hasPaidPlan = currentPlan !== "free" && sub?.status === "active";
+  const isPastDue   = sub?.status === "past_due";
 
   return (
     <div className="space-y-6">
-      {subscription?.plan !== "free" && (
-        <div className="bg-white/4 border border-purple-500/30 rounded-xl p-4 flex items-center justify-between">
+      {/* Current plan status bar */}
+      {sub && sub.plan !== "free" && (
+        <div className={cn(
+          "border rounded-xl p-4 flex items-center justify-between",
+          isPastDue ? "bg-red-500/10 border-red-500/30" : "bg-white/4 border-purple-500/30"
+        )}>
           <div>
-            <p className="text-white font-medium">Current plan: <span className="text-purple-300 capitalize">{currentPlan}</span></p>
-            {subscription?.current_period_end && (
+            <p className="text-white font-medium">
+              Current plan: <span className="text-purple-300 capitalize">{sub.plan}</span>
+              {sub.billing_cycle && <span className="text-white/40 text-sm ml-2">({sub.billing_cycle})</span>}
+            </p>
+            {sub.current_period_end && (
               <p className="text-white/50 text-sm mt-0.5">
-                {subscription.cancel_at_period_end ? "Cancels on" : "Renews on"}{" "}
-                {new Date(subscription.current_period_end).toLocaleDateString("en-GB")}
+                {sub.cancel_at_period_end ? "Cancels on" : "Renews on"}{" "}
+                {new Date(sub.current_period_end).toLocaleDateString("en-GB")}
+              </p>
+            )}
+            {isPastDue && (
+              <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
+                <AlertTriangle size={12} /> Payment failed — update your payment method
               </p>
             )}
           </div>
-          <span className={cn("px-2 py-1 rounded-full text-xs border", subscription?.status === "active" ? "bg-green-500/20 text-green-300 border-green-500/30" : "bg-red-500/20 text-red-300 border-red-500/30")}>
-            {subscription?.status ?? "active"}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className={cn(
+              "px-2 py-1 rounded-full text-xs border",
+              sub.status === "active"   ? "bg-green-500/20 text-green-300 border-green-500/30" :
+              sub.status === "past_due" ? "bg-red-500/20 text-red-300 border-red-500/30" :
+              "bg-amber-500/20 text-amber-300 border-amber-500/30"
+            )}>
+              {sub.status}
+            </span>
+            {sub.stripe_customer_id && (
+              <button
+                onClick={() => void openPortal()}
+                disabled={openingPortal}
+                className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white border border-white/20 rounded-lg px-3 py-1.5 disabled:opacity-40"
+              >
+                {openingPortal ? <Loader2 size={14} className="animate-spin" /> : <ExternalLink size={14} />}
+                Manage billing
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      <div className="grid md:grid-cols-3 gap-6">
-        {PLANS.map((plan) => {
-          const Icon = plan.icon;
-          const isCurrent = currentPlan === plan.id;
-          const isUpgrading = upgrading === plan.id;
+      {/* Annual toggle */}
+      <div className="flex items-center justify-between">
+        <div />
+        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1">
+          <button
+            onClick={() => setAnnual(false)}
+            className={cn("px-4 py-1.5 rounded-full text-sm transition-colors", !annual ? "bg-white/15 text-white font-medium" : "text-white/50")}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setAnnual(true)}
+            className={cn("px-4 py-1.5 rounded-full text-sm transition-colors flex items-center gap-1.5", annual ? "bg-white/15 text-white font-medium" : "text-white/50")}
+          >
+            Annual
+            <span className="text-xs text-emerald-400 font-semibold">Save ~17%</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Plan cards */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {(plans.length > 0 ? plans : FALLBACK_PLANS).map((plan) => {
+          const slug    = plan.slug;
+          const colors  = PLAN_COLORS[slug] ?? PLAN_COLORS.free;
+          const Icon    = PLAN_ICONS[slug] ?? Star;
+          const isCurrent  = currentPlan === slug;
+          const isUpgrading = upgrading === slug;
+          const price   = annual ? plan.annual_price : plan.monthly_price;
+          const period  = price === 0 ? "forever" : annual ? "/yr" : "/mo";
+          const highlights = (plan.features_json as { highlights?: string[] })?.highlights ?? [];
+
           return (
-            <div key={plan.id} className={cn("bg-white/4 border rounded-xl p-6 flex flex-col relative", plan.color, isCurrent && "ring-2 ring-brand-500/50")}>
-              {plan.badge && (
+            <div
+              key={slug}
+              className={cn(
+                "bg-white/4 border rounded-xl p-5 flex flex-col relative",
+                colors.border,
+                isCurrent && "ring-2 ring-brand-500/50"
+              )}
+            >
+              {colors.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="gradient-brand text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">{plan.badge}</span>
+                  <span className={cn("text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap", colors.badgeText)}>
+                    {colors.badge}
+                  </span>
                 </div>
               )}
 
-              <div className="flex items-center gap-2 mb-4">
-                <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", plan.id === "featured" ? "bg-amber-500/20" : plan.id === "pro" ? "bg-purple-500/20" : "bg-white/10")}>
-                  <Icon className={cn("w-5 h-5", plan.id === "featured" ? "text-amber-400" : plan.id === "pro" ? "text-purple-400" : "text-white/60")} />
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center", colors.bg)}>
+                  <Icon className={cn("w-5 h-5", colors.icon)} />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold">{plan.name}</h3>
+                  <h3 className="text-white font-bold capitalize">{plan.name}</h3>
                   <div className="flex items-baseline gap-0.5">
-                    <span className="text-xl font-bold text-white">{plan.price}</span>
-                    <span className="text-white/40 text-xs">{plan.period}</span>
+                    <span className="text-xl font-bold text-white">
+                      {price === 0 ? "£0" : `£${price}`}
+                    </span>
+                    <span className="text-white/40 text-xs">{period}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2 flex-1 mb-5">
-                {plan.features.map((f) => (
-                  <div key={f} className="flex gap-2 text-sm">
-                    <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-white/80">{f}</span>
-                  </div>
-                ))}
-                {plan.missing.map((f) => (
-                  <div key={f} className="flex gap-2 text-sm opacity-30">
-                    <CheckCircle className="w-4 h-4 text-white/30 flex-shrink-0 mt-0.5" />
-                    <span className="text-white/40 line-through">{f}</span>
+              <p className="text-white/40 text-xs mb-3">
+                {(plan.features_json as { tagline?: string })?.tagline ?? ""}
+              </p>
+
+              <div className="space-y-1.5 flex-1 mb-5">
+                {highlights.map((h) => (
+                  <div key={h} className="flex gap-2 text-sm">
+                    <CheckCircle className="w-3.5 h-3.5 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-white/75">{h}</span>
                   </div>
                 ))}
               </div>
 
               {isCurrent ? (
-                <div className="btn-secondary text-center cursor-default opacity-60">Current Plan</div>
+                <div className="btn-secondary text-center cursor-default opacity-60 text-sm py-2">Current Plan</div>
               ) : (
-                <button onClick={() => void choosePlan(plan.id)} disabled={!!upgrading}
-                  className={cn("btn-primary flex items-center justify-center gap-2 disabled:opacity-40", plan.id === "featured" ? "bg-amber-500 hover:bg-amber-600" : "")}>
-                  {isUpgrading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><ArrowRight className="w-4 h-4" />{plan.id === "free" ? "Downgrade" : "Upgrade"}</>}
+                <button
+                  onClick={() => void choosePlan(slug)}
+                  disabled={!!upgrading || (hasPaidPlan && slug === "free")}
+                  className={cn(
+                    "btn-primary flex items-center justify-center gap-2 text-sm py-2 disabled:opacity-40",
+                    slug === "elite"   ? "bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700" :
+                    slug === "premium" ? "bg-amber-500 hover:bg-amber-600" : ""
+                  )}
+                >
+                  {isUpgrading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                    <>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                      {slug === "free" ? "Downgrade" : "Upgrade"}
+                    </>
+                  )}
                 </button>
               )}
             </div>
@@ -175,39 +265,32 @@ export function VendorSubscriptionView() {
         })}
       </div>
 
-      <p className="text-white/30 text-xs text-center">Subscriptions are billed monthly. Cancel anytime. Secure payments via Stripe.</p>
+      <p className="text-white/30 text-xs text-center">
+        Subscriptions billed {annual ? "annually" : "monthly"}. Cancel anytime. Secure payments via Stripe.
+        {annual && <> Annual plans save approximately 17% vs monthly billing.</>}
+      </p>
 
-      {/* Plan comparison table */}
+      {/* Feature comparison table */}
       <div className="bg-white/4 border border-white/6 rounded-xl p-6 overflow-x-auto">
-        <h3 className="text-white font-semibold mb-4">Plan Feature Comparison</h3>
+        <h3 className="text-white font-semibold mb-4">Plan Comparison</h3>
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/10">
               <th className="text-left text-slate-400 font-normal py-2 pr-4">Feature</th>
-              <th className="text-center text-slate-400 font-normal py-2 px-4">Free</th>
-              <th className="text-center text-purple-400 font-semibold py-2 px-4">Pro</th>
-              <th className="text-center text-amber-400 font-semibold py-2 px-4">Featured</th>
+              <th className="text-center text-slate-400 font-normal py-2 px-3">Free</th>
+              <th className="text-center text-purple-400 font-semibold py-2 px-3">Pro</th>
+              <th className="text-center text-amber-400 font-semibold py-2 px-3">Premium</th>
+              <th className="text-center text-rose-400 font-semibold py-2 px-3">Elite</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {[
-              { feature: "Profile photos", free: "5", pro: "20", featured: "Unlimited" },
-              { feature: "Video portfolio", free: "—", pro: "✓", featured: "✓" },
-              { feature: "Service packages", free: "1", pro: "Unlimited", featured: "Unlimited" },
-              { feature: "Analytics dashboard", free: "—", pro: "✓", featured: "✓" },
-              { feature: "Priority search ranking", free: "—", pro: "✓", featured: "✓" },
-              { feature: "Smart lead boosts", free: "—", pro: "✓", featured: "✓" },
-              { feature: "Pro badge", free: "—", pro: "✓", featured: "✓" },
-              { feature: "Homepage featured", free: "—", pro: "—", featured: "✓" },
-              { feature: "Top category placement", free: "—", pro: "—", featured: "✓" },
-              { feature: "Featured badge", free: "—", pro: "—", featured: "✓" },
-              { feature: "Priority support", free: "—", pro: "—", featured: "✓" },
-            ].map((row) => (
+            {FEATURE_COMPARISON.map((row) => (
               <tr key={row.feature}>
                 <td className="py-2.5 pr-4 text-slate-400">{row.feature}</td>
-                <td className="py-2.5 px-4 text-center text-slate-500">{row.free}</td>
-                <td className="py-2.5 px-4 text-center text-purple-300">{row.pro}</td>
-                <td className="py-2.5 px-4 text-center text-amber-300">{row.featured}</td>
+                <td className="py-2.5 px-3 text-center text-slate-500">{row.free}</td>
+                <td className="py-2.5 px-3 text-center text-purple-300">{row.pro}</td>
+                <td className="py-2.5 px-3 text-center text-amber-300">{row.premium}</td>
+                <td className="py-2.5 px-3 text-center text-rose-300">{row.elite}</td>
               </tr>
             ))}
           </tbody>
@@ -216,3 +299,11 @@ export function VendorSubscriptionView() {
     </div>
   );
 }
+
+// Fallback plan shapes for when DB isn't available (SSR race etc.)
+const FALLBACK_PLANS: PlanRow[] = [
+  { slug: "free",    name: "Free",    monthly_price: 0,   annual_price: 0,    visibility_boost: 0,  max_images: 5,  max_packages: 1,  analytics_tier: "basic",    featured_eligible: false, priority_support: false, features_json: { tagline: "Get started", highlights: ["Basic vendor profile","5 portfolio photos","1 service package"] }, sort_order: 0 },
+  { slug: "pro",     name: "Pro",     monthly_price: 29,  annual_price: 279,  visibility_boost: 3,  max_images: 20, max_packages: -1, analytics_tier: "standard", featured_eligible: false, priority_support: false, features_json: { tagline: "Grow your bookings", highlights: ["Everything in Free","20 portfolio photos","Full analytics","+3 search boost"] }, sort_order: 1 },
+  { slug: "premium", name: "Premium", monthly_price: 79,  annual_price: 759,  visibility_boost: 6,  max_images: 50, max_packages: -1, analytics_tier: "advanced", featured_eligible: true,  priority_support: false, features_json: { tagline: "Maximum visibility", highlights: ["Everything in Pro","50 portfolio photos","Featured placement","+6 search boost"] }, sort_order: 2 },
+  { slug: "elite",   name: "Elite",   monthly_price: 149, annual_price: 1428, visibility_boost: 10, max_images: -1, max_packages: -1, analytics_tier: "advanced", featured_eligible: true,  priority_support: true,  features_json: { tagline: "Dominate your market", highlights: ["Everything in Premium","Unlimited media","Homepage featured","+10 search boost","Priority support"] }, sort_order: 3 },
+];

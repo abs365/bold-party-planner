@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import { VENDOR_CATEGORIES, type Vendor, type VendorMedia, type Review, type Pro
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { BookingProtectionCard, CompletedJobsPill, ResponseTimePill } from "@/components/ui/TrustBadges";
-import { VendorTrustBadges } from "@/components/vendor/VendorTrustBadges";
+import { VendorTrustBadges, VendorBadgesRow } from "@/components/vendor/VendorTrustBadges";
 import { VendorSocialFeed } from "@/components/ui/social/VendorSocialFeed";
 import toast from "react-hot-toast";
 
@@ -62,7 +62,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 pb-28 lg:pb-10">
-      {/* Lightbox — intentionally dark overlay */}
+      {/* Lightbox â€” intentionally dark overlay */}
       {lightboxIndex !== null && mediaList[lightboxIndex] && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeLightbox}>
           <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20">
@@ -170,7 +170,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     <span className="text-sm text-gray-500">{vendor.city}</span>
                   </div>
                   {vendor.travel_radius_km && (
-                    <span className="text-sm text-gray-400">· Travels up to {vendor.travel_radius_km}km</span>
+                    <span className="text-sm text-gray-400">Â· Travels up to {vendor.travel_radius_km}km</span>
                   )}
                 </div>
               </div>
@@ -203,7 +203,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 <button
                   onClick={() => {
                     if (navigator.share) {
-                      navigator.share({ title: vendor.business_name, text: `Check out ${vendor.business_name} on Bold Party`, url: window.location.href });
+                      navigator.share({ title: vendor.business_name, text: `Check out ${vendor.business_name} on ELBOLD Events`, url: window.location.href });
                     } else {
                       navigator.clipboard.writeText(window.location.href);
                       toast.success("Link copied to clipboard!");
@@ -219,19 +219,19 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
             {/* Badges */}
             <div className="flex flex-wrap gap-2 mb-5">
-              {vendor.verified && (
-                <Badge variant="success">
-                  <CheckCircle2 size={12} /> Verified Vendor
-                </Badge>
-              )}
-              <VendorTrustBadges
-                verificationLevel={vendor.verification_level}
-                verified={vendor.verified}
-                completedJobsCount={vendor.completed_jobs_count}
-                compact
+              <VendorBadgesRow
+                vendor={{
+                  verification_level: vendor.verification_level,
+                  verified: vendor.verified,
+                  response_rate: vendor.response_rate,
+                  rating: vendor.rating,
+                  review_count: vendor.review_count,
+                  completed_jobs_count: vendor.completed_jobs_count,
+                  cancellation_rate: vendor.cancellation_rate,
+                }}
               />
               {(vendor.subscription_plan === "featured" || vendor.featured) && (
-                <Badge variant="gold">⭐ Featured</Badge>
+                <Badge variant="gold">â­ Featured</Badge>
               )}
               {vendor.subscription_plan === "pro" && !vendor.featured && (
                 <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-medium">

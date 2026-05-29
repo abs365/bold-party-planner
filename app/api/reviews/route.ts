@@ -1,15 +1,29 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
+
+const subRating = z.number().int().min(1).max(5).optional();
 
 const reviewSchema = z.object({
-  booking_id: z.string().uuid(),
-  vendor_id: z.string().uuid(),
-  rating: z.number().int().min(1).max(5),
-  comment: z.string().max(1000).optional(),
+  booking_id:              z.string().uuid(),
+  vendor_id:               z.string().uuid(),
+  rating:                  z.number().int().min(1).max(5),
+  comment:                 z.string().max(1000).optional(),
+  communication_rating:    subRating,
+  professionalism_rating:  subRating,
+  punctuality_rating:      subRating,
+  quality_rating:          subRating,
+  value_rating:            subRating,
 });
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const rl = rateLimit({ ...RATE_LIMITS.review, identifier: `review:${ip}` });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } });
+  }
+
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -21,7 +35,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
 
-    const { booking_id, vendor_id, rating, comment } = parsed.data;
+    const {
+      booking_id, vendor_id, rating, comment,
+      communication_rating, professionalism_rating,
+      punctuality_rating, quality_rating, value_rating,
+    } = parsed.data;
 
     // Verify booking is completed and belongs to this customer
     const { data: booking } = await supabase
@@ -49,7 +67,21 @@ export async function POST(request: Request) {
 
     const { data: review, error } = await supabase
       .from("reviews")
-      .insert({ booking_id, vendor_id, customer_id: user.id, rating, comment: comment ?? null })
+      .insert({
+        booking_id,
+        vendor_id,
+        customer_id:            user.id,
+        rating,
+        comment:                comment ?? null,
+        communication_rating:   communication_rating   ?? null,
+        professionalism_rating: professionalism_rating ?? null,
+        punctuality_rating:     punctuality_rating     ?? null,
+        quality_rating:         quality_rating         ?? null,
+        value_rating:           value_rating           ?? null,
+        moderation_status:      "approved",
+        is_verified:            true,
+        verified_at:            new Date().toISOString(),
+      })
       .select()
       .single();
 
@@ -79,7 +111,7 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  // Vendor responds to review
+  // Vendor responds to a review
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -100,7 +132,7 @@ export async function PATCH(request: Request) {
 
     const { error } = await supabase
       .from("reviews")
-      .update({ response })
+      .update({ response, response_at: new Date().toISOString() })
       .eq("id", review_id)
       .eq("vendor_id", vendor.id);
 

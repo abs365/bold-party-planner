@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -20,7 +20,11 @@ export default async function AdminDashboard() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  // Use service-role client for all data queries so RLS doesn't filter out
+  // other users' records (admin must see all bookings, pending vendors, etc.)
+  const db = await createAdminClient();
+
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
 
   const cutoff7  = new Date(); cutoff7.setDate(cutoff7.getDate() - 7);
   const cutoff30 = new Date(); cutoff30.setDate(cutoff30.getDate() - 30);
@@ -29,28 +33,26 @@ export default async function AdminDashboard() {
     customersRes, vendorsRes, eventsRes,
     bookingsRes, pendingVendorsRes, disputesRes,
     weeklyBookingsRes, pendingVerificationsRes,
-    openReportsRes, alertsRes,
+    openReportsRes, alertsRes, flaggedVendorsRes,
   ] = await Promise.all([
-    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer"),
-    supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
-    supabase.from("events").select("id", { count: "exact", head: true }),
-    supabase.from("bookings").select("total_amount, commission_amount, status, created_at, vendor_id, customer_id")
+    db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer"),
+    db.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
+    db.from("events").select("id", { count: "exact", head: true }),
+    db.from("bookings").select("total_amount, commission_amount, status, created_at, vendor_id, customer_id")
       .order("created_at", { ascending: false }).limit(200),
-    supabase.from("vendors").select("*, profile:profiles(full_name, email)")
+    db.from("vendors").select("id, business_name, category, city, created_at, profile:profiles(full_name, email)")
       .eq("status", "pending").order("created_at", { ascending: false }).limit(10),
-    supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "disputed"),
-    supabase.from("bookings").select("id, total_amount, commission_amount, created_at")
+    db.from("bookings").select("id", { count: "exact", head: true }).eq("status", "disputed"),
+    db.from("bookings").select("id, total_amount, commission_amount, created_at")
       .gte("created_at", cutoff7.toISOString()).order("created_at", { ascending: false }),
-    supabase.from("vendor_verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
-    supabase.from("content_reports").select("id", { count: "exact", head: true }).eq("status", "open"),
-    supabase.from("admin_alerts").select("id, type, title, body, severity, created_at, read, vendor_id")
+    db.from("vendor_verifications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    db.from("content_reports").select("id", { count: "exact", head: true }).eq("status", "open"),
+    db.from("admin_alerts").select("id, type, title, body, severity, created_at, read, vendor_id")
       .eq("read", false).order("created_at", { ascending: false }).limit(8),
+    db.from("vendors").select("id", { count: "exact", head: true }).eq("suspicious_flag", true),
   ]);
 
-  const flaggedVendors = (await supabase
-    .from("vendors")
-    .select("id", { count: "exact", head: true })
-    .eq("suspicious_flag", true)).count ?? 0;
+  const flaggedVendors = flaggedVendorsRes.count ?? 0;
 
   const allBookings      = bookingsRes.data ?? [];
   const weeklyBookings   = weeklyBookingsRes.data ?? [];
@@ -72,7 +74,7 @@ export default async function AdminDashboard() {
 
   return (
     <DashboardLayout user={{ ...profile!, role: "admin" }}>
-      <div className="max-w-7xl mx-auto space-y-7">
+      <div data-testid="admin-dashboard" className="max-w-7xl mx-auto space-y-7">
 
         {/* Header */}
         <div className="flex items-start justify-between">
@@ -214,7 +216,7 @@ export default async function AdminDashboard() {
                     <div className="flex gap-1.5 flex-shrink-0">
                       <form action={async () => {
                         "use server";
-                        const s = await createClient();
+                        const s = await createAdminClient();
                         await s.from("vendors").update({ status: "rejected" }).eq("id", vendor.id);
                       }}>
                         <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors border border-red-500/15">
@@ -223,7 +225,7 @@ export default async function AdminDashboard() {
                       </form>
                       <form action={async () => {
                         "use server";
-                        const s = await createClient();
+                        const s = await createAdminClient();
                         await s.from("vendors").update({ status: "approved" }).eq("id", vendor.id);
                       }}>
                         <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors border border-emerald-500/15">

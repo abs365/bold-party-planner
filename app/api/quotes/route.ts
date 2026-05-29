@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
 import { scoreLead } from "@/lib/ai/scoring";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
+import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 
 const quoteSchema = z.object({
   vendor_id: z.string().uuid(),
@@ -45,6 +48,12 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const ip = getClientIp(req);
+  const rl = rateLimit({ ...RATE_LIMITS.quote, identifier: `quote:${ip}` });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -81,6 +90,20 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void createAuditLog({
+    actorUserId: user.id,
+    actorRole: "customer",
+    action: "quote.created",
+    entityType: "quote",
+    entityId: data.id,
+    ipAddress: ipFromRequest(req),
+  });
+  void track({
+    event: "quote.requested",
+    userId: user.id,
+    properties: { vendor_id, event_id: rest.event_id ?? null, lead_score },
+  });
 
   // Notify vendor
   void supabase.rpc("notify_user", {

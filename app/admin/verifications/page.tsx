@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminVerificationsView } from "@/components/admin/AdminVerificationsView";
 
@@ -13,10 +13,11 @@ export default async function AdminVerificationsPage() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const db = await createAdminClient();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
 
   const [pendingRes] = await Promise.all([
-    supabase
+    db
       .from("vendor_verifications")
       .select(`
         *,
@@ -31,12 +32,12 @@ export default async function AdminVerificationsPage() {
   ]);
 
   const pendingCount = pendingRes.data?.length ?? 0;
-  const approvedCount = (await supabase
+  const approvedCount = (await db
     .from("vendor_verifications")
     .select("id", { count: "exact", head: true })
     .eq("status", "approved")).count ?? 0;
 
-  const flaggedCount = (await supabase
+  const flaggedCount = (await db
     .from("vendors")
     .select("id", { count: "exact", head: true })
     .eq("suspicious_flag", true)).count ?? 0;

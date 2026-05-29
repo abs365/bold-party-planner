@@ -56,6 +56,16 @@ export type PaymentStatus =
 
 export type VendorStatus = "pending" | "approved" | "rejected" | "suspended";
 
+export type VendorLifecycleState =
+  | "no_account"
+  | "pending"
+  | "setup"
+  | "at_risk"
+  | "marketplace_ready"
+  | "optimised"
+  | "suspended"
+  | "rejected";
+
 export interface Profile {
   id: string;
   email: string;
@@ -93,7 +103,7 @@ export interface Vendor {
   instagram_url: string | null;
   website_url: string | null;
   event_types: string[] | null;
-  subscription_plan: "free" | "pro" | "featured";
+  subscription_plan: "free" | "pro" | "featured" | "premium" | "elite";
   profile_views: number;
   service_areas: string[] | null;
   verification_level: number;
@@ -101,6 +111,13 @@ export interface Vendor {
   completed_jobs_count: number;
   cancellation_rate: number | null;
   suspicious_flag: boolean;
+  suspicious_reason: string | null;
+  last_active_at: string | null;
+  trust_tier: "new" | "trusted" | "top_rated" | "exceptional";
+  verified_review_count: number;
+  reputation_score: number;
+  repeat_customer_count: number;
+  dispute_count: number;
   created_at: string;
   updated_at: string | null;
   profile?: Profile;
@@ -226,6 +243,8 @@ export interface Invoice {
   created_at: string;
 }
 
+export type ReviewModerationStatus = "approved" | "flagged" | "removed";
+
 export interface Review {
   id: string;
   booking_id: string;
@@ -234,8 +253,72 @@ export interface Review {
   rating: number;
   comment: string | null;
   response: string | null;
+  response_at: string | null;
+  // sub-ratings (optional — not all reviews will have them)
+  communication_rating:   number | null;
+  professionalism_rating: number | null;
+  punctuality_rating:     number | null;
+  quality_rating:         number | null;
+  value_rating:           number | null;
+  // moderation
+  moderation_status: ReviewModerationStatus;
+  moderation_notes:  string | null;
+  moderated_by:      string | null;
+  moderated_at:      string | null;
+  // verification
+  is_verified: boolean;
+  verified_at: string | null;
   created_at: string;
   profile?: Profile;
+}
+
+export type ReviewReportReason = "fake" | "spam" | "offensive" | "irrelevant" | "conflict_of_interest" | "other";
+
+export interface ReviewReport {
+  id: string;
+  review_id: string;
+  reporter_id: string;
+  reason: ReviewReportReason;
+  details: string | null;
+  status: "open" | "resolved" | "dismissed";
+  resolved_by: string | null;
+  resolved_at: string | null;
+  created_at: string;
+}
+
+export interface VendorSubscription {
+  id: string;
+  vendor_id: string;
+  plan: "free" | "pro" | "featured" | "premium" | "elite";
+  status: "active" | "cancelled" | "past_due" | "trialing";
+  billing_cycle: "monthly" | "annual";
+  stripe_subscription_id: string | null;
+  stripe_customer_id: string | null;
+  current_period_start: string | null;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  failed_payment_count: number;
+  last_payment_at: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  slug: string;
+  name: string;
+  monthly_price: number;
+  annual_price: number;
+  visibility_boost: number;
+  max_images: number;
+  max_packages: number;
+  analytics_tier: "basic" | "standard" | "advanced";
+  featured_eligible: boolean;
+  category_featured_eligible: boolean;
+  priority_support: boolean;
+  active: boolean;
+  features_json: Record<string, unknown>;
+  sort_order: number;
 }
 
 export interface Notification {

@@ -19,7 +19,7 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
     .from("quotes")
     .select(`
       *,
-      vendor:vendors(id, business_name, category, city, rating, review_count, bio, media:vendor_media(url, is_cover, type), packages:vendor_packages(id, name, price, includes)),
+      vendor:vendors(id, business_name, category, city, rating, review_count, bio, verification_level, response_rate, completed_jobs_count, media:vendor_media(url, is_cover, type), packages:vendor_packages(id, name, price, includes)),
       customer:profiles(id, full_name),
       event:events(id, title, date, city, guest_count),
       response:quote_responses(*)

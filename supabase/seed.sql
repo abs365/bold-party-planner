@@ -1,7 +1,15 @@
 -- Bold Party Planner - Demo Seed Data (UK Event Marketplace)
--- Run AFTER ALL migrations (001 through 008).
 --
--- This creates test users in auth.users FIRST, then profiles, vendors, etc.
+-- SETUP ORDER:
+--   1. Run ALL migrations (001 through 017) in Supabase Dashboard SQL Editor
+--   2. POST /api/auth/create-demo-users  ← creates auth.users via Admin API
+--   3. Run this seed.sql                 ← creates profiles (ON CONFLICT skip),
+--                                           vendors, events, bookings, etc.
+--
+-- auth.users and auth.identities are intentionally NOT created here.
+-- GoTrue requires clean rows created via its own API to authenticate correctly.
+-- Direct auth.users inserts produce corrupt internal state that breaks signIn.
+--
 -- Safe to re-run (uses ON CONFLICT DO NOTHING throughout).
 --
 -- Enum values used here must match DB CHECK constraints:
@@ -33,34 +41,6 @@ DECLARE
   event3 UUID;
   booking1 UUID;
 BEGIN
-
--- ─── Step 0: Create auth.users entries ────────────────────────────────────────
--- These are demo users with a dummy encrypted password.
--- Password for all: "BoldPartyDemo2026!" (bcrypt hash below)
-INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, role, aud, created_at, updated_at, confirmation_token, raw_app_meta_data, raw_user_meta_data)
-VALUES
-  (v1_id, '00000000-0000-0000-0000-000000000000', 'james.bennett@boldparty.demo',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"James Bennett"}'),
-  (v2_id, '00000000-0000-0000-0000-000000000000', 'sofia.martinez@boldparty.demo',  '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Sofia Martinez"}'),
-  (v3_id, '00000000-0000-0000-0000-000000000000', 'ravi.patel@boldparty.demo',      '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Ravi Patel"}'),
-  (v4_id, '00000000-0000-0000-0000-000000000000', 'charlotte.hughes@boldparty.demo','$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Charlotte Hughes"}'),
-  (v5_id, '00000000-0000-0000-0000-000000000000', 'marcus.thompson@boldparty.demo', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Marcus Thompson"}'),
-  (c1_id, '00000000-0000-0000-0000-000000000000', 'emily.carter@boldparty.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Emily Carter"}'),
-  (c2_id, '00000000-0000-0000-0000-000000000000', 'oliver.webb@boldparty.demo',     '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Oliver Webb"}'),
-  (c3_id, '00000000-0000-0000-0000-000000000000', 'priya.singh@boldparty.demo',     '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Priya Singh"}')
-ON CONFLICT (id) DO NOTHING;
-
--- Also create auth.identities (required by Supabase Auth)
-INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
-VALUES
-  (v1_id, v1_id, v1_id::text, 'email', jsonb_build_object('sub', v1_id::text, 'email', 'james.bennett@boldparty.demo'),   NOW(), NOW(), NOW()),
-  (v2_id, v2_id, v2_id::text, 'email', jsonb_build_object('sub', v2_id::text, 'email', 'sofia.martinez@boldparty.demo'),  NOW(), NOW(), NOW()),
-  (v3_id, v3_id, v3_id::text, 'email', jsonb_build_object('sub', v3_id::text, 'email', 'ravi.patel@boldparty.demo'),      NOW(), NOW(), NOW()),
-  (v4_id, v4_id, v4_id::text, 'email', jsonb_build_object('sub', v4_id::text, 'email', 'charlotte.hughes@boldparty.demo'),NOW(), NOW(), NOW()),
-  (v5_id, v5_id, v5_id::text, 'email', jsonb_build_object('sub', v5_id::text, 'email', 'marcus.thompson@boldparty.demo'), NOW(), NOW(), NOW()),
-  (c1_id, c1_id, c1_id::text, 'email', jsonb_build_object('sub', c1_id::text, 'email', 'emily.carter@boldparty.demo'),    NOW(), NOW(), NOW()),
-  (c2_id, c2_id, c2_id::text, 'email', jsonb_build_object('sub', c2_id::text, 'email', 'oliver.webb@boldparty.demo'),     NOW(), NOW(), NOW()),
-  (c3_id, c3_id, c3_id::text, 'email', jsonb_build_object('sub', c3_id::text, 'email', 'priya.singh@boldparty.demo'),     NOW(), NOW(), NOW())
-ON CONFLICT DO NOTHING;
 
 -- ─── Step 1: Profiles ─────────────────────────────────────────────────────────
 -- If your handle_new_user trigger already created these, this will skip them

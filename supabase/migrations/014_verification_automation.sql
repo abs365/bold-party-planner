@@ -21,7 +21,8 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 3. Storage RLS — vendors upload/read only their own folder
 --    Path convention: verification/{vendorId}/{docType}/{filename}
-CREATE POLICY IF NOT EXISTS "verif_vendor_upload"
+DROP POLICY IF EXISTS "verif_vendor_upload"   ON storage.objects;
+CREATE POLICY "verif_vendor_upload"
   ON storage.objects FOR INSERT TO authenticated
   WITH CHECK (
     bucket_id = 'verification-documents'
@@ -31,7 +32,8 @@ CREATE POLICY IF NOT EXISTS "verif_vendor_upload"
     )
   );
 
-CREATE POLICY IF NOT EXISTS "verif_vendor_read_own"
+DROP POLICY IF EXISTS "verif_vendor_read_own" ON storage.objects;
+CREATE POLICY "verif_vendor_read_own"
   ON storage.objects FOR SELECT TO authenticated
   USING (
     bucket_id = 'verification-documents'

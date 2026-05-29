@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
 
 const schema = z.object({
   moderation_status: z.enum(["approved", "rejected"]),
@@ -13,11 +12,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin();
+  if (!auth) return forbidden();
 
   const { id } = await params;
   let body: unknown;
@@ -29,7 +25,7 @@ export async function PATCH(
   const update: Record<string, unknown> = {
     moderation_status: parsed.data.moderation_status,
     moderated_at: new Date().toISOString(),
-    moderated_by: user.id,
+    moderated_by: auth.user.id,
   };
 
   if (parsed.data.moderation_status === "rejected") {
@@ -38,8 +34,17 @@ export async function PATCH(
     update.deleted_at = new Date().toISOString();
   }
 
-  const { error } = await supabase.from("vendor_media").update(update).eq("id", id);
+  const { error } = await auth.db.from("vendor_media").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void createAuditLog({
+    actorUserId: auth.user.id,
+    actorRole: "admin",
+    action: parsed.data.moderation_status === "approved" ? "admin.media.approve" : "admin.media.reject",
+    entityType: "vendor_media",
+    entityId: id,
+    ipAddress: ipFromRequest(req),
+  });
 
   return NextResponse.json({ success: true });
 }

@@ -54,12 +54,24 @@ export const RATE_LIMITS = {
   ai: { limit: 20, windowMs: 60_000 },
   /** Payment routes */
   payment: { limit: 10, windowMs: 60_000 },
-  /** Auth routes */
+  /** Auth routes (login/signup) */
   auth: { limit: 10, windowMs: 60_000 },
+  /** Signup — stricter than auth to prevent account farming */
+  signup: { limit: 5, windowMs: 15 * 60_000 },
   /** General API */
   api: { limit: 60, windowMs: 60_000 },
   /** Upload routes */
   upload: { limit: 20, windowMs: 60_000 },
+  /** Messaging / enquiry routes */
+  messaging: { limit: 30, windowMs: 60_000 },
+  /** Review submission */
+  review: { limit: 5, windowMs: 60 * 60_000 },
+  /** Quote / booking request */
+  quote: { limit: 10, windowMs: 60_000 },
+  /** Admin API routes */
+  admin: { limit: 120, windowMs: 60_000 },
+  /** Stripe webhook ingest */
+  webhook: { limit: 300, windowMs: 60_000 },
 } as const;
 
 export function getClientIp(req: Request): string {

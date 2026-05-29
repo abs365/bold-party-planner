@@ -38,7 +38,7 @@ export default function SignupPage() {
       if (error) throw error;
 
       if (data.session) {
-        toast.success("Account created! Welcome to Bold Party.");
+        toast.success("Account created! Welcome to ELBOLD Events.");
         window.location.href = role === "vendor" ? "/vendor/apply" : "/dashboard";
         return;
       }
@@ -69,7 +69,7 @@ export default function SignupPage() {
             <p className="text-brand-600 font-semibold mb-6">{email}</p>
             <div className="space-y-3 text-left mb-6">
               {[
-                "Open the email from Bold Party",
+                "Open the email from ELBOLD",
                 "Click the confirmation link",
                 "You'll be automatically signed in",
               ].map((step, i) => (
@@ -109,10 +109,10 @@ export default function SignupPage() {
             <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center">
               <Sparkles size={18} className="text-white" />
             </div>
-            <span className="gradient-brand-text">Bold Party</span>
+            <span className="gradient-brand-text">ELBOLD</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Join thousands planning better events</p>
+          <p className="text-gray-500 text-sm mt-1">Join trusted vendors and event hosts across the UK</p>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
@@ -142,12 +142,14 @@ export default function SignupPage() {
               <div className="relative">
                 <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
+                  id="full-name"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
                   className="input-light pl-icon"
                   required
+                  data-testid="name-input"
                 />
               </div>
             </div>
@@ -157,12 +159,14 @@ export default function SignupPage() {
               <div className="relative">
                 <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
+                  id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   className="input-light pl-icon"
                   required
+                  data-testid="email-input"
                 />
               </div>
             </div>
@@ -172,6 +176,7 @@ export default function SignupPage() {
               <div className="relative">
                 <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
+                  id="signup-password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -179,6 +184,7 @@ export default function SignupPage() {
                   className="input-light pl-icon pr-10"
                   required
                   minLength={8}
+                  data-testid="password-input"
                 />
                 <button
                   type="button"

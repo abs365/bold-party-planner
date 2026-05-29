@@ -1,6 +1,199 @@
-import { BadgeCheck, Shield, Star, Zap, Clock, Briefcase } from "lucide-react";
+import { BadgeCheck, Shield, Star, Zap, Clock, Briefcase, ShieldCheck, Heart, Award, CheckCircle2, ThumbsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VERIFICATION_LEVELS } from "@/lib/verification-requirements";
+
+// ── Named trust badges ────────────────────────────────────────────────────────
+
+export interface TrustBadgeSpec {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  bgClass: string;
+  borderClass: string;
+  textClass: string;
+}
+
+export function getVendorBadges(vendor: {
+  verification_level?: number;
+  verified?: boolean;
+  response_rate?: number | null;
+  rating?: number;
+  review_count?: number;
+  completed_jobs_count?: number;
+  cancellation_rate?: number | null;
+  trust_tier?: string | null;
+  repeat_customer_count?: number;
+}): TrustBadgeSpec[] {
+  const badges: TrustBadgeSpec[] = [];
+  const level = vendor.verification_level ?? (vendor.verified ? 1 : 0);
+
+  if (level >= 4) badges.push({
+    id: "premium_partner",
+    label: "Premium Partner",
+    description: "Invite-only top-tier vendor",
+    icon: Star,
+    bgClass: "bg-amber-50",
+    borderClass: "border-amber-200",
+    textClass: "text-amber-700",
+  });
+  else if (level >= 3) badges.push({
+    id: "trusted_pro",
+    label: "Trusted Pro",
+    description: "5+ jobs, 4.5★, 80%+ response rate",
+    icon: Star,
+    bgClass: "bg-amber-50",
+    borderClass: "border-amber-200",
+    textClass: "text-amber-700",
+  });
+  else if (level >= 2) badges.push({
+    id: "business_verified",
+    label: "Business Verified",
+    description: "ID and business documents confirmed",
+    icon: ShieldCheck,
+    bgClass: "bg-blue-50",
+    borderClass: "border-blue-200",
+    textClass: "text-blue-700",
+  });
+  else if (level >= 1) badges.push({
+    id: "identity_verified",
+    label: "Identity Verified",
+    description: "Profile and contact details confirmed",
+    icon: BadgeCheck,
+    bgClass: "bg-emerald-50",
+    borderClass: "border-emerald-200",
+    textClass: "text-emerald-700",
+  });
+
+  const responseRate = vendor.response_rate ?? 0;
+  if (responseRate >= 80) badges.push({
+    id: "fast_responder",
+    label: "Fast Responder",
+    description: `${Math.round(responseRate)}% quote response rate`,
+    icon: Zap,
+    bgClass: "bg-purple-50",
+    borderClass: "border-purple-200",
+    textClass: "text-purple-700",
+  });
+
+  const rating = vendor.rating ?? 0;
+  const reviewCount = vendor.review_count ?? 0;
+  if (rating >= 4.8 && reviewCount >= 10) badges.push({
+    id: "top_rated",
+    label: "Top Rated",
+    description: `${rating.toFixed(1)}★ from ${reviewCount} reviews`,
+    icon: Star,
+    bgClass: "bg-yellow-50",
+    borderClass: "border-yellow-200",
+    textClass: "text-yellow-700",
+  });
+
+  const jobs = vendor.completed_jobs_count ?? 0;
+  const cancelRate = vendor.cancellation_rate ?? 0;
+  if (jobs >= 20 && cancelRate < 5) badges.push({
+    id: "reliable",
+    label: "Reliable",
+    description: `${jobs} completed events, low cancellation`,
+    icon: Shield,
+    bgClass: "bg-gray-50",
+    borderClass: "border-gray-200",
+    textClass: "text-gray-700",
+  });
+  else if (jobs >= 10) badges.push({
+    id: "highly_active",
+    label: "Highly Active",
+    description: `${jobs}+ completed events`,
+    icon: Briefcase,
+    bgClass: "bg-slate-50",
+    borderClass: "border-slate-200",
+    textClass: "text-slate-600",
+  });
+
+  // ── Reputation-driven badges ────────────────────────────────────────────────
+  const tier    = vendor.trust_tier ?? "new";
+  const repeats = vendor.repeat_customer_count ?? 0;
+
+  if (tier === "exceptional") {
+    badges.push({
+      id: "exceptional_service",
+      label: "Exceptional Service",
+      description: "Elite vendor with outstanding verified review record",
+      icon: Award,
+      bgClass: "bg-rose-50",
+      borderClass: "border-rose-200",
+      textClass: "text-rose-700",
+    });
+  }
+
+  if (repeats >= 3) {
+    badges.push({
+      id: "customer_favourite",
+      label: "Customer Favourite",
+      description: `${repeats} repeat customers`,
+      icon: Heart,
+      bgClass: "bg-pink-50",
+      borderClass: "border-pink-200",
+      textClass: "text-pink-700",
+    });
+  }
+
+  if (jobs >= 15 && cancelRate < 5) {
+    badges.push({
+      id: "consistently_reliable",
+      label: "Consistently Reliable",
+      description: "Low cancellation rate across 15+ events",
+      icon: CheckCircle2,
+      bgClass: "bg-emerald-50",
+      borderClass: "border-emerald-200",
+      textClass: "text-emerald-700",
+    });
+  }
+
+  if (tier === "top_rated" || tier === "exceptional") {
+    badges.push({
+      id: "highly_recommended",
+      label: "Highly Recommended",
+      description: "Consistently top-rated by verified customers",
+      icon: ThumbsUp,
+      bgClass: "bg-indigo-50",
+      borderClass: "border-indigo-200",
+      textClass: "text-indigo-700",
+    });
+  }
+
+  return badges;
+}
+
+interface VendorBadgesRowProps {
+  vendor: Parameters<typeof getVendorBadges>[0];
+  className?: string;
+  max?: number;
+}
+
+export function VendorBadgesRow({ vendor, className, max = 4 }: VendorBadgesRowProps) {
+  const badges = getVendorBadges(vendor).slice(0, max);
+  if (badges.length === 0) return null;
+  return (
+    <div className={cn("flex flex-wrap gap-1.5", className)}>
+      {badges.map((badge) => {
+        const Icon = badge.icon;
+        return (
+          <span
+            key={badge.id}
+            title={badge.description}
+            className={cn(
+              "inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border font-medium",
+              badge.bgClass, badge.borderClass, badge.textClass
+            )}
+          >
+            <Icon size={10} />
+            {badge.label}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 interface VendorTrustBadgesProps {
   verificationLevel?: number;

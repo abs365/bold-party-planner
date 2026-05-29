@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
 
 const schema = z.object({
   status: z.enum(["reviewing", "resolved", "dismissed"]),
@@ -13,11 +12,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin();
+  if (!auth) return forbidden();
 
   const { id } = await params;
   let body: unknown;
@@ -28,13 +24,22 @@ export async function PATCH(
 
   const update: Record<string, unknown> = {
     status: parsed.data.status,
-    resolved_by: user.id,
+    resolved_by: auth.user.id,
     resolved_at: new Date().toISOString(),
   };
   if (parsed.data.resolution_notes) update.resolution_notes = parsed.data.resolution_notes;
 
-  const { error } = await supabase.from("content_reports").update(update).eq("id", id);
+  const { error } = await auth.db.from("content_reports").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void createAuditLog({
+    actorUserId: auth.user.id,
+    actorRole: "admin",
+    action: parsed.data.status === "resolved" ? "admin.report.resolve" : "admin.report.dismiss",
+    entityType: "content_report",
+    entityId: id,
+    ipAddress: ipFromRequest(req),
+  });
 
   return NextResponse.json({ success: true });
 }

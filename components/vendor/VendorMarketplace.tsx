@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,6 +9,10 @@ import {
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Vendor, type VendorCategory } from "@/types";
+import { calculateVendorScore } from "@/lib/vendor/ranking";
+import { VendorBadgesRow } from "@/components/vendor/VendorTrustBadges";
+
+const VENDOR_PAGE_SIZE = 20;
 
 const EVENT_TYPES = [
   "wedding", "birthday", "corporate", "anniversary", "graduation",
@@ -43,7 +47,7 @@ export function VendorMarketplace({
     (initialCategory as VendorCategory) ?? ""
   );
   const [city, setCity] = useState(initialCity ?? "");
-  const [sortBy, setSortBy] = useState<"rating" | "price_low" | "price_high" | "popular" | "smart">("smart");
+  const [sortBy, setSortBy] = useState<"smart" | "rating" | "price_low" | "price_high" | "popular" | "fastest_responder" | "newest" | "most_active">("smart");
   const [showFilters, setShowFilters] = useState(false);
   const [showAllCats, setShowAllCats] = useState(false);
   const [budgetMin, setBudgetMin] = useState(initialBudgetMin ?? 0);
@@ -51,11 +55,21 @@ export function VendorMarketplace({
   const [minRating, setMinRating] = useState(initialMinRating ?? 0);
   const [verifiedOnly, setVerifiedOnly] = useState(initialVerifiedOnly ?? false);
   const [eventType, setEventType] = useState(initialEventType ?? "");
+  const [displayCount, setDisplayCount] = useState(VENDOR_PAGE_SIZE);
+
+  // Reset pagination whenever filters change
+  useEffect(() => {
+    setDisplayCount(VENDOR_PAGE_SIZE);
+  }, [search, category, city, sortBy, budgetMin, budgetMax, minRating, verifiedOnly, eventType]);
 
   const smartPicks = useMemo(() =>
     vendors
-      .filter((v) => v.featured || (v.verified && v.rating >= 4.5))
-      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+      .filter((v) => calculateVendorScore(v).tier !== "limited")
+      .sort((a, b) => {
+        const sa = calculateVendorScore(a).total + (a.featured ? 10 : 0);
+        const sb = calculateVendorScore(b).total + (b.featured ? 10 : 0);
+        return sb - sa;
+      })
       .slice(0, 4),
     [vendors]
   );
@@ -88,9 +102,9 @@ export function VendorMarketplace({
     switch (sortBy) {
       case "smart":
         result.sort((a, b) => {
-          const scoreA = (a.rating ?? 0) * 6 + (a.featured ? 10 : 0) + (a.verified ? 5 : 0) + (a.review_count ?? 0) * 0.1;
-          const scoreB = (b.rating ?? 0) * 6 + (b.featured ? 10 : 0) + (b.verified ? 5 : 0) + (b.review_count ?? 0) * 0.1;
-          return scoreB - scoreA;
+          const sa = calculateVendorScore(a).total + (a.featured ? 10 : 0);
+          const sb = calculateVendorScore(b).total + (b.featured ? 10 : 0);
+          return sb - sa;
         });
         break;
       case "rating":
@@ -104,6 +118,15 @@ export function VendorMarketplace({
         break;
       case "popular":
         result.sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0));
+        break;
+      case "fastest_responder":
+        result.sort((a, b) => (b.response_rate ?? -1) - (a.response_rate ?? -1));
+        break;
+      case "most_active":
+        result.sort((a, b) => (b.completed_jobs_count ?? 0) - (a.completed_jobs_count ?? 0));
+        break;
+      case "newest":
+        result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
     }
 
@@ -119,6 +142,7 @@ export function VendorMarketplace({
     setMinRating(0);
     setVerifiedOnly(false);
     setEventType("");
+    setDisplayCount(VENDOR_PAGE_SIZE);
   };
 
   const activeFilterCount = [
@@ -226,9 +250,12 @@ export function VendorMarketplace({
                   onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                   className="input-light py-2 text-sm"
                 >
-                  <option value="smart">Smart Match</option>
-                  <option value="rating">Highest Rated</option>
+                  <option value="smart">Recommended</option>
+                  <option value="rating">Top Rated</option>
+                  <option value="fastest_responder">Fastest Responder</option>
+                  <option value="most_active">Most Active</option>
                   <option value="popular">Most Reviews</option>
+                  <option value="newest">Newest</option>
                   <option value="price_low">Price: Low to High</option>
                   <option value="price_high">Price: High to Low</option>
                 </select>
@@ -400,7 +427,7 @@ export function VendorMarketplace({
           </p>
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <TrendingUp size={13} />
-            {sortBy === "smart" ? "Smart Match" : "Custom sort"}
+            {sortBy === "smart" ? "Recommended" : "Custom sort"}
           </div>
         </div>
 
@@ -412,11 +439,26 @@ export function VendorMarketplace({
             <button onClick={clearFilters} className="btn-secondary-light">Clear Filters</button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {filtered.map((vendor) => (
-              <VendorCard key={vendor.id} vendor={vendor} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {filtered.slice(0, displayCount).map((vendor) => (
+                <VendorCard key={vendor.id} vendor={vendor} />
+              ))}
+            </div>
+            {filtered.length > displayCount && (
+              <div className="flex flex-col items-center gap-2 mt-10">
+                <button
+                  onClick={() => setDisplayCount((c) => c + VENDOR_PAGE_SIZE)}
+                  className="btn-secondary-light px-8 py-3 text-sm"
+                >
+                  Show more vendors
+                </button>
+                <p className="text-xs text-gray-400">
+                  Showing {displayCount} of {filtered.length}
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -474,7 +516,10 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
   const minPrice = vendor.min_price ?? vendor.packages?.[0]?.price;
   const isHot = (vendor.rating ?? 0) >= 4.7 && (vendor.review_count ?? 0) >= 30;
   const hasInstantQuote = vendor.packages && vendor.packages.length > 0;
-  const responseTime = (vendor.rating ?? 0) >= 4.8 ? "1h" : (vendor.rating ?? 0) >= 4.5 ? "2h" : "24h";
+  const responseRate = vendor.response_rate ?? 0;
+  const responseTime = responseRate >= 90 ? "~1h" : responseRate >= 70 ? "~2h" : responseRate >= 50 ? "~4h" : "24h";
+  const isFastResponder = responseRate >= 80;
+  const completedJobs = vendor.completed_jobs_count ?? 0;
 
   return (
     <div className="group relative">
@@ -514,13 +559,20 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
               {vendor.featured && (
                 <span className="badge bg-amber-500/90 text-amber-900 text-xs font-bold">Featured</span>
               )}
-              {vendor.verified && (
-                <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
-                  <CheckCircle2 size={10} />
-                  {vendor.verification_level >= 2 ? "Business Verified" : "Verified"}
+              {vendor.verification_level >= 3 ? (
+                <span className="badge bg-amber-500/80 border border-amber-400/40 text-amber-100 text-xs flex items-center gap-1 backdrop-blur-sm">
+                  <Star size={9} className="fill-amber-100" /> Trusted Pro
                 </span>
-              )}
-              {isHot && !vendor.featured && (
+              ) : vendor.verification_level >= 2 ? (
+                <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+                  <CheckCircle2 size={10} /> Business Verified
+                </span>
+              ) : vendor.verified ? (
+                <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+                  <CheckCircle2 size={10} /> Verified
+                </span>
+              ) : null}
+              {isHot && !vendor.featured && vendor.verification_level < 3 && (
                 <span className="badge bg-red-500/80 text-white text-xs flex items-center gap-1">
                   <Zap size={9} className="fill-white" /> Hot
                 </span>
@@ -570,7 +622,7 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
               )}
             </div>
 
-            <div className="flex items-center gap-1 text-xs text-gray-400 mb-2.5">
+            <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
               <MapPin size={10} />
               {vendor.city}
               {vendor.review_count > 0 && (
@@ -580,11 +632,34 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
               )}
             </div>
 
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs text-gray-400 flex items-center gap-1">
-                <Clock size={9} /> Replies {responseTime}
+            <VendorBadgesRow
+              vendor={{
+                verification_level: vendor.verification_level,
+                verified: vendor.verified,
+                response_rate: vendor.response_rate,
+                rating: vendor.rating,
+                review_count: vendor.review_count,
+                completed_jobs_count: vendor.completed_jobs_count,
+                cancellation_rate: vendor.cancellation_rate,
+              }}
+              max={2}
+              className="mb-2"
+            />
+
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <span className={cn(
+                "text-xs flex items-center gap-1",
+                isFastResponder ? "text-emerald-600" : "text-gray-400"
+              )}>
+                {isFastResponder ? <Zap size={9} className="fill-emerald-600 text-emerald-600" /> : <Clock size={9} />}
+                {isFastResponder ? "Fast responder" : `Replies ${responseTime}`}
               </span>
-              {hasInstantQuote && (
+              {completedJobs >= 5 && (
+                <span className="text-xs text-gray-400 flex items-center gap-1 ml-auto">
+                  {completedJobs}+ events
+                </span>
+              )}
+              {hasInstantQuote && completedJobs < 5 && (
                 <span className="text-xs text-emerald-600 flex items-center gap-1 ml-auto">
                   <Zap size={9} className="fill-emerald-600" /> Instant Quote
                 </span>

@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Playwright output dirs — contain minified third-party JS
+    "playwright-report/**",
+    "test-results/**",
+    // Playwright test files are excluded from the Next.js build
+    "tests/**",
   ]),
 ]);
 

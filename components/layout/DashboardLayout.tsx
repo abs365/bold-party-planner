@@ -8,7 +8,7 @@ import {
   Bell, Menu, X, LogOut, User, ChevronRight, Star,
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
-  Inbox, Heart, Mail, HelpCircle, Shield,
+  Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -60,7 +60,12 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/moderation", label: "Moderation", icon: Shield },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: BadgeCheck },
+  { href: "/admin/monetization", label: "Monetization", icon: DollarSign },
+  { href: "/admin/governance", label: "Governance", icon: Shield },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/support", label: "Support", icon: HelpCircle },
+  { href: "/admin/system", label: "System", icon: Server },
+  { href: "/admin/launch", label: "Launch Readiness", icon: Rocket },
 ];
 
 interface SidebarContentProps {
@@ -79,7 +84,7 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
         <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
           <Sparkles size={15} className="text-white" />
         </div>
-        <span className="font-bold text-sm gradient-brand-text">Bold Party</span>
+        <span className="font-bold text-sm gradient-brand-text">ELBOLD</span>
       </Link>
 
       <div className="px-4 py-4 border-b border-white/6">

@@ -2,21 +2,21 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Community Guidelines | Bold Party",
-  description: "Bold Party's community standards for customers and vendors.",
+  title: "Community Guidelines | ELBOLD",
+  description: "ELBOLD's community standards for customers and vendors.",
 };
 
 export default function CommunityGuidelines() {
   return (
     <LegalPage
       title="Community Guidelines"
-      subtitle="The standards that make Bold Party a trustworthy, respectful, and enjoyable marketplace for everyone."
+      subtitle="The standards that make ELBOLD a trustworthy, respectful, and enjoyable marketplace for everyone."
       lastUpdated="May 2026"
       sections={[
         {
           title: "Our Community Values",
           content: [
-            "Bold Party is built on trust between event hosts and event professionals. Our community thrives when everyone acts with honesty, respect, and professionalism.",
+            "ELBOLD is built on trust between event hosts and event professionals. Our community thrives when everyone acts with honesty, respect, and professionalism.",
             "These guidelines apply to all users: customers, vendors, and anyone who interacts with our platform.",
           ],
         },
@@ -37,7 +37,7 @@ export default function CommunityGuidelines() {
             "Be available: respond to vendor queries and confirm details in a timely manner.",
             "Pay on time: complete payments by the agreed deadlines to avoid booking cancellation.",
             "Be fair in reviews: share your honest experience, but avoid reviews written in anger or exaggerating issues.",
-            "Don't circumvent the platform: arranging direct payment with vendors outside Bold Party removes your booking protection.",
+            "Don't circumvent the platform: arranging direct payment with vendors outside ELBOLD removes your booking protection.",
           ],
         },
         {
@@ -53,7 +53,7 @@ export default function CommunityGuidelines() {
         {
           title: "Prohibited Content",
           content: [
-            "The following content is strictly prohibited on Bold Party: illegal services or content, adult or explicit material, counterfeit goods or services, misleading pricing, spam or automated messages, content that infringes intellectual property rights.",
+            "The following content is strictly prohibited on ELBOLD: illegal services or content, adult or explicit material, counterfeit goods or services, misleading pricing, spam or automated messages, content that infringes intellectual property rights.",
             "Profile photos must be appropriate for all audiences. Portfolio content must relate to the event services offered.",
           ],
         },
@@ -63,7 +63,7 @@ export default function CommunityGuidelines() {
             "If you encounter behaviour that violates these guidelines, please report it immediately.",
             "Report a vendor: use the 'Report' button on any vendor profile.",
             "Report a message: use the flag icon in the messaging interface.",
-            "Contact us directly: safety@boldparty.co.uk",
+            "Contact us directly: safety@elbold.com",
             "We take all reports seriously and investigate within 24 hours.",
           ],
         },

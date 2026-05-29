@@ -49,26 +49,30 @@ export default function VendorApplyPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { window.location.href = "/login"; return; }
 
-      await supabase.from("profiles").update({ role: "vendor" }).eq("id", user.id);
-
-      const { error } = await supabase.from("vendors").insert({
-        user_id: user.id,
-        business_name: formData.business_name,
-        category: formData.category,
-        bio: formData.bio || null,
-        location: formData.location,
-        city: formData.city,
-        travel_radius_km: formData.travel_radius_km,
-        min_price: formData.min_price ? Number(formData.min_price) : null,
-        max_price: formData.max_price ? Number(formData.max_price) : null,
-        years_experience: formData.years_experience ? Number(formData.years_experience) : null,
-        instagram_url: formData.instagram_url || null,
-        website_url: formData.website_url || null,
-        status: "pending",
+      const res = await fetch("/api/vendor/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          business_name: formData.business_name,
+          category: formData.category,
+          bio: formData.bio || null,
+          location: formData.location,
+          city: formData.city,
+          travel_radius_km: formData.travel_radius_km,
+          min_price: formData.min_price ? Number(formData.min_price) : null,
+          max_price: formData.max_price ? Number(formData.max_price) : null,
+          years_experience: formData.years_experience ? Number(formData.years_experience) : null,
+          instagram_url: formData.instagram_url || null,
+          website_url: formData.website_url || null,
+        }),
       });
 
-      if (error) throw error;
-      toast.success("Application submitted! We'll review and approve it shortly.");
+      if (!res.ok) {
+        const data = await res.json() as { error?: string };
+        throw new Error(data.error ?? "Submission failed");
+      }
+
+      toast.success("Application submitted! Check your email — we'll be in touch within 24–48 hours.");
       window.location.href = "/vendor/dashboard";
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Submission failed");
@@ -91,7 +95,7 @@ export default function VendorApplyPage() {
               Vendor Application
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-              Join Bold Party as a Vendor
+              Join ELBOLD Events as a Vendor
             </h1>
             <p className="text-gray-500 max-w-lg mx-auto">
               Reach thousands of event hosts across the UK. Free to join, no monthly fees, and you keep 90% of every booking.
@@ -103,7 +107,7 @@ export default function VendorApplyPage() {
             {/* Left sidebar — benefits */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
-                <h2 className="text-base font-semibold text-gray-900 mb-4">Why join Bold Party?</h2>
+                <h2 className="text-base font-semibold text-gray-900 mb-4">Why join ELBOLD Events?</h2>
                 <div className="space-y-3">
                   {BENEFITS.map((b) => (
                     <div key={b.label} className="flex items-center gap-3">
@@ -321,7 +325,7 @@ export default function VendorApplyPage() {
                     <div className="bg-brand-50 border border-brand-200 rounded-xl p-4">
                       <p className="text-sm text-brand-800">
                         <Sparkles size={13} className="inline mr-1.5 text-brand-600" />
-                        After submission, our team reviews your application within 24–48 hours. You&apos;ll receive an email once approved.
+                        After submission, our team reviews your application within 24–48 hours. You&apos;ll receive a confirmation email immediately and an approval email once reviewed.
                       </p>
                     </div>
 

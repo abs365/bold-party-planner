@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
 
 const packageSchema = z.object({
   name: z.string().min(1).max(100),
@@ -46,6 +47,16 @@ export async function POST(req: Request) {
   const rows = parsed.data.packages.map((p) => ({ ...p, vendor_id: vendor.id }));
   const { data, error } = await supabase.from("vendor_packages").insert(rows).select();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void createAuditLog({
+    actorUserId: user.id,
+    actorRole: "vendor",
+    action: "vendor.package.create",
+    entityType: "vendor_package",
+    entityId: vendor.id,
+    ipAddress: ipFromRequest(req),
+  });
+
   return NextResponse.json(data);
 }
 
@@ -62,5 +73,15 @@ export async function DELETE(req: Request) {
 
   const { error } = await supabase.from("vendor_packages").delete().eq("id", package_id).eq("vendor_id", vendor.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void createAuditLog({
+    actorUserId: user.id,
+    actorRole: "vendor",
+    action: "vendor.package.delete",
+    entityType: "vendor_package",
+    entityId: package_id,
+    ipAddress: ipFromRequest(req),
+  });
+
   return NextResponse.json({ success: true });
 }

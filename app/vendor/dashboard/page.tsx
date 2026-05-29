@@ -4,10 +4,18 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { VendorTrustBadge } from "@/components/ui/TrustBadges";
+import { ProfileStrengthWidget } from "@/components/vendor/ProfileStrengthWidget";
+import { VendorGovernanceWidget } from "@/components/vendor/VendorGovernanceWidget";
+import { FoundingVendorBanner } from "@/components/vendor/FoundingVendorBanner";
+import { computeVendorCompletion } from "@/lib/vendor/completion";
+import { calculateVendorHealthScore } from "@/lib/vendor/health";
+import { detectComputedWarnings } from "@/lib/vendor/warnings";
+import { resolveGovernance } from "@/lib/vendor/governance";
+import { calculateVendorScore } from "@/lib/vendor/ranking";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import {
   ShoppingBag, CreditCard, Star, Eye, TrendingUp, ArrowRight,
-  CheckCircle2, AlertCircle, MessageSquare, Quote, Calendar,
+  CheckCircle2, MessageSquare, Quote, Calendar,
   Zap, BarChart2, Award, Bell, Clock, Users, ChevronRight,
 } from "lucide-react";
 import type { Booking, Vendor } from "@/types";
@@ -36,7 +44,7 @@ export default async function VendorDashboardPage() {
   const [bookingsRes, reviewsRes, analyticsRes, quotesRes, unreadRes] = await Promise.all([
     supabase
       .from("bookings")
-      .select("*, event:events(title, date, city, guest_count), customer:profiles(full_name, email, avatar_url)")
+      .select("id, status, payment_status, total_amount, vendor_payout, deposit_amount, created_at, event:events(title, date, city, guest_count), customer:profiles(full_name, email, avatar_url)")
       .eq("vendor_id", vendor.id)
       .order("created_at", { ascending: false })
       .limit(20),
@@ -63,7 +71,7 @@ export default async function VendorDashboardPage() {
       .eq("read", false),
   ]);
 
-  const allBookings  = (bookingsRes.data ?? []) as Booking[];
+  const allBookings  = (bookingsRes.data ?? []) as unknown as Booking[];
   const reviews      = reviewsRes.data ?? [];
   const analytics    = analyticsRes.data ?? [];
   const pendingQuotes = quotesRes.data ?? [];
@@ -86,27 +94,46 @@ export default async function VendorDashboardPage() {
   const quoteRequests = analytics.filter((a) => a.event_type === "quote_request").length;
   const conversionRate = profileViews > 0 ? ((confirmed.length / profileViews) * 100).toFixed(1) : "0.0";
 
-  const profileCompletion = [
-    vendor.bio,
-    vendor.location,
-    (vendor as Vendor & { media?: unknown[] }).media?.length,
-    (vendor as Vendor & { packages?: unknown[] }).packages?.length,
-    vendor.min_price,
-  ].filter(Boolean).length;
+  const mediaCount   = (vendor as Vendor & { media?: unknown[] }).media?.length ?? 0;
+  const packageCount = (vendor as Vendor & { packages?: unknown[] }).packages?.length ?? 0;
 
-  const profileItems = [
-    { label: "Bio",      done: !!vendor.bio,                                                         href: "/vendor/profile" },
-    { label: "Location", done: !!vendor.location,                                                    href: "/vendor/profile" },
-    { label: "Photos",   done: !!((vendor as Vendor & { media?: unknown[] }).media?.length),         href: "/vendor/media" },
-    { label: "Packages", done: !!((vendor as Vendor & { packages?: unknown[] }).packages?.length),   href: "/vendor/services" },
-    { label: "Pricing",  done: !!vendor.min_price,                                                   href: "/vendor/services" },
-  ];
+  const completion = computeVendorCompletion({
+    vendor,
+    mediaCount,
+    packageCount,
+    hasAvailability: false, // not fetched on dashboard for perf; full check in /vendor/onboarding
+  });
+
+  const health   = calculateVendorHealthScore(vendor);
+  const warnings = detectComputedWarnings(vendor);
+  const rankScore = calculateVendorScore({
+    ...vendor,
+    packages: (vendor as Vendor & { packages?: unknown[] }).packages ?? [],
+  }).total;
+  const governance = resolveGovernance({
+    status:              vendor.status,
+    verificationLevel:   vendor.verification_level,
+    completionScore:     completion.score,
+    rankScore,
+    healthScore:         health.total,
+    hasCriticalWarnings: warnings.some((w) => w.severity === "critical"),
+    isSuspicious:        vendor.suspicious_flag,
+    cancellationRate:    vendor.cancellation_rate ?? null,
+    responseRate:        vendor.response_rate ?? null,
+    subscriptionPlan:    vendor.subscription_plan,
+  });
+
+  // Legacy simple completion kept for empty-state copy
+  const profileCompletion = [vendor.bio, vendor.city, mediaCount, packageCount, vendor.min_price].filter(Boolean).length;
 
   const nowMs = new Date().getTime();
 
   return (
     <DashboardLayout user={profile}>
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div data-testid="vendor-dashboard" className="max-w-6xl mx-auto space-y-6">
+
+        {/* ─── Founding Vendor Banner ────────────────────────────────── */}
+        {vendor.status === "approved" && <FoundingVendorBanner />}
 
         {/* ─── Header ──────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -145,38 +172,15 @@ export default async function VendorDashboardPage() {
           </div>
         </div>
 
-        {/* ─── Profile Completion ───────────────────────────────────── */}
-        {profileCompletion < 5 && (
-          <div className="bg-white/4 border border-amber-500/25 rounded-xl p-5 animate-fade-in-up">
-            <div className="flex items-center gap-3 mb-3">
-              <AlertCircle size={16} className="text-amber-400 flex-shrink-0" />
-              <span className="font-semibold text-white text-sm">
-                Complete your profile to start receiving bookings
-              </span>
-              <span className="ml-auto text-sm text-amber-400 font-bold whitespace-nowrap">{profileCompletion}/5</span>
-            </div>
-            <div className="bg-white/5 rounded-full h-1.5 mb-4 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-amber-500 to-amber-400 h-1.5 rounded-full transition-all duration-700"
-                style={{ width: `${(profileCompletion / 5) * 100}%` }}
-              />
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-              {profileItems.map(({ label, done, href }) => (
-                <Link key={label} href={href} className={cn_cls(
-                  "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all",
-                  done ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/15" : "text-slate-400 bg-white/4 border border-white/8 hover:border-brand-500/20 hover:bg-white/6"
-                )}>
-                  {done ? <CheckCircle2 size={11} /> : <span className="w-3 h-3 rounded-full border border-current opacity-50" />}
-                  {label}
-                </Link>
-              ))}
-            </div>
+        {/* ─── Profile Strength (always visible) ──────────────────── */}
+        {completion.score < 100 && (
+          <div className="animate-fade-in-up">
+            <ProfileStrengthWidget completion={completion} />
           </div>
         )}
 
         {/* ─── KPI Stats ───────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div data-testid="vendor-dashboard-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               label: "New Requests",
@@ -449,6 +453,15 @@ export default async function VendorDashboardPage() {
                   })}
                 </div>
               </div>
+            )}
+
+            {/* Governance / Marketplace Status */}
+            {(governance.lifecycleState === "at_risk" || governance.lifecycleState === "setup" || warnings.length > 0) && (
+              <VendorGovernanceWidget
+                governance={governance}
+                health={health}
+                computedWarnings={warnings}
+              />
             )}
 
             {/* Subscription Upgrade */}

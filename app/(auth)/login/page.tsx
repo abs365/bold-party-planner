@@ -1,54 +1,24 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, useActionState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Sparkles, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { loginAction } from "@/app/actions/login";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/dashboard";
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        if (error.message.toLowerCase().includes("email not confirmed")) {
-          toast.error("Please confirm your email first. Check your inbox for the confirmation link.");
-        } else if (error.message.toLowerCase().includes("invalid login credentials")) {
-          toast.error("Incorrect email or password. Please try again.");
-        } else {
-          toast.error(error.message);
-        }
-        return;
-      }
+  const [state, formAction, isPending] = useActionState(loginAction, null);
 
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      let dest = redirectTo;
-      if (profile?.role === "vendor") dest = "/vendor/dashboard";
-
-      toast.success("Welcome back!");
-      window.location.href = dest;
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Sign in failed");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (state?.error) {
+      toast.error(state.error);
     }
-  }
+  }, [state?.error]);
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-16">
@@ -58,42 +28,46 @@ function LoginForm() {
             <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center">
               <Sparkles size={18} className="text-white" />
             </div>
-            <span className="gradient-brand-text">Bold Party</span>
+            <span className="gradient-brand-text">ELBOLD</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
           <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form action={formAction} className="space-y-5">
+            <input type="hidden" name="redirectTo" value={redirectTo} />
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
               <div className="relative">
                 <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
+                  id="email"
+                  name="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   className="input-light pl-icon"
                   required
                   autoComplete="email"
+                  data-testid="email-input"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
               <div className="relative">
                 <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 <input
+                  id="password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="input-light pl-icon pr-10"
                   required
                   autoComplete="current-password"
+                  data-testid="password-input"
                 />
                 <button
                   type="button"
@@ -105,9 +79,9 @@ function LoginForm() {
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="btn-primary w-full py-3">
-              {loading ? <Loader2 size={16} className="animate-spin" /> : null}
-              {loading ? "Signing in..." : "Sign In"}
+            <button type="submit" disabled={isPending} className="btn-primary w-full py-3">
+              {isPending ? <Loader2 size={16} className="animate-spin" /> : null}
+              {isPending ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
@@ -122,9 +96,9 @@ function LoginForm() {
         <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs text-gray-500">
           <p className="font-medium text-gray-600 mb-2">Test accounts (after running seed):</p>
           <div className="space-y-0.5">
-            <p><span className="text-gray-700">Customer:</span> emily.carter@boldparty.demo</p>
-            <p><span className="text-gray-700">Vendor:</span> james.bennett@boldparty.demo</p>
-            <p><span className="text-gray-700">Password:</span> BoldPartyDemo2026!</p>
+            <p><span className="text-gray-700">Customer:</span> emily.carter@elbold.demo</p>
+            <p><span className="text-gray-700">Vendor:</span> james.bennett@elbold.demo</p>
+            <p><span className="text-gray-700">Password:</span> ElboldDemo2026!</p>
           </div>
         </div>
       </div>

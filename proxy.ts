@@ -17,16 +17,14 @@ const PROTECTED_PREFIXES = [
   "/vendor/subscription",
   "/vendor/availability",
   "/vendor/onboarding",
+  "/vendor/verification",
+  "/vendor/payouts",
   "/admin",
 ];
 
-// Routes that only admin emails can visit
 const ADMIN_PREFIXES = ["/admin"];
+const AUTH_PAGES     = ["/login", "/signup"];
 
-// Auth pages — logged-in users should be bounced to their dashboard
-const AUTH_PAGES = ["/login", "/signup"];
-
-// Admin emails from env (comma-separated)
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
   .split(",")
   .map((e) => e.trim())
@@ -55,31 +53,29 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Refresh session (extends expiry, sets refreshed cookies in response)
+  // Refresh session — extends cookie expiry and populates response Set-Cookie
   const { data: { user } } = await supabase.auth.getUser();
 
-  const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
-  const isAuthPage = AUTH_PAGES.some((p) => pathname === p);
+  const isProtected  = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
+  const isAuthPage   = AUTH_PAGES.some((p) => pathname === p);
   const isAdminRoute = ADMIN_PREFIXES.some((p) => pathname.startsWith(p));
 
-  // 1. Unauthenticated user hitting a protected route → login
+  // 1. Unauthenticated → protected route: redirect to login
   if (isProtected && !user) {
     const url = new URL("/login", request.url);
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
-  // 2. Authenticated user hitting /login or /signup → bounce to their dashboard
+  // 2. Authenticated → auth page: bounce to appropriate dashboard
   if (isAuthPage && user) {
-    // We can't do a DB query here without extra latency, so check email for admin
     if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(user.email ?? "")) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
-    // Default: send to customer dashboard (vendor dashboard is linked from there)
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // 3. Admin-only route: check email (consistent with page-level checks)
+  // 3. Non-admin → admin route: redirect to customer dashboard
   if (isAdminRoute && user) {
     if (ADMIN_EMAILS.length === 0 || !ADMIN_EMAILS.includes(user.email ?? "")) {
       return NextResponse.redirect(new URL("/dashboard", request.url));

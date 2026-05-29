@@ -2,21 +2,21 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Bold Party",
-  description: "How Bold Party collects, uses, and protects your personal data.",
+  title: "Privacy Policy | ELBOLD",
+  description: "How ELBOLD collects, uses, and protects your personal data.",
 };
 
 export default function PrivacyPolicy() {
   return (
     <LegalPage
       title="Privacy Policy"
-      subtitle="How we collect, use, and protect your personal data at Bold Party Event Planner."
+      subtitle="How we collect, use, and protect your personal data at ELBOLD Event Planner."
       lastUpdated="May 2026"
       sections={[
         {
           title: "1. Who We Are",
           content: [
-            "Bold Party Event Planner Ltd ('Bold Party', 'we', 'us', 'our') operates the event planning marketplace at boldparty.co.uk. We are registered in England and Wales.",
+            "ELBOLD Event Planner Ltd ('ELBOLD', 'we', 'us', 'our') operates the event planning marketplace at elbold.com. We are registered in England and Wales.",
             "We act as a data controller under the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.",
           ],
         },
@@ -88,7 +88,7 @@ export default function PrivacyPolicy() {
             "Right to restriction: request we limit how we process your data in certain circumstances.",
             "Right to data portability: receive your data in a structured, machine-readable format.",
             "Right to object: object to processing based on legitimate interests.",
-            "To exercise any of these rights, email privacy@boldparty.co.uk. We will respond within 30 days.",
+            "To exercise any of these rights, email privacy@elbold.com. We will respond within 30 days.",
           ],
         },
         {
@@ -105,7 +105,7 @@ export default function PrivacyPolicy() {
         {
           title: "11. Contact and Complaints",
           content: [
-            "Data protection queries: privacy@boldparty.co.uk",
+            "Data protection queries: privacy@elbold.com",
             "You have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk if you believe we have not handled your data correctly.",
           ],
         },

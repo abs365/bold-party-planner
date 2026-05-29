@@ -1,0 +1,169 @@
+name: CI
+
+# Triggers:
+#   push  → main, develop, release/* branches
+#   PR    → targeting main or develop
+on:
+  push:
+    branches: [main, develop, "release/**"]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel any in-progress run for the same branch/PR when a new commit arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# JOB 1 — Type Check / Lint / Build
+#
+# Runs on every push and PR.
+# Blocks merge if TypeScript, lint, or the production build fails.
+# ──────────────────────────────────────────────────────────────────────────────
+jobs:
+  build:
+    name: Type Check / Lint / Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm   # caches ~/.npm registry downloads
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # ── Public (embedded in client bundle) ────────────────────────────
+          NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_APP_URL:           ${{ secrets.NEXT_PUBLIC_APP_URL }}
+          NEXT_PUBLIC_SENTRY_DSN:        ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          # ── Server-side secrets (not in client bundle) ────────────────────
+          SUPABASE_SERVICE_ROLE_KEY:     ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          STRIPE_SECRET_KEY:             ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET:         ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          RESEND_API_KEY:                ${{ secrets.RESEND_API_KEY }}
+          OPENAI_API_KEY:                ${{ secrets.OPENAI_API_KEY }}
+          ADMIN_EMAILS:                  ${{ secrets.ADMIN_EMAILS }}
+          SENTRY_DSN:                    ${{ secrets.SENTRY_DSN }}
+          SENTRY_ORG:                    ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT:                ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN:             ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      # Upload .next/ (excluding the cache dir) for the E2E job to reuse.
+      # The E2E job runs `npm start` against this pre-built artifact — no recompilation.
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build-${{ github.sha }}
+          path: |
+            .next/
+            !.next/cache/
+          retention-days: 3
+          if-no-files-found: error
+
+# ──────────────────────────────────────────────────────────────────────────────
+# JOB 2 — Playwright E2E
+#
+# Only runs on:
+#   • pushes to main
+#   • pull requests targeting main
+#
+# Uses the pre-built .next/ artifact from Job 1 and serves it via `npm start`
+# (production mode). This is faster than re-running the dev server and gives
+# better production parity.
+#
+# NOTE: Tests connect to the shared Supabase dev/staging project. If two CI
+# runs execute simultaneously against different PRs, seed data may transiently
+# conflict. The seed endpoint is idempotent so re-runs recover cleanly.
+# ──────────────────────────────────────────────────────────────────────────────
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    needs: build
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.base_ref == 'main')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Install only Chromium — matches the single browser used in playwright.config.ts
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      # Restore the .next/ build produced by Job 1.
+      # playwright.config.ts uses `npm start` when CI=true, so no recompilation needed.
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build-${{ github.sha }}
+          path: .next/
+
+      - name: Run Playwright E2E tests
+        run: npm run test:e2e
+        env:
+          CI: "true"
+          PLAYWRIGHT_BASE_URL:           http://localhost:3000
+          # ── Public vars ───────────────────────────────────────────────────
+          NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_APP_URL:           http://localhost:3000
+          # ── Server secrets (needed by global.setup + route handlers) ──────
+          SUPABASE_SERVICE_ROLE_KEY:     ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          STRIPE_SECRET_KEY:             ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET:         ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          RESEND_API_KEY:                ${{ secrets.RESEND_API_KEY }}
+          OPENAI_API_KEY:                ${{ secrets.OPENAI_API_KEY }}
+          ADMIN_EMAILS:                  ${{ secrets.ADMIN_EMAILS }}
+          CRON_SECRET:                   ${{ secrets.CRON_SECRET }}
+
+      # Always upload the HTML report so it can be reviewed from the Actions tab
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.sha }}
+          path: playwright-report/
+          retention-days: 14
+
+      # Upload traces, screenshots, and videos only on failure for root-cause analysis
+      - name: Upload test traces and screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results-${{ github.sha }}
+          path: test-results/
+          retention-days: 7

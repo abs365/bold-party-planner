@@ -24,9 +24,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!vendor) return { title: "Vendor Not Found" };
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
-  const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | Bold Party`;
+  const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | ELBOLD Events`;
   const description = vendor.description?.slice(0, 160) ??
-    `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on Bold Party.`;
+    `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on ELBOLD Events.`;
 
   return {
     title,
@@ -43,23 +43,31 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   const { id } = await params;
   const supabase = await createClient();
 
-  const [vendorRes, authRes] = await Promise.all([
+  const [vendorRes, authRes, reviewsRes] = await Promise.all([
     supabase
       .from("vendors")
       .select(`
         *,
         profile:profiles(id, full_name, avatar_url, email),
-        media:vendor_media(*),
-        packages:vendor_packages(*),
-        reviews:reviews(*, profile:profiles(full_name, avatar_url))
+        media:vendor_media(id, url, type, is_cover, caption, sort_order, moderation_status, alt_text, width, height, duration_secs),
+        packages:vendor_packages(id, name, description, price, duration_hours, includes, is_popular)
       `)
       .eq("id", id)
       .eq("status", "approved")
       .single(),
     supabase.auth.getUser(),
+    supabase
+      .from("reviews")
+      .select("id, rating, comment, created_at, response, response_at, profile:profiles(full_name, avatar_url)")
+      .eq("vendor_id", id)
+      .order("created_at", { ascending: false })
+      .limit(20),
   ]);
 
   if (!vendorRes.data) notFound();
+
+  // Merge reviews into vendor object (VendorProfileView expects vendor.reviews)
+  const vendorWithReviews = { ...vendorRes.data, reviews: reviewsRes.data ?? [] };
 
   const { data: similarVendors } = await supabase
     .from("vendors")
@@ -71,7 +79,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     .order("rating", { ascending: false })
     .limit(4);
 
-  const vendor = vendorRes.data;
+  const vendor = vendorWithReviews;
 
   let profile = null;
   if (authRes.data.user) {
@@ -90,7 +98,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     "@type": "LocalBusiness",
     "name": vendor.business_name,
     "description": vendor.description ?? undefined,
-    "url": `https://boldparty.co.uk/vendors/${id}`,
+    "url": `https://elbold.com/vendors/${id}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": vendor.city,

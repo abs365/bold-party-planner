@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const cat = VENDOR_CATEGORIES[category as keyof typeof VENDOR_CATEGORIES];
   if (!cat) return { title: "Category Not Found" };
 
-  const title = `${cat.label}s for Hire in the UK | Bold Party`;
-  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews and book securely on Bold Party, the UK's trusted event marketplace.`;
+  const title = `${cat.label}s for Hire in the UK | ELBOLD Events`;
+  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews and book securely on ELBOLD Events, the UK's trusted event marketplace.`;
 
   return {
     title,
@@ -57,8 +57,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": `${cat.label}s for Hire in the UK`,
-    "description": `Find and book verified ${cat.label.toLowerCase()}s for events across the UK on Bold Party.`,
-    "url": `https://boldparty.co.uk/categories/${category}`,
+    "description": `Find and book verified ${cat.label.toLowerCase()}s for events across the UK on ELBOLD Events.`,
+    "url": `https://elbold.com/categories/${category}`,
   };
 
   return (
@@ -189,11 +189,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         )}
       </section>
 
-      {/* Why Bold Party */}
+      {/* Why ELBOLD Events */}
       <section className="py-16 px-4 bg-gray-50 border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
-            Why Book a {cat.label} on Bold Party?
+            Why Book a {cat.label} on ELBOLD Events?
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[

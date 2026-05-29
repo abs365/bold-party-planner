@@ -36,7 +36,7 @@ export async function LegalPage({ title, subtitle, lastUpdated, sections }: Lega
         {/* Header */}
         <div className="mb-12">
           <Link href="/" className="text-brand-400 text-sm hover:text-brand-300 transition-colors mb-6 inline-block">
-            ← Back to Bold Party
+            ← Back to ELBOLD
           </Link>
           <h1 className="text-3xl font-extrabold text-white mb-3">{title}</h1>
           <p className="text-slate-400">{subtitle}</p>
@@ -65,12 +65,12 @@ export async function LegalPage({ title, subtitle, lastUpdated, sections }: Lega
         <div className="mt-16 bg-white/4 rounded-xl p-6 border border-brand-500/15">
           <p className="text-white/60 text-sm">
             Questions about this document? Contact us at{" "}
-            <a href="mailto:legal@boldparty.co.uk" className="text-brand-400 hover:text-brand-300 transition-colors">
-              legal@boldparty.co.uk
+            <a href="mailto:legal@elbold.com" className="text-brand-400 hover:text-brand-300 transition-colors">
+              legal@elbold.com
             </a>
             {" "}or{" "}
-            <a href="mailto:support@boldparty.co.uk" className="text-brand-400 hover:text-brand-300 transition-colors">
-              support@boldparty.co.uk
+            <a href="mailto:support@elbold.com" className="text-brand-400 hover:text-brand-300 transition-colors">
+              support@elbold.com
             </a>.
           </p>
         </div>

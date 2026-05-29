@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { tryUpgradeLevel1 } from "@/lib/verification-automation";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
 
 export async function PATCH(req: Request) {
   const supabase = await createClient();
@@ -35,6 +37,17 @@ export async function PATCH(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Audit + analytics (fire-and-forget)
+  void createAuditLog({
+    actorUserId: user.id,
+    actorRole: "vendor",
+    action: "vendor.profile.update",
+    entityType: "vendor",
+    entityId: data.id,
+    ipAddress: ipFromRequest(req),
+  });
+  void track({ event: "vendor.onboarding.step_completed", userId: user.id, properties: { step: "profile" } });
 
   // Check level 1 eligibility after profile update (fire-and-forget)
   if (data.verification_level === 0) {

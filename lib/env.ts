@@ -55,7 +55,32 @@ const SERVER_ENV: Record<string, EnvVar> = {
   NEXT_PUBLIC_APP_URL: {
     value: process.env.NEXT_PUBLIC_APP_URL,
     required: true,
-    description: "Public app URL (e.g. https://boldparty.co.uk)",
+    description: "Public app URL (e.g. https://elbold.com)",
+  },
+  CRON_SECRET: {
+    value: process.env.CRON_SECRET,
+    required: false,
+    description: "Bearer token for cron job endpoints",
+  },
+  SENTRY_DSN: {
+    value: process.env.SENTRY_DSN,
+    required: false,
+    description: "Sentry DSN for server-side error tracking",
+  },
+  SENTRY_ORG: {
+    value: process.env.SENTRY_ORG,
+    required: false,
+    description: "Sentry organisation slug for source-map upload in CI",
+  },
+  SENTRY_PROJECT: {
+    value: process.env.SENTRY_PROJECT,
+    required: false,
+    description: "Sentry project slug (defaults to bold-party-planner)",
+  },
+  SENTRY_AUTH_TOKEN: {
+    value: process.env.SENTRY_AUTH_TOKEN,
+    required: false,
+    description: "Sentry auth token for source-map upload in CI",
   },
 };
 
@@ -92,11 +117,11 @@ export function validateEnv() {
   }
 
   if (warnings.length > 0) {
-    console.warn(`[Bold Party] Optional env vars not set:\n${warnings.join("\n")}`);
+    console.warn(`[ELBOLD] Optional env vars not set:\n${warnings.join("\n")}`);
   }
 
   if (missing.length > 0) {
-    const msg = `[Bold Party] Missing required environment variables:\n${missing.join("\n")}\n\nSee DEPLOYMENT_GUIDE.md for setup instructions.`;
+    const msg = `[ELBOLD] Missing required environment variables:\n${missing.join("\n")}\n\nSee DEPLOYMENT_GUIDE.md for setup instructions.`;
     if (process.env.NODE_ENV === "production") {
       // In production, crash loudly so the issue is impossible to miss
       throw new Error(msg);
@@ -112,7 +137,7 @@ function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value || value.trim() === "") {
     throw new Error(
-      `[Bold Party] Environment variable ${name} is required but not set. ` +
+      `[ELBOLD] Environment variable ${name} is required but not set. ` +
       `See DEPLOYMENT_GUIDE.md for setup instructions.`
     );
   }
@@ -133,8 +158,11 @@ export const env = {
   stripeFeaturedPriceId: () => optionalEnv("STRIPE_FEATURED_PRICE_ID"),
   resendApiKey: () => requireEnv("RESEND_API_KEY"),
   openaiApiKey: () => requireEnv("OPENAI_API_KEY"),
-  appUrl: () => optionalEnv("NEXT_PUBLIC_APP_URL", "https://boldparty.co.uk"),
+  appUrl: () => optionalEnv("NEXT_PUBLIC_APP_URL", "https://elbold.com"),
   adminEmails: () => optionalEnv("ADMIN_EMAILS", "").split(",").map((e) => e.trim()).filter(Boolean),
+  cronSecret: () => optionalEnv("CRON_SECRET"),
+  sentryDsn: () => optionalEnv("SENTRY_DSN"),
+  sentryEnvironment: () => optionalEnv("SENTRY_ENVIRONMENT", process.env.NODE_ENV ?? "development"),
   isProduction: () => process.env.NODE_ENV === "production",
   isDevelopment: () => process.env.NODE_ENV === "development",
 } as const;

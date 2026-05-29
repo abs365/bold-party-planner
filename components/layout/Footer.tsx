@@ -9,7 +9,8 @@ const PLATFORM_LINKS = [
 ];
 
 const VENDOR_LINKS = [
-  { label: "Join as Vendor", href: "/vendor/apply" },
+  { label: "Founding Vendor Programme", href: "/founding-vendors" },
+  { label: "Join as a Vendor", href: "/vendor/apply" },
   { label: "Vendor Dashboard", href: "/vendor/dashboard" },
   { label: "Subscription Plans", href: "/vendor/subscription" },
   { label: "Vendor Terms", href: "/vendor-terms" },
@@ -18,15 +19,16 @@ const VENDOR_LINKS = [
 const LEGAL_LINKS = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
+  { label: "Cookie Policy", href: "/cookies" },
   { label: "Refund Policy", href: "/refunds" },
   { label: "Community Guidelines", href: "/community-guidelines" },
 ];
 
 const SUPPORT_LINKS = [
   { label: "Help Centre", href: "/how-it-works" },
-  { label: "Contact Us", href: "mailto:support@boldparty.co.uk" },
-  { label: "Report an Issue", href: "mailto:safety@boldparty.co.uk" },
-  { label: "Dispute Resolution", href: "mailto:disputes@boldparty.co.uk" },
+  { label: "Contact Us", href: "mailto:support@elbold.com" },
+  { label: "Report an Issue", href: "mailto:safety@elbold.com" },
+  { label: "Dispute Resolution", href: "mailto:disputes@elbold.com" },
 ];
 
 export function Footer() {
@@ -40,10 +42,10 @@ export function Footer() {
               <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
                 <Sparkles size={16} className="text-white" />
               </div>
-              <span className="gradient-brand-text">Bold Party</span>
+              <span className="gradient-brand-text">ELBOLD</span>
             </Link>
             <p className="text-gray-500 text-sm leading-relaxed mb-5">
-              The UK&apos;s event planning marketplace. Plan, book, and celebrate with confidence.
+              ELBOLD Events — trusted vendors for extraordinary celebrations across the UK.
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-400 mb-5">
               <Shield size={12} className="text-gray-400" />
@@ -116,7 +118,7 @@ export function Footer() {
 
         <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} Bold Party Event Planner Ltd. All rights reserved. Registered in England and Wales.
+            &copy; {new Date().getFullYear()} ELBOLD Ltd. All rights reserved. Registered in England and Wales.
           </p>
           <div className="flex items-center gap-4 text-gray-400 text-xs">
             <Link href="/privacy" className="hover:text-gray-600 transition-colors">Privacy</Link>

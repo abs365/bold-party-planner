@@ -1,32 +1,25 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { requireAdmin, forbidden } from "@/lib/auth/guards";
 import {
   sendVerificationApproved,
   sendVerificationRejected,
   sendResubmissionRequested,
   sendLevelUpgraded,
 } from "@/lib/resend/verification-emails";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
-
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) return null;
-  return { supabase, user };
-}
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { track } from "@/lib/analytics";
 
 export async function GET(req: Request) {
   const auth = await requireAdmin();
-  if (!auth) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status") ?? "pending";
   const category = searchParams.get("category");
   const search = searchParams.get("search");
 
-  let query = auth.supabase
+  let query = auth.db
     .from("vendor_verifications")
     .select(`
       *,
@@ -65,7 +58,7 @@ const patchSchema = z.object({
 
 export async function PATCH(req: Request) {
   const auth = await requireAdmin();
-  if (!auth) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!auth) return forbidden();
 
   const body = await req.json();
   const parsed = patchSchema.safeParse(body);
@@ -77,7 +70,7 @@ export async function PATCH(req: Request) {
   const now = new Date().toISOString();
 
   // Get current verification
-  const { data: verif } = await auth.supabase
+  const { data: verif } = await auth.db
     .from("vendor_verifications")
     .select("*, vendor:vendors(id, verification_level, verified)")
     .eq("id", id)
@@ -89,7 +82,7 @@ export async function PATCH(req: Request) {
 
   // Fetch vendor contact for emails
   async function getVendorContact(): Promise<{ email: string; name: string } | null> {
-    const { data } = await auth!.supabase
+    const { data } = await auth!.db
       .from("vendors")
       .select("user_id, business_name, profile:profiles(email, full_name)")
       .eq("id", vendor.id)
@@ -100,7 +93,7 @@ export async function PATCH(req: Request) {
   }
 
   if (action === "approve") {
-    const { data, error } = await auth.supabase
+    const { data, error } = await auth.db
       .from("vendor_verifications")
       .update({
         status: "approved",
@@ -118,7 +111,7 @@ export async function PATCH(req: Request) {
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     // Check if all required documents are approved → upgrade verification_level
-    const { data: allVerifs } = await auth.supabase
+    const { data: allVerifs } = await auth.db
       .from("vendor_verifications")
       .select("type, status")
       .eq("vendor_id", vendor.id);
@@ -141,10 +134,10 @@ export async function PATCH(req: Request) {
     }
 
     if (Object.keys(updates).length > 0) {
-      await auth.supabase.from("vendors").update(updates).eq("id", vendor.id);
+      await auth.db.from("vendors").update(updates).eq("id", vendor.id);
     }
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -154,6 +147,18 @@ export async function PATCH(req: Request) {
       new_status: "approved",
       notes: notes ?? null,
     });
+
+    // Audit + analytics (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.approve",
+      entityType: "vendor_verification",
+      entityId: id,
+      targetUserId: vendor.id,
+      ipAddress: ipFromRequest(req),
+    });
+    void track({ event: "vendor.verification.approved", userId: auth.user.id, properties: { verification_id: id, vendor_id: vendor.id } });
 
     // Send email + level-upgrade email if level changed
     const contact = await getVendorContact();
@@ -168,7 +173,7 @@ export async function PATCH(req: Request) {
   }
 
   if (action === "reject") {
-    const { data, error } = await auth.supabase
+    const { data, error } = await auth.db
       .from("vendor_verifications")
       .update({
         status: "rejected",
@@ -185,7 +190,7 @@ export async function PATCH(req: Request) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -195,6 +200,18 @@ export async function PATCH(req: Request) {
       new_status: "rejected",
       notes: rejection_reason ?? notes ?? null,
     });
+
+    // Audit + analytics (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.reject",
+      entityType: "vendor_verification",
+      entityId: id,
+      targetUserId: vendor.id,
+      ipAddress: ipFromRequest(req),
+    });
+    void track({ event: "vendor.verification.rejected", userId: auth.user.id, properties: { verification_id: id, vendor_id: vendor.id } });
 
     const rejectContact = await getVendorContact();
     if (rejectContact) {
@@ -208,7 +225,7 @@ export async function PATCH(req: Request) {
   }
 
   if (action === "request_resubmission") {
-    const { data, error } = await auth.supabase
+    const { data, error } = await auth.db
       .from("vendor_verifications")
       .update({
         status: "rejected",
@@ -224,7 +241,7 @@ export async function PATCH(req: Request) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -233,6 +250,17 @@ export async function PATCH(req: Request) {
       old_status: verif.status,
       new_status: "rejected",
       notes: rejection_reason ?? null,
+    });
+
+    // Audit (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.request_resubmission",
+      entityType: "vendor_verification",
+      entityId: id,
+      targetUserId: vendor.id,
+      ipAddress: ipFromRequest(req),
     });
 
     const resubContact = await getVendorContact();
@@ -247,12 +275,12 @@ export async function PATCH(req: Request) {
   }
 
   if (action === "flag") {
-    await auth.supabase.from("vendors").update({
+    await auth.db.from("vendors").update({
       suspicious_flag: true,
       suspicious_reason: suspicious_reason ?? null,
     }).eq("id", vendor.id);
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -261,16 +289,26 @@ export async function PATCH(req: Request) {
       notes: suspicious_reason ?? null,
     });
 
+    // Audit (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.flag",
+      entityType: "vendor",
+      entityId: vendor.id,
+      ipAddress: ipFromRequest(req),
+    });
+
     return NextResponse.json({ success: true });
   }
 
   if (action === "unflag") {
-    await auth.supabase.from("vendors").update({
+    await auth.db.from("vendors").update({
       suspicious_flag: false,
       suspicious_reason: null,
     }).eq("id", vendor.id);
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -278,19 +316,29 @@ export async function PATCH(req: Request) {
       action: "unflagged",
     });
 
+    // Audit (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.unflag",
+      entityType: "vendor",
+      entityId: vendor.id,
+      ipAddress: ipFromRequest(req),
+    });
+
     return NextResponse.json({ success: true });
   }
 
   if (action === "set_level" && level !== undefined) {
-    const { data: currentVendor } = await auth.supabase
+    const { data: currentVendor } = await auth.db
       .from("vendors")
       .select("verification_level")
       .eq("id", vendor.id)
       .single();
 
-    await auth.supabase.from("vendors").update({ verification_level: level }).eq("id", vendor.id);
+    await auth.db.from("vendors").update({ verification_level: level }).eq("id", vendor.id);
 
-    await auth.supabase.from("verification_activity_log").insert({
+    await auth.db.from("verification_activity_log").insert({
       vendor_id: vendor.id,
       verification_id: id,
       actor_id: auth.user.id,
@@ -299,6 +347,18 @@ export async function PATCH(req: Request) {
       old_level: currentVendor?.verification_level ?? 0,
       new_level: level,
       notes: notes ?? null,
+    });
+
+    // Audit (fire-and-forget)
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole: "admin",
+      action: "admin.verification.set_level",
+      entityType: "vendor_verification",
+      entityId: id,
+      targetUserId: vendor.id,
+      after: { level },
+      ipAddress: ipFromRequest(req),
     });
 
     if (level > (currentVendor?.verification_level ?? 0)) {
@@ -316,12 +376,12 @@ export async function PATCH(req: Request) {
 
 export async function POST(req: Request) {
   const auth = await requireAdmin();
-  if (!auth) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!auth) return forbidden();
 
   const { vendor_id, type } = await req.json() as { vendor_id: string; type: string };
   if (!vendor_id || !type) return NextResponse.json({ error: "vendor_id and type required" }, { status: 400 });
 
-  const { data, error } = await auth.supabase
+  const { data, error } = await auth.db
     .from("vendor_verifications")
     .upsert({
       vendor_id,
