@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { CheckCircle2, Star, TrendingUp, Shield, Zap, Award } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Founding Vendor Programme | ELBOLD Events",
+  title: "Founding Vendor Programme",
   description: "Join as one of ELBOLD's first trusted vendors. Free profile, priority placement, and the exclusive Founding Vendor badge. Limited places available.",
 };
 
