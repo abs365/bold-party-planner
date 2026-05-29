@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     .from("stripe_events")
     .select("id")
     .eq("id", event.id)
-    .single();
+    .maybeSingle();
 
   if (existing) {
     return NextResponse.json({ received: true, duplicate: true });
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       .from("bookings")
       .select("*, vendor:vendors(user_id, business_name), event:events(title)")
       .eq("id", bookingId)
-      .single();
+      .maybeSingle();
 
     if (!booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
@@ -125,13 +125,13 @@ export async function POST(request: Request) {
       .from("profiles")
       .select("email, full_name")
       .eq("id", customerId)
-      .single();
+      .maybeSingle();
 
     const { data: vendorProfile } = await supabase
       .from("profiles")
       .select("email, full_name")
       .eq("id", vendor?.user_id)
-      .single();
+      .maybeSingle();
 
     if (customerProfile?.email) {
       const { sendPaymentReceived } = await import("@/lib/resend");
@@ -175,7 +175,7 @@ export async function POST(request: Request) {
       .from("payments")
       .select("booking_id")
       .eq("stripe_payment_intent_id", charge.payment_intent as string)
-      .single();
+      .maybeSingle();
 
     if (payment) {
       await supabase.from("bookings")
@@ -255,7 +255,7 @@ export async function POST(request: Request) {
       });
 
       // Notify vendor
-      const { data: vendor } = await supabase.from("vendors").select("user_id, business_name").eq("id", vendorId).single();
+      const { data: vendor } = await supabase.from("vendors").select("user_id, business_name").eq("id", vendorId).maybeSingle();
       if (vendor?.user_id) {
         void supabase.rpc("notify_user", {
           p_user_id: vendor.user_id,
@@ -276,7 +276,7 @@ export async function POST(request: Request) {
         .from("vendor_subscriptions")
         .select("id, vendor_id, plan")
         .eq("stripe_subscription_id", invoice.subscription)
-        .single();
+        .maybeSingle();
 
       if (sub) {
         await supabase.from("vendor_subscriptions").update({
@@ -306,7 +306,7 @@ export async function POST(request: Request) {
         .from("vendor_subscriptions")
         .select("id, vendor_id, plan, failed_payment_count")
         .eq("stripe_subscription_id", invoice.subscription)
-        .single();
+        .maybeSingle();
 
       if (sub) {
         const failCount = (sub.failed_payment_count ?? 0) + 1;
@@ -327,7 +327,7 @@ export async function POST(request: Request) {
         });
 
         // Notify vendor
-        const { data: vendor } = await supabase.from("vendors").select("user_id").eq("id", sub.vendor_id).single();
+        const { data: vendor } = await supabase.from("vendors").select("user_id").eq("id", sub.vendor_id).maybeSingle();
         if (vendor?.user_id) {
           void supabase.rpc("notify_user", {
             p_user_id: vendor.user_id,
