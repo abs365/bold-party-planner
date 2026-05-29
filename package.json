@@ -20,6 +20,8 @@
     "test:e2e:mobile": "playwright test tests/mobile.spec.ts --project=mobile-chrome"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/ios": "^8.3.4",
     "@hookform/resolvers": "^5.4.0",
     "@sentry/nextjs": "^8.55.2",
     "@stripe/stripe-js": "^9.6.0",
