@@ -15,7 +15,7 @@ export async function GET(request: Request) {
         .from("profiles")
         .select("role")
         .eq("id", data.user.id)
-        .single();
+        .maybeSingle();
 
       const adminEmails = (process.env.ADMIN_EMAILS ?? "")
         .split(",")
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
           .from("vendors")
           .select("id")
           .eq("user_id", data.user.id)
-          .single();
+          .maybeSingle();
         dest = vendor ? "/vendor/dashboard" : "/vendor/apply";
       } else {
         dest = next;

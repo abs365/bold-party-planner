@@ -7,14 +7,14 @@ export async function POST() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
     if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
     const { data: sub } = await supabase
       .from("vendor_subscriptions")
       .select("stripe_customer_id")
       .eq("vendor_id", vendor.id)
-      .single();
+      .maybeSingle();
 
     if (!sub?.stripe_customer_id) {
       return NextResponse.json({ error: "No active Stripe customer" }, { status: 400 });

@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     .from("reviews")
     .select("id, vendor_id, moderation_status, rating")
     .eq("id", review_id)
-    .single();
+    .maybeSingle();
 
   if (!review) return NextResponse.json({ error: "Review not found" }, { status: 404 });
 

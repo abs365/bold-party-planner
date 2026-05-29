@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id, profile_views, rating, review_count").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, profile_views, rating, review_count").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const { searchParams } = new URL(req.url);

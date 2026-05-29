@@ -153,7 +153,7 @@ export async function POST(request: Request) {
       })
       .eq("id", warning_id)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

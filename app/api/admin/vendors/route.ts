@@ -46,16 +46,17 @@ export async function PATCH(request: Request) {
     .from("vendors")
     .select("status")
     .eq("id", vendor_id)
-    .single();
+    .maybeSingle();
 
   const { data: vendor, error } = await auth.db
     .from("vendors")
     .update(updates)
     .eq("id", vendor_id)
     .select("*, profile:profiles(email, full_name)")
-    .single();
+    .maybeSingle();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!vendor) return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
 
   const auditAction =
     status === "approved" ? "admin.vendor.approve" :

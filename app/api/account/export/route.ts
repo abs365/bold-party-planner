@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     { data: vendor },
     { data: messages },
   ] = await Promise.all([
-    supabase.from("profiles").select("id, full_name, email, phone, city, created_at").eq("id", user.id).single(),
+    supabase.from("profiles").select("id, full_name, email, phone, city, created_at").eq("id", user.id).maybeSingle(),
     supabase.from("events").select("id, title, date, location, guest_count, event_type, created_at").eq("user_id", user.id),
     supabase.from("bookings").select("id, status, payment_status, total_price, created_at, event_id").eq("customer_id", user.id),
     supabase.from("payments").select("amount, type, status, currency, created_at").eq("booking_id.bookings.customer_id", user.id),

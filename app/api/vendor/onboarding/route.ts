@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const { status } = await req.json() as { status: string };
@@ -26,10 +26,10 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
-  const { data, error } = await supabase.from("vendor_onboarding").select("*").eq("vendor_id", vendor.id).single();
+  const { data, error } = await supabase.from("vendor_onboarding").select("*").eq("vendor_id", vendor.id).maybeSingle();
   if (error) return NextResponse.json(null);
   return NextResponse.json(data);
 }

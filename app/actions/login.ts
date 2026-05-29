@@ -71,7 +71,7 @@ export async function loginAction(
     .from("profiles")
     .select("role")
     .eq("id", data.user.id)
-    .single();
+    .maybeSingle();
 
   console.log("[AUTH-DEBUG] loginAction — profile role:", profile?.role);
 

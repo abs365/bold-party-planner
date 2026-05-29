@@ -17,12 +17,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       response:quote_responses(*)
     `)
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error || !data) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const isCustomer = data.customer_id === user.id;
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   const isVendor = vendor && data.vendor_id === vendor.id;
 
   if (!isCustomer && !isVendor) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -39,10 +39,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const body = await req.json();
   const { action, price, message, includes, valid_until, status } = body as Record<string, unknown>;
 
-  const { data: quote } = await supabase.from("quotes").select("*").eq("id", id).single();
+  const { data: quote } = await supabase.from("quotes").select("*").eq("id", id).maybeSingle();
   if (!quote) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id, user_id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, user_id").eq("user_id", user.id).maybeSingle();
 
   if (action === "respond" && vendor && quote.vendor_id === vendor.id) {
     // Vendor responding to quote
@@ -91,7 +91,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       .from("quote_responses")
       .select("*")
       .eq("quote_id", id)
-      .single();
+      .maybeSingle();
 
     if (!response) return NextResponse.json({ error: "No response to accept" }, { status: 400 });
 

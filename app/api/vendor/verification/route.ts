@@ -19,7 +19,7 @@ async function requireVendor() {
     .from("vendors")
     .select("id, category, verification_level, status")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
   if (!vendor) return null;
   return { supabase, user, vendor };
 }
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     .select("id, status, resubmission_allowed, resubmit_count")
     .eq("vendor_id", auth.vendor.id)
     .eq("type", type)
-    .single();
+    .maybeSingle();
 
   if (existing?.status === "rejected" && !existing.resubmission_allowed) {
     return NextResponse.json({ error: "Resubmission not allowed for this document type" }, { status: 403 });

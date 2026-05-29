@@ -71,7 +71,7 @@ export async function POST(request: Request) {
     .from("profiles")
     .select("email, full_name")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   // Send welcome email — fire and forget
   if (profile?.email) {

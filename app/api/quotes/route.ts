@@ -35,7 +35,7 @@ export async function GET(req: Request) {
   `);
 
   if (role === "vendor") {
-    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
     if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
     query = query.eq("vendor_id", vendor.id);
   } else {
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
   const { vendor_id, ...rest } = parsed.data;
 
   // Check vendor is approved
-  const { data: vendor } = await supabase.from("vendors").select("id, status, user_id").eq("id", vendor_id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, status, user_id").eq("id", vendor_id).maybeSingle();
   if (!vendor || vendor.status !== "approved") {
     return NextResponse.json({ error: "Vendor not available" }, { status: 400 });
   }

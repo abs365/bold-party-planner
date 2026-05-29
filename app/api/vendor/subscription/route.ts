@@ -17,14 +17,14 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id, subscription_plan").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, subscription_plan").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const { data: subscription } = await supabase
     .from("vendor_subscriptions")
     .select("*")
     .eq("vendor_id", vendor.id)
-    .single();
+    .maybeSingle();
 
   // Also return available plans from DB
   const db = await createAdminClient();
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id, subscription_plan, status").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, subscription_plan, status").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   if (vendor.status === "suspended") {
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 
   // ── Cancel subscription ───────────────────────────────────────────────────
   if (action === "cancel") {
-    const { data: sub } = await supabase.from("vendor_subscriptions").select("stripe_subscription_id").eq("vendor_id", vendor.id).single();
+    const { data: sub } = await supabase.from("vendor_subscriptions").select("stripe_subscription_id").eq("vendor_id", vendor.id).maybeSingle();
     if (sub?.stripe_subscription_id) {
       const Stripe = (await import("stripe")).default;
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -98,12 +98,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Stripe price ID not configured for ${plan} ${billing_cycle}` }, { status: 500 });
   }
 
-  const { data: profile } = await supabase.from("profiles").select("email, full_name").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("email, full_name").eq("id", user.id).maybeSingle();
 
   const Stripe = (await import("stripe")).default;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  const { data: existingSub } = await supabase.from("vendor_subscriptions").select("stripe_customer_id").eq("vendor_id", vendor.id).single();
+  const { data: existingSub } = await supabase.from("vendor_subscriptions").select("stripe_customer_id").eq("vendor_id", vendor.id).maybeSingle();
   let customerId = existingSub?.stripe_customer_id;
 
   if (!customerId) {

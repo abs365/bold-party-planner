@@ -23,7 +23,7 @@ export async function PATCH(
       .from("profiles")
       .select("role")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
 
     // Vendor can accept/reject their own bookings
     if (profile?.role === "vendor") {
@@ -31,7 +31,7 @@ export async function PATCH(
         .from("vendors")
         .select("id")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
@@ -46,7 +46,7 @@ export async function PATCH(
         .eq("id", id)
         .eq("vendor_id", vendor.id)
         .select("*, event:events(title), customer:profiles(email, full_name)")
-        .single();
+        .maybeSingle();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -115,7 +115,7 @@ export async function PATCH(
         .eq("id", id)
         .eq("customer_id", user.id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
 

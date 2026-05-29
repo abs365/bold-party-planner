@@ -21,7 +21,7 @@ export async function GET(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const { searchParams } = new URL(req.url);
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const body = await req.json();
@@ -65,7 +65,7 @@ export async function DELETE(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const { package_id } = await req.json() as { package_id: string };

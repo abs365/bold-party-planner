@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       .select("*, event:events(title, date), vendor:vendors(business_name, user_id)")
       .eq("id", bookingId)
       .eq("customer_id", user.id)
-      .single();
+      .maybeSingle();
 
     if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     if (!["accepted", "confirmed"].includes(booking.status)) {

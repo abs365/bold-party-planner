@@ -74,7 +74,7 @@ export async function PATCH(req: Request) {
     .from("vendor_verifications")
     .select("*, vendor:vendors(id, verification_level, verified)")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (!verif) return NextResponse.json({ error: "Verification not found" }, { status: 404 });
 
