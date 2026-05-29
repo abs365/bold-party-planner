@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Cookie, X } from "lucide-react";
 
@@ -9,16 +9,10 @@ type ConsentChoice = "all" | "necessary" | null;
 const STORAGE_KEY = "bp_cookie_consent";
 
 export function CookieConsent() {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) setShow(true);
-    } catch {
-      // localStorage unavailable (private mode etc.) — don't show
-    }
-  }, []);
+  const [show, setShow] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try { return !localStorage.getItem(STORAGE_KEY); } catch { return false; }
+  });
 
   function accept(choice: ConsentChoice) {
     try {

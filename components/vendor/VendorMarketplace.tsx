@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -57,10 +57,14 @@ export function VendorMarketplace({
   const [eventType, setEventType] = useState(initialEventType ?? "");
   const [displayCount, setDisplayCount] = useState(VENDOR_PAGE_SIZE);
 
-  // Reset pagination whenever filters change
-  useEffect(() => {
+  // Reset pagination when filters change — React's "detect changes in render" pattern
+  // (avoids setState-in-effect; see react.dev/learn/you-might-not-need-an-effect)
+  const filtersKey = `${search}|${category}|${city}|${sortBy}|${budgetMin}|${budgetMax}|${minRating}|${verifiedOnly}|${eventType}`;
+  const [prevFiltersKey, setPrevFiltersKey] = useState(filtersKey);
+  if (prevFiltersKey !== filtersKey) {
+    setPrevFiltersKey(filtersKey);
     setDisplayCount(VENDOR_PAGE_SIZE);
-  }, [search, category, city, sortBy, budgetMin, budgetMax, minRating, verifiedOnly, eventType]);
+  }
 
   const smartPicks = useMemo(() =>
     vendors

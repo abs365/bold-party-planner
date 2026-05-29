@@ -61,7 +61,7 @@ export async function GET(request: Request) {
   }
 
   // ── 2. Optional test send ──────────────────────────────────────────────────
-  let sendResult: { attempted: boolean; success?: boolean; error?: string; type?: string } = { attempted: false };
+  const sendResult: { attempted: boolean; success?: boolean; error?: string; type?: string } = { attempted: false };
 
   if (sendTo) {
     sendResult.attempted = true;
