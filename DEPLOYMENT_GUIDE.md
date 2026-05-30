@@ -1,6 +1,6 @@
-# Bold Party — Deployment Guide
+# ELBOLD — Deployment Guide
 
-Complete step-by-step guide to deploy Bold Party Event Planner to production.
+Complete step-by-step guide to deploy ELBOLD Events to production.
 
 ---
 
@@ -12,7 +12,7 @@ Complete step-by-step guide to deploy Bold Party Event Planner to production.
 - A Stripe account (stripe.com)
 - A Resend account (resend.com)
 - An OpenAI account (platform.openai.com)
-- A domain name (e.g. boldparty.co.uk)
+- A domain name (e.g. elbold.com)
 
 ---
 
@@ -101,12 +101,12 @@ Go to Project Settings → API:
 In Stripe Dashboard → Products → Add product:
 
 **Pro Plan:**
-- Name: Bold Party Pro
+- Name: ELBOLD Pro
 - Price: £29.00 / month (recurring)
 - Save the Price ID → `STRIPE_PRO_PRICE_ID`
 
 **Featured Plan:**
-- Name: Bold Party Featured
+- Name: ELBOLD Featured
 - Price: £79.00 / month (recurring)
 - Save the Price ID → `STRIPE_FEATURED_PRICE_ID`
 
@@ -142,7 +142,7 @@ Save the **Webhook Signing Secret** → `STRIPE_WEBHOOK_SECRET`
 3. Create an API key → `RESEND_API_KEY`
 4. Update the FROM address in `lib/resend/index.ts`:
    ```ts
-   const FROM = "Bold Party <noreply@yourdomain.co.uk>";
+   const FROM = "ELBOLD <noreply@yourdomain.co.uk>";
    ```
 5. Test by sending a test email from the Resend dashboard.
 
@@ -208,7 +208,7 @@ Set the environment for each variable:
 ### 6.3 Configure Custom Domain
 
 1. Vercel → Project → Settings → Domains
-2. Add your domain: `boldparty.co.uk` and `www.boldparty.co.uk`
+2. Add your domain: `elbold.com` and `www.elbold.com`
 3. Update your domain registrar's DNS records as instructed by Vercel
 
 ### 6.4 Deploy

@@ -1,4 +1,4 @@
-# Bold Party Planner — GitHub Actions CI/CD
+# ELBOLD — GitHub Actions CI/CD
 
 ## Overview
 
@@ -60,7 +60,7 @@ Add these in: **GitHub → Repository → Settings → Secrets and variables →
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (`https://xxx.supabase.co`) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (admin operations) |
-| `ADMIN_EMAILS` | Comma-separated admin emails (e.g. `admin@boldparty.co.uk`) |
+| `ADMIN_EMAILS` | Comma-separated admin emails (e.g. `admin@elbold.com`) |
 
 ### Required for build to succeed
 
@@ -75,7 +75,7 @@ Add these in: **GitHub → Repository → Settings → Secrets and variables →
 
 | Secret | Description |
 |---|---|
-| `NEXT_PUBLIC_APP_URL` | Public URL (defaults to `https://boldparty.co.uk`) |
+| `NEXT_PUBLIC_APP_URL` | Public URL (defaults to `https://elbold.com`) |
 | `NEXT_PUBLIC_SENTRY_DSN` | Sentry DSN for client-side error tracking |
 | `SENTRY_DSN` | Sentry DSN for server-side error tracking |
 | `SENTRY_ORG` | Sentry org slug (for source map upload) |

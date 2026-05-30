@@ -1,4 +1,4 @@
-# Bold Party Planner — Operational Runbooks
+# ELBOLD — Operational Runbooks
 
 ## Runbook Index
 
@@ -334,7 +334,7 @@ const { data } = await supabase.storage
 3. Vercel auto-deploys from `main` to production — monitor the deployment in Vercel Dashboard
 4. Watch the deployment log for build errors (~3–5 minutes)
 5. After deployment completes:
-   - `GET https://boldparty.co.uk/api/health` — confirm all green
+   - `GET https://elbold.com/api/health` — confirm all green
    - Run the smoke test (see `docs/production-checklist.md` → Post-Deployment Smoke Test)
 6. Monitor Sentry for new errors in the first 30 minutes
 

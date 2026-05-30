@@ -1,8 +1,8 @@
-# Bold Party Planner — Engineering Standards
+# ELBOLD — Engineering Standards
 
 **Version:** 1.0
 
-Bold Party Planner is operational marketplace infrastructure, not a prototype. All engineering decisions must reflect that maturity.
+ELBOLD is operational marketplace infrastructure, not a prototype. All engineering decisions must reflect that maturity.
 
 ---
 

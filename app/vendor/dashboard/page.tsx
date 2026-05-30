@@ -17,6 +17,7 @@ import {
   ShoppingBag, CreditCard, Star, Eye, TrendingUp, ArrowRight,
   CheckCircle2, MessageSquare, Quote, Calendar,
   Zap, BarChart2, Award, Bell, Clock, Users, ChevronRight,
+  Rocket, Package, Camera,
 } from "lucide-react";
 import type { Booking, Vendor } from "@/types";
 
@@ -123,6 +124,14 @@ export default async function VendorDashboardPage() {
     subscriptionPlan:    vendor.subscription_plan,
   });
 
+  // Redirect brand-new approved vendors to the guided setup flow.
+  // Score ≤ 10 means only the "status = approved" base points — nothing else filled in.
+  // Scoped to first 48 hours to avoid hijacking returning vendors who haven't finished yet.
+  if (vendor.status === "approved" && completion.score <= 10) {
+    const hoursOld = (new Date().getTime() - new Date(vendor.created_at).getTime()) / 3_600_000;
+    if (hoursOld < 48) redirect("/vendor/onboarding");
+  }
+
   // Legacy simple completion kept for empty-state copy
   const profileCompletion = [vendor.bio, vendor.city, mediaCount, packageCount, vendor.min_price].filter(Boolean).length;
 
@@ -171,6 +180,48 @@ export default async function VendorDashboardPage() {
             </Link>
           </div>
         </div>
+
+        {/* ─── First-Login Getting Started Banner ─────────────────── */}
+        {allBookings.length === 0 && profileCompletion < 3 && vendor.status === "approved" && (
+          <div className="bg-[#0d1b3e] border border-[rgba(201,168,76,0.2)] rounded-2xl p-6 animate-fade-in-up">
+            <div className="flex items-start gap-4">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: "rgba(201,168,76,0.12)" }}
+              >
+                <Rocket size={18} style={{ color: "#C9A84C" }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-white mb-1">
+                  Your profile is live — let&apos;s get you your first enquiry.
+                </h3>
+                <p className="text-sm font-light mb-5" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  Customers can already find you. Complete these three steps to maximise your chances of a first booking.
+                </p>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  {[
+                    { href: "/vendor/profile",  icon: Users,        label: "Write your bio",      sub: "Tell customers what makes your service worth booking." },
+                    { href: "/vendor/services", icon: Package,       label: "Add a package",       sub: "Set a name, price, and description for your main service." },
+                    { href: "/vendor/media",    icon: Camera,        label: "Upload 3+ photos",    sub: "High-quality photos are the #1 factor in getting booked." },
+                  ].map(({ href, icon: Icon, label, sub }) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      className="flex items-start gap-3 rounded-xl p-4 transition-colors hover:bg-white/5"
+                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+                    >
+                      <Icon size={15} style={{ color: "#C9A84C" }} className="flex-shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold text-white mb-0.5">{label}</div>
+                        <div className="text-xs font-light" style={{ color: "rgba(255,255,255,0.35)" }}>{sub}</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ─── Profile Strength (always visible) ──────────────────── */}
         {completion.score < 100 && (

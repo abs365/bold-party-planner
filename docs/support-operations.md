@@ -1,4 +1,4 @@
-# Bold Party Planner — Support & Moderation Operations
+# ELBOLD — Support & Moderation Operations
 
 **Version:** 1.0
 

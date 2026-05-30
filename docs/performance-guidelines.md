@@ -1,4 +1,4 @@
-# Bold Party Planner — Performance Guidelines
+# ELBOLD — Performance Guidelines
 
 **Version:** 1.0  
 **Applies to:** All contributors, all phases

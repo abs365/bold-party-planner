@@ -1,4 +1,4 @@
-# Mobile Performance Audit — Bold Party
+# Mobile Performance Audit — ELBOLD
 
 Audit date: 2026-05-29
 Auditor: Phase 25A review of codebase

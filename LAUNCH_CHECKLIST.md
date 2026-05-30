@@ -1,4 +1,4 @@
-# Bold Party — Launch Checklist
+# ELBOLD — Launch Checklist
 
 Use this checklist before going live. Check off each item as it's completed.
 

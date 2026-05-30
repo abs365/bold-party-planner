@@ -1,4 +1,4 @@
-# Bold Party Planner — Incident Response
+# ELBOLD — Incident Response
 
 **Version:** 1.0  
 **Applies to:** All production incidents

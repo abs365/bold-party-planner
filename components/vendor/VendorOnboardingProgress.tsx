@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   CheckCircle2, Circle, ChevronRight, User, Package, Camera,
-  ShieldCheck, Clock, Rocket, Star, Zap, ArrowRight,
+  ShieldCheck, Clock, Rocket, Star, Zap, ArrowRight, Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CompletionResult, OnboardingStep } from "@/lib/vendor/completion";
@@ -43,9 +43,12 @@ export function VendorOnboardingProgress({ completion, vendorName }: Props) {
       <div className="bg-white/4 border border-white/6 rounded-2xl p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              {isMarketplaceReady && (
+                <Sparkles size={18} className="text-emerald-400 flex-shrink-0" />
+              )}
               {isMarketplaceReady
-                ? `ðŸŽ‰ You're marketplace ready, ${vendorName.split(" ")[0]}!`
+                ? `You're marketplace ready, ${vendorName.split(" ")[0]}!`
                 : `Welcome to ELBOLD Events, ${vendorName.split(" ")[0]}!`}
             </h2>
             <p className="text-slate-400 text-sm mt-1">

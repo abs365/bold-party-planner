@@ -1,12 +1,12 @@
-# Mobile Deployment Guide — Bold Party
+# Mobile Deployment Guide — ELBOLD
 
-This guide covers deploying Bold Party as a native Android and iOS app using Capacitor.
+This guide covers deploying ELBOLD as a native Android and iOS app using Capacitor.
 
 ---
 
 ## Architecture Overview
 
-Bold Party uses **Capacitor** to wrap the Next.js web app in a native WebView shell. The app always loads from the hosted production URL (`https://boldparty.co.uk`), which means:
+ELBOLD uses **Capacitor** to wrap the Next.js web app in a native WebView shell. The app always loads from the hosted production URL (`https://elbold.com`), which means:
 
 - All SSR, API routes, and Supabase auth work unchanged
 - Native features (push notifications, camera, etc.) are added via Capacitor plugins
@@ -69,7 +69,7 @@ Add to `.env.local` and Vercel environment variables:
 ```env
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=<public key>
 VAPID_PRIVATE_KEY=<private key>
-VAPID_SUBJECT=mailto:hello@boldparty.co.uk
+VAPID_SUBJECT=mailto:hello@elbold.com
 ```
 
 **IMPORTANT**: Never rotate VAPID keys after users have subscribed — existing subscriptions will break. Keep them in a password manager.
@@ -113,7 +113,7 @@ cd android && ./gradlew bundleRelease
 4. Fill in store listing (see `docs/app-store-assets.md`)
 5. Promote to Production when ready
 
-### App ID: `uk.co.boldparty.app`
+### App ID: `com.elbold.app`
 
 ---
 
@@ -129,7 +129,7 @@ npx cap open ios
 
 ### 2. Configure in Xcode
 
-- Set Bundle Identifier: `uk.co.boldparty.app`
+- Set Bundle Identifier: `com.elbold.app`
 - Set Development Team (Apple Developer account)
 - Set minimum iOS version: 15.0
 - Enable Push Notifications capability

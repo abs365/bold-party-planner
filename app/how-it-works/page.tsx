@@ -164,6 +164,26 @@ export default async function HowItWorksPage() {
           </div>
         </div>
 
+        {/* How ELBOLD makes money */}
+        <div className="mb-16 border border-gray-100 rounded-2xl p-8">
+          <h2 className="text-lg font-light text-gray-900 tracking-tight mb-2">How ELBOLD makes money</h2>
+          <p className="text-sm text-gray-400 font-light leading-relaxed mb-5">
+            ELBOLD is free to use for event hosts. Vendors list for free and there are no monthly fees required to receive enquiries.
+          </p>
+          <div className="space-y-3">
+            {[
+              "ELBOLD earns a 10% service fee on the value of completed bookings. This is deducted from the vendor payout automatically — customers pay the listed price.",
+              "Optional subscription plans are available for vendors who want additional visibility, analytics, or priority placement. These are never required to use the platform.",
+              "There are no hidden charges, no sign-up fees, and no fees for browsing or receiving quotes.",
+            ].map((point) => (
+              <div key={point} className="flex items-start gap-3">
+                <CheckCircle2 size={15} className="text-gray-300 shrink-0 mt-0.5" />
+                <p className="text-sm text-gray-500 font-light leading-relaxed">{point}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="text-center">
           <Link href="/dashboard/create-event" className="btn-luxury-dark text-sm py-3.5 px-8 inline-flex">
             Start Planning Your Event

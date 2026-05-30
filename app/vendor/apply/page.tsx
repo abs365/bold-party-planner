@@ -10,28 +10,49 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 const BENEFITS = [
-  { icon: "💰", label: "Keep 90% of every booking you receive" },
-  { icon: "🎯", label: "Free to join — no monthly fees, no contract" },
-  { icon: "📈", label: "Get found by customers searching for your category" },
-  { icon: "⭐", label: "Verified reviews after every booking build your profile" },
+  { icon: "🔍", label: "Get found by customers searching for your category and location" },
+  { icon: "📅", label: "Manage enquiries, bookings and availability in one place" },
+  { icon: "⭐", label: "Build your reputation with verified reviews from real clients" },
+  { icon: "💳", label: "Secure Stripe payments — no invoicing, no chasing, no disputes" },
 ];
 
+const FORM_DEFAULTS = {
+  business_name: "",
+  category: "" as VendorCategory | "",
+  bio: "",
+  location: "",
+  city: "",
+  travel_radius_km: 30,
+  min_price: "",
+  max_price: "",
+  years_experience: "",
+  instagram_url: "",
+  website_url: "",
+};
+
+function readDraft() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem("vendor_apply_draft");
+    return raw ? (JSON.parse(raw) as typeof FORM_DEFAULTS) : null;
+  } catch { return null; }
+}
+
 export default function VendorApplyPage() {
-  const [step, setStep] = useState(1);
-  const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    business_name: "",
-    category: "" as VendorCategory | "",
-    bio: "",
-    location: "",
-    city: "",
-    travel_radius_km: 30,
-    min_price: "",
-    max_price: "",
-    years_experience: "",
-    instagram_url: "",
-    website_url: "",
+  const [formData, setFormData] = useState<typeof FORM_DEFAULTS>(() => {
+    const draft = readDraft();
+    return draft ? { ...FORM_DEFAULTS, ...draft } : FORM_DEFAULTS;
   });
+
+  const [step, setStep] = useState<number>(() => {
+    const draft = readDraft();
+    if (!draft) return 1;
+    if (draft.city) return 3;
+    if (draft.business_name || draft.category) return 2;
+    return 1;
+  });
+
+  const [submitting, setSubmitting] = useState(false);
 
   function update(key: string, value: string | number) {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -47,7 +68,12 @@ export default function VendorApplyPage() {
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { window.location.href = "/login"; return; }
+      if (!user) {
+        // Save draft so it can be restored after signup
+        sessionStorage.setItem("vendor_apply_draft", JSON.stringify(formData));
+        window.location.assign("/signup?role=vendor");
+        return;
+      }
 
       const res = await fetch("/api/vendor/apply", {
         method: "POST",
@@ -72,8 +98,9 @@ export default function VendorApplyPage() {
         throw new Error(data.error ?? "Submission failed");
       }
 
+      sessionStorage.removeItem("vendor_apply_draft");
       toast.success("Application submitted! Check your email — we'll be in touch within 24–48 hours.");
-      window.location.href = "/vendor/dashboard";
+      window.location.assign("/vendor/dashboard");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Submission failed");
     } finally {
@@ -104,7 +131,7 @@ export default function VendorApplyPage() {
             className="max-w-lg mx-auto text-base font-light leading-relaxed"
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
-            Free to join. No monthly fees. You keep 90% of every booking you receive.
+            List your services free. Receive verified enquiries. Grow your bookings with a platform built for UK event professionals.
           </p>
         </div>
       </div>

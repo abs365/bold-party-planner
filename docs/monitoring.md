@@ -1,4 +1,4 @@
-# Bold Party Planner — Monitoring & Alerting
+# ELBOLD — Monitoring & Alerting
 
 **Version:** 1.0
 

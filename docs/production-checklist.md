@@ -1,4 +1,4 @@
-# Bold Party Planner — Production Health Checklist
+# ELBOLD — Production Health Checklist
 
 **Version:** 1.0
 
@@ -41,7 +41,7 @@ Run through this before promoting any build to production.
 - [ ] Sentry project is healthy (no backlog of unresolved errors from prior deploy)
 - [ ] `GET /api/health` returns `"status": "ok"` on the current production deployment
   ```bash
-  curl https://boldparty.co.uk/api/health
+  curl https://elbold.com/api/health
   ```
 - [ ] All health check components return `"ok"`:
   - [ ] `database`
@@ -162,7 +162,7 @@ Complete before going live with real users:
 - [ ] Stripe switched from test mode to live mode
 - [ ] Stripe webhooks configured to production URL (`/api/webhooks/stripe`)
 - [ ] Resend email domain verified for production domain
-- [ ] `NEXT_PUBLIC_APP_URL` set to production URL (`https://boldparty.co.uk`)
+- [ ] `NEXT_PUBLIC_APP_URL` set to production URL (`https://elbold.com`)
 - [ ] Custom domain configured in Vercel
 
 ### Legal & compliance

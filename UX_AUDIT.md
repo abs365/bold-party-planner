@@ -1,4 +1,4 @@
-# UX Audit — Bold Party Event Planner
+# UX Audit — ELBOLD Events
 _Completed: 2026-05-25_
 
 ---

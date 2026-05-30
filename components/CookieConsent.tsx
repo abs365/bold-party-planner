@@ -28,9 +28,31 @@ export function CookieConsent() {
       role="dialog"
       aria-label="Cookie consent"
       aria-live="polite"
-      className="fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6 pointer-events-none"
+      className="fixed bottom-0 inset-x-0 z-50 p-3 sm:p-6 pointer-events-none"
     >
-      <div className="max-w-2xl mx-auto bg-gray-900 border border-white/10 rounded-2xl shadow-2xl shadow-black/40 p-5 pointer-events-auto">
+      {/* ── Mobile: slim single-row strip ── */}
+      <div className="sm:hidden max-w-2xl mx-auto bg-gray-900 border border-white/10 rounded-xl shadow-2xl shadow-black/40 px-4 py-3 pointer-events-auto flex items-center gap-3">
+        <Cookie className="w-4 h-4 text-brand-400 flex-shrink-0" />
+        <p className="text-white/60 text-xs flex-1 min-w-0">
+          We use cookies.{" "}
+          <Link href="/cookies" className="text-brand-400 underline">Policy</Link>
+        </p>
+        <button
+          onClick={() => accept("necessary")}
+          className="text-xs text-white/50 hover:text-white/80 border border-white/15 rounded-lg px-3 py-1.5 transition-colors flex-shrink-0"
+        >
+          Decline
+        </button>
+        <button
+          onClick={() => accept("all")}
+          className="text-xs font-semibold bg-brand-500 hover:bg-brand-600 text-white rounded-lg px-3 py-1.5 transition-colors flex-shrink-0"
+        >
+          Accept
+        </button>
+      </div>
+
+      {/* ── Desktop: full card ── */}
+      <div className="hidden sm:block max-w-2xl mx-auto bg-gray-900 border border-white/10 rounded-2xl shadow-2xl shadow-black/40 p-5 pointer-events-auto">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 mt-0.5">
             <Cookie className="w-5 h-5 text-brand-400" />

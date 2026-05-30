@@ -9,7 +9,12 @@ import toast from "react-hot-toast";
 type Role = "customer" | "vendor";
 
 export default function SignupPage() {
-  const [role, setRole] = useState<Role>("customer");
+  const [role, setRole] = useState<Role>(() => {
+    if (typeof window === "undefined") return "customer";
+    return new URLSearchParams(window.location.search).get("role") === "vendor"
+      ? "vendor"
+      : "customer";
+  });
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -145,7 +150,7 @@ export default function SignupPage() {
           </h2>
           <p className="text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
             {role === "vendor"
-              ? "Free to join. Keep 90% of every booking. Founding Vendor places available now."
+              ? "List free. Receive verified enquiries. Build your reputation on ELBOLD."
               : "Verified DJs, photographers, caterers, decorators and 15 more categories across the UK."}
           </p>
         </div>
@@ -279,7 +284,7 @@ export default function SignupPage() {
                 style={{ background: "rgba(13,27,62,0.04)", border: "1px solid rgba(13,27,62,0.1)", color: "#374151" }}
               >
                 <CheckCircle2 size={12} className="mt-0.5 flex-shrink-0 text-gray-400" />
-                Free to join. Keep 90% of every booking. Complete your vendor profile after confirming email.
+                Free to list. Complete your vendor profile after confirming your email to start receiving enquiries.
               </div>
             )}
 

@@ -1,4 +1,4 @@
-# Bold Party Planner — Architecture Reference
+# ELBOLD — Architecture Reference
 
 ## Stack
 

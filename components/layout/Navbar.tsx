@@ -42,7 +42,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
     const { createClient } = await import("@/lib/supabase/client");
     const supabase = createClient();
     await supabase.auth.signOut();
-    window.location.href = "/login";
+    window.location.assign("/login");
   }
 
   const headerClass = lightBg

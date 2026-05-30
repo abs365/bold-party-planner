@@ -1,4 +1,4 @@
-# Bold Party Planner — Performance Audit
+# ELBOLD — Performance Audit
 
 **Conducted:** 2026-05-28  
 **Status:** Phase 3 (Production Performance)

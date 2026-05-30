@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 const BENEFITS = [
   {
     icon: CheckCircle2,
-    title: "Free to list. Free forever.",
-    description: "Creating and maintaining your profile costs nothing. When a customer books you, you keep 90% of the full payment. No hidden fees, no monthly subscription, no commission creep.",
+    title: "Free to list your services.",
+    description: "Creating your profile and receiving enquiries costs nothing. ELBOLD earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
   },
   {
     icon: Star,
     title: "Founding Vendor badge on your profile",
-    description: "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Badged and verified vendors consistently receive more enquiries than unverified listings at comparable prices.",
+    description: "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
   },
   {
     icon: TrendingUp,
@@ -90,8 +90,8 @@ export default async function FoundingVendorsPage() {
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
             Event hosts use ELBOLD to find and book DJs, photographers, caterers,
-            decorators and more. List your services free, keep 90% of every booking,
-            and start receiving enquiries within days of going live.
+            decorators and more. List your services free, receive verified enquiries,
+            and build your reputation on a marketplace designed for UK professionals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
@@ -232,7 +232,7 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-6"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            No credit card &nbsp;·&nbsp; No monthly fees &nbsp;·&nbsp; Keep 90% of every booking &nbsp;·&nbsp; Cancel anytime
+            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; ELBOLD earns only when you do &nbsp;·&nbsp; Cancel anytime
           </p>
         </div>
       </section>

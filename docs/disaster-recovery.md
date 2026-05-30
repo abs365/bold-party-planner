@@ -1,4 +1,4 @@
-# Bold Party Planner — Disaster Recovery
+# ELBOLD — Disaster Recovery
 
 **Version:** 1.0
 

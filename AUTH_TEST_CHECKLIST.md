@@ -1,4 +1,4 @@
-# Auth Test Checklist — Bold Party
+# Auth Test Checklist — ELBOLD
 _Created: 2026-05-25_
 
 ---

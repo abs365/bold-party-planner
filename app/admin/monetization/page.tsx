@@ -17,7 +17,7 @@ export default async function AdminMonetizationPage() {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
   // Fetch monetization data server-side
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
   let data = null;
   try {
     const res = await fetch(`${baseUrl}/api/admin/monetization?days=30`, {

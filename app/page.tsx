@@ -140,7 +140,7 @@ export default async function Home() {
               <ArrowRight size={15} />
             </Link>
             <Link href="/founding-vendors" className="btn-luxury-outline">
-              Founding Vendor Programme
+              List Your Services Free
             </Link>
           </div>
 
@@ -435,54 +435,73 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF ──────────────────────────────────────────────────── */}
+      {/* ── TRUST PILLARS ─────────────────────────────────────────────────── */}
       <section
         className="py-24 px-4"
         style={{ background: "#0D1B3E" }}
       >
-        <div className="max-w-2xl mx-auto text-center">
-          {/* Gold stars */}
-          <div className="flex justify-center gap-1.5 mb-8">
-            {Array.from({ length: 5 }, (_, i) => (
-              <svg key={i} width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"
-                  fill="#C9A84C"
-                />
-              </svg>
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-14">
+            <p
+              className="text-xs tracking-[0.3em] font-semibold mb-4 uppercase"
+              style={{ color: "rgba(201,168,76,0.55)" }}
+            >
+              Why ELBOLD
+            </p>
+            <h2
+              className="text-2xl font-light tracking-tight"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
+              Built around vendor quality and customer confidence.
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6 mb-14">
+            {[
+              {
+                icon: "✦",
+                title: "Every vendor is reviewed",
+                desc: "We manually review every vendor application before they appear on the platform. No automated approvals.",
+              },
+              {
+                icon: "✦",
+                title: "Secure Stripe payments",
+                desc: "All booking payments go through Stripe. Deposits are held securely and released upon completion.",
+              },
+              {
+                icon: "✦",
+                title: "Reviews from real bookings only",
+                desc: "Customer reviews are collected only after a confirmed, completed booking. No unverified ratings.",
+              },
+            ].map(({ icon, title, desc }) => (
+              <div
+                key={title}
+                className="rounded-2xl p-7"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(201,168,76,0.1)" }}
+              >
+                <div
+                  className="text-sm mb-4"
+                  style={{ color: "rgba(201,168,76,0.6)" }}
+                >
+                  {icon}
+                </div>
+                <h3
+                  className="font-semibold text-sm mb-3"
+                  style={{ color: "rgba(255,255,255,0.85)" }}
+                >
+                  {title}
+                </h3>
+                <p
+                  className="text-sm font-light leading-relaxed"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
+                >
+                  {desc}
+                </p>
+              </div>
             ))}
           </div>
 
-          <blockquote
-            className="text-xl font-light leading-relaxed mb-8"
-            style={{ color: "rgba(255,255,255,0.8)" }}
-          >
-            &ldquo;ELBOLD Events made planning my 30th birthday effortless.
-            The DJ and decorator were incredible, and everything ran perfectly
-            on the day. I couldn&apos;t have done it without this platform.&rdquo;
-          </blockquote>
-
-          <div className="flex items-center justify-center gap-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-              style={{ background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}
-            >
-              AJ
-            </div>
-            <div className="text-left">
-              <div className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.85)" }}>
-                Amara Johnson
-              </div>
-              <div
-                className="text-xs font-light"
-                style={{ color: "rgba(255,255,255,0.3)" }}
-              >
-                30th Birthday · London
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 pt-12" style={{ borderTop: "1px solid rgba(201,168,76,0.12)" }}>
+          <div className="text-center pt-10" style={{ borderTop: "1px solid rgba(201,168,76,0.12)" }}>
             <p
               className="text-xs tracking-[0.25em] font-light mb-6"
               style={{ color: "rgba(201,168,76,0.45)" }}

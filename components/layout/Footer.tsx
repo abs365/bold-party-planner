@@ -3,6 +3,7 @@ import Link from "next/link";
 const PLATFORM_LINKS = [
   { label: "Browse Vendors", href: "/browse" },
   { label: "How It Works", href: "/how-it-works" },
+  { label: "About ELBOLD", href: "/about" },
   { label: "Create an Event", href: "/dashboard/create-event" },
   { label: "Booking Protection", href: "/booking-protection" },
 ];
@@ -58,19 +59,19 @@ export function Footer() {
               <span style={{ color: "#C9A84C", opacity: 0.6 }}>&#x2605;</span>
               Stripe-secured payments
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3" aria-hidden="true">
               {["IG", "X", "FB"].map((label) => (
                 <div
                   key={label}
-                  className="w-8 h-8 rounded flex items-center justify-center cursor-pointer transition-colors"
+                  className="w-8 h-8 rounded flex items-center justify-center"
                   style={{
-                    border: "1px solid rgba(201,168,76,0.2)",
-                    background: "rgba(201,168,76,0.05)",
+                    border: "1px solid rgba(201,168,76,0.12)",
+                    background: "rgba(201,168,76,0.03)",
                   }}
                 >
                   <span
                     className="text-xs font-bold"
-                    style={{ color: "rgba(201,168,76,0.5)" }}
+                    style={{ color: "rgba(201,168,76,0.3)" }}
                   >
                     {label}
                   </span>

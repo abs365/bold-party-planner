@@ -1,4 +1,4 @@
-# App Store Asset Checklist — Bold Party
+# App Store Asset Checklist — ELBOLD
 
 All assets required before submitting to Google Play and Apple App Store.
 
@@ -95,7 +95,7 @@ Required for at least 6.5" and 5.5" (or universal):
 | 5.5" (iPhone 8 Plus) | Yes |
 | 12.9" iPad Pro | If supporting iPad |
 
-Recommended screenshots for Bold Party:
+Recommended screenshots for ELBOLD:
 1. **Home / Browse** — vendor cards with category filters
 2. **Vendor Profile** — photos, reviews, packages, request quote button
 3. **Event Planning** — create event wizard
@@ -108,13 +108,13 @@ Recommended screenshots for Bold Party:
 
 ### Short Description (80 chars max — Google Play)
 ```
-Book DJs, caterers & photographers for any event. UK's #1 party planner.
+Book DJs, caterers & photographers for any event. UK's trusted vendor marketplace.
 ```
 
 ### Full Description (4000 chars — Google Play / 4000 chars — App Store)
 
 ```
-Bold Party is the UK's premium event planning marketplace. Whether you're planning a birthday bash, wedding reception, corporate event or intimate gathering — find and book verified vendors in minutes.
+ELBOLD is the UK's premium event vendor marketplace. Whether you're planning a birthday bash, wedding reception, corporate event or intimate gathering — find and book verified vendors in minutes.
 
 FIND THE PERFECT VENDORS
 • Browse 100+ verified DJs, photographers, caterers, decorators and more
@@ -124,7 +124,7 @@ FIND THE PERFECT VENDORS
 PLAN YOUR EVENT
 • Smart event planning wizard — tell us about your occasion, we'll handle the rest
 • Manage multiple events from your personal dashboard
-• AI-powered planning assistant gives personalised recommendations
+• Smart planning assistant gives personalised vendor recommendations
 
 BOOK WITH CONFIDENCE
 • Every vendor is identity-verified and reviewed
@@ -138,7 +138,7 @@ FOR VENDORS
 • Get verified to stand out with trust badges
 • Analytics dashboard to grow your business
 
-Download Bold Party today and start planning your perfect event.
+Download ELBOLD today and start planning your extraordinary event.
 ```
 
 ### Keywords (100 chars — App Store)
@@ -155,13 +155,13 @@ event planner,DJ hire,party planning,wedding vendors,event booking,caterers,phot
 - App Store: **Lifestyle** (primary), **Business** (secondary)
 
 ### Privacy Policy URL
-`https://boldparty.co.uk/privacy`
+`https://elbold.com/privacy`
 
 ### Support URL
-`https://boldparty.co.uk/support`
+`https://elbold.com/how-it-works`
 
 ### Marketing URL
-`https://boldparty.co.uk`
+`https://elbold.com`
 
 ---
 
@@ -172,7 +172,7 @@ event planner,DJ hire,party planning,wedding vendors,event booking,caterers,phot
 - [ ] Splash screens generated
 - [ ] Screenshots captured (all required sizes)
 - [ ] Store listing copy written and proofread
-- [ ] Privacy policy published at boldparty.co.uk/privacy
+- [ ] Privacy policy published at elbold.com/privacy
 - [ ] App tested on physical device (not just simulator)
 - [ ] Push notifications tested end-to-end
 - [ ] Deep links working correctly

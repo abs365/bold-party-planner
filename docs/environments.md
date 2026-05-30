@@ -1,4 +1,4 @@
-# Bold Party Planner — Environment Discipline
+# ELBOLD — Environment Discipline
 
 **Version:** 1.0
 

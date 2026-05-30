@@ -35,6 +35,7 @@ export type VendorCategory =
   | "transport"
   | "cleaner"
   | "event_staff"
+  | "event_planner"
   | "other";
 
 export type BookingStatus =
@@ -334,25 +335,26 @@ export interface Notification {
 
 export const VENDOR_CATEGORIES: Record<VendorCategory, { label: string; icon: string; description: string }> = {
   dj: { label: "DJ", icon: "🎧", description: "Music & entertainment" },
-  decorator: { label: "Decorator", icon: "🎨", description: "Event decoration & styling" },
+  decorator: { label: "Decorator", icon: "🌸", description: "Event decoration & styling" },
   caterer: { label: "Caterer", icon: "🍽️", description: "Food & beverages" },
   photographer: { label: "Photographer", icon: "📸", description: "Photo coverage" },
   videographer: { label: "Videographer", icon: "🎥", description: "Video coverage & editing" },
   mc: { label: "MC / Host", icon: "🎤", description: "Master of ceremonies" },
   security: { label: "Security", icon: "🛡️", description: "Event security personnel" },
-  usher: { label: "Ushers", icon: "🤝", description: "Guest management & ushering" },
+  usher: { label: "Ushers", icon: "🎟️", description: "Guest management & ushering" },
   makeup_artist: { label: "Makeup Artist", icon: "💄", description: "Makeup & beauty" },
   cake_maker: { label: "Cake Maker", icon: "🎂", description: "Custom cakes & desserts" },
   balloon_decorator: { label: "Balloon Decorator", icon: "🎈", description: "Balloon art & decoration" },
-  lighting_stage: { label: "Lighting & Stage", icon: "💡", description: "Lighting rigs & stage setup" },
+  lighting_stage: { label: "Lighting & Stage", icon: "🎭", description: "Lighting rigs & stage setup" },
   furniture_rental: { label: "Furniture Rental", icon: "🪑", description: "Tables, chairs & furniture" },
-  marquee_rental: { label: "Marquee Rental", icon: "⛺", description: "Tents & marquee hire" },
+  marquee_rental: { label: "Marquee Rental", icon: "🏛️", description: "Tents & marquee hire" },
   live_band: { label: "Live Band", icon: "🎸", description: "Live music performance" },
-  luxury_services: { label: "Luxury Services", icon: "✨", description: "Premium event experiences" },
-  transport: { label: "Transport", icon: "🚗", description: "Guest & VIP transport" },
+  luxury_services: { label: "Luxury Services", icon: "🥂", description: "Premium event experiences" },
+  transport: { label: "Transport", icon: "🚐", description: "Guest & VIP transport" },
   cleaner: { label: "Cleaners", icon: "🧹", description: "Pre & post event cleaning" },
   event_staff: { label: "Event Staff", icon: "👔", description: "Waiters, runners & helpers" },
-  other: { label: "Other Services", icon: "✨", description: "Specialist & unique event services" },
+  event_planner: { label: "Event Planner", icon: "📋", description: "Full event planning & coordination" },
+  other: { label: "Other Services", icon: "⚙️", description: "Specialist & unique event services" },
 };
 
 export const EVENT_TYPES: Record<EventType, { label: string; icon: string }> = {

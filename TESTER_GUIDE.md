@@ -1,6 +1,6 @@
-# Bold Party — Tester Guide (Beta)
+# ELBOLD — Tester Guide (Beta)
 
-Welcome to the Bold Party beta test! This guide gives you everything you need to explore the platform thoroughly and provide meaningful feedback.
+Welcome to the ELBOLD beta test! This guide gives you everything you need to explore the platform thoroughly and provide meaningful feedback.
 
 ---
 
@@ -264,4 +264,4 @@ Share feedback in the designated Slack channel or Google Form provided by the te
 
 ---
 
-*Bold Party Beta — Tester Guide v1.0 — Last updated: May 2026*
+*ELBOLD Beta — Tester Guide v1.0 — Last updated: May 2026*
