@@ -4,7 +4,7 @@ import { z } from "zod";
 import { scoreLead } from "@/lib/ai/scoring";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
-import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const quoteSchema = z.object({
   vendor_id: z.string().uuid(),
@@ -48,14 +48,28 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const ip = getClientIp(req);
-  const rl = rateLimit({ ...RATE_LIMITS.quote, identifier: `quote:${ip}` });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
-
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  const identifier = user?.id ?? getClientIp(req);
+  const rlHour = rateLimit({ identifier: `quotes:hr:${identifier}`, limit: 20, windowMs: 60 * 60_000 });
+  const rlDay  = rateLimit({ identifier: `quotes:day:${identifier}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+
+  if (!rlHour.allowed || !rlDay.allowed) {
+    const rl = !rlHour.allowed ? rlHour : rlDay;
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "20",
+          "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
+    );
+  }
+
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
@@ -114,5 +128,11 @@ export async function POST(req: Request) {
     p_link: `/vendor/quotes`,
   });
 
-  return NextResponse.json(data);
+  return NextResponse.json(data, {
+    headers: {
+      "X-RateLimit-Limit": "20",
+      "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+      "X-RateLimit-Reset": String(Math.ceil(Math.min(rlHour.resetAt, rlDay.resetAt) / 1000)),
+    },
+  });
 }

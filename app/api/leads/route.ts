@@ -1,11 +1,32 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { routeLeadToVendors } from "@/lib/ai/lead-routing";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 // POST /api/leads — trigger AI lead routing for a quote
 export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  const identifier = user?.id ?? getClientIp(req);
+  const rlHour = rateLimit({ identifier: `leads:hr:${identifier}`, limit: 20, windowMs: 60 * 60_000 });
+  const rlDay  = rateLimit({ identifier: `leads:day:${identifier}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+
+  if (!rlHour.allowed || !rlDay.allowed) {
+    const rl = !rlHour.allowed ? rlHour : rlDay;
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "20",
+          "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
+    );
+  }
+
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json() as { quote_id?: string };
@@ -23,7 +44,13 @@ export async function POST(req: Request) {
   }
 
   const result = await routeLeadToVendors(body.quote_id);
-  return NextResponse.json(result);
+  return NextResponse.json(result, {
+    headers: {
+      "X-RateLimit-Limit": "20",
+      "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+      "X-RateLimit-Reset": String(Math.ceil(Math.min(rlHour.resetAt, rlDay.resetAt) / 1000)),
+    },
+  });
 }
 
 // GET /api/leads — get vendor's incoming leads with scoring

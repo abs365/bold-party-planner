@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
-import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const subRating = z.number().int().min(1).max(5).optional();
 
@@ -18,15 +18,27 @@ const reviewSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const ip = getClientIp(request);
-  const rl = rateLimit({ ...RATE_LIMITS.review, identifier: `review:${ip}` });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } });
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const identifier = user?.id ?? getClientIp(request);
+  const rlDay = rateLimit({ identifier: `reviews:day:${identifier}`, limit: 10, windowMs: 24 * 60 * 60_000 });
+
+  if (!rlDay.allowed) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "10",
+          "X-RateLimit-Remaining": "0",
+          "X-RateLimit-Reset": String(Math.ceil(rlDay.resetAt / 1000)),
+        },
+      }
+    );
   }
 
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
@@ -100,7 +112,13 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json(review);
+    return NextResponse.json(review, {
+      headers: {
+        "X-RateLimit-Limit": "10",
+        "X-RateLimit-Remaining": String(rlDay.remaining),
+        "X-RateLimit-Reset": String(Math.ceil(rlDay.resetAt / 1000)),
+      },
+    });
   } catch (err: unknown) {
     console.error("Review error:", err);
     return NextResponse.json(

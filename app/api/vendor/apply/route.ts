@@ -1,17 +1,31 @@
 import { NextResponse } from "next/server";
 import { requireAuth, unauthorized } from "@/lib/auth/guards";
 import { createAdminClient } from "@/lib/supabase/server";
-import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { track } from "@/lib/analytics";
 
 export async function POST(request: Request) {
-  const ip = getClientIp(request);
-  const rl = rateLimit({ ...RATE_LIMITS.auth, limit: 5, windowMs: 60 * 60_000, identifier: `vendor_apply:${ip}` });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  const ctx = await requireAuth();
+  const identifier = ctx?.user.id ?? getClientIp(request);
+
+  const rlHour = rateLimit({ identifier: `vendor-apply:hr:${identifier}`, limit: 5, windowMs: 60 * 60_000 });
+  const rlDay  = rateLimit({ identifier: `vendor-apply:day:${identifier}`, limit: 20, windowMs: 24 * 60 * 60_000 });
+
+  if (!rlHour.allowed || !rlDay.allowed) {
+    const rl = !rlHour.allowed ? rlHour : rlDay;
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "5",
+          "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
+    );
   }
 
-  const ctx = await requireAuth();
   if (!ctx) return unauthorized();
 
   const { user, supabase } = ctx;
@@ -89,5 +103,11 @@ export async function POST(request: Request) {
     properties: { vendor_id: String(vendor.id), category: body.category, city: body.city },
   });
 
-  return NextResponse.json({ success: true, vendor_id: vendor.id });
+  return NextResponse.json({ success: true, vendor_id: vendor.id }, {
+    headers: {
+      "X-RateLimit-Limit": "5",
+      "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+      "X-RateLimit-Reset": String(Math.ceil(Math.min(rlHour.resetAt, rlDay.resetAt) / 1000)),
+    },
+  });
 }
