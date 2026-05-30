@@ -1,11 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const rl = rateLimit({ identifier: `checkout:hr:${user.id}`, limit: 10, windowMs: 60 * 60_000 });
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": "10",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+          },
+        }
+      );
+    }
 
     const { bookingId, paymentType } = await request.json() as {
       bookingId: string;
@@ -77,7 +93,13 @@ export async function POST(request: Request) {
       .update({ stripe_checkout_session_id: session.id })
       .eq("id", bookingId);
 
-    return NextResponse.json({ url: session.url, sessionId: session.id });
+    return NextResponse.json({ url: session.url, sessionId: session.id }, {
+      headers: {
+        "X-RateLimit-Limit": "10",
+        "X-RateLimit-Remaining": String(rl.remaining),
+        "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+      },
+    });
   } catch (err: unknown) {
     console.error("Checkout error:", err);
     return NextResponse.json(

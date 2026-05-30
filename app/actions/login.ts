@@ -1,8 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function loginAction(
   _prevState: { error: string } | null,
@@ -13,6 +14,16 @@ export async function loginAction(
   const redirectTo = (formData.get("redirectTo") ?? "/dashboard") as string;
 
   console.log("[AUTH-DEBUG] loginAction start — email:", email, "redirectTo:", redirectTo);
+
+  const headersList = await headers();
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headersList.get("x-real-ip") ??
+    "anonymous";
+  const rl = rateLimit({ identifier: `login:${ip}`, limit: 5, windowMs: 15 * 60_000 });
+  if (!rl.allowed) {
+    return { error: "Rate limit exceeded" };
+  }
 
   const cookieStore = await cookies();
   console.log("[AUTH-DEBUG] loginAction — cookies before auth:", cookieStore.getAll().map((c) => c.name));

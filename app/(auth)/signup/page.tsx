@@ -25,19 +25,21 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: fullName, role },
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          fullName,
+          role,
           emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        },
+        }),
       });
-      if (error) throw error;
+      const json = await res.json() as { error?: string; hasSession?: boolean };
+      if (!res.ok) throw new Error(json.error ?? "Signup failed");
 
-      if (data.session) {
+      if (json.hasSession) {
         toast.success("Account created! Welcome to ELBOLD Events.");
         window.location.href = role === "vendor" ? "/vendor/apply" : "/dashboard";
         return;

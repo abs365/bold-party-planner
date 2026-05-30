@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createAdminAlert } from "@/lib/verification-automation";
+import { rateLimit } from "@/lib/rate-limit";
 
 const ALLOWED_MIME = new Set([
   "image/jpeg",
@@ -33,6 +34,23 @@ export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const rlHour = rateLimit({ identifier: `ver-upload:hr:${user.id}`, limit: 20, windowMs: 60 * 60_000 });
+  const rlDay  = rateLimit({ identifier: `ver-upload:day:${user.id}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+  if (!rlHour.allowed || !rlDay.allowed) {
+    const rl = !rlHour.allowed ? rlHour : rlDay;
+    return NextResponse.json(
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "20",
+          "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
+    );
+  }
 
   // Get vendor record
   const { data: vendor } = await supabase
@@ -109,12 +127,21 @@ export async function POST(req: Request) {
     severity: "info",
   });
 
-  return NextResponse.json({
-    path: storagePath,
-    signedUrl: signedData?.signedUrl ?? null,
-    docType,
-    filename,
-    size: file.size,
-    mimeType: file.type,
-  });
+  return NextResponse.json(
+    {
+      path: storagePath,
+      signedUrl: signedData?.signedUrl ?? null,
+      docType,
+      filename,
+      size: file.size,
+      mimeType: file.type,
+    },
+    {
+      headers: {
+        "X-RateLimit-Limit": "20",
+        "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+        "X-RateLimit-Reset": String(Math.ceil(Math.min(rlHour.resetAt, rlDay.resetAt) / 1000)),
+      },
+    }
+  );
 }

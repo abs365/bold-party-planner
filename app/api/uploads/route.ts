@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
+import { rateLimit } from "@/lib/rate-limit";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 const MIN_FILE_SIZE = 1024;              // 1 KB — reject empty/corrupt files
@@ -40,6 +41,23 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const rlHour = rateLimit({ identifier: `uploads:hr:${user.id}`, limit: 20, windowMs: 60 * 60_000 });
+    const rlDay  = rateLimit({ identifier: `uploads:day:${user.id}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+    if (!rlHour.allowed || !rlDay.allowed) {
+      const rl = !rlHour.allowed ? rlHour : rlDay;
+      return NextResponse.json(
+        { error: "Rate limit exceeded" },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": "20",
+            "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+            "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+          },
+        }
+      );
+    }
 
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -166,7 +184,13 @@ export async function POST(request: Request) {
     });
     void track({ event: "upload.completed", userId: user.id, properties: { mediaType, vendorId } });
 
-    return NextResponse.json(mediaRecord);
+    return NextResponse.json(mediaRecord, {
+      headers: {
+        "X-RateLimit-Limit": "20",
+        "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+        "X-RateLimit-Reset": String(Math.ceil(Math.min(rlHour.resetAt, rlDay.resetAt) / 1000)),
+      },
+    });
   } catch (err: unknown) {
     logger.error("upload.unexpected_error", { err });
     return NextResponse.json(
