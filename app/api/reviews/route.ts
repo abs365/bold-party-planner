@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const identifier = user?.id ?? getClientIp(request);
-  const rlDay = rateLimit({ identifier: `reviews:day:${identifier}`, limit: 10, windowMs: 24 * 60 * 60_000 });
+  const rlDay = await rateLimit({ identifier: `reviews:day:${identifier}`, limit: 10, windowMs: 24 * 60 * 60_000 });
 
   if (!rlDay.allowed) {
     return NextResponse.json(

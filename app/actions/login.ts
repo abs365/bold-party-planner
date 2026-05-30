@@ -13,20 +13,17 @@ export async function loginAction(
   const password = (formData.get("password") ?? "") as string;
   const redirectTo = (formData.get("redirectTo") ?? "/dashboard") as string;
 
-  console.log("[AUTH-DEBUG] loginAction start — email:", email, "redirectTo:", redirectTo);
-
   const headersList = await headers();
   const ip =
     headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     headersList.get("x-real-ip") ??
     "anonymous";
-  const rl = rateLimit({ identifier: `login:${ip}`, limit: 5, windowMs: 15 * 60_000 });
+  const rl = await rateLimit({ identifier: `login:${ip}`, limit: 5, windowMs: 15 * 60_000 });
   if (!rl.allowed) {
     return { error: "Rate limit exceeded" };
   }
 
   const cookieStore = await cookies();
-  console.log("[AUTH-DEBUG] loginAction — cookies before auth:", cookieStore.getAll().map((c) => c.name));
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,14 +34,12 @@ export async function loginAction(
           return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
-          console.log("[AUTH-DEBUG] loginAction setAll called — cookies to set:", cookiesToSet.map((c) => ({ name: c.name, valueLen: c.value.length, options: c.options })));
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
-            console.log("[AUTH-DEBUG] loginAction setAll — cookies set successfully");
-          } catch (err) {
-            console.error("[AUTH-DEBUG] loginAction setAll — ERROR setting cookies:", err);
+          } catch {
+            // setAll can throw in read-only contexts (middleware); safe to ignore
           }
         },
       },
@@ -54,14 +49,6 @@ export async function loginAction(
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
-  });
-
-  console.log("[AUTH-DEBUG] loginAction signInWithPassword —", {
-    hasUser: !!data.user,
-    hasSession: !!data.session,
-    userId: data.user?.id,
-    sessionExpiresAt: data.session?.expires_at,
-    error: error?.message,
   });
 
   if (error) {
@@ -84,11 +71,6 @@ export async function loginAction(
     .eq("id", data.user.id)
     .maybeSingle();
 
-  console.log("[AUTH-DEBUG] loginAction — profile role:", profile?.role);
-
   const dest = profile?.role === "vendor" ? "/vendor/dashboard" : redirectTo;
-  console.log("[AUTH-DEBUG] loginAction — redirecting to:", dest);
-  console.log("[AUTH-DEBUG] loginAction — cookies after auth:", cookieStore.getAll().map((c) => c.name));
-
   redirect(dest);
 }

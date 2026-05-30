@@ -1,17 +1,10 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
-import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 import { assertStripeKey, assertWebhookSecret } from "@/lib/stripe";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const ip = getClientIp(request);
-  const rl = rateLimit({ ...RATE_LIMITS.webhook, identifier: `webhook:${ip}` });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
-
   const body = await request.text();
   const sig = request.headers.get("stripe-signature");
 

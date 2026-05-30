@@ -35,8 +35,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const rlHour = rateLimit({ identifier: `ver-upload:hr:${user.id}`, limit: 20, windowMs: 60 * 60_000 });
-  const rlDay  = rateLimit({ identifier: `ver-upload:day:${user.id}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+  const rlHour = await rateLimit({ identifier: `ver-upload:hr:${user.id}`, limit: 20, windowMs: 60 * 60_000 });
+  const rlDay  = await rateLimit({ identifier: `ver-upload:day:${user.id}`, limit: 100, windowMs: 24 * 60 * 60_000 });
   if (!rlHour.allowed || !rlDay.allowed) {
     const rl = !rlHour.allowed ? rlHour : rlDay;
     return NextResponse.json(

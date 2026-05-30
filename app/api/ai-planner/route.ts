@@ -10,8 +10,8 @@ export async function POST(request: Request) {
     const { data: { user } } = await supabase.auth.getUser();
 
     const identifier = user?.id ?? getClientIp(request);
-    const rlMin = rateLimit({ identifier: `ai-planner:min:${identifier}`, limit: 10, windowMs: 60_000 });
-    const rlHour = rateLimit({ identifier: `ai-planner:hr:${identifier}`, limit: 50, windowMs: 60 * 60_000 });
+    const rlMin = await rateLimit({ identifier: `ai-planner:min:${identifier}`, limit: 10, windowMs: 60_000 });
+    const rlHour = await rateLimit({ identifier: `ai-planner:hr:${identifier}`, limit: 50, windowMs: 60 * 60_000 });
 
     if (!rlMin.allowed || !rlHour.allowed) {
       const rl = !rlMin.allowed ? rlMin : rlHour;

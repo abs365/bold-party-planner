@@ -8,8 +8,8 @@ export async function POST(request: Request) {
   const ctx = await requireAuth();
   const identifier = ctx?.user.id ?? getClientIp(request);
 
-  const rlHour = rateLimit({ identifier: `vendor-apply:hr:${identifier}`, limit: 5, windowMs: 60 * 60_000 });
-  const rlDay  = rateLimit({ identifier: `vendor-apply:day:${identifier}`, limit: 20, windowMs: 24 * 60 * 60_000 });
+  const rlHour = await rateLimit({ identifier: `vendor-apply:hr:${identifier}`, limit: 5, windowMs: 60 * 60_000 });
+  const rlDay  = await rateLimit({ identifier: `vendor-apply:day:${identifier}`, limit: 20, windowMs: 24 * 60 * 60_000 });
 
   if (!rlHour.allowed || !rlDay.allowed) {
     const rl = !rlHour.allowed ? rlHour : rlDay;

@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 // financial records (bookings, payments) are retained for 7 years per UK law.
 export async function POST(request: Request) {
   const ip = getClientIp(request);
-  const rl = rateLimit({ ...RATE_LIMITS.auth, identifier: `account_delete:${ip}` });
+  const rl = await rateLimit({ ...RATE_LIMITS.auth, identifier: `account_delete:${ip}` });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

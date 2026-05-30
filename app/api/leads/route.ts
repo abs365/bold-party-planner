@@ -9,8 +9,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const identifier = user?.id ?? getClientIp(req);
-  const rlHour = rateLimit({ identifier: `leads:hr:${identifier}`, limit: 20, windowMs: 60 * 60_000 });
-  const rlDay  = rateLimit({ identifier: `leads:day:${identifier}`, limit: 100, windowMs: 24 * 60 * 60_000 });
+  const rlHour = await rateLimit({ identifier: `leads:hr:${identifier}`, limit: 20, windowMs: 60 * 60_000 });
+  const rlDay  = await rateLimit({ identifier: `leads:day:${identifier}`, limit: 100, windowMs: 24 * 60 * 60_000 });
 
   if (!rlHour.allowed || !rlDay.allowed) {
     const rl = !rlHour.allowed ? rlHour : rlDay;

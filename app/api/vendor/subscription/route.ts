@@ -42,7 +42,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const ip = getClientIp(req);
-  const rl = rateLimit({ ...RATE_LIMITS.payment, identifier: `sub:${ip}` });
+  const rl = await rateLimit({ ...RATE_LIMITS.payment, identifier: `sub:${ip}` });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

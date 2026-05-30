@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const rl = rateLimit({ identifier: `checkout:hr:${user.id}`, limit: 10, windowMs: 60 * 60_000 });
+    const rl = await rateLimit({ identifier: `checkout:hr:${user.id}`, limit: 10, windowMs: 60 * 60_000 });
     if (!rl.allowed) {
       return NextResponse.json(
         { error: "Rate limit exceeded" },
@@ -47,7 +47,14 @@ export async function POST(request: Request) {
     }
 
     const amount = paymentType === "deposit" ? booking.deposit_amount : booking.total_amount;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+    if (!appUrl) {
+      console.error("Checkout error: NEXT_PUBLIC_APP_URL is not set");
+      return NextResponse.json(
+        { error: "Server misconfiguration: NEXT_PUBLIC_APP_URL is not set" },
+        { status: 500 }
+      );
+    }
 
     const event = booking.event as Record<string, string>;
     const vendor = booking.vendor as Record<string, string>;

@@ -1,54 +1,102 @@
-// Simple in-memory rate limiter for API routes.
-// Suitable for single-instance deployments. For multi-instance (Vercel), swap
-// the store for an Upstash Redis client using the same interface.
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
+// ---------------------------------------------------------------------------
+// Redis client (lazy-initialised on first request)
+// ---------------------------------------------------------------------------
 
-const store = new Map<string, RateLimitEntry>();
+let redis: Redis | null = null;
+// Cache Ratelimit instances keyed by "{limit}:{windowMs}" to avoid recreating
+// them on every request. Identifiers are passed at call time, not baked in.
+const limiters = new Map<string, Ratelimit>();
 
-// Clean up expired entries every 5 minutes
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [key, entry] of store) {
-      if (entry.resetAt < now) store.delete(key);
+function getRedis(): Redis | null {
+  if (redis) return redis;
+  const url   = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    if (process.env.NODE_ENV === "production") {
+      console.warn(
+        "[rate-limit] UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN not set. " +
+          "Rate limiting is DISABLED — all requests will be allowed."
+      );
     }
-  }, 5 * 60 * 1000);
+    return null;
+  }
+  redis = new Redis({ url, token });
+  return redis;
 }
+
+// Convert milliseconds to the string format @upstash/ratelimit expects.
+function msToWindow(ms: number): `${number} ${"ms" | "s" | "m" | "h" | "d"}` {
+  if (ms % 86_400_000 === 0) return `${ms / 86_400_000} d`;
+  if (ms % 3_600_000  === 0) return `${ms / 3_600_000} h`;
+  if (ms % 60_000     === 0) return `${ms / 60_000} m`;
+  if (ms % 1_000      === 0) return `${ms / 1_000} s`;
+  return `${ms} ms`;
+}
+
+function getLimiter(limit: number, windowMs: number): Ratelimit | null {
+  const client = getRedis();
+  if (!client) return null;
+  const key = `${limit}:${windowMs}`;
+  if (!limiters.has(key)) {
+    limiters.set(
+      key,
+      new Ratelimit({
+        redis: client,
+        limiter: Ratelimit.slidingWindow(limit, msToWindow(windowMs)),
+        prefix: "elbold:rl",
+      }),
+    );
+  }
+  return limiters.get(key)!;
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
 
 export interface RateLimitOptions {
-  limit: number;       // Max requests per window
-  windowMs: number;    // Window size in milliseconds
-  identifier: string;  // Usually IP address or user ID
+  limit: number;
+  windowMs: number;
+  identifier: string;
 }
 
 export interface RateLimitResult {
   allowed: boolean;
   remaining: number;
-  resetAt: number;
+  resetAt: number;          // Unix ms timestamp
   retryAfterSeconds: number;
 }
 
-export function rateLimit(options: RateLimitOptions): RateLimitResult {
+/**
+ * Check a sliding-window rate limit against Upstash Redis.
+ * Fails open (allowed: true) when UPSTASH env vars are not configured so that
+ * local development and preview deployments without Redis still work.
+ */
+export async function rateLimit(options: RateLimitOptions): Promise<RateLimitResult> {
   const { limit, windowMs, identifier } = options;
   const now = Date.now();
-  const key = `${identifier}:${Math.floor(now / windowMs)}`;
 
-  const entry = store.get(key) ?? { count: 0, resetAt: now + windowMs };
-  entry.count += 1;
-  store.set(key, entry);
+  const limiter = getLimiter(limit, windowMs);
+  if (!limiter) {
+    return { allowed: true, remaining: limit, resetAt: now + windowMs, retryAfterSeconds: 0 };
+  }
 
-  const allowed = entry.count <= limit;
-  const remaining = Math.max(0, limit - entry.count);
-  const retryAfterSeconds = allowed ? 0 : Math.ceil((entry.resetAt - now) / 1000);
-
-  return { allowed, remaining, resetAt: entry.resetAt, retryAfterSeconds };
+  const result = await limiter.limit(identifier);
+  return {
+    allowed:           result.success,
+    remaining:         result.remaining,
+    resetAt:           result.reset,
+    retryAfterSeconds: result.success ? 0 : Math.ceil((result.reset - now) / 1000),
+  };
 }
 
-// Presets for common use cases
+// ---------------------------------------------------------------------------
+// Presets — unchanged; callers spread these into RateLimitOptions
+// ---------------------------------------------------------------------------
+
 export const RATE_LIMITS = {
   /** AI/OpenAI routes — expensive, limit tightly */
   ai: { limit: 20, windowMs: 60_000 },

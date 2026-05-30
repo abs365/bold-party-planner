@@ -4,7 +4,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = rateLimit({ identifier: `signup:${ip}`, limit: 5, windowMs: 60 * 60_000 });
+  const rl = await rateLimit({ identifier: `signup:${ip}`, limit: 5, windowMs: 60 * 60_000 });
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "Rate limit exceeded" },

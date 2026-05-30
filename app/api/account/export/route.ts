@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 // GDPR Art. 20 — right to data portability.
 export async function GET(request: Request) {
   const ip = getClientIp(request);
-  const rl = rateLimit({ ...RATE_LIMITS.auth, limit: 2, windowMs: 60 * 60_000, identifier: `export:${ip}` });
+  const rl = await rateLimit({ ...RATE_LIMITS.auth, limit: 2, windowMs: 60 * 60_000, identifier: `export:${ip}` });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests — you may export your data once per hour" }, { status: 429 });
   }

@@ -44,8 +44,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const identifier = user?.id ?? getClientIp(req);
-  const rlHour = rateLimit({ identifier: `messages:hr:${identifier}`, limit: 30, windowMs: 60 * 60_000 });
-  const rlDay  = rateLimit({ identifier: `messages:day:${identifier}`, limit: 200, windowMs: 24 * 60 * 60_000 });
+  const rlHour = await rateLimit({ identifier: `messages:hr:${identifier}`, limit: 30, windowMs: 60 * 60_000 });
+  const rlDay  = await rateLimit({ identifier: `messages:day:${identifier}`, limit: 200, windowMs: 24 * 60 * 60_000 });
 
   if (!rlHour.allowed || !rlDay.allowed) {
     const rl = !rlHour.allowed ? rlHour : rlDay;
