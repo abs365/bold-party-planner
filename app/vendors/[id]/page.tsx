@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { VendorProfileView } from "@/components/vendor/VendorProfileView";
@@ -41,14 +41,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function VendorProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  // Session client: used only for auth.getUser() and the logged-in visitor's own profile.
   const supabase = await createClient();
+  // Admin client: bypasses RLS for public read-only data (vendor info, review author names).
+  // Required so anonymous visitors see reviewer full_name/avatar_url after migration 027
+  // restricts profiles_public_read to approved vendors only.
+  const adminDb = await createAdminClient();
 
   const [vendorRes, authRes, reviewsRes] = await Promise.all([
-    supabase
+    adminDb
       .from("vendors")
       .select(`
         *,
-        profile:profiles(id, full_name, avatar_url, email),
+        profile:profiles(id, full_name, avatar_url),
         media:vendor_media(id, url, type, is_cover, caption, sort_order, moderation_status, alt_text, width, height, duration_secs),
         packages:vendor_packages(id, name, description, price, duration_hours, includes, is_popular)
       `)
@@ -56,7 +61,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
       .eq("status", "approved")
       .single(),
     supabase.auth.getUser(),
-    supabase
+    adminDb
       .from("reviews")
       .select("id, rating, comment, created_at, response, response_at, profile:profiles(full_name, avatar_url)")
       .eq("vendor_id", id)
@@ -69,7 +74,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   // Merge reviews into vendor object (VendorProfileView expects vendor.reviews)
   const vendorWithReviews = { ...vendorRes.data, reviews: reviewsRes.data ?? [] };
 
-  const { data: similarVendors } = await supabase
+  const { data: similarVendors } = await adminDb
     .from("vendors")
     .select("id, business_name, category, city, rating, review_count, min_price, verified, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")

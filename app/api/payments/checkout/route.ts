@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit } from "@/lib/rate-limit";
+import { assertStripeKey } from "@/lib/stripe";
 
 export async function POST(request: Request) {
   try {
@@ -53,8 +54,7 @@ export async function POST(request: Request) {
 
     // Lazily import Stripe to avoid module-level instantiation
     const Stripe = (await import("stripe")).default;
-    if (!process.env.STRIPE_SECRET_KEY) throw new Error("STRIPE_SECRET_KEY missing");
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(assertStripeKey());
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",

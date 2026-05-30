@@ -1,8 +1,52 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const csp = [
+  "default-src 'self'",
+  // Next.js requires 'unsafe-inline' for RSC hydration scripts.
+  // Stripe.js must be loaded from js.stripe.com.
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com",
+  // Tailwind and Next.js inject inline styles.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  // Images from Supabase Storage, Unsplash demo images, and data/blob URIs for uploads.
+  "img-src 'self' data: blob: https://*.supabase.co https://*.supabase.in https://images.unsplash.com",
+  // Fonts bundled via next/font land on 'self'; include gstatic as fallback.
+  "font-src 'self' https://fonts.gstatic.com",
+  // API calls: Supabase REST/Auth/Realtime (WebSocket), Stripe, Vercel Analytics.
+  // Sentry browser events route through the /monitoring tunnel (same origin = 'self').
+  "connect-src 'self' https://*.supabase.co https://*.supabase.in wss://*.supabase.co wss://*.supabase.in https://api.stripe.com https://q.stripe.com https://*.sentry.io https://vitals.vercel-insights.com https://www.google-analytics.com https://analytics.google.com",
+  // Stripe Checkout and 3DS frames are served from stripe.com subdomains.
+  "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+  // Service worker registered from same origin; blob: needed for dynamic worker creation.
+  "worker-src 'self' blob:",
+  // Block plugins and object embeds entirely.
+  "object-src 'none'",
+  // Prevent base-tag hijacking.
+  "base-uri 'self'",
+  // All form submissions must go to same origin; Stripe Checkout is a redirect, not a form POST.
+  "form-action 'self'",
+].join("; ");
+
 const nextConfig: NextConfig = {
   turbopack: {},
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          // Prevent the site from being embedded in any frame (clickjacking defence).
+          { key: "X-Frame-Options",          value: "DENY" },
+          // Stop browsers from MIME-sniffing the content-type.
+          { key: "X-Content-Type-Options",   value: "nosniff" },
+          // Send origin only; strip path/query from the Referer header on cross-origin requests.
+          { key: "Referrer-Policy",          value: "strict-origin-when-cross-origin" },
+          // Disable camera, microphone, and geolocation APIs.
+          { key: "Permissions-Policy",       value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Content-Security-Policy",  value: csp },
+        ],
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

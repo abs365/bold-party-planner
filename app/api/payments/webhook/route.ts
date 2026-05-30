@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
+import { assertStripeKey, assertWebhookSecret } from "@/lib/stripe";
 
 export const runtime = "nodejs";
 
@@ -15,16 +16,13 @@ export async function POST(request: Request) {
   const sig = request.headers.get("stripe-signature");
 
   if (!sig) return NextResponse.json({ error: "No signature" }, { status: 400 });
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    return NextResponse.json({ error: "Webhook secret missing" }, { status: 500 });
-  }
 
   let event: import("stripe").Stripe.Event;
 
   try {
     const Stripe = (await import("stripe")).default;
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    const stripe = new Stripe(assertStripeKey());
+    event = stripe.webhooks.constructEvent(body, sig, assertWebhookSecret());
   } catch (err) {
     console.error("Webhook signature error:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
