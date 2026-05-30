@@ -17,8 +17,9 @@ export async function GET(req: Request) {
     `);
 
   if (bookingId) {
-    const { data, error } = await query.eq("booking_id", bookingId).single();
+    const { data, error } = await query.eq("booking_id", bookingId).maybeSingle();
     if (error) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json(data);
   }
 
@@ -42,11 +43,11 @@ export async function PATCH(req: Request) {
     .from("contracts")
     .select("*")
     .eq("id", contract_id)
-    .single();
+    .maybeSingle();
 
   if (!contract) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
 
   if (action === "customer_accept" && contract.customer_id === user.id) {
     const now = new Date().toISOString();
