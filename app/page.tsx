@@ -37,7 +37,7 @@ type FeaturedVendor = Pick<
   media?: Array<{ url: string; type: string; is_cover: boolean }>;
 };
 
-function ElboldMark({ size = 40 }: { size?: number }) {
+function ElboldMark({ size = 40, fetchPriority }: { size?: number; fetchPriority?: "high" | "low" | "auto" }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -45,6 +45,7 @@ function ElboldMark({ size = 40 }: { size?: number }) {
       width={size}
       height={size}
       alt="ELBOLD"
+      fetchPriority={fetchPriority}
       style={{ display: "block" }}
     />
   );
@@ -100,7 +101,7 @@ export default async function Home() {
 
           {/* Brand mark — acts as a centrepiece, not just a nav logo */}
           <div className="flex flex-col items-center mb-14">
-            <ElboldMark size={72} />
+            <ElboldMark size={72} fetchPriority="high" />
             <div className="mt-5 flex items-center gap-3">
               <div className="h-px w-10" style={{ background: "rgba(201,168,76,0.35)" }} />
               <span

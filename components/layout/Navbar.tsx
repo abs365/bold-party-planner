@@ -80,6 +80,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
             height="34"
             alt="ELBOLD mark"
             className="flex-shrink-0"
+            fetchPriority="high"
           />
           <span
             className="font-bold tracking-[0.18em] text-sm"

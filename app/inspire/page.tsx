@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -322,8 +323,13 @@ export default async function InspirePage() {
                   >
                     <div className="h-44 relative overflow-hidden" style={{ background: "#0D1B3E" }}>
                       {cover?.url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={cover.url} alt={vendor.business_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <Image
+                          src={cover.url}
+                          alt={vendor.business_name}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           {/* eslint-disable-next-line @next/next/no-img-element */}

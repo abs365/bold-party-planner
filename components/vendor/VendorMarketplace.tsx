@@ -415,8 +415,8 @@ export function VendorMarketplace({
             <span className="text-xs text-gray-400">Highest-rated verified vendors</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {smartPicks.map((vendor) => (
-              <SmartPickCard key={vendor.id} vendor={vendor} />
+            {smartPicks.map((vendor, index) => (
+              <SmartPickCard key={vendor.id} vendor={vendor} priority={index < 2} />
             ))}
           </div>
         </div>
@@ -445,8 +445,8 @@ export function VendorMarketplace({
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {filtered.slice(0, displayCount).map((vendor) => (
-                <VendorCard key={vendor.id} vendor={vendor} />
+              {filtered.slice(0, displayCount).map((vendor, index) => (
+                <VendorCard key={vendor.id} vendor={vendor} priority={index === 0} />
               ))}
             </div>
             {filtered.length > displayCount && (
@@ -469,7 +469,7 @@ export function VendorMarketplace({
   );
 }
 
-function SmartPickCard({ vendor }: { vendor: Vendor }) {
+function SmartPickCard({ vendor, priority = false }: { vendor: Vendor; priority?: boolean }) {
   const cat = VENDOR_CATEGORIES[vendor.category];
   const coverMedia = vendor.media?.find((m) => m.is_cover) ?? vendor.media?.[0];
   const minPrice = vendor.min_price ?? vendor.packages?.[0]?.price;
@@ -485,6 +485,7 @@ function SmartPickCard({ vendor }: { vendor: Vendor }) {
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 50vw, 25vw"
+              priority={priority}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -512,7 +513,7 @@ function SmartPickCard({ vendor }: { vendor: Vendor }) {
   );
 }
 
-function VendorCard({ vendor }: { vendor: Vendor }) {
+function VendorCard({ vendor, priority = false }: { vendor: Vendor; priority?: boolean }) {
   const [saved, setSaved] = useState(false);
   const cat = VENDOR_CATEGORIES[vendor.category];
   const coverMedia = vendor.media?.find((m) => m.is_cover) ?? vendor.media?.[0];
@@ -539,6 +540,7 @@ function VendorCard({ vendor }: { vendor: Vendor }) {
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  priority={priority}
                 />
               ) : (
                 <video
