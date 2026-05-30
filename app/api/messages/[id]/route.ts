@@ -7,13 +7,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
 
   const { data: thread } = await supabase
     .from("message_threads")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (!thread) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -46,10 +46,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!content?.trim()) return NextResponse.json({ error: "Message cannot be empty" }, { status: 400 });
   if (content.length > 2000) return NextResponse.json({ error: "Message too long" }, { status: 400 });
 
-  const { data: thread } = await supabase.from("message_threads").select("*").eq("id", id).single();
+  const { data: thread } = await supabase.from("message_threads").select("*").eq("id", id).maybeSingle();
   if (!thread) return NextResponse.json({ error: "Thread not found" }, { status: 404 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
   const isCustomer = thread.customer_id === user.id;
   const isVendor = vendor && thread.vendor_id === vendor.id;
   if (!isCustomer && !isVendor) return NextResponse.json({ error: "Forbidden" }, { status: 403 });

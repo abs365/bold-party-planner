@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       .eq("id", booking_id)
       .eq("customer_id", user.id)
       .eq("status", "completed")
-      .single();
+      .maybeSingle();
 
     if (!booking) {
       return NextResponse.json({ error: "Booking not found or not completed" }, { status: 403 });
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
       .from("reviews")
       .select("id")
       .eq("booking_id", booking_id)
-      .single();
+      .maybeSingle();
 
     if (existing) {
       return NextResponse.json({ error: "Review already submitted" }, { status: 409 });
@@ -126,7 +126,7 @@ export async function PATCH(request: Request) {
       .from("vendors")
       .select("id")
       .eq("user_id", user.id)
-      .single();
+      .maybeSingle();
 
     if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 

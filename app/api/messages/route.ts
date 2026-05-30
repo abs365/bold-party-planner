@@ -16,7 +16,7 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
 
   let query = supabase
     .from("message_threads")
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 
   const { vendor_id, booking_id, quote_id, subject, first_message } = parsed.data;
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("id", vendor_id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id").eq("id", vendor_id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
 
   // Check for existing thread
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     .eq("customer_id", user.id)
     .eq("vendor_id", vendor_id)
     .eq(booking_id ? "booking_id" : "customer_id", booking_id ?? user.id)
-    .single();
+    .maybeSingle();
 
   let threadId = existing?.id;
 

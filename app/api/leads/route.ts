@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     .from("quotes")
     .select("id, customer_id")
     .eq("id", body.quote_id)
-    .single();
+    .maybeSingle();
 
   if (!quote || quote.customer_id !== user.id) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -36,7 +36,7 @@ export async function GET() {
     .from("vendors")
     .select("id, lead_count, conversion_count, response_rate")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
 
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 

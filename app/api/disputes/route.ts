@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     .select("id, customer_id, vendor_id, vendor:vendors(user_id)")
     .eq("id", booking_id)
     .eq("customer_id", user.id)
-    .single();
+    .maybeSingle();
 
   if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
 
@@ -102,7 +102,7 @@ export async function PATCH(req: Request) {
   const isAdmin = ADMIN_EMAILS.includes(user.email ?? "");
 
   if (action === "vendor_respond") {
-    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+    const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
     if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
     await supabase.from("disputes")

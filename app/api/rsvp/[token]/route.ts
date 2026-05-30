@@ -11,7 +11,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     .select(`*, event:events(id, title, date, start_time, city, venue_name, venue_address, event_type, guest_count, theme)`)
     .eq("rsvp_token", token)
     .eq("is_active", true)
-    .single();
+    .maybeSingle();
 
   if (error || !invitation) {
     return NextResponse.json({ error: "Invitation not found or expired" }, { status: 404 });
@@ -33,7 +33,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
     .select("id, is_active, rsvp_count")
     .eq("rsvp_token", token)
     .eq("is_active", true)
-    .single();
+    .maybeSingle();
 
   if (!invitation) {
     return NextResponse.json({ error: "Invitation not found or expired" }, { status: 404 });
