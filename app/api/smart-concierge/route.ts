@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { rateLimit, RATE_LIMITS, getClientIp } from "@/lib/rate-limit";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const SYSTEM_PROMPT = `You are the ELBOLD Events Smart Event Concierge â€” a premium, friendly event planning expert for the UK market.
 
@@ -27,18 +27,28 @@ Guidelines:
 - Be encouraging and make planning feel exciting, not overwhelming`;
 
 export async function POST(req: Request) {
-  // Rate limit: 20 AI requests per minute per IP
-  const ip = getClientIp(req);
-  const rl = rateLimit({ identifier: ip, ...RATE_LIMITS.ai });
-  if (!rl.allowed) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const identifier = user?.id ?? getClientIp(req);
+  const rlMin = rateLimit({ identifier: `smart-concierge:min:${identifier}`, limit: 10, windowMs: 60_000 });
+  const rlHour = rateLimit({ identifier: `smart-concierge:hr:${identifier}`, limit: 50, windowMs: 60 * 60_000 });
+
+  if (!rlMin.allowed || !rlHour.allowed) {
+    const rl = !rlMin.allowed ? rlMin : rlHour;
     return NextResponse.json(
-      { error: "Too many requests. Please wait a moment." },
-      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+      { error: "Rate limit exceeded" },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "10",
+          "X-RateLimit-Remaining": String(Math.min(rlMin.remaining, rlHour.remaining)),
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
     );
   }
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { message, event_id, history } = await req.json() as {
@@ -82,7 +92,13 @@ export async function POST(req: Request) {
     { user_id: user.id, event_id: event_id ?? null, role: "assistant", content: reply },
   ]);
 
-  return NextResponse.json({ reply });
+  return NextResponse.json({ reply }, {
+    headers: {
+      "X-RateLimit-Limit": "10",
+      "X-RateLimit-Remaining": String(Math.min(rlMin.remaining, rlHour.remaining)),
+      "X-RateLimit-Reset": String(Math.ceil(Math.min(rlMin.resetAt, rlHour.resetAt) / 1000)),
+    },
+  });
 }
 
 export async function GET(req: Request) {
