@@ -12,6 +12,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Browse Event Vendors | ELBOLD Events",
     description: "Find and book verified event vendors across the UK.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ELBOLD Events – Browse Verified Event Vendors",
+        type: "image/png",
+      },
+    ],
   },
 };
 

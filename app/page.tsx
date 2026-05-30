@@ -15,6 +15,15 @@ export const metadata: Metadata = {
     title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
     description: "Trusted vendors for extraordinary celebrations across the United Kingdom.",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
+        type: "image/png",
+      },
+    ],
   },
 };
 

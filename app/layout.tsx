@@ -39,12 +39,27 @@ export const metadata: Metadata = {
     type: "website",
     url: APP_URL,
     locale: "en_GB",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
     description: "Book verified event vendors across the UK.",
     creator: "@elbold",
+    images: [
+      {
+        url: "/opengraph-image",
+        alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
+      },
+    ],
   },
   robots: {
     index: true,
