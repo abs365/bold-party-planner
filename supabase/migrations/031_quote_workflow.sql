@@ -75,7 +75,8 @@ CREATE INDEX IF NOT EXISTS quote_events_created_at_idx ON public.quote_events(cr
 ALTER TABLE public.quote_events ENABLE ROW LEVEL SECURITY;
 
 -- Customer reads events for own quotes
-CREATE POLICY IF NOT EXISTS "quote_events_customer_read" ON public.quote_events
+DROP POLICY IF EXISTS "quote_events_customer_read" ON public.quote_events;
+CREATE POLICY "quote_events_customer_read" ON public.quote_events
   FOR SELECT TO authenticated
   USING (
     quote_id IN (
@@ -84,7 +85,8 @@ CREATE POLICY IF NOT EXISTS "quote_events_customer_read" ON public.quote_events
   );
 
 -- Vendor reads events for their quotes
-CREATE POLICY IF NOT EXISTS "quote_events_vendor_read" ON public.quote_events
+DROP POLICY IF EXISTS "quote_events_vendor_read" ON public.quote_events;
+CREATE POLICY "quote_events_vendor_read" ON public.quote_events
   FOR SELECT TO authenticated
   USING (
     quote_id IN (
