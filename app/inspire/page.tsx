@@ -15,21 +15,20 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 const TRENDING_THEMES = [
-  { label: "Garden Party", count: "2.4k saves", href: "/browse?event=wedding" },
-  { label: "Masquerade Ball", count: "1.8k saves", href: "/browse?event=birthday" },
-  { label: "Tropical Paradise", count: "1.6k saves", href: "/browse?event=birthday" },
-  { label: "Enchanted Forest", count: "1.4k saves", href: "/browse?event=wedding" },
-  { label: "Black & Gold Luxe", count: "1.2k saves", href: "/browse?event=corporate" },
-  { label: "Vintage Carousel", count: "980 saves", href: "/browse?event=birthday" },
-  { label: "Boho Greenhouse", count: "870 saves", href: "/browse?event=wedding" },
-  { label: "Circus Spectacular", count: "760 saves", href: "/browse?event=birthday" },
+  { label: "Garden Party",     href: "/browse?event=wedding&theme=garden-party"      },
+  { label: "Masquerade Ball",  href: "/browse?event=birthday&theme=masquerade"       },
+  { label: "Tropical Paradise",href: "/browse?event=birthday&theme=tropical-paradise"},
+  { label: "Enchanted Forest", href: "/browse?event=wedding&theme=enchanted-forest"  },
+  { label: "Black & Gold Luxe",href: "/browse?event=corporate&theme=black-gold-luxe" },
+  { label: "Vintage Carousel", href: "/browse?event=birthday&theme=vintage-carousel" },
+  { label: "Boho Greenhouse",  href: "/browse?event=wedding&theme=boho-greenhouse"   },
+  { label: "Circus Spectacular",href: "/browse?event=birthday&theme=circus-spectacular"},
 ];
 
 const COLOUR_PALETTES = [
   {
     name: "Rose Gold & Ivory",
     colors: ["#B76E79", "#F5E6D3", "#D4AF8C", "#F8F4F0"],
-    saves: "3.2k",
     style: "Wedding · Anniversary",
     mood: "Romantic & Timeless",
     href: "/browse?category=decorator&event=wedding",
@@ -38,7 +37,6 @@ const COLOUR_PALETTES = [
   {
     name: "Midnight Navy & Gold",
     colors: ["#1B2A4A", "#C9A84C", "#0D1B2A", "#E8D5A0"],
-    saves: "2.8k",
     style: "Corporate · Gala",
     mood: "Bold & Sophisticated",
     href: "/browse?category=lighting_stage&event=corporate",
@@ -47,7 +45,6 @@ const COLOUR_PALETTES = [
   {
     name: "Sage & Terracotta",
     colors: ["#87A878", "#C4714F", "#F2E8DF", "#5C4033"],
-    saves: "2.1k",
     style: "Boho · Garden Party",
     mood: "Natural & Earthy",
     href: "/browse?category=decorator&event=wedding",
@@ -56,7 +53,6 @@ const COLOUR_PALETTES = [
   {
     name: "Dusty Lavender",
     colors: ["#C8B8D8", "#9B8AA3", "#F0EBF5", "#6E5F80"],
-    saves: "1.9k",
     style: "Baby Shower · Wedding",
     mood: "Soft & Dreamy",
     href: "/browse?category=balloon_decorator&event=baby_shower",
@@ -65,7 +61,6 @@ const COLOUR_PALETTES = [
   {
     name: "Emerald & Champagne",
     colors: ["#2D6A4F", "#F0E5B0", "#1B4332", "#C8B460"],
-    saves: "1.7k",
     style: "Anniversary · Wedding",
     mood: "Luxurious & Rich",
     href: "/browse?category=decorator&event=anniversary",
@@ -74,7 +69,6 @@ const COLOUR_PALETTES = [
   {
     name: "Blush & Burgundy",
     colors: ["#FFB6C1", "#800020", "#FFF0F3", "#4A0010"],
-    saves: "1.5k",
     style: "Wedding · Engagement",
     mood: "Passionate & Elegant",
     href: "/browse?category=decorator&event=engagement",
@@ -83,12 +77,12 @@ const COLOUR_PALETTES = [
 ];
 
 const INSPIRATION_COLLECTIONS = [
-  { title: "Wedding", count: 48, href: "/browse?category=decorator&event=wedding" },
-  { title: "Birthday", count: 62, href: "/browse?event=birthday" },
-  { title: "Corporate", count: 34, href: "/browse?event=corporate" },
-  { title: "Baby Shower", count: 29, href: "/browse?event=baby_shower" },
-  { title: "Table Styling", count: 55, href: "/browse?category=decorator" },
-  { title: "Lighting", count: 41, href: "/browse?category=lighting_stage" },
+  { title: "Wedding",     href: "/browse?category=decorator&event=wedding" },
+  { title: "Birthday",    href: "/browse?event=birthday"                   },
+  { title: "Corporate",   href: "/browse?event=corporate"                  },
+  { title: "Baby Shower", href: "/browse?event=baby_shower"                },
+  { title: "Table Styling",href: "/browse?category=decorator"              },
+  { title: "Lighting",    href: "/browse?category=lighting_stage"          },
 ];
 
 export default async function InspirePage() {
@@ -197,10 +191,7 @@ export default async function InspirePage() {
                 className="flex items-center justify-between px-4 py-3.5 rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group"
               >
                 <span className="text-sm font-medium text-gray-900">{theme.label}</span>
-                <div className="flex items-center gap-1">
-                  <Heart size={9} className="text-gray-300 group-hover:text-gray-400 transition-colors" />
-                  <span className="text-xs text-gray-400 font-light">{theme.count.split(" ")[0]}</span>
-                </div>
+                <ArrowRight size={12} className="text-gray-300 group-hover:text-gray-500 transition-colors flex-shrink-0" />
               </Link>
             ))}
           </div>
@@ -232,8 +223,7 @@ export default async function InspirePage() {
                     <polygon points="13,1 25,13 13,25 1,13" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
                   </svg>
                 </div>
-                <div className="font-medium text-gray-900 text-sm mb-1">{col.title}</div>
-                <div className="text-xs text-gray-400 font-light">{col.count} ideas</div>
+                <div className="font-medium text-gray-900 text-sm">{col.title}</div>
               </Link>
             ))}
           </div>
@@ -278,10 +268,6 @@ export default async function InspirePage() {
                 <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid #f3f4f6" }}>
                   <span className="text-xs text-gray-400 font-light">{palette.style}</span>
                   <div className="flex items-center gap-2.5">
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <Heart size={9} />
-                      {palette.saves}
-                    </div>
                     <span className="flex items-center gap-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#0D1B3E" }}>
                       {palette.vendors} <ExternalLink size={10} />
                     </span>

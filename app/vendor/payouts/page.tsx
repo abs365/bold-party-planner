@@ -107,17 +107,20 @@ export default async function VendorPayoutsPage() {
           )}
         </div>
 
-        {/* Payout setup placeholder */}
-        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
+        {/* Payout information — manual process during beta */}
+        <div className="bg-white/4 border border-amber-500/20 rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-bold text-white">Bank Account</h2>
-            <span className="text-xs bg-amber-500/15 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20">Setup Required</span>
+            <h2 className="font-bold text-white">How Payouts Work</h2>
+            <span className="text-xs bg-amber-500/15 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/20">Beta Period</span>
           </div>
-          <p className="text-sm text-slate-400 mb-4">Connect your bank account to receive payouts directly. Stripe Connect setup will be available in the next release.</p>
-          <button disabled className="btn-secondary opacity-50 cursor-not-allowed">
-            <ArrowUpRight size={15} />
-            Connect Bank Account (Coming Soon)
-          </button>
+          <div className="space-y-3 text-sm text-slate-400">
+            <p>During our launch period, payouts are processed manually by the ELBOLD team within 7 working days of a booking being marked complete.</p>
+            <p>ELBOLD retains a <span className="text-white font-medium">10% platform fee</span>. You receive 90% of the confirmed booking value.</p>
+            <p>To receive your payout, ensure your account details are on file. Contact <span className="text-white">support@elbold.com</span> if you have any questions.</p>
+          </div>
+          <div className="mt-4 pt-4 border-t border-white/6">
+            <p className="text-xs text-slate-500">Automated bank payouts via Stripe Connect are coming. You will be notified when this goes live.</p>
+          </div>
         </div>
       </div>
     </DashboardLayout>

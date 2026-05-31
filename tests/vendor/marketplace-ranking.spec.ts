@@ -69,7 +69,7 @@ test.describe("Marketplace — Trust badges on cards", () => {
     await page.goto("/browse");
     // At least one of the named verification badges should be visible on the page
     await expect(
-      page.getByText(/business verified|identity verified|trusted pro/i).first()
+      page.getByText(/business verified|id verified|address verified|identity verified|trusted pro|trusted professional/i).first()
     ).toBeVisible({ timeout: 10000 });
   });
 

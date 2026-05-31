@@ -20,6 +20,12 @@ function LoginForm() {
     }
   }, [state?.error]);
 
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      toast.success("Password updated. Please sign in with your new password.");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="min-h-screen flex">
 
@@ -126,9 +132,14 @@ function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="password" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  Password
+                </label>
+                <Link href="/forgot-password" className="text-xs text-gray-400 hover:text-gray-700 transition-colors font-light">
+                  Forgot password?
+                </Link>
+              </div>
               <div className="relative">
                 <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
                 <input

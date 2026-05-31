@@ -117,6 +117,16 @@ export function VendorSubscriptionView() {
 
   return (
     <div className="space-y-6">
+      {/* Free plan — explain what a subscription gives */}
+      {currentPlan === "free" && !hasPaidPlan && (
+        <div className="bg-white/3 border border-white/6 rounded-xl p-4">
+          <p className="text-white font-medium text-sm mb-1">You&apos;re on the Free plan</p>
+          <p className="text-slate-400 text-xs leading-relaxed">
+            Your profile is live and visible to customers. Upgrading gives you priority search placement, more photos, analytics, and a Pro or Elite badge that builds customer confidence.
+          </p>
+        </div>
+      )}
+
       {/* Current plan status bar */}
       {sub && sub.plan !== "free" && (
         <div className={cn(

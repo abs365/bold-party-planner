@@ -41,6 +41,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
+  // Supabase silently "succeeds" for existing emails when email confirmation is enabled —
+  // it returns a user with an empty identities array instead of an error.
+  // We detect this and return a clear 409 so the UI can show the right message.
+  if (data.user && data.user.identities && data.user.identities.length === 0) {
+    return NextResponse.json(
+      { error: "An account already exists with this email. Please sign in or reset your password." },
+      { status: 409 }
+    );
+  }
+
   return NextResponse.json(
     { hasSession: !!data.session },
     {

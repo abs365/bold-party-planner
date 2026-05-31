@@ -42,6 +42,13 @@ export default function SignupPage() {
         }),
       });
       const json = await res.json() as { error?: string; hasSession?: boolean };
+
+      // 409 = email already registered (caught at API level via identities check)
+      if (res.status === 409) {
+        toast.error(json.error ?? "An account already exists with this email. Please sign in or reset your password.");
+        return;
+      }
+
       if (!res.ok) throw new Error(json.error ?? "Signup failed");
 
       if (json.hasSession) {
@@ -53,8 +60,8 @@ export default function SignupPage() {
       setConfirmed(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Signup failed";
-      if (msg.toLowerCase().includes("already registered") || msg.toLowerCase().includes("user already")) {
-        toast.error("An account with this email already exists. Try signing in instead.");
+      if (msg.toLowerCase().includes("already registered") || msg.toLowerCase().includes("user already") || msg.toLowerCase().includes("already exists")) {
+        toast.error("An account already exists with this email. Please sign in or reset your password.");
       } else {
         toast.error(msg);
       }

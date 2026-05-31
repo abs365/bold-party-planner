@@ -38,6 +38,7 @@ export default async function BrowsePage({
     min_rating?: string;
     verified_only?: string;
     event_type?: string;
+    theme?: string;
   }>;
 }) {
   const params = await searchParams;
@@ -89,20 +90,29 @@ export default async function BrowsePage({
           >
             ELBOLD Events
           </p>
+          {params.theme && (
+            <p className="text-xs tracking-[0.2em] font-semibold mb-2 uppercase" style={{ color: "rgba(201,168,76,0.5)" }}>
+              {params.theme.replace(/-/g, " ")} Inspiration
+            </p>
+          )}
           <h1
             className="text-3xl sm:text-4xl font-light tracking-tight mb-3"
             style={{ color: "rgba(255,255,255,0.92)" }}
           >
-            {params.category
+            {params.theme
+              ? params.theme.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+              : params.category
               ? `${params.category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}s`
               : "Browse Vendors"}
           </h1>
           <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.4)" }}>
-            {params.search
+            {params.theme
+              ? `Vendors for your ${params.theme.replace(/-/g, " ")} event`
+              : params.search
               ? `Results for "${params.search}"`
               : params.city
               ? `Vendors in ${params.city}`
-              : "Verified event professionals across the United Kingdom"}
+              : "Event professionals across the United Kingdom"}
           </p>
         </div>
       </div>
@@ -121,6 +131,7 @@ export default async function BrowsePage({
           initialMinRating={params.min_rating ? parseFloat(params.min_rating) : undefined}
           initialVerifiedOnly={params.verified_only === "true"}
           initialEventType={params.event_type}
+          initialTheme={params.theme}
         />
       </div>
       <Footer />

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { z } from "zod";
 import { scoreLead } from "@/lib/ai/scoring";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
@@ -7,15 +7,18 @@ import { track } from "@/lib/analytics";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const quoteSchema = z.object({
-  vendor_id: z.string().uuid(),
-  event_id: z.string().uuid().optional(),
-  message: z.string().max(2000).optional(),
-  requirements: z.string().max(2000).optional(),
-  event_date: z.string().optional(),
-  event_type: z.string().optional(),
+  vendor_id:   z.string().uuid(),
+  event_id:    z.string().uuid().optional(),
+  message:     z.string().max(2000).optional(),
+  requirements:z.string().max(2000).optional(),
+  notes:       z.string().max(2000).optional(),
+  city:        z.string().max(200).optional(),
+  category:    z.string().max(100).optional(),
+  event_date:  z.string().optional(),
+  event_type:  z.string().optional(),
   guest_count: z.number().int().min(1).max(10000).optional(),
-  budget_min: z.number().min(0).optional(),
-  budget_max: z.number().min(0).optional(),
+  budget_min:  z.number().min(0).optional(),
+  budget_max:  z.number().min(0).optional(),
 });
 
 export async function GET(req: Request) {
@@ -24,13 +27,15 @@ export async function GET(req: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
-  const role = searchParams.get("role") ?? "customer";
+  const role     = searchParams.get("role")     ?? "customer";
+  const eventId  = searchParams.get("event_id") ?? null;
 
   let query = supabase.from("quotes").select(`
     *,
-    vendor:vendors(id, business_name, category, city, rating, media:vendor_media(url, is_cover)),
+    vendor:vendors(id, business_name, category, city, rating, review_count, verification_level,
+      response_rate, completed_jobs_count, media:vendor_media(url, is_cover)),
     customer:profiles(id, full_name, avatar_url),
-    event:events(id, title, date),
+    event:events(id, title, date, city),
     response:quote_responses(*)
   `);
 
@@ -40,6 +45,7 @@ export async function GET(req: Request) {
     query = query.eq("vendor_id", vendor.id);
   } else {
     query = query.eq("customer_id", user.id);
+    if (eventId) query = query.eq("event_id", eventId);
   }
 
   const { data, error } = await query.order("created_at", { ascending: false });
@@ -57,17 +63,14 @@ export async function POST(req: Request) {
 
   if (!rlHour.allowed || !rlDay.allowed) {
     const rl = !rlHour.allowed ? rlHour : rlDay;
-    return NextResponse.json(
-      { error: "Rate limit exceeded" },
-      {
-        status: 429,
-        headers: {
-          "X-RateLimit-Limit": "20",
-          "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
-          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
-        },
-      }
-    );
+    return NextResponse.json({ error: "Rate limit exceeded" }, {
+      status: 429,
+      headers: {
+        "X-RateLimit-Limit": "20",
+        "X-RateLimit-Remaining": String(Math.min(rlHour.remaining, rlDay.remaining)),
+        "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+      },
+    });
   }
 
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -80,52 +83,76 @@ export async function POST(req: Request) {
 
   const { vendor_id, ...rest } = parsed.data;
 
-  // Check vendor is approved
-  const { data: vendor } = await supabase.from("vendors").select("id, status, user_id").eq("id", vendor_id).maybeSingle();
+  const { data: vendor } = await supabase
+    .from("vendors").select("id, status, user_id").eq("id", vendor_id).maybeSingle();
   if (!vendor || vendor.status !== "approved") {
     return NextResponse.json({ error: "Vendor not available" }, { status: 400 });
   }
-
-  // Prevent quoting own vendor profile
   if (vendor.user_id === user.id) {
-    return NextResponse.json({ error: "Cannot request quote from yourself" }, { status: 400 });
+    return NextResponse.json({ error: "Cannot request a quote from yourself" }, { status: 400 });
+  }
+
+  // Prevent duplicate pending quote to same vendor for same event
+  if (rest.event_id) {
+    const { data: existing } = await supabase
+      .from("quotes")
+      .select("id")
+      .eq("customer_id", user.id)
+      .eq("vendor_id", vendor_id)
+      .eq("event_id", rest.event_id)
+      .in("status", ["pending", "responded", "viewed", "shortlisted"])
+      .maybeSingle();
+    if (existing) {
+      return NextResponse.json(
+        { error: "You already have an open quote with this vendor for this event" },
+        { status: 409 }
+      );
+    }
   }
 
   const lead_score = scoreLead({
-    budget_max: rest.budget_max ?? null,
+    budget_max:  rest.budget_max  ?? null,
     guest_count: rest.guest_count ?? null,
-    event_date: rest.event_date ?? null,
+    event_date:  rest.event_date  ?? null,
   });
 
   const { data, error } = await supabase
     .from("quotes")
-    .insert({ customer_id: user.id, vendor_id, ...rest, lead_score, routed_at: new Date().toISOString() })
+    .insert({
+      customer_id: user.id,
+      vendor_id,
+      ...rest,
+      lead_score,
+      status: "pending",
+      routed_at: new Date().toISOString(),
+    })
     .select()
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  void createAuditLog({
-    actorUserId: user.id,
-    actorRole: "customer",
-    action: "quote.created",
-    entityType: "quote",
-    entityId: data.id,
-    ipAddress: ipFromRequest(req),
-  });
-  void track({
-    event: "quote.requested",
-    userId: user.id,
-    properties: { vendor_id, event_id: rest.event_id ?? null, lead_score },
+  // Audit trail
+  const db = await createAdminClient();
+  void db.from("quote_events").insert({
+    quote_id: data.id, actor_id: user.id, actor_role: "customer",
+    event_type: "quote_created",
+    details: { vendor_id, event_type: rest.event_type, lead_score },
   });
 
-  // Notify vendor
+  void createAuditLog({
+    actorUserId: user.id, actorRole: "customer",
+    action: "quote.created", entityType: "quote", entityId: data.id,
+    ipAddress: ipFromRequest(req),
+  });
+  void track({ event: "quote.requested", userId: user.id,
+    properties: { vendor_id, event_id: rest.event_id ?? null, lead_score } });
+
   void supabase.rpc("notify_user", {
     p_user_id: vendor.user_id,
     p_title: "New Quote Request",
-    p_message: `You have a new quote request. Respond within 7 days.`,
+    p_message: "You have a new quote request. Review and respond within 7 days.",
     p_type: "booking",
-    p_link: `/vendor/quotes`,
+    p_link: "/vendor/quotes",
   });
 
   return NextResponse.json(data, {

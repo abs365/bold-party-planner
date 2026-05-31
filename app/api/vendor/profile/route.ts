@@ -12,7 +12,7 @@ export async function PATCH(req: Request) {
   const body = await req.json();
 
   const allowed = [
-    "business_name", "tagline", "bio", "category", "city", "address",
+    "business_name", "tagline", "bio", "category", "custom_category_description", "city", "address",
     "phone", "website_url", "instagram_url", "min_price", "max_price",
     "years_experience", "event_types",
   ];

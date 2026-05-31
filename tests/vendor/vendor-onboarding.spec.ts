@@ -140,7 +140,7 @@ test.describe("Vendor — Onboarding: Approved (fully complete)", () => {
     await expect(page.getByText(/basic profile/i).first()).toBeVisible();
     await expect(page.getByText(/services/i).first()).toBeVisible();
     await expect(page.getByText(/photo gallery/i).first()).toBeVisible();
-    await expect(page.getByText(/identity verification/i).first()).toBeVisible();
+    await expect(page.getByText(/verification documents|identity verification/i).first()).toBeVisible();
     await expect(page.getByText(/trust/i).first()).toBeVisible();
     await expect(page.getByText(/marketplace ready/i).first()).toBeVisible();
   });
@@ -198,7 +198,7 @@ test.describe("Vendor — Onboarding: Partial completion", () => {
   test("shows incomplete verification step", async ({ page }) => {
     await page.goto("/vendor/onboarding");
     // Charlotte has no verification — the step should be visible but not complete
-    await expect(page.getByText(/identity verification/i)).toBeVisible();
+    await expect(page.getByText(/verification documents|identity verification/i)).toBeVisible();
   });
 
   test("shows next action CTA", async ({ page }) => {

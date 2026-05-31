@@ -114,6 +114,14 @@ export default async function Home() {
             </div>
           </div>
 
+          {/* Mission label */}
+          <p
+            className="text-xs tracking-[0.3em] font-semibold uppercase mb-8"
+            style={{ color: "rgba(201,168,76,0.6)" }}
+          >
+            Connecting customers with trusted event professionals across the UK
+          </p>
+
           {/* Headline */}
           <h1
             className="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[1.06] text-white mb-8"

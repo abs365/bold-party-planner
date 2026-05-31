@@ -92,14 +92,15 @@ export function computeVendorCompletion({
     },
     {
       id: "verification",
-      label: "Identity Verification",
-      description: "Verified vendors get priority placement and higher customer trust",
+      label: "Verification Documents",
+      description: "Document-verified vendors build stronger customer trust and rank higher",
       maxPoints: 25,
       href: "/vendor/verification",
       cta: "Start Verification",
       items: [
-        { label: "Profile auto-verified (level 1)", done: verificationLevel >= 1, points: 8, tip: "Complete profile + phone + 3 photos to auto-verify" },
-        { label: "Document verification approved (level 2)", done: verificationLevel >= 2, points: 17, tip: "Submit ID and business documents for full Business Verified status" },
+        { label: "Email + phone confirmed (level 1)", done: verificationLevel >= 1, points: 5, tip: "Your account is registered — submit documents to unlock verified badges" },
+        { label: "Government ID approved (level 2)", done: verificationLevel >= 2, points: 10, tip: "Submit a government-issued ID for ID Verified status" },
+        { label: "Proof of address approved (level 3+)", done: verificationLevel >= 3, points: 10, tip: "Submit proof of address or business registration for full Business Verified status" },
       ],
     },
     {
@@ -135,13 +136,15 @@ export function computeVendorCompletion({
 
   const score = Math.min(100, steps.reduce((sum, s) => sum + s.earnedPoints, 0));
   const nextStep = steps.find((s) => !s.complete) ?? null;
-  const isMarketplaceReady = score >= 60;
+  // Marketplace ready requires both profile score AND at least basic verification (level 1)
+  const isMarketplaceReady = score >= 60 && verificationLevel >= 1;
 
   let strengthLabel: CompletionResult["strengthLabel"];
   if (score < 25) strengthLabel = "Getting Started";
   else if (score < 50) strengthLabel = "Building Profile";
   else if (score < 75) strengthLabel = "Almost Ready";
-  else if (score < 95) strengthLabel = "Marketplace Ready";
+  // Cannot reach "Fully Optimised" without document verification (level 2+)
+  else if (score < 95 || verificationLevel < 2) strengthLabel = "Marketplace Ready";
   else strengthLabel = "Fully Optimised";
 
   let nextActionText: string | null = null;
@@ -155,6 +158,40 @@ export function computeVendorCompletion({
   return { score, steps, nextStep, isMarketplaceReady, strengthLabel, nextActionText, nextActionHref };
 }
 
+// ── Customer-facing verification trust score ──────────────────────────────────
+// Separate from the vendor's internal profile completion score.
+// This is what customers see on vendor profiles and marketplace cards.
+export interface VerificationTrustResult {
+  level: number;           // 0–4 from DB; 5 computed dynamically
+  trustScore: number;      // 0–100 shown to customers
+  label: string;           // Human-readable label
+  badgeId: string | null;  // Badge identifier, null if unverified
+  isVerified: boolean;     // True if level >= 2 (document verified)
+}
+
+export function computeVerificationTrustScore(vendor: {
+  verification_level?: number;
+  completed_jobs_count?: number;
+  rating?: number;
+  response_rate?: number | null;
+}): VerificationTrustResult {
+  const level = vendor.verification_level ?? 0;
+  const jobs  = vendor.completed_jobs_count ?? 0;
+  const rating = vendor.rating ?? 0;
+  const responseRate = vendor.response_rate ?? 0;
+
+  // Level 5 = Trusted Professional, computed dynamically from track record
+  const isTrustedPro = level >= 2 && jobs >= 5 && rating >= 4.5 && responseRate >= 80;
+
+  if (level <= 0) return { level: 0, trustScore: 0,  label: "Unverified",            badgeId: null,               isVerified: false };
+  if (level === 1) return { level: 1, trustScore: 10, label: "Email Verified",        badgeId: "email_verified",   isVerified: false };
+  if (level === 2 && !isTrustedPro) return { level: 2, trustScore: 40, label: "ID Verified",     badgeId: "id_verified",      isVerified: true  };
+  if (level === 3 && !isTrustedPro) return { level: 3, trustScore: 70, label: "Address Verified", badgeId: "address_verified", isVerified: true  };
+  if (level >= 4 && !isTrustedPro) return { level: 4, trustScore: 85, label: "Business Verified", badgeId: "business_verified", isVerified: true };
+  if (isTrustedPro && level < 4) return { level: 5, trustScore: 90, label: "Trusted Professional", badgeId: "trusted_pro", isVerified: true };
+  return { level: 5, trustScore: 100, label: "Trusted Professional", badgeId: "trusted_pro", isVerified: true };
+}
+
 export function getActivationMessages(completion: CompletionResult): string[] {
   const messages: string[] = [];
   const { steps, score } = completion;
@@ -165,8 +202,8 @@ export function getActivationMessages(completion: CompletionResult): string[] {
   else if (mediaCount < 5) messages.push(`Upload ${5 - mediaCount} more photos to unlock full visibility`);
 
   const verStep = steps.find((s) => s.id === "verification");
-  if (verStep && !verStep.items[0].done) messages.push("Complete your profile to unlock automatic Level 1 verification");
-  else if (verStep && !verStep.items[1].done) messages.push("Submit verification documents to get 'Business Verified' badge");
+  if (verStep && !verStep.items[1].done) messages.push("Submit a government ID to get 'ID Verified' — customers trust verified vendors more");
+  else if (verStep && !verStep.items[2].done) messages.push("Submit proof of address or business registration for 'Business Verified' status");
 
   const svcStep = steps.find((s) => s.id === "services");
   if (svcStep && !svcStep.items[0].done) messages.push("Create a service package so customers can request quotes");

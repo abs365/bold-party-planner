@@ -103,6 +103,7 @@ export interface Vendor {
   years_experience: number | null;
   instagram_url: string | null;
   website_url: string | null;
+  custom_category_description?: string | null;
   event_types: string[] | null;
   subscription_plan: "free" | "pro" | "featured" | "premium" | "elite";
   profile_views: number;
@@ -440,6 +441,101 @@ export interface RSVPResponse {
   plus_one: boolean;
   meal_preference: string | null;
   message: string | null;
+  created_at: string;
+}
+
+// ── Quote workflow ────────────────────────────────────────────────────────────
+
+export type QuoteStatus =
+  | "pending"     // customer request sent, vendor hasn't responded
+  | "responded"   // vendor has submitted a price
+  | "viewed"      // customer opened vendor's quote
+  | "shortlisted" // customer marked as favourite for comparison
+  | "accepted"    // customer accepted this vendor's quote
+  | "rejected"    // customer rejected this vendor's quote
+  | "expired"     // passed expires_at with no customer action
+  | "withdrawn"   // customer withdrew the request
+  | "converted"   // booking created
+  | "declined";   // vendor declined to quote (legacy / vendor-initiated)
+
+export type QuoteResponseStatus = "pending" | "accepted" | "declined";
+
+export interface QuoteResponse {
+  id: string;
+  quote_id: string;
+  vendor_id: string;
+  price: number;
+  deposit_amount: number | null;
+  message: string | null;
+  title: string | null;
+  description: string | null;
+  services: string[] | null;
+  terms: string | null;
+  duration_hours: number | null;
+  includes: string[] | null;
+  valid_until: string | null;
+  status: QuoteResponseStatus;
+  withdrawal_reason: string | null;
+  created_at: string;
+  updated_at?: string | null;
+}
+
+export interface Quote {
+  id: string;
+  customer_id: string;
+  vendor_id: string;
+  event_id: string | null;
+  status: QuoteStatus;
+  message: string | null;
+  requirements: string | null;
+  notes: string | null;
+  city: string | null;
+  category: string | null;
+  event_date: string | null;
+  event_type: string | null;
+  guest_count: number | null;
+  budget_min: number | null;
+  budget_max: number | null;
+  expires_at: string | null;
+  lead_score: number | null;
+  routed_at: string | null;
+  responded_at: string | null;
+  accepted_at: string | null;
+  viewed_at: string | null;
+  shortlisted_at: string | null;
+  rejected_at: string | null;
+  withdrawn_at: string | null;
+  vendor_decline_reason: string | null;
+  customer_rejection_reason: string | null;
+  converted_booking_id: string | null;
+  created_at: string;
+  // Joined relations (optional, present when selected)
+  vendor?: {
+    id: string;
+    business_name: string;
+    category: string;
+    city: string;
+    rating: number | null;
+    review_count?: number | null;
+    bio?: string | null;
+    verification_level?: number | null;
+    response_rate?: number | null;
+    completed_jobs_count?: number | null;
+    media?: Array<{ url: string; is_cover: boolean; type?: string }>;
+    packages?: Array<{ id: string; name: string; price: number; includes: string[] | null }>;
+  };
+  customer?: { id: string; full_name: string; avatar_url: string | null };
+  event?: { id: string; title: string; date: string; city?: string | null; guest_count?: number | null };
+  response?: QuoteResponse | QuoteResponse[] | null;
+}
+
+export interface QuoteEvent {
+  id: string;
+  quote_id: string;
+  actor_id: string | null;
+  actor_role: "customer" | "vendor" | "admin" | "system";
+  event_type: string;
+  details: Record<string, unknown> | null;
   created_at: string;
 }
 

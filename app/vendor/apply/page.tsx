@@ -19,6 +19,7 @@ const BENEFITS = [
 const FORM_DEFAULTS = {
   business_name: "",
   category: "" as VendorCategory | "",
+  custom_category_description: "",
   bio: "",
   location: "",
   city: "",
@@ -81,6 +82,7 @@ export default function VendorApplyPage() {
         body: JSON.stringify({
           business_name: formData.business_name,
           category: formData.category,
+          custom_category_description: formData.category === "other" ? formData.custom_category_description || null : null,
           bio: formData.bio || null,
           location: formData.location,
           city: formData.city,
@@ -250,12 +252,39 @@ export default function VendorApplyPage() {
                           </button>
                         ))}
                       </div>
+
+                      {/* Custom description — shown only when Other is selected */}
+                      {formData.category === "other" && (
+                        <div className="mt-4">
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Describe your service *
+                          </label>
+                          <p className="text-xs text-gray-400 mb-2">
+                            Tell us exactly what you offer. Be specific — our admin team uses this to decide the best way to list your business.
+                          </p>
+                          <textarea
+                            value={formData.custom_category_description}
+                            onChange={(e) => update("custom_category_description", e.target.value)}
+                            placeholder="e.g. Drone Light Show — synchronised indoor & outdoor drone displays for weddings and corporate events, 50–200 drones, fully CAA-licensed."
+                            rows={3}
+                            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 resize-none"
+                            maxLength={300}
+                          />
+                          <p className="text-xs text-gray-400 mt-1 text-right">
+                            {formData.custom_category_description.length}/300
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     <button
                       onClick={() => {
                         if (!formData.business_name || !formData.category) {
                           toast.error("Please fill in all required fields");
+                          return;
+                        }
+                        if (formData.category === "other" && !formData.custom_category_description.trim()) {
+                          toast.error("Please describe your service so we can list you correctly");
                           return;
                         }
                         setStep(2);

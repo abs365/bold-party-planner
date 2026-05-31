@@ -29,6 +29,7 @@ interface VendorMarketplaceProps {
   initialMinRating?: number;
   initialVerifiedOnly?: boolean;
   initialEventType?: string;
+  initialTheme?: string;
 }
 
 export function VendorMarketplace({
@@ -41,6 +42,7 @@ export function VendorMarketplace({
   initialMinRating,
   initialVerifiedOnly,
   initialEventType,
+  initialTheme,
 }: VendorMarketplaceProps) {
   const [search, setSearch] = useState(initialSearch ?? "");
   const [category, setCategory] = useState<VendorCategory | "">(
@@ -92,7 +94,8 @@ export function VendorMarketplace({
 
     if (category) result = result.filter((v) => v.category === category);
     if (city) result = result.filter((v) => v.city.toLowerCase().includes(city.toLowerCase()));
-    if (verifiedOnly) result = result.filter((v) => v.verified);
+    // "ID Verified and above" = verification_level >= 2 (document checked by admin)
+    if (verifiedOnly) result = result.filter((v) => (v.verification_level ?? 0) >= 2);
     if (minRating > 0) result = result.filter((v) => (v.rating ?? 0) >= minRating);
 
     if (budgetMax < 10000) {
@@ -199,7 +202,7 @@ export function VendorMarketplace({
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-5">
             <span className="flex items-center gap-1.5 text-xs text-gray-400">
               <CheckCircle2 size={12} className="text-gray-400" />
-              Verified vendors only
+              ID Verified or above
             </span>
             <span className="hidden sm:block w-px h-3 bg-gray-200" />
             <span className="flex items-center gap-1.5 text-xs text-gray-400">
@@ -323,8 +326,15 @@ export function VendorMarketplace({
                   )}
                 >
                   <BadgeCheck size={15} />
-                  Verified Only
+                  ID Verified+
                 </button>
+
+                {initialTheme && (
+                  <span className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-amber-200 bg-amber-50 text-amber-700 text-xs font-medium">
+                    <Star size={11} className="fill-amber-400 text-amber-400" />
+                    {initialTheme.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </span>
+                )}
 
                 {activeFilterCount > 0 && (
                   <button onClick={clearFilters} className="btn-secondary-light py-2 px-3 text-xs flex items-center gap-1.5">
@@ -565,17 +575,17 @@ function VendorCard({ vendor, priority = false }: { vendor: Vendor; priority?: b
               {vendor.featured && (
                 <span className="badge bg-amber-500/90 text-amber-900 text-xs font-bold">Featured</span>
               )}
-              {vendor.verification_level >= 3 ? (
-                <span className="badge bg-amber-500/80 border border-amber-400/40 text-amber-100 text-xs flex items-center gap-1 backdrop-blur-sm">
-                  <Star size={9} className="fill-amber-100" /> Trusted Pro
-                </span>
-              ) : vendor.verification_level >= 2 ? (
-                <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+              {vendor.verification_level >= 4 ? (
+                <span className="badge bg-blue-600/80 border border-blue-400/40 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
                   <CheckCircle2 size={10} /> Business Verified
                 </span>
-              ) : vendor.verified ? (
-                <span className="badge bg-black/50 border border-white/30 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
-                  <CheckCircle2 size={10} /> Verified
+              ) : vendor.verification_level >= 3 ? (
+                <span className="badge bg-blue-600/80 border border-blue-400/40 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+                  <CheckCircle2 size={10} /> Address Verified
+                </span>
+              ) : vendor.verification_level >= 2 ? (
+                <span className="badge bg-emerald-600/80 border border-emerald-400/40 text-white text-xs flex items-center gap-1 backdrop-blur-sm">
+                  <CheckCircle2 size={10} /> ID Verified
                 </span>
               ) : null}
               {isHot && !vendor.featured && vendor.verification_level < 3 && (

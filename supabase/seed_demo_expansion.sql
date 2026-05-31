@@ -174,7 +174,7 @@ INSERT INTO vendor_media (vendor_id, url, type, caption, is_cover) VALUES
   -- Aisha Films
   (vendor6,  'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800', 'image', 'Cinematic wedding moment',       true),
   (vendor6,  'https://images.unsplash.com/photo-1478720568477-152d9b21b0b8?w=800', 'image', 'Documentary-style ceremony',     false),
-  (vendor6,  'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800', 'image', 'Behind the scenes edit suite',   false),
+  (vendor6,  'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800', 'image', 'Videographer capturing ceremony', false),
   -- The Prestige Band
   (vendor7,  'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800', 'image', 'Band performing at wedding',     true),
   (vendor7,  'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800', 'image', 'Dancefloor packed all night',    false),

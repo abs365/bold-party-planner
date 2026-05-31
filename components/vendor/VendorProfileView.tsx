@@ -161,7 +161,11 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               <div>
                 <div className="flex items-center gap-2 text-sm text-brand-600 mb-1">
                   <span>{cat?.icon}</span>
-                  <span className="font-medium">{cat?.label}</span>
+                  <span className="font-medium">
+                    {vendor.category === "other" && vendor.custom_category_description
+                      ? vendor.custom_category_description
+                      : cat?.label}
+                  </span>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900">{vendor.business_name}</h1>
                 <div className="flex items-center gap-4 mt-2">

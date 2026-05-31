@@ -28,42 +28,56 @@ export function getVendorBadges(vendor: {
   const badges: TrustBadgeSpec[] = [];
   const level = vendor.verification_level ?? (vendor.verified ? 1 : 0);
 
-  if (level >= 4) badges.push({
-    id: "premium_partner",
-    label: "Premium Partner",
-    description: "Invite-only top-tier vendor",
-    icon: Star,
-    bgClass: "bg-amber-50",
-    borderClass: "border-amber-200",
-    textClass: "text-amber-700",
-  });
-  else if (level >= 3) badges.push({
+  // Level 4 = Business Verified (admin-approved business registration documents)
+  // Level 3 = Address Verified (admin-approved proof of address)
+  // Level 2 = ID Verified (admin-approved government ID)
+  // Level 1 = Email Verified (auto-granted, no documents checked)
+  // Level 0 = Unverified (no badge shown to customers)
+
+  // Trusted Professional: dynamically computed from track record (requires Level 2+)
+  const tpRespRate  = vendor.response_rate ?? 0;
+  const tpJobs      = vendor.completed_jobs_count ?? 0;
+  const tpRating    = vendor.rating ?? 0;
+  const isTrustedPro = level >= 2 && tpJobs >= 5 && tpRating >= 4.5 && tpRespRate >= 80;
+
+  if (isTrustedPro) badges.push({
     id: "trusted_pro",
-    label: "Trusted Pro",
-    description: "5+ jobs, 4.5★, 80%+ response rate",
+    label: "Trusted Professional",
+    description: `${tpJobs}+ completed events, ${tpRating.toFixed(1)}★, ${Math.round(tpRespRate)}% response rate`,
     icon: Star,
     bgClass: "bg-amber-50",
     borderClass: "border-amber-200",
     textClass: "text-amber-700",
   });
-  else if (level >= 2) badges.push({
+  else if (level >= 4) badges.push({
     id: "business_verified",
     label: "Business Verified",
-    description: "ID and business documents confirmed",
+    description: "Business registration documents verified by ELBOLD",
     icon: ShieldCheck,
     bgClass: "bg-blue-50",
     borderClass: "border-blue-200",
     textClass: "text-blue-700",
   });
-  else if (level >= 1) badges.push({
-    id: "identity_verified",
-    label: "Identity Verified",
-    description: "Profile and contact details confirmed",
+  else if (level >= 3) badges.push({
+    id: "address_verified",
+    label: "Address Verified",
+    description: "Proof of address verified by ELBOLD",
+    icon: ShieldCheck,
+    bgClass: "bg-blue-50",
+    borderClass: "border-blue-200",
+    textClass: "text-blue-700",
+  });
+  else if (level >= 2) badges.push({
+    id: "id_verified",
+    label: "ID Verified",
+    description: "Government ID verified by ELBOLD",
     icon: BadgeCheck,
     bgClass: "bg-emerald-50",
     borderClass: "border-emerald-200",
     textClass: "text-emerald-700",
   });
+  // Level 1 (email verified) intentionally shows no customer-facing badge —
+  // no documents were checked so no "Verified" claim should appear to customers.
 
   const responseRate = vendor.response_rate ?? 0;
   if (responseRate >= 80) badges.push({

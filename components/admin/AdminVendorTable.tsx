@@ -249,7 +249,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       </div>
                       <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 flex-wrap">
                         <span className="flex items-center gap-1"><MapPin size={10} />{String(vendor.city ?? "—")}</span>
-                        <span>{cat?.label}</span>
+                        <span>{vendor.category === "other" && vendor.custom_category_description ? `Other: ${String(vendor.custom_category_description)}` : cat?.label}</span>
                         {Number(vendor.rating) > 0 && (
                           <span className="flex items-center gap-1">
                             <Star size={10} className="fill-amber-400 text-amber-400" />

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const type = searchParams.get("type");
   const next = searchParams.get("next") ?? "/dashboard";
 
   if (code) {
@@ -11,6 +12,11 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user) {
+      // Password recovery: redirect to reset page so user can set new password
+      if (type === "recovery") {
+        return NextResponse.redirect(`${origin}/reset-password`);
+      }
+
       const { data: profile } = await supabase
         .from("profiles")
         .select("role")
@@ -26,7 +32,6 @@ export async function GET(request: Request) {
       if (adminEmails.includes(data.user.email ?? "")) {
         dest = "/admin";
       } else if (profile?.role === "vendor") {
-        // Check if vendor has completed onboarding
         const { data: vendor } = await supabase
           .from("vendors")
           .select("id")

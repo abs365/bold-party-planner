@@ -33,6 +33,7 @@ export async function POST(request: Request) {
   const body = await request.json() as {
     business_name: string;
     category: string;
+    custom_category_description?: string | null;
     bio?: string;
     location?: string;
     city: string;
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
       user_id: user.id,
       business_name: body.business_name,
       category: body.category,
+      custom_category_description: body.category === "other" ? (body.custom_category_description || null) : null,
       bio: body.bio || null,
       location: body.location || null,
       city: body.city,
