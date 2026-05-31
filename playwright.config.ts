@@ -41,7 +41,7 @@ export default defineConfig({
     command: process.env.CI ? "npm start" : "npm run dev",
     url: "http://localhost:3000",
     // Never reuse — stale Turbopack chunk-hash causes 404s in dev; not needed in prod mode
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: process.env.CI ? 60_000 : 180_000,
     stdout: "pipe",
     stderr: "pipe",

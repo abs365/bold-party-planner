@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Calendar, MapPin, Users, FileText, Loader2, CheckCircle2, CreditCard } from "lucide-react";
-import { cn, formatCurrency, formatDate, calculateCommission, generateInvoiceNumber } from "@/lib/utils";
+import { cn, formatCurrency, formatPackagePrice, formatDate, calculateCommission, generateInvoiceNumber } from "@/lib/utils";
 import { VENDOR_CATEGORIES, COMMISSION_RATE, type Vendor, type VendorPackage, type VendorMedia } from "@/types";
 import toast from "react-hot-toast";
 
@@ -150,7 +150,7 @@ export function BookingRequestForm({
                   >
                     <div className="flex justify-between mb-1">
                       <div className="font-semibold text-white text-sm">{p.name}</div>
-                      <div className="font-bold text-white">{formatCurrency(p.price)}</div>
+                      <div className="font-bold text-white">{formatPackagePrice(p.price, p.pricing_type)}</div>
                     </div>
                     <p className="text-xs text-slate-500">{p.description}</p>
                   </div>
@@ -221,7 +221,14 @@ export function BookingRequestForm({
               <div>
                 <div className="text-sm text-slate-400 mb-1">Selected Package</div>
                 <div className="font-semibold text-white">{pkg.name}</div>
-                <div className="text-brand-400 font-bold">{formatCurrency(pkg.price)}</div>
+                <div className="text-brand-400 font-bold">
+                  {formatPackagePrice(pkg.price, pkg.pricing_type)}
+                </div>
+                {pkg.pricing_type === "price_on_request" && (
+                  <p className="text-xs text-slate-500 mt-1">
+                    Price confirmed by vendor after enquiry.
+                  </p>
+                )}
               </div>
             ) : vendor.min_price ? (
               <div>
@@ -230,7 +237,7 @@ export function BookingRequestForm({
               </div>
             ) : null}
 
-            {totalAmount > 0 && (
+            {totalAmount > 0 && pkg?.pricing_type !== "price_on_request" && (
               <div className="space-y-2 pt-3 border-t border-white/8 text-sm">
                 <div className="flex justify-between text-slate-400">
                   <span>Service total</span>

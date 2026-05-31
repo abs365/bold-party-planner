@@ -8,7 +8,7 @@ import {
   Share2, Heart, ChevronLeft, ChevronRight, MessageCircle,
   Package, X, Zap,
 } from "lucide-react";
-import { cn, formatCurrency, formatDate } from "@/lib/utils";
+import { cn, formatCurrency, formatPackagePrice, formatDate } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Vendor, type VendorMedia, type Review, type Profile } from "@/types";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
@@ -366,10 +366,12 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                           <span className="text-xs text-amber-600 font-medium">Most Popular</span>
                         )}
                       </div>
-                      <div className="text-lg font-bold text-gray-900">{formatCurrency(pkg.price)}</div>
+                      <div className="text-lg font-bold text-gray-900">
+                        {formatPackagePrice(pkg.price, pkg.pricing_type)}
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mb-2">{pkg.description}</p>
-                    {pkg.duration_hours && (
+                    {pkg.duration_hours && pkg.pricing_type !== "price_on_request" && (
                       <div className="flex items-center gap-1 text-xs text-gray-400">
                         <Clock size={11} />
                         {pkg.duration_hours}h
@@ -413,19 +415,36 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               return (
                 <div className="p-3 rounded-xl bg-brand-50 border border-brand-200 mb-4 flex items-center justify-between">
                   <div className="text-xs text-gray-500 truncate mr-2">{pkg.name}</div>
-                  <div className="text-lg font-bold text-gray-900 flex-shrink-0">{formatCurrency(pkg.price)}</div>
+                  <div className="text-lg font-bold text-gray-900 flex-shrink-0">
+                    {formatPackagePrice(pkg.price, pkg.pricing_type)}
+                  </div>
                 </div>
               );
             })()}
 
-            <button
-              onClick={handleBookNow}
-              disabled={booking}
-              className="btn-primary w-full py-3.5"
-            >
-              <Calendar size={16} />
-              {selectedPackage ? "Book Selected Package" : "Book Now"}
-            </button>
+            {(() => {
+              const selPkg = packages.find((p) => p.id === selectedPackage);
+              const isPOR = selPkg?.pricing_type === "price_on_request";
+              return isPOR ? (
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center mb-1">
+                  <p className="text-sm text-gray-500 font-light">
+                    This package uses custom pricing.
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Use <strong>Request Free Quote</strong> below to get a price from the vendor.
+                  </p>
+                </div>
+              ) : (
+                <button
+                  onClick={handleBookNow}
+                  disabled={booking}
+                  className="btn-primary w-full py-3.5"
+                >
+                  <Calendar size={16} />
+                  {selectedPackage ? "Book Selected Package" : "Book Now"}
+                </button>
+              );
+            })()}
 
             <button
               onClick={() => {

@@ -9,6 +9,15 @@ export function formatCurrency(amount: number, currency = "GBP"): string {
   return new Intl.NumberFormat("en-GB", { style: "currency", currency }).format(amount);
 }
 
+export function formatPackagePrice(price: number, pricingType?: string | null): string {
+  switch (pricingType) {
+    case "starting_from":    return `From ${formatCurrency(price)}`;
+    case "per_person":       return `${formatCurrency(price)} per person`;
+    case "price_on_request": return "Price on request";
+    default:                 return formatCurrency(price);
+  }
+}
+
 export function formatDate(date: string | Date): string {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(date));
 }

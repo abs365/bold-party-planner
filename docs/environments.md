@@ -80,7 +80,7 @@ if (process.env.NODE_ENV === "production" && !process.env.CI) {
 ### Protection against accidental production seeds
 
 1. The seed endpoint requires `CI=true` in production mode — Vercel never sets this
-2. Demo user creation is idempotent and scoped to `*@boldparty.demo` emails only
+2. Demo user creation is idempotent and scoped to `*@elbold.demo` emails only
 3. Seed data uses fixed UUIDs (`a0000001-...`, `b0000001-...`) — never overlapping with real user UUIDs
 
 ---
@@ -130,7 +130,7 @@ RESEND_API_KEY=re_...
 OPENAI_API_KEY=sk-...
 
 # Auth
-ADMIN_EMAILS=admin@boldparty.demo,your-real-email@example.com
+ADMIN_EMAILS=admin@elbold.demo,your-real-email@example.com
 
 # Cron
 CRON_SECRET=any-local-secret

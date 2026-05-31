@@ -59,7 +59,7 @@ Run through this before promoting any build to production.
 
 - [ ] `CI` env var is NOT set in Vercel production environment
 - [ ] Seed endpoints return 403 when called without the demo secret
-- [ ] No `@boldparty.demo` accounts present in production (these belong in dev/staging only)
+- [ ] No `@elbold.demo` accounts present in production (these belong in dev/staging only)
 
 ---
 

@@ -74,35 +74,36 @@ export default async function globalSetup() {
           (r) => r.status !== "created" && r.status !== "already_exists" && r.status !== "created_id_mismatch"
         ) ?? [];
         if (failed.length > 0) {
-          console.error(`
+          const msg = `
 ╔══════════════════════════════════════════════════════════════════════╗
 ║  DEMO USER CREATION FAILED — auth tests cannot pass                 ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║  Check:                                                              ║
 ║    1. SUPABASE_SERVICE_ROLE_KEY is set correctly in .env.local       ║
 ║    2. The app is running and reachable at ${BASE_URL.padEnd(26)}║
-║    3. Migration 017 is applied (handle_new_user ON CONFLICT fix)     ║
+║    3. @boldparty.demo users must be deleted before @elbold.demo      ║
+║       users can be created with the same deterministic UUIDs.        ║
 ║                                                                      ║
 ║  Failed users:                                                       ║
 ${failed.map((r) => `║    ${`${r.email}: ${r.error ?? r.status}`.slice(0, 64).padEnd(64)}║`).join("\n")}
 ╚══════════════════════════════════════════════════════════════════════╝
-`);
+`;
+          console.error(msg);
+          throw new Error(`[global setup] Demo user provisioning failed for ${failed.length} user(s). Cannot run tests.`);
         }
         if (body.message) console.warn(`[global setup] ${body.message}`);
       }
     } else {
       const text = await res.text();
-      console.warn(
-        `\n[global setup] create-demo-users returned ${res.status()}: ${text.slice(0, 200)}`
+      throw new Error(
+        `[global setup] create-demo-users returned ${res.status()}: ${text.slice(0, 200)}`
       );
     }
   } catch (err) {
-    console.warn(
-      "\n[global setup] Could not bootstrap demo users:",
-      (err as Error).message
-    );
-    console.warn(
-      "[global setup] Run the app and POST /api/auth/create-demo-users manually if tests fail."
+    if ((err as Error).message.startsWith("[global setup]")) throw err;
+    throw new Error(
+      `[global setup] Could not reach create-demo-users: ${(err as Error).message}. ` +
+      `Is the dev server running at ${BASE_URL}?`
     );
   } finally {
     await ctx.dispose();

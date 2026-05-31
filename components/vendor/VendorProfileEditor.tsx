@@ -71,8 +71,9 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="max-w-2xl mx-auto">
+      {/* Sticky header — always visible while scrolling the form */}
+      <div className="sticky top-0 z-10 bg-[#0a0a0f] pt-2 pb-5 -mt-2 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Edit Profile</h1>
           <p className="text-slate-400 text-sm mt-1">Keep your profile up to date to attract more customers</p>
@@ -82,6 +83,8 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
           {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
         </button>
       </div>
+
+      <div className="space-y-6">
 
       {/* Basic Info */}
       <div className="bg-white/4 border border-white/6 rounded-xl p-6 space-y-4">
@@ -225,12 +228,13 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end pb-4">
         <button onClick={handleSave} disabled={saving} className="btn-primary px-8">
           {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
           {saving ? "Saving..." : "Save Changes"}
         </button>
       </div>
+      </div>{/* end space-y-6 */}
     </div>
   );
 }

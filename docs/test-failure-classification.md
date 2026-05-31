@@ -55,7 +55,7 @@
 | verification tabs are navigable | — | ✓ guarded |
 | verification history tab is accessible | — | ✓ always passes (body check) |
 
-**Key risk — Category C:** `tests` seed must create at least one package for `james.bennett@boldparty.demo` so `/vendor/services` shows package content.
+**Key risk — Category C:** `tests` seed must create at least one package for `james.bennett@elbold.demo` so `/vendor/services` shows package content.
 
 ---
 
@@ -78,7 +78,7 @@
 | verifications page renders stats | — | ✓ text check |
 | trust level buttons per verification card | — | ✓ guarded |
 
-**Key risk — Config:** `admin@boldparty.demo` must be in `ADMIN_EMAILS` secret. Without it, the admin user logs in but gets redirected to `/dashboard` and all admin tests fail.
+**Key risk — Config:** `admin@elbold.demo` must be in `ADMIN_EMAILS` secret. Without it, the admin user logs in but gets redirected to `/dashboard` and all admin tests fail.
 
 ---
 
@@ -99,7 +99,7 @@
 | messages page is accessible | — | ✓ text check |
 | saved vendors page renders | — | ✓ text check |
 
-**Key risk — Category C:** Browse page needs at least one `status='approved'` vendor. Seed must approve `james.bennett@boldparty.demo`'s vendor record.
+**Key risk — Category C:** Browse page needs at least one `status='approved'` vendor. Seed must approve `james.bennett@elbold.demo`'s vendor record.
 
 ---
 
@@ -129,10 +129,10 @@ For all tests to pass, `tests/global.setup.ts` must produce:
 
 | Requirement | Why |
 |---|---|
-| `james.bennett@boldparty.demo` has a `vendor` record with `status='approved'` | Marketplace, vendor profile, quote tests |
+| `james.bennett@elbold.demo` has a `vendor` record with `status='approved'` | Marketplace, vendor profile, quote tests |
 | Vendor record has at least 1 package | Services page "renders existing packages" test |
-| `admin@boldparty.demo` email is in `ADMIN_EMAILS` env var | All admin tests |
-| `emily.carter@boldparty.demo` is a customer | Customer tests |
+| `admin@elbold.demo` email is in `ADMIN_EMAILS` env var | All admin tests |
+| `emily.carter@elbold.demo` is a customer | Customer tests |
 | Events/bookings seeded with correct `customer_id` | Bookings test |
 
 ---

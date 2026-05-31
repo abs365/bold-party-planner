@@ -43,44 +43,44 @@ BEGIN
 -- ─── Step 0: Auth users ───────────────────────────────────────────────────────
 INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, role, aud, created_at, updated_at, confirmation_token, raw_app_meta_data, raw_user_meta_data)
 VALUES
-  (v6_id,  '00000000-0000-0000-0000-000000000000', 'aisha.okafor@boldparty.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Aisha Okafor"}'),
-  (v7_id,  '00000000-0000-0000-0000-000000000000', 'daniel.walsh@boldparty.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Daniel Walsh"}'),
-  (v8_id,  '00000000-0000-0000-0000-000000000000', 'grace.chen@boldparty.demo',      '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Grace Chen"}'),
-  (v9_id,  '00000000-0000-0000-0000-000000000000', 'theo.harrington@boldparty.demo', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Theo Harrington"}'),
-  (v10_id, '00000000-0000-0000-0000-000000000000', 'fatima.ahmed@boldparty.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Fatima Ahmed"}'),
-  (v11_id, '00000000-0000-0000-0000-000000000000', 'jake.morrison@boldparty.demo',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Jake Morrison"}'),
-  (v12_id, '00000000-0000-0000-0000-000000000000', 'natalie.russo@boldparty.demo',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Natalie Russo"}'),
-  (v13_id, '00000000-0000-0000-0000-000000000000', 'ben.osei@boldparty.demo',        '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Ben Osei"}'),
-  (v14_id, '00000000-0000-0000-0000-000000000000', 'isabelle.martin@boldparty.demo', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Isabelle Martin"}'),
-  (v15_id, '00000000-0000-0000-0000-000000000000', 'chris.obi@boldparty.demo',       '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Chris Obi"}')
+  (v6_id,  '00000000-0000-0000-0000-000000000000', 'aisha.okafor@elbold.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Aisha Okafor"}'),
+  (v7_id,  '00000000-0000-0000-0000-000000000000', 'daniel.walsh@elbold.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Daniel Walsh"}'),
+  (v8_id,  '00000000-0000-0000-0000-000000000000', 'grace.chen@elbold.demo',      '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Grace Chen"}'),
+  (v9_id,  '00000000-0000-0000-0000-000000000000', 'theo.harrington@elbold.demo', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Theo Harrington"}'),
+  (v10_id, '00000000-0000-0000-0000-000000000000', 'fatima.ahmed@elbold.demo',    '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Fatima Ahmed"}'),
+  (v11_id, '00000000-0000-0000-0000-000000000000', 'jake.morrison@elbold.demo',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Jake Morrison"}'),
+  (v12_id, '00000000-0000-0000-0000-000000000000', 'natalie.russo@elbold.demo',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Natalie Russo"}'),
+  (v13_id, '00000000-0000-0000-0000-000000000000', 'ben.osei@elbold.demo',        '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Ben Osei"}'),
+  (v14_id, '00000000-0000-0000-0000-000000000000', 'isabelle.martin@elbold.demo', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Isabelle Martin"}'),
+  (v15_id, '00000000-0000-0000-0000-000000000000', 'chris.obi@elbold.demo',       '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012', NOW(), 'authenticated', 'authenticated', NOW(), NOW(), '', '{"provider":"email","providers":["email"]}', '{"full_name":"Chris Obi"}')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
 VALUES
-  (v6_id,  v6_id,  v6_id::text,  'email', jsonb_build_object('sub', v6_id::text,  'email', 'aisha.okafor@boldparty.demo'),    NOW(), NOW(), NOW()),
-  (v7_id,  v7_id,  v7_id::text,  'email', jsonb_build_object('sub', v7_id::text,  'email', 'daniel.walsh@boldparty.demo'),    NOW(), NOW(), NOW()),
-  (v8_id,  v8_id,  v8_id::text,  'email', jsonb_build_object('sub', v8_id::text,  'email', 'grace.chen@boldparty.demo'),      NOW(), NOW(), NOW()),
-  (v9_id,  v9_id,  v9_id::text,  'email', jsonb_build_object('sub', v9_id::text,  'email', 'theo.harrington@boldparty.demo'), NOW(), NOW(), NOW()),
-  (v10_id, v10_id, v10_id::text, 'email', jsonb_build_object('sub', v10_id::text, 'email', 'fatima.ahmed@boldparty.demo'),    NOW(), NOW(), NOW()),
-  (v11_id, v11_id, v11_id::text, 'email', jsonb_build_object('sub', v11_id::text, 'email', 'jake.morrison@boldparty.demo'),   NOW(), NOW(), NOW()),
-  (v12_id, v12_id, v12_id::text, 'email', jsonb_build_object('sub', v12_id::text, 'email', 'natalie.russo@boldparty.demo'),   NOW(), NOW(), NOW()),
-  (v13_id, v13_id, v13_id::text, 'email', jsonb_build_object('sub', v13_id::text, 'email', 'ben.osei@boldparty.demo'),        NOW(), NOW(), NOW()),
-  (v14_id, v14_id, v14_id::text, 'email', jsonb_build_object('sub', v14_id::text, 'email', 'isabelle.martin@boldparty.demo'), NOW(), NOW(), NOW()),
-  (v15_id, v15_id, v15_id::text, 'email', jsonb_build_object('sub', v15_id::text, 'email', 'chris.obi@boldparty.demo'),       NOW(), NOW(), NOW())
+  (v6_id,  v6_id,  v6_id::text,  'email', jsonb_build_object('sub', v6_id::text,  'email', 'aisha.okafor@elbold.demo'),    NOW(), NOW(), NOW()),
+  (v7_id,  v7_id,  v7_id::text,  'email', jsonb_build_object('sub', v7_id::text,  'email', 'daniel.walsh@elbold.demo'),    NOW(), NOW(), NOW()),
+  (v8_id,  v8_id,  v8_id::text,  'email', jsonb_build_object('sub', v8_id::text,  'email', 'grace.chen@elbold.demo'),      NOW(), NOW(), NOW()),
+  (v9_id,  v9_id,  v9_id::text,  'email', jsonb_build_object('sub', v9_id::text,  'email', 'theo.harrington@elbold.demo'), NOW(), NOW(), NOW()),
+  (v10_id, v10_id, v10_id::text, 'email', jsonb_build_object('sub', v10_id::text, 'email', 'fatima.ahmed@elbold.demo'),    NOW(), NOW(), NOW()),
+  (v11_id, v11_id, v11_id::text, 'email', jsonb_build_object('sub', v11_id::text, 'email', 'jake.morrison@elbold.demo'),   NOW(), NOW(), NOW()),
+  (v12_id, v12_id, v12_id::text, 'email', jsonb_build_object('sub', v12_id::text, 'email', 'natalie.russo@elbold.demo'),   NOW(), NOW(), NOW()),
+  (v13_id, v13_id, v13_id::text, 'email', jsonb_build_object('sub', v13_id::text, 'email', 'ben.osei@elbold.demo'),        NOW(), NOW(), NOW()),
+  (v14_id, v14_id, v14_id::text, 'email', jsonb_build_object('sub', v14_id::text, 'email', 'isabelle.martin@elbold.demo'), NOW(), NOW(), NOW()),
+  (v15_id, v15_id, v15_id::text, 'email', jsonb_build_object('sub', v15_id::text, 'email', 'chris.obi@elbold.demo'),       NOW(), NOW(), NOW())
 ON CONFLICT DO NOTHING;
 
 -- ─── Step 1: Profiles ─────────────────────────────────────────────────────────
 INSERT INTO profiles (id, full_name, email, role, avatar_url) VALUES
-  (v6_id,  'Aisha Okafor',     'aisha.okafor@boldparty.demo',    'vendor', NULL),
-  (v7_id,  'Daniel Walsh',     'daniel.walsh@boldparty.demo',    'vendor', NULL),
-  (v8_id,  'Grace Chen',       'grace.chen@boldparty.demo',      'vendor', NULL),
-  (v9_id,  'Theo Harrington',  'theo.harrington@boldparty.demo', 'vendor', NULL),
-  (v10_id, 'Fatima Ahmed',     'fatima.ahmed@boldparty.demo',    'vendor', NULL),
-  (v11_id, 'Jake Morrison',    'jake.morrison@boldparty.demo',   'vendor', NULL),
-  (v12_id, 'Natalie Russo',    'natalie.russo@boldparty.demo',   'vendor', NULL),
-  (v13_id, 'Ben Osei',         'ben.osei@boldparty.demo',        'vendor', NULL),
-  (v14_id, 'Isabelle Martin',  'isabelle.martin@boldparty.demo', 'vendor', NULL),
-  (v15_id, 'Chris Obi',        'chris.obi@boldparty.demo',       'vendor', NULL)
+  (v6_id,  'Aisha Okafor',     'aisha.okafor@elbold.demo',    'vendor', NULL),
+  (v7_id,  'Daniel Walsh',     'daniel.walsh@elbold.demo',    'vendor', NULL),
+  (v8_id,  'Grace Chen',       'grace.chen@elbold.demo',      'vendor', NULL),
+  (v9_id,  'Theo Harrington',  'theo.harrington@elbold.demo', 'vendor', NULL),
+  (v10_id, 'Fatima Ahmed',     'fatima.ahmed@elbold.demo',    'vendor', NULL),
+  (v11_id, 'Jake Morrison',    'jake.morrison@elbold.demo',   'vendor', NULL),
+  (v12_id, 'Natalie Russo',    'natalie.russo@elbold.demo',   'vendor', NULL),
+  (v13_id, 'Ben Osei',         'ben.osei@elbold.demo',        'vendor', NULL),
+  (v14_id, 'Isabelle Martin',  'isabelle.martin@elbold.demo', 'vendor', NULL),
+  (v15_id, 'Chris Obi',        'chris.obi@elbold.demo',       'vendor', NULL)
 ON CONFLICT (id) DO NOTHING;
 
 -- ─── Step 2: Vendors ──────────────────────────────────────────────────────────

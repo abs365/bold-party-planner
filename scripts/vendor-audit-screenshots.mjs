@@ -65,8 +65,8 @@ const authPage = await authCtx.newPage();
 try {
   await authPage.goto(BASE + "/login", { waitUntil: "networkidle", timeout: 15000 });
   await authPage.waitForTimeout(500);
-  await authPage.fill('[data-testid="email-input"]',    "james.bennett@boldparty.demo");
-  await authPage.fill('[data-testid="password-input"]', "BoldPartyDemo2026!");
+  await authPage.fill('[data-testid="email-input"]',    "james.bennett@elbold.demo");
+  await authPage.fill('[data-testid="password-input"]', "ElboldDemo2026!");
   await authPage.click('[type="submit"]');
   await authPage.waitForURL(/\/vendor\/dashboard|\/vendor\/onboarding/, { timeout: 12000 });
   console.log("  ✓ Logged in as vendor demo");

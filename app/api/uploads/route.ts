@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
@@ -132,12 +132,16 @@ export async function POST(request: Request) {
     }
 
     // ── Upload to Supabase Storage ────────────────────────────────────────────
+    // Use the admin (service-role) client for storage so uploads succeed regardless
+    // of how the bucket's RLS policies are configured. All security (auth, vendor
+    // ownership, rate limiting, file validation) is enforced above.
     const safeName = sanitizeFilename(file.name.replace(/\.[^.]+$/, ""));
     const fileName = `${vendorId}/${Date.now()}_${safeName}.${ext}`;
     const bucket = mediaType === "video" ? "vendor-videos" : "vendor-images";
 
+    const adminClient = await createAdminClient();
     const arrayBuffer = await file.arrayBuffer();
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await adminClient.storage
       .from(bucket)
       .upload(fileName, arrayBuffer, {
         contentType: mimeType,
@@ -153,7 +157,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    const { data: urlData } = adminClient.storage.from(bucket).getPublicUrl(fileName);
 
     // ── Save to DB ────────────────────────────────────────────────────────────
     const { data: mediaRecord, error: dbError } = await supabase

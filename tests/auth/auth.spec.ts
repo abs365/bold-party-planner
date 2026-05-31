@@ -2,6 +2,13 @@ import { test, expect } from "@playwright/test";
 import { loginAs, logout, expectRedirectToLogin, ACCOUNTS } from "../helpers";
 
 test.describe("Auth — Sign Up", () => {
+  test.beforeEach(async ({ page }) => {
+    // Dismiss the CookieConsent banner so it never overlaps clickable elements.
+    await page.addInitScript(() => {
+      localStorage.setItem("bp_cookie_consent", JSON.stringify({ choice: "necessary", at: Date.now() }));
+    });
+  });
+
   test("signup page renders correctly", async ({ page }) => {
     await page.goto("/signup");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -55,8 +62,11 @@ test.describe("Auth — Login", () => {
     await page.getByTestId("email-input").fill("nobody@example.com");
     await page.getByTestId("password-input").fill("wrongpassword");
     await page.getByRole("button", { name: "Sign In" }).click();
+    // Match the toast error text. Excludes the Next.js dev-overlay "Console Error" label
+    // by requiring the pattern to match actual auth error wording.
     await expect(
-      page.getByText(/invalid|incorrect|error/i).or(page.locator("[role=alert]"))
+      page.getByText(/incorrect.*password|invalid.*credential|try again/i)
+        .or(page.locator("[role=alert]").filter({ hasText: /incorrect|invalid|try again/i }).first())
     ).toBeVisible({ timeout: 8000 });
   });
 

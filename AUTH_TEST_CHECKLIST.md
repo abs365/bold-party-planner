@@ -35,12 +35,12 @@ fetch('/api/auth/create-demo-users', {
 
 | Email | Password | Role |
 |-------|----------|------|
-| emily.carter@boldparty.demo | BoldPartyDemo2026! | Customer |
-| oliver.webb@boldparty.demo | BoldPartyDemo2026! | Customer |
-| priya.singh@boldparty.demo | BoldPartyDemo2026! | Customer |
-| james.bennett@boldparty.demo | BoldPartyDemo2026! | Vendor (approved) |
-| sofia.martinez@boldparty.demo | BoldPartyDemo2026! | Vendor (approved) |
-| ravi.patel@boldparty.demo | BoldPartyDemo2026! | Vendor (approved) |
+| emily.carter@elbold.demo | ElboldDemo2026! | Customer |
+| oliver.webb@elbold.demo | ElboldDemo2026! | Customer |
+| priya.singh@elbold.demo | ElboldDemo2026! | Customer |
+| james.bennett@elbold.demo | ElboldDemo2026! | Vendor (approved) |
+| sofia.martinez@elbold.demo | ElboldDemo2026! | Vendor (approved) |
+| ravi.patel@elbold.demo | ElboldDemo2026! | Vendor (approved) |
 
 ### Admin Account
 

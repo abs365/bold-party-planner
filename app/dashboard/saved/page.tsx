@@ -85,33 +85,36 @@ export default async function SavedVendorsPage() {
               const vendor = v as { id: string; business_name: string; category: string; city: string; rating: number; review_count: number; media?: { url: string; is_cover: boolean }[]; saved_at: string };
               const cover = vendor.media?.find((m) => m.is_cover)?.url;
               return (
-                <Link key={vendor.id} href={`/vendors/${vendor.id}`} className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors">
-                  <div className="w-16 h-16 rounded-xl bg-brand-500/15 flex-shrink-0 overflow-hidden">
-                    {cover ? (
-                      <Image src={cover} alt={vendor.business_name} width={64} height={64} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-brand-400 text-2xl">
-                        {vendor.business_name[0]}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold truncate">{vendor.business_name}</h3>
-                    <p className="text-slate-400 text-xs capitalize mt-0.5">{vendor.category.replace("_", " ")} · {vendor.city}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <span className="text-yellow-400 text-xs">★</span>
-                      <span className="text-white text-xs font-medium">{vendor.rating.toFixed(1)}</span>
-                      <span className="text-slate-500 text-xs">({vendor.review_count})</span>
+                // Outer div prevents nested <a> tags (invalid HTML).
+                // Vendor profile link wraps the info; Quote link is a sibling.
+                <div key={vendor.id} className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors">
+                  <Link href={`/vendors/${vendor.id}`} className="flex gap-4 flex-1 min-w-0">
+                    <div className="w-16 h-16 rounded-xl bg-brand-500/15 flex-shrink-0 overflow-hidden">
+                      {cover ? (
+                        <Image src={cover} alt={vendor.business_name} width={64} height={64} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-brand-400 text-2xl">
+                          {vendor.business_name[0]}
+                        </div>
+                      )}
                     </div>
-                  </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold truncate">{vendor.business_name}</h3>
+                      <p className="text-slate-400 text-xs capitalize mt-0.5">{vendor.category.replace("_", " ")} · {vendor.city}</p>
+                      <div className="flex items-center gap-1 mt-1">
+                        <span className="text-yellow-400 text-xs">★</span>
+                        <span className="text-white text-xs font-medium">{vendor.rating.toFixed(1)}</span>
+                        <span className="text-slate-500 text-xs">({vendor.review_count})</span>
+                      </div>
+                    </div>
+                  </Link>
                   <Link
                     href={`/dashboard/quotes/new?vendor=${vendor.id}&name=${encodeURIComponent(vendor.business_name)}`}
                     className="self-center btn-secondary text-xs px-3 py-1.5 flex-shrink-0"
-                    onClick={(e) => e.stopPropagation()}
                   >
                     Quote
                   </Link>
-                </Link>
+                </div>
               );
             })}
           </div>

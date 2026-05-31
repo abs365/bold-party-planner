@@ -45,14 +45,14 @@ BEGIN
 -- ─── Step 1: Profiles ─────────────────────────────────────────────────────────
 -- If your handle_new_user trigger already created these, this will skip them
 INSERT INTO profiles (id, full_name, email, role, avatar_url) VALUES
-  (v1_id, 'James Bennett', 'james.bennett@boldparty.demo', 'vendor', NULL),
-  (v2_id, 'Sofia Martinez', 'sofia.martinez@boldparty.demo', 'vendor', NULL),
-  (v3_id, 'Ravi Patel', 'ravi.patel@boldparty.demo', 'vendor', NULL),
-  (v4_id, 'Charlotte Hughes', 'charlotte.hughes@boldparty.demo', 'vendor', NULL),
-  (v5_id, 'Marcus Thompson', 'marcus.thompson@boldparty.demo', 'vendor', NULL),
-  (c1_id, 'Emily Carter', 'emily.carter@boldparty.demo', 'customer', NULL),
-  (c2_id, 'Oliver Webb', 'oliver.webb@boldparty.demo', 'customer', NULL),
-  (c3_id, 'Priya Singh', 'priya.singh@boldparty.demo', 'customer', NULL)
+  (v1_id, 'James Bennett', 'james.bennett@elbold.demo', 'vendor', NULL),
+  (v2_id, 'Sofia Martinez', 'sofia.martinez@elbold.demo', 'vendor', NULL),
+  (v3_id, 'Ravi Patel', 'ravi.patel@elbold.demo', 'vendor', NULL),
+  (v4_id, 'Charlotte Hughes', 'charlotte.hughes@elbold.demo', 'vendor', NULL),
+  (v5_id, 'Marcus Thompson', 'marcus.thompson@elbold.demo', 'vendor', NULL),
+  (c1_id, 'Emily Carter', 'emily.carter@elbold.demo', 'customer', NULL),
+  (c2_id, 'Oliver Webb', 'oliver.webb@elbold.demo', 'customer', NULL),
+  (c3_id, 'Priya Singh', 'priya.singh@elbold.demo', 'customer', NULL)
 ON CONFLICT (id) DO NOTHING;
 
 -- ─── Step 2: Vendors ──────────────────────────────────────────────────────────

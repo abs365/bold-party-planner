@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Plus, Trash2, Edit2, X, Loader2, Check, Package, Star } from "lucide-react";
-import { cn, formatCurrency } from "@/lib/utils";
-import type { VendorPackage } from "@/types";
+import { cn, formatPackagePrice } from "@/lib/utils";
+import { PRICING_TYPE_LABELS } from "@/types";
+import type { VendorPackage, PricingType } from "@/types";
 import toast from "react-hot-toast";
 
 interface VendorServicesManagerProps {
@@ -15,6 +16,7 @@ interface PackageForm {
   name: string;
   description: string;
   price: string;
+  pricing_type: PricingType;
   duration_hours: string;
   includes: string;
   is_popular: boolean;
@@ -24,6 +26,7 @@ const DEFAULT_FORM: PackageForm = {
   name: "",
   description: "",
   price: "",
+  pricing_type: "fixed",
   duration_hours: "",
   includes: "",
   is_popular: false,
@@ -45,7 +48,8 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
     setForm({
       name: pkg.name,
       description: pkg.description,
-      price: String(pkg.price),
+      price: pkg.pricing_type === "price_on_request" ? "" : String(pkg.price),
+      pricing_type: pkg.pricing_type ?? "fixed",
       duration_hours: pkg.duration_hours ? String(pkg.duration_hours) : "",
       includes: pkg.includes.join("\n"),
       is_popular: pkg.is_popular,
@@ -60,8 +64,12 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
   }
 
   async function savePackage() {
-    if (!form.name || !form.description || !form.price) {
-      toast.error("Name, description and price are required");
+    if (!form.name || !form.description) {
+      toast.error("Name and description are required");
+      return;
+    }
+    if (form.pricing_type !== "price_on_request" && !form.price) {
+      toast.error("Price is required for this pricing type");
       return;
     }
     setSaving(true);
@@ -73,7 +81,8 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
         vendor_id: vendorId,
         name: form.name,
         description: form.description,
-        price: Number(form.price),
+        price: form.pricing_type === "price_on_request" ? 0 : Number(form.price),
+        pricing_type: form.pricing_type,
         duration_hours: form.duration_hours ? Number(form.duration_hours) : null,
         includes: form.includes.split("\n").map((s) => s.trim()).filter(Boolean),
         is_popular: form.is_popular,
@@ -150,19 +159,55 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
           </div>
 
           <div className="space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Package Name *</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => update("name", e.target.value)}
-                  placeholder="e.g. Basic, Standard, Premium"
-                  className="input-field"
-                />
+            {/* Name */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Package Name *</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => update("name", e.target.value)}
+                placeholder="e.g. Basic, Standard, Premium"
+                className="input-field"
+              />
+            </div>
+
+            {/* Pricing type */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Pricing Type *</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {(Object.keys(PRICING_TYPE_LABELS) as PricingType[]).map((pt) => (
+                  <button
+                    key={pt}
+                    type="button"
+                    onClick={() => {
+                      update("pricing_type", pt);
+                      if (pt === "price_on_request") update("price", "");
+                    }}
+                    className={cn(
+                      "px-2 py-2 rounded-lg text-xs font-medium border transition-all text-center",
+                      form.pricing_type === pt
+                        ? "bg-brand-500/20 border-brand-500/40 text-brand-300"
+                        : "bg-white/4 border-white/10 text-slate-400 hover:border-white/20"
+                    )}
+                  >
+                    {PRICING_TYPE_LABELS[pt]}
+                  </button>
+                ))}
               </div>
+            </div>
+
+            {/* Price — hidden for Price on Request */}
+            {form.pricing_type !== "price_on_request" && (
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">Price (£) *</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  Price (£) *
+                  {form.pricing_type === "per_person" && (
+                    <span className="text-slate-500 font-normal ml-1">per person</span>
+                  )}
+                  {form.pricing_type === "starting_from" && (
+                    <span className="text-slate-500 font-normal ml-1">starting from</span>
+                  )}
+                </label>
                 <input
                   type="number"
                   value={form.price}
@@ -172,7 +217,7 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
                   className="input-field"
                 />
               </div>
-            </div>
+            )}
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">Description *</label>
@@ -266,9 +311,11 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
               )}
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-3 flex-wrap">
                     <h3 className="font-bold text-white">{pkg.name}</h3>
-                    <span className="text-xl font-bold text-brand-400">{formatCurrency(pkg.price)}</span>
+                    <span className="text-xl font-bold text-brand-400">
+                      {formatPackagePrice(pkg.price, pkg.pricing_type)}
+                    </span>
                     {pkg.duration_hours && (
                       <span className="text-xs text-slate-500">{pkg.duration_hours}h</span>
                     )}

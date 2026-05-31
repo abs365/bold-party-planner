@@ -10,7 +10,7 @@ SELECT
   created_at,
   last_sign_in_at
 FROM auth.users
-WHERE email LIKE '%@boldparty.demo'
+WHERE email LIKE '%@elbold.demo'
 ORDER BY email;
 
 -- ── 2. auth.identities (orphaned rows here cause "Database error checking email") ──
@@ -20,14 +20,14 @@ SELECT
   provider,
   created_at
 FROM auth.identities
-WHERE identity_data->>'email' LIKE '%@boldparty.demo'
+WHERE identity_data->>'email' LIKE '%@elbold.demo'
 ORDER BY 2;
 
 -- ── 3. auth.sessions ───────────────────────────────────────────────────────────
 SELECT user_id, created_at, not_after
 FROM auth.sessions
 WHERE user_id IN (
-  SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo'
+  SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo'
 )
 ORDER BY created_at DESC;
 
@@ -35,7 +35,7 @@ ORDER BY created_at DESC;
 SELECT user_id, created_at, revoked
 FROM auth.refresh_tokens
 WHERE user_id IN (
-  SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo'
+  SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo'
 )
 ORDER BY created_at DESC;
 
@@ -43,28 +43,28 @@ ORDER BY created_at DESC;
 SELECT user_id, factor_type, status, created_at
 FROM auth.mfa_factors
 WHERE user_id IN (
-  SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo'
+  SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo'
 );
 
 -- ── 6. profiles ────────────────────────────────────────────────────────────────
 SELECT id, email, role, full_name, created_at
 FROM profiles
-WHERE email LIKE '%@boldparty.demo'
+WHERE email LIKE '%@elbold.demo'
 ORDER BY email;
 
 -- ── 7. vendors ─────────────────────────────────────────────────────────────────
 SELECT v.id, v.user_id, p.email, v.business_name, v.status, v.created_at
 FROM vendors v
 JOIN profiles p ON p.id = v.user_id
-WHERE p.email LIKE '%@boldparty.demo'
+WHERE p.email LIKE '%@elbold.demo'
 ORDER BY p.email;
 
 -- ── 8. Summary counts across all tables ────────────────────────────────────────
 SELECT
-  (SELECT COUNT(*) FROM auth.users        WHERE email LIKE '%@boldparty.demo')                                              AS auth_users,
-  (SELECT COUNT(*) FROM auth.identities   WHERE identity_data->>'email' LIKE '%@boldparty.demo')                            AS auth_identities,
-  (SELECT COUNT(*) FROM auth.sessions     WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo')) AS auth_sessions,
-  (SELECT COUNT(*) FROM auth.refresh_tokens WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo')) AS auth_refresh_tokens,
-  (SELECT COUNT(*) FROM auth.mfa_factors  WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@boldparty.demo')) AS auth_mfa_factors,
-  (SELECT COUNT(*) FROM profiles          WHERE email LIKE '%@boldparty.demo')                                              AS profiles,
-  (SELECT COUNT(*) FROM vendors v JOIN profiles p ON p.id = v.user_id WHERE p.email LIKE '%@boldparty.demo')                AS vendors;
+  (SELECT COUNT(*) FROM auth.users        WHERE email LIKE '%@elbold.demo')                                              AS auth_users,
+  (SELECT COUNT(*) FROM auth.identities   WHERE identity_data->>'email' LIKE '%@elbold.demo')                            AS auth_identities,
+  (SELECT COUNT(*) FROM auth.sessions     WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo')) AS auth_sessions,
+  (SELECT COUNT(*) FROM auth.refresh_tokens WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo')) AS auth_refresh_tokens,
+  (SELECT COUNT(*) FROM auth.mfa_factors  WHERE user_id IN (SELECT id FROM auth.users WHERE email LIKE '%@elbold.demo')) AS auth_mfa_factors,
+  (SELECT COUNT(*) FROM profiles          WHERE email LIKE '%@elbold.demo')                                              AS profiles,
+  (SELECT COUNT(*) FROM vendors v JOIN profiles p ON p.id = v.user_id WHERE p.email LIKE '%@elbold.demo')                AS vendors;

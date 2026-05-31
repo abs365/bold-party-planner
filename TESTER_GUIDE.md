@@ -6,33 +6,33 @@ Welcome to the ELBOLD beta test! This guide gives you everything you need to exp
 
 ## Test Accounts
 
-All accounts use the same password: **`BoldPartyDemo2026!`**
+All accounts use the same password: **`ElboldDemo2026!`**
 
 ### Customer Accounts
 | Name | Email | Use For |
 |------|-------|---------|
-| Emily Carter | emily.carter@boldparty.demo | Wedding planning, multi-vendor booking |
-| Oliver Webb | oliver.webb@boldparty.demo | Birthday party, DJ + decor bookings |
-| Priya Singh | priya.singh@boldparty.demo | Baby shower, quote flow |
+| Emily Carter | emily.carter@elbold.demo | Wedding planning, multi-vendor booking |
+| Oliver Webb | oliver.webb@elbold.demo | Birthday party, DJ + decor bookings |
+| Priya Singh | priya.singh@elbold.demo | Baby shower, quote flow |
 
 ### Vendor Accounts
 | Name | Email | Business | Category |
 |------|-------|----------|----------|
-| James Bennett | james.bennett@boldparty.demo | Bennett Visuals | Photographer |
-| Sofia Martinez | sofia.martinez@boldparty.demo | Sofia Blooms | Florist/Decorator |
-| Ravi Patel | ravi.patel@boldparty.demo | Spice & Grace Catering | Caterer |
-| Charlotte Hughes | charlotte.hughes@boldparty.demo | Charlotte DJ Services | DJ |
-| Marcus Thompson | marcus.thompson@boldparty.demo | Marcus Events Decor | Decorator |
-| Aisha Okafor | aisha.okafor@boldparty.demo | Aisha Films | Videographer |
-| Daniel Walsh | daniel.walsh@boldparty.demo | The Prestige Band | Live Band |
-| Grace Chen | grace.chen@boldparty.demo | Glow by Grace | Makeup Artist |
-| Theo Harrington | theo.harrington@boldparty.demo | Theo's Couture Cakes | Cake Maker |
-| Fatima Ahmed | fatima.ahmed@boldparty.demo | Fatima Hosts | MC / Host |
-| Jake Morrison | jake.morrison@boldparty.demo | Canvas & Canopy | Marquee Hire |
-| Natalie Russo | natalie.russo@boldparty.demo | Neon Nights Events | Lighting & Stage |
-| Ben Osei | ben.osei@boldparty.demo | Pop & Bloom | Balloon Decorator |
-| Isabelle Martin | isabelle.martin@boldparty.demo | Premier Arrivals | Transport |
-| Chris Obi | chris.obi@boldparty.demo | ProStaff Yorkshire | Event Staff |
+| James Bennett | james.bennett@elbold.demo | Bennett Visuals | Photographer |
+| Sofia Martinez | sofia.martinez@elbold.demo | Sofia Blooms | Florist/Decorator |
+| Ravi Patel | ravi.patel@elbold.demo | Spice & Grace Catering | Caterer |
+| Charlotte Hughes | charlotte.hughes@elbold.demo | Charlotte DJ Services | DJ |
+| Marcus Thompson | marcus.thompson@elbold.demo | Marcus Events Decor | Decorator |
+| Aisha Okafor | aisha.okafor@elbold.demo | Aisha Films | Videographer |
+| Daniel Walsh | daniel.walsh@elbold.demo | The Prestige Band | Live Band |
+| Grace Chen | grace.chen@elbold.demo | Glow by Grace | Makeup Artist |
+| Theo Harrington | theo.harrington@elbold.demo | Theo's Couture Cakes | Cake Maker |
+| Fatima Ahmed | fatima.ahmed@elbold.demo | Fatima Hosts | MC / Host |
+| Jake Morrison | jake.morrison@elbold.demo | Canvas & Canopy | Marquee Hire |
+| Natalie Russo | natalie.russo@elbold.demo | Neon Nights Events | Lighting & Stage |
+| Ben Osei | ben.osei@elbold.demo | Pop & Bloom | Balloon Decorator |
+| Isabelle Martin | isabelle.martin@elbold.demo | Premier Arrivals | Transport |
+| Chris Obi | chris.obi@elbold.demo | ProStaff Yorkshire | Event Staff |
 
 ### Admin Account
 > Create via Supabase dashboard: set `role = 'admin'` in the profiles table, or use the create-demo-users API endpoint with the secret `BOLD_PARTY_DEMO_2026`.
@@ -109,7 +109,7 @@ All accounts use the same password: **`BoldPartyDemo2026!`**
 ## Vendor Flow — What to Test
 
 ### 1. Vendor Dashboard
-- [ ] Sign in as a vendor (e.g. james.bennett@boldparty.demo)
+- [ ] Sign in as a vendor (e.g. james.bennett@elbold.demo)
 - [ ] Check the dashboard stats: profile views, pending quotes, revenue
 - [ ] Check profile completion percentage
 - [ ] Navigate using the vendor sidebar

@@ -143,12 +143,22 @@ export interface VendorMedia {
   created_at: string;
 }
 
+export type PricingType = "fixed" | "starting_from" | "per_person" | "price_on_request";
+
+export const PRICING_TYPE_LABELS: Record<PricingType, string> = {
+  fixed:             "Fixed Price",
+  starting_from:     "Starting From",
+  per_person:        "Per Person",
+  price_on_request:  "Price on Request",
+};
+
 export interface VendorPackage {
   id: string;
   vendor_id: string;
   name: string;
   description: string;
   price: number;
+  pricing_type: PricingType;
   duration_hours: number | null;
   includes: string[];
   is_popular: boolean;

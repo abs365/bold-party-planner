@@ -30,13 +30,13 @@
 
 **Steps:**
 1. Open Supabase Dashboard → SQL Editor
-2. Run `supabase/migrations/019_force_demo_auth_cleanup.sql` — deletes all `*@boldparty.demo` rows from auth tables
+2. Run `supabase/migrations/019_force_demo_auth_cleanup.sql` — deletes all `*@elbold.demo` rows from auth tables
 3. Open the running app (dev or staging)
 4. POST to `/api/auth/create-demo-users` with body `{ "secret": "BOLD_PARTY_DEMO_2026" }`
 5. All 9 users return `"created"` or `"already_exists"` → success
 6. POST to `/api/dev/seed-e2e` with body `{ "secret": "BOLD_PARTY_SEED_2026" }` to restore marketplace data
 
-**Verify:** Log in as `james.bennett@boldparty.demo` / `BoldPartyDemo2026!`
+**Verify:** Log in as `james.bennett@elbold.demo` / `ElboldDemo2026!`
 
 ---
 
@@ -294,7 +294,7 @@ const { data } = await supabase.storage
 
 6. **Verify:**
    - `GET http://localhost:3000/api/health` returns all green
-   - Log in as `james.bennett@boldparty.demo` / `BoldPartyDemo2026!`
+   - Log in as `james.bennett@elbold.demo` / `ElboldDemo2026!`
 
 **Verify:** App loads at `http://localhost:3000`, all health checks pass.
 

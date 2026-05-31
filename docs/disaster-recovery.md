@@ -187,7 +187,7 @@ Migrations are forward-only. Never manually restore a backup unless data loss is
    ```
 
 **Validation checklist:**
-- [ ] Can log in as `james.bennett@boldparty.demo` / `BoldPartyDemo2026!`
+- [ ] Can log in as `james.bennett@elbold.demo` / `ElboldDemo2026!`
 - [ ] Marketplace shows 5 vendors
 - [ ] Admin dashboard shows expected stats
 - [ ] Playwright global.setup passes

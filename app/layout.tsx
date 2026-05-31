@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { CookieConsent } from "@/components/CookieConsent";
+import { CookieConsentClient } from "@/components/CookieConsentClient";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import "./globals.css";
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.className}>
       <body className="min-h-screen antialiased">
         {children}
-        <CookieConsent />
+        <CookieConsentClient />
         <ServiceWorkerRegistration />
         <InstallPrompt />
         <Toaster
