@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatDistanceToNow, differenceInHours } from "date-fns";
-import { MessageSquare, Clock, CheckCircle, ArrowRight, Zap, AlertCircle } from "lucide-react";
+import { MessageSquare, Clock, CheckCircle, ArrowRight, Zap, AlertCircle, GitCompare } from "lucide-react";
 
 interface QuoteResponse {
   id: string;
@@ -32,11 +32,16 @@ interface CustomerQuotesViewProps {
 }
 
 const STATUS_BADGE: Record<string, { label: string; color: string; icon: React.ComponentType<{ className?: string }> }> = {
-  pending: { label: "Awaiting Response", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30", icon: Clock },
-  responded: { label: "Response Received", color: "bg-blue-500/20 text-blue-300 border-blue-500/30", icon: MessageSquare },
-  converted: { label: "Booking Created", color: "bg-green-500/20 text-green-300 border-green-500/30", icon: CheckCircle },
-  declined: { label: "Declined", color: "bg-red-500/20 text-red-300 border-red-500/30", icon: MessageSquare },
-  expired: { label: "Expired", color: "bg-white/10 text-white/40 border-white/20", icon: Clock },
+  pending:     { label: "Awaiting Response", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",  icon: Clock },
+  responded:   { label: "Response Received", color: "bg-blue-500/20 text-blue-300 border-blue-500/30",        icon: MessageSquare },
+  viewed:      { label: "Quote Viewed",      color: "bg-blue-500/20 text-blue-300 border-blue-500/30",        icon: MessageSquare },
+  shortlisted: { label: "Shortlisted",       color: "bg-purple-500/20 text-purple-300 border-purple-500/30",  icon: CheckCircle },
+  accepted:    { label: "Accepted",          color: "bg-green-500/20 text-green-300 border-green-500/30",     icon: CheckCircle },
+  converted:   { label: "Booking Created",   color: "bg-green-500/20 text-green-300 border-green-500/30",     icon: CheckCircle },
+  rejected:    { label: "Not Selected",      color: "bg-white/10 text-white/40 border-white/20",              icon: MessageSquare },
+  withdrawn:   { label: "Withdrawn",         color: "bg-white/10 text-white/40 border-white/20",              icon: Clock },
+  declined:    { label: "Vendor Declined",   color: "bg-red-500/20 text-red-300 border-red-500/30",           icon: MessageSquare },
+  expired:     { label: "Expired",           color: "bg-white/10 text-white/40 border-white/20",              icon: Clock },
 };
 
 export function CustomerQuotesView({ quotes }: CustomerQuotesViewProps) {
@@ -51,12 +56,45 @@ export function CustomerQuotesView({ quotes }: CustomerQuotesViewProps) {
     );
   }
 
-  const respondedCount = quotes.filter((q) => q.status === "responded").length;
+  const respondedCount = quotes.filter((q) => ["responded", "viewed", "shortlisted"].includes(q.status)).length;
+
+  // Group by event to find events with multiple responded quotes (eligible for comparison)
+  const eventResponseCounts: Record<string, { count: number; title: string }> = {};
+  for (const q of quotes) {
+    if (q.event?.id && ["responded", "viewed", "shortlisted"].includes(q.status)) {
+      const key = q.event.id;
+      if (!eventResponseCounts[key]) {
+        eventResponseCounts[key] = { count: 0, title: q.event.title };
+      }
+      eventResponseCounts[key].count++;
+    }
+  }
+  const comparableEvents = Object.entries(eventResponseCounts).filter(([, v]) => v.count >= 2);
 
   return (
     <div className="space-y-4">
+      {/* Compare CTA when multiple vendors responded for the same event */}
+      {comparableEvents.length > 0 && (
+        <div className="space-y-2">
+          {comparableEvents.map(([eventId, info]) => (
+            <div key={eventId} className="flex items-center gap-3 p-3.5 rounded-xl bg-brand-500/10 border border-brand-500/25">
+              <GitCompare size={15} className="text-brand-400 flex-shrink-0" />
+              <p className="text-brand-300 text-sm font-medium flex-1">
+                {info.count} vendors quoted for <span className="font-semibold">{info.title}</span>
+              </p>
+              <Link
+                href={`/dashboard/quotes/compare?event_id=${eventId}`}
+                className="flex-shrink-0 px-3 py-1.5 rounded-lg bg-brand-500/20 border border-brand-500/40 text-brand-300 text-xs font-semibold hover:bg-brand-500/30 transition-colors"
+              >
+                Compare →
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Urgency banner if there are unread responses */}
-      {respondedCount > 0 && (
+      {respondedCount > 0 && comparableEvents.length === 0 && (
         <div className="flex items-center gap-3 p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/25">
           <Zap size={15} className="text-blue-400 flex-shrink-0" />
           <p className="text-blue-300 text-sm font-medium">

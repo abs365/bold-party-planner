@@ -44,6 +44,11 @@ export type AuditAction =
   | "booking.cancelled"
   | "quote.status.change"
   | "quote.created"
+  | "quote.responded"
+  | "quote.accepted"
+  | "quote.rejected"
+  | "quote.withdrawn"
+  | "quote.declined"
   // Events
   | "event.created"
   // Auth

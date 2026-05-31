@@ -104,7 +104,7 @@ export async function PATCH(req: Request, { params }: Params) {
     void createAuditLog({ actorUserId: user.id, actorRole: "vendor",
       action: "quote.responded", entityType: "quote", entityId: id,
       ipAddress: ipFromRequest(req) });
-    void track({ event: "quote.vendor_responded", userId: user.id,
+    void track({ event: "quote.responded", userId: user.id,
       properties: { quote_id: id, price } });
     void supabase.rpc("notify_user", {
       p_user_id: quote.customer_id, p_title: "Quote Response Received",

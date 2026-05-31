@@ -54,6 +54,7 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/vendors", label: "Vendors", icon: Store },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/bookings", label: "Bookings", icon: ShoppingBag },
+  { href: "/admin/quotes", label: "Quote Pipeline", icon: Inbox },
   { href: "/admin/payouts", label: "Payouts", icon: Wallet },
   { href: "/admin/disputes", label: "Disputes", icon: AlertCircle },
   { href: "/admin/verifications", label: "Verifications", icon: BadgeCheck },

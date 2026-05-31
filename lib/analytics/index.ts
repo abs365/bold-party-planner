@@ -26,7 +26,9 @@ export type AnalyticsEvent =
   | "quote.requested"
   | "quote.responded"
   | "quote.accepted"
+  | "quote.rejected"
   | "quote.declined"
+  | "quote.withdrawn"
   | "quote.expired"
   // Booking funnel
   | "booking.created"

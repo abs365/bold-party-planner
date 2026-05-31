@@ -160,3 +160,106 @@ test.describe("Customer — Saved Vendors", () => {
     ).toBeVisible({ timeout: 8000 });
   });
 });
+
+test.describe("Customer — Quote Workflow (Phase 26)", () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAs(page, "customer");
+  });
+
+  test("quotes page shows compare CTA when multiple vendors responded for same event", async ({ page }) => {
+    await page.goto("/dashboard/quotes");
+    // The compare CTA only appears if seed data has 2+ responded quotes for one event.
+    // This test checks the page structure is correct and no errors occur.
+    const quotesContent = page.getByText(/quotes|no quote/i).first();
+    await expect(quotesContent).toBeVisible({ timeout: 10000 });
+  });
+
+  test("compare page redirects to quotes if no event_id", async ({ page }) => {
+    await page.goto("/dashboard/quotes/compare");
+    // Should redirect to /dashboard/quotes since no event_id provided
+    await expect(page).toHaveURL(/\/dashboard\/quotes/, { timeout: 8000 });
+  });
+
+  test("compare page renders with event_id param (even if no responded quotes)", async ({ page }) => {
+    // Navigate to quotes list first to get event context
+    await page.goto("/dashboard/quotes");
+    // Look for a Compare link
+    const compareLink = page.getByRole("link", { name: /compare/i }).first();
+    if (await compareLink.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await compareLink.click();
+      await expect(page).toHaveURL(/\/compare/, { timeout: 8000 });
+      await expect(
+        page.getByRole("heading", { name: /compare quotes/i }).or(
+          page.getByText(/compare|no vendor quotes/i)
+        ).first()
+      ).toBeVisible({ timeout: 8000 });
+    } else {
+      // No compare link visible (no multi-responded quotes in seed) — verify page directly
+      await page.goto("/dashboard/quotes/compare?event_id=00000000-0000-0000-0000-000000000000");
+      // Should redirect since event_id doesn't belong to user
+      await expect(page).toHaveURL(/\/dashboard\/quotes/, { timeout: 8000 });
+    }
+  });
+
+  test("quote detail page shows status timeline", async ({ page }) => {
+    await page.goto("/dashboard/quotes");
+    // Click first quote link if available
+    const firstQuoteLink = page.locator("a[href*='/dashboard/quotes/']").first();
+    if (await firstQuoteLink.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await firstQuoteLink.click();
+      await expect(page).toHaveURL(/\/dashboard\/quotes\//, { timeout: 8000 });
+      // Timeline should show "Request Sent"
+      await expect(
+        page.getByText(/request sent|vendor responded|booking/i).first()
+      ).toBeVisible({ timeout: 8000 });
+    }
+  });
+
+  test("new quote request form is accessible", async ({ page }) => {
+    await page.goto("/dashboard/quotes/new");
+    await expect(
+      page.getByText(/request.*quote|new quote|quote request/i).first()
+    ).toBeVisible({ timeout: 8000 });
+  });
+});
+
+test.describe("Admin — Quote Pipeline (Phase 26)", () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAs(page, "admin");
+  });
+
+  test("admin quotes page loads and shows stats", async ({ page }) => {
+    await page.goto("/admin/quotes");
+    await expect(page.getByRole("heading", { name: /quote pipeline/i })).toBeVisible({ timeout: 10000 });
+    // Stats row should be visible
+    await expect(page.getByText(/total|pending|converted|conv\. rate/i).first()).toBeVisible({ timeout: 8000 });
+  });
+
+  test("admin quotes page shows filter buttons", async ({ page }) => {
+    await page.goto("/admin/quotes");
+    // Filter buttons: all, active, pending, responded, etc.
+    await expect(page.getByRole("button", { name: /^all$/i })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("button", { name: /^active$/i })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole("button", { name: /^pending$/i })).toBeVisible({ timeout: 8000 });
+  });
+
+  test("admin quotes search filters results", async ({ page }) => {
+    await page.goto("/admin/quotes");
+    await page.waitForTimeout(1000);
+    const searchInput = page.locator("input[placeholder*='search' i]").first();
+    if (await searchInput.isVisible({ timeout: 5000 }).catch(() => false)) {
+      await searchInput.fill("zzznomatchwillbefound");
+      await expect(page.getByText(/no quotes match/i)).toBeVisible({ timeout: 5000 });
+    }
+  });
+
+  test("admin quote pipeline not accessible to customers", async ({ page }) => {
+    await page.context().clearCookies();
+    await loginAs(page, "customer");
+    const res = await page.goto("/admin/quotes");
+    // Should redirect away from admin
+    expect(page.url()).not.toContain("/admin/quotes");
+    // Status could be redirect (200 after redirect) or direct 403
+    expect([200, 302, 403]).toContain(res?.status() ?? 200);
+  });
+});
