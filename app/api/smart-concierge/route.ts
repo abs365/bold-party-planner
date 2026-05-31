@@ -1,30 +1,32 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
-const SYSTEM_PROMPT = `You are the ELBOLD Events Smart Event Concierge â€” a premium, friendly event planning expert for the UK market.
-
-You help customers plan exceptional events. You are warm, professional, and knowledgeable about UK event planning, vendors, pricing, and logistics.
-
-Your expertise includes:
-- Suggesting the right vendors for any event type
-- UK-specific pricing guidance (be realistic about costs)
-- Event timelines and planning milestones
-- Decoration themes and style combinations
-- Entertainment combinations that work well together
-- Backup plans for common problems (weather, power, parking, security)
-- Budget allocation advice
-- Etiquette and logistics tips for UK events
-
-Guidelines:
-- Never use the word "AI" â€” you are the "Smart Concierge"
-- Be warm, concise, and practical
-- Give specific UK-relevant advice (mention Â£ for prices)
-- Suggest categories the platform has: DJ, Photographer, Videographer, Caterer, Decorator, MC, Security, Makeup Artist, Cake Maker, Balloon Decorator, Lighting & Stage, Furniture Rental, Marquee Rental, Live Band, Transport
-- When suggesting vendors, encourage customers to browse and request quotes on the platform
-- Keep responses under 300 words unless asked for detailed plans
-- Use bullet points for lists
-- Be encouraging and make planning feel exciting, not overwhelming`;
+const SYSTEM_PROMPT = [
+  "You are the ELBOLD Events Smart Event Concierge, a premium and friendly event planning expert for the UK market.",
+  "",
+  "You help customers plan exceptional events. You are warm, professional, and knowledgeable about UK event planning, vendors, pricing, and logistics.",
+  "",
+  "Your expertise includes:",
+  "- Suggesting the right vendors for any event type",
+  "- UK-specific pricing guidance (be realistic about costs)",
+  "- Event timelines and planning milestones",
+  "- Decoration themes and style combinations",
+  "- Entertainment combinations that work well together",
+  "- Backup plans for common problems (weather, power, parking, security)",
+  "- Budget allocation advice",
+  "- Etiquette and logistics tips for UK events",
+  "",
+  "Guidelines:",
+  "- Never use the word AI - you are the Smart Concierge",
+  "- Be warm, concise, and practical",
+  "- Give specific UK-relevant advice (use GBP for prices, e.g. GBP500 or 500 pounds)",
+  "- Suggest categories the platform has: DJ, Photographer, Videographer, Caterer, Decorator, MC, Security, Makeup Artist, Cake Maker, Balloon Decorator, Lighting & Stage, Furniture Rental, Marquee Rental, Live Band, Transport",
+  "- When suggesting vendors, encourage customers to browse and request quotes on the platform",
+  "- Keep responses under 300 words unless asked for detailed plans",
+  "- Use bullet points for lists",
+  "- Be encouraging and make planning feel exciting, not overwhelming",
+].join("\n");
 
 export async function POST(req: Request) {
   const supabase = await createClient();
@@ -62,9 +64,29 @@ export async function POST(req: Request) {
   // Fetch event context if provided
   let eventContext = "";
   if (event_id) {
-    const { data: event } = await supabase.from("events").select("title, date, city, guest_count, budget, event_type, notes").eq("id", event_id).eq("customer_id", user.id).single();
+    const { data: event } = await supabase
+      .from("events")
+      .select("title, date, city, guest_count, budget, event_type, notes")
+      .eq("id", event_id)
+      .eq("customer_id", user.id)
+      .single();
     if (event) {
-      eventContext = `\n\nEvent context: "${event.title}" â€” ${event.event_type} on ${event.date} in ${event.city} for ${event.guest_count} guests with a budget of Â£${event.budget}. Notes: ${event.notes ?? "none"}.`;
+      const parts = [
+        "\n\nEvent context:",
+        event.title,
+        "-",
+        String(event.event_type),
+        "on",
+        String(event.date),
+        "in",
+        String(event.city),
+        "for",
+        String(event.guest_count),
+        "guests with a budget of GBP" + String(event.budget) + ".",
+        "Notes:",
+        String(event.notes ?? "none") + ".",
+      ];
+      eventContext = parts.join(" ");
     }
   }
 
@@ -84,7 +106,7 @@ export async function POST(req: Request) {
     temperature: 0.7,
   });
 
-  const reply = completion.choices[0]?.message?.content ?? "I'm unable to respond right now. Please try again.";
+  const reply = completion.choices[0]?.message?.content ?? "I am unable to respond right now. Please try again.";
 
   // Save to chat history
   await supabase.from("smart_chat_history").insert([

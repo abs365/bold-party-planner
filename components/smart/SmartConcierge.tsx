@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, X, Send, Minimize2, Maximize2, ChevronDown } from "lucide-react";
@@ -12,7 +12,7 @@ interface Message {
 const SUGGESTIONS = [
   "What vendors do I need for a wedding?",
   "Help me plan a 50-person birthday party",
-  "What's a realistic budget for a corporate event?",
+  "What is a realistic budget for a corporate event?",
   "Suggest a backup plan for outdoor events",
   "What entertainment combinations work best?",
 ];
@@ -22,9 +22,11 @@ interface SmartConciergeProps {
   eventTitle?: string;
 }
 
+const WELCOME_TEXT = "Hello! I am your Smart Event Concierge. I am here to help you plan a flawless event - from vendor recommendations to timelines, budgets, and inspiration. What are you planning?";
+
 const WELCOME: Message = {
   role: "assistant",
-  content: "Hello! I'm your Smart Event Concierge. I'm here to help you plan a flawless event â€” from vendor recommendations to timelines, budgets, and inspiration. What are you planning?",
+  content: WELCOME_TEXT,
 };
 
 export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
@@ -35,7 +37,7 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
     {
       role: "assistant",
       content: eventTitle
-        ? `Hello! I'm your Smart Event Concierge. I can see you're planning **${eventTitle}** â€” I'm here to help with vendor suggestions, timeline planning, budget tips, and anything else you need. What would you like help with?`
+        ? `Hello! I am your Smart Event Concierge. I can see you are planning **${eventTitle}** - I am here to help with vendor suggestions, timeline planning, budget tips, and anything else you need. What would you like help with?`
         : WELCOME.content,
     },
   ]);
@@ -62,8 +64,8 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
             {
               role: "assistant",
               content: eventTitle
-                ? `Welcome back! We've been planning **${eventTitle}** together. Here's our conversation history â€” how can I help you further?`
-                : "Welcome back! Here's your recent conversation history. How can I help you today?",
+                ? `Welcome back! We have been planning **${eventTitle}** together. Here is your conversation history - how can I help you further?`
+                : "Welcome back! Here is your recent conversation history. How can I help you today?",
             },
             ...history.slice(-20),
           ]);
@@ -99,11 +101,11 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
         }),
       });
       const data = await res.json() as { reply?: string; error?: string };
-      const reply = data.reply ?? "I'm sorry, I couldn't process that. Please try again.";
+      const reply = data.reply ?? "Sorry, I could not process that. Please try again.";
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
       if (!open) setUnread(true);
     } catch {
-      setMessages((m) => [...m, { role: "assistant", content: "I'm having trouble connecting. Please try again in a moment." }]);
+      setMessages((m) => [...m, { role: "assistant", content: "I am having trouble connecting. Please try again in a moment." }]);
     } finally {
       setLoading(false);
     }
@@ -224,7 +226,7 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
                     <Send className="w-4 h-4 text-white" />
                   </button>
                 </div>
-                <p className="text-white/20 text-xs text-center mt-2">Smart Event Concierge Â· ELBOLD Events</p>
+                <p className="text-white/20 text-xs text-center mt-2">Smart Event Concierge &middot; ELBOLD Events</p>
               </div>
             </>
           )}

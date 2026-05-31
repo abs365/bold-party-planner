@@ -112,6 +112,23 @@ export async function PATCH(req: Request, { params }: Params) {
       p_type: "booking", p_link: `/dashboard/quotes/${id}`,
     });
 
+    // Transactional email to customer
+    void (async () => {
+      const { data: customerContact } = await db.from("profiles").select("email, full_name").eq("id", quote.customer_id).maybeSingle();
+      const { data: vendorProfile } = await db.from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+      const { data: vendorRow } = await db.from("vendors").select("business_name").eq("user_id", user.id).maybeSingle();
+      if (customerContact?.email) {
+        const { sendQuoteResponseToCustomer } = await import("@/lib/resend");
+        void sendQuoteResponseToCustomer(
+          customerContact.email,
+          customerContact.full_name ?? "there",
+          vendorRow?.business_name ?? vendorProfile?.full_name ?? "Your vendor",
+          price,
+          id
+        );
+      }
+    })();
+
     return NextResponse.json(response);
   }
 
@@ -228,6 +245,26 @@ export async function PATCH(req: Request, { params }: Params) {
       p_type: "booking", p_link: `/vendor/bookings/${booking.id}`,
     });
 
+    // Transactional email to vendor on acceptance
+    void (async () => {
+      const { data: vendorUser } = await db.from("vendors").select("user_id, business_name").eq("id", quote.vendor_id).maybeSingle();
+      if (vendorUser?.user_id) {
+        const { data: vendorContact } = await db.from("profiles").select("email, full_name").eq("id", vendorUser.user_id).maybeSingle();
+        if (vendorContact?.email) {
+          const { sendQuoteAcceptedToVendor } = await import("@/lib/resend");
+          const { data: customerProfile } = await db.from("profiles").select("full_name").eq("id", quote.customer_id).maybeSingle();
+          void sendQuoteAcceptedToVendor(
+            vendorContact.email,
+            vendorContact.full_name ?? "there",
+            customerProfile?.full_name ?? "A customer",
+            quote.event_type ?? "event",
+            response.price,
+            booking.id
+          );
+        }
+      }
+    })();
+
     return NextResponse.json({ booking });
   }
 
@@ -244,6 +281,24 @@ export async function PATCH(req: Request, { params }: Params) {
       event_type: "rejected", details: { reason },
     });
     void track({ event: "quote.rejected", userId: user.id, properties: { quote_id: id } });
+
+    // Notify vendor by email that their quote was not selected
+    void (async () => {
+      const { data: vendorUser } = await db.from("vendors").select("user_id").eq("id", quote.vendor_id).maybeSingle();
+      if (vendorUser?.user_id) {
+        const { data: vendorContact } = await db.from("profiles").select("email, full_name").eq("id", vendorUser.user_id).maybeSingle();
+        if (vendorContact?.email) {
+          const { sendQuoteRejectedToVendor } = await import("@/lib/resend");
+          const { data: customerProfile } = await db.from("profiles").select("full_name").eq("id", quote.customer_id).maybeSingle();
+          void sendQuoteRejectedToVendor(
+            vendorContact.email,
+            vendorContact.full_name ?? "there",
+            customerProfile?.full_name ?? "The customer",
+            quote.event_type ?? "event"
+          );
+        }
+      }
+    })();
 
     return NextResponse.json({ success: true });
   }

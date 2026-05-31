@@ -192,16 +192,21 @@ export function QuoteComparisonView({ quotes, eventTitle, eventId }: QuoteCompar
                   </span>
                 </div>
 
-                {/* Trust badges */}
+                {/* Trust badges — level 2+ only; level 1 has no document verification */}
                 <div className="flex flex-wrap gap-1">
-                  {(quote.vendor?.verification_level ?? 0) >= 2 && (
+                  {(quote.vendor?.verification_level ?? 0) >= 4 && (
                     <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
                       <BadgeCheck className="w-3 h-3" /> Business Verified
                     </span>
                   )}
-                  {(quote.vendor?.verification_level ?? 0) === 1 && (
+                  {(quote.vendor?.verification_level ?? 0) === 3 && (
+                    <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
+                      <BadgeCheck className="w-3 h-3" /> Address Verified
+                    </span>
+                  )}
+                  {(quote.vendor?.verification_level ?? 0) === 2 && (
                     <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-300">
-                      <BadgeCheck className="w-3 h-3" /> Verified
+                      <BadgeCheck className="w-3 h-3" /> ID Verified
                     </span>
                   )}
                   {(quote.vendor?.response_rate ?? 0) >= 80 && (

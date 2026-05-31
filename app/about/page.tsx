@@ -49,6 +49,34 @@ export default async function AboutPage() {
 
       <div className="max-w-3xl mx-auto px-4 py-20 space-y-16">
 
+        {/* Vision · Mission · Values */}
+        <section className="border border-gray-100 rounded-2xl p-8 space-y-6">
+          <div>
+            <p className="text-xs tracking-[0.25em] font-semibold uppercase mb-2" style={{ color: "#C9A84C" }}>Vision</p>
+            <p className="text-lg font-light text-gray-900 leading-snug">
+              Become the UK&apos;s most trusted event vendor marketplace.
+            </p>
+          </div>
+          <div className="h-px bg-gray-100" />
+          <div>
+            <p className="text-xs tracking-[0.25em] font-semibold uppercase mb-2" style={{ color: "#C9A84C" }}>Mission</p>
+            <p className="text-lg font-light text-gray-900 leading-snug">
+              Connect customers with trusted event professionals while helping vendors build sustainable businesses.
+            </p>
+          </div>
+          <div className="h-px bg-gray-100" />
+          <div>
+            <p className="text-xs tracking-[0.25em] font-semibold uppercase mb-2" style={{ color: "#C9A84C" }}>Values</p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {["Trust", "Transparency", "Reliability", "Quality", "Community"].map((v) => (
+                <span key={v} className="px-3 py-1 rounded-full text-xs font-medium border border-gray-200 text-gray-600">
+                  {v}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Why we exist */}
         <section>
           <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-5">Why ELBOLD exists</h2>

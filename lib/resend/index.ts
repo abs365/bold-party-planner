@@ -233,3 +233,94 @@ export async function sendRefundProcessed(
     <p>If you have questions, contact <a href="mailto:support@elbold.com" style="color:#0d1b3e">support@elbold.com</a>.</p>`
   ));
 }
+
+// ── Quote lifecycle emails ─────────────────────────────────────────────────────
+
+export async function sendQuoteRequestToVendor(
+  to: string,
+  vendorName: string,
+  customerName: string,
+  eventType: string,
+  eventDate: string | null,
+  budgetMax: number | null,
+  quoteId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  const budgetLine = budgetMax ? `<p><span class="detail-label">Budget:</span> <span class="detail-value">up to £${budgetMax.toLocaleString("en-GB")}</span></p>` : "";
+  const dateLine = eventDate ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>` : "";
+  return send(to, `New quote request from ${customerName} — ELBOLD Events`, wrap(
+    "New Quote Request",
+    `<p>Hi ${vendorName},</p>
+    <p><span class="highlight">${customerName}</span> has requested a quote for their event. Vendors who respond within 2 hours win significantly more bookings.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Event type:</span> <span class="detail-value">${eventType.replace(/_/g, " ")}</span></p>
+      ${dateLine}
+      ${budgetLine}
+    </div>
+    <p>Log in to review the full request and submit your price.</p>
+    <a href="${appUrl}/vendor/quotes" class="btn">View & Respond</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">This request will expire if unanswered within 7 days.</p>`
+  ));
+}
+
+export async function sendQuoteResponseToCustomer(
+  to: string,
+  customerName: string,
+  vendorBusiness: string,
+  price: number,
+  quoteId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  return send(to, `${vendorBusiness} has responded to your quote — ELBOLD Events`, wrap(
+    "Quote Response Received",
+    `<p>Hi ${customerName},</p>
+    <p><span class="highlight">${vendorBusiness}</span> has submitted a price for your event.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Quoted price:</span> <span class="detail-value">£${price.toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
+      <p><span class="detail-label">Deposit required:</span> <span class="detail-value">£${(price * 0.3).toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
+    </div>
+    <p>Review the full quote details, compare with other vendors, and accept or decline at your convenience.</p>
+    <a href="${appUrl}/dashboard/quotes/${quoteId}" class="btn">View Quote</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">You are not committed to anything until you accept.</p>`
+  ));
+}
+
+export async function sendQuoteAcceptedToVendor(
+  to: string,
+  vendorName: string,
+  customerName: string,
+  eventType: string,
+  price: number,
+  bookingId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  return send(to, `Quote accepted — ${customerName} has booked you! — ELBOLD Events`, wrap(
+    "Quote Accepted — Booking Created",
+    `<p>Hi ${vendorName},</p>
+    <p>Congratulations! <span class="highlight">${customerName}</span> has accepted your quote and a booking has been created.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Event:</span> <span class="detail-value">${eventType.replace(/_/g, " ")}</span></p>
+      <p><span class="detail-label">Agreed price:</span> <span class="detail-value">£${price.toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
+      <p><span class="detail-label">Your payout (90%):</span> <span class="detail-value">£${(price * 0.9).toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
+    </div>
+    <p>The customer will pay the deposit to secure the date. You will be notified when payment is received.</p>
+    <a href="${appUrl}/vendor/bookings/${bookingId}" class="btn">View Booking</a>`
+  ));
+}
+
+export async function sendQuoteRejectedToVendor(
+  to: string,
+  vendorName: string,
+  customerName: string,
+  eventType: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  return send(to, `Quote update — ELBOLD Events`, wrap(
+    "Quote Not Selected",
+    `<p>Hi ${vendorName},</p>
+    <p>${customerName} has chosen a different vendor for their ${eventType.replace(/_/g, " ")} event.</p>
+    <p>This happens — availability, budget, and timing all play a role. Your profile is still live and new enquiries will continue to arrive.</p>
+    <a href="${appUrl}/vendor/quotes" class="btn">View Your Leads</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">Tip: Vendors who upload 8+ photos and respond within 2 hours win significantly more bookings.</p>`
+  ));
+}

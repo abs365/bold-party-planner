@@ -25,7 +25,7 @@ const LEGAL_LINKS = [
 ];
 
 const SUPPORT_LINKS = [
-  { label: "Help Centre", href: "/how-it-works" },
+  { label: "Help Centre", href: "/help" },
   { label: "Contact Us", href: "mailto:support@elbold.com" },
   { label: "Report an Issue", href: "mailto:safety@elbold.com" },
   { label: "Dispute Resolution", href: "mailto:disputes@elbold.com" },

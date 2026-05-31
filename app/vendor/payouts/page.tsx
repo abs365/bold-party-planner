@@ -1,7 +1,9 @@
 ﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Wallet, TrendingUp, Clock, CheckCircle2, AlertCircle, ArrowUpRight } from "lucide-react";
+import { Wallet, TrendingUp, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { BankDetailsForm } from "@/components/vendor/BankDetailsForm";
+import { createAdminClient } from "@/lib/supabase/server";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -24,13 +26,21 @@ export default async function VendorPayoutsPage() {
     .order("created_at", { ascending: false })
     .limit(20);
 
+  // Load existing bank details
+  const adminDb = await createAdminClient();
+  const { data: bankDetails } = await adminDb
+    .from("vendor_bank_details")
+    .select("account_name, sort_code, account_number")
+    .eq("vendor_id", vendor.id)
+    .maybeSingle();
+
   const confirmedBookings = (bookings ?? []).filter((b) => b.status === "confirmed" || b.status === "completed");
   const totalRevenue = confirmedBookings.reduce((sum, b) => sum + (b.total_amount ?? 0), 0);
   const depositRevenue = confirmedBookings.reduce((sum, b) => sum + (b.deposit_amount ?? 0), 0);
   const pendingBookings = (bookings ?? []).filter((b) => b.status === "pending");
   const pendingRevenue = pendingBookings.reduce((sum, b) => sum + (b.deposit_amount ?? 0), 0);
 
-  const fmt = (n: number) => `Â£${n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  const fmt = (n: number) => n.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
 
   return (
     <DashboardLayout user={profile as Profile}>
@@ -107,7 +117,23 @@ export default async function VendorPayoutsPage() {
           )}
         </div>
 
-        {/* Payout information — manual process during beta */}
+        {/* Payout bank details */}
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="font-bold text-white">Payout Bank Details</h2>
+              <p className="text-xs text-slate-400 mt-0.5">Where we send your earnings after each completed booking</p>
+            </div>
+            {bankDetails && (
+              <span className="text-xs bg-emerald-500/15 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                Details on file
+              </span>
+            )}
+          </div>
+          <BankDetailsForm initial={bankDetails ?? null} />
+        </div>
+
+        {/* How payouts work */}
         <div className="bg-white/4 border border-amber-500/20 rounded-xl p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-bold text-white">How Payouts Work</h2>
@@ -116,10 +142,10 @@ export default async function VendorPayoutsPage() {
           <div className="space-y-3 text-sm text-slate-400">
             <p>During our launch period, payouts are processed manually by the ELBOLD team within 7 working days of a booking being marked complete.</p>
             <p>ELBOLD retains a <span className="text-white font-medium">10% platform fee</span>. You receive 90% of the confirmed booking value.</p>
-            <p>To receive your payout, ensure your account details are on file. Contact <span className="text-white">support@elbold.com</span> if you have any questions.</p>
+            <p>Payouts go to the UK bank account you register above. Questions? Email <a href="mailto:support@elbold.com" className="text-white hover:opacity-75">support@elbold.com</a></p>
           </div>
           <div className="mt-4 pt-4 border-t border-white/6">
-            <p className="text-xs text-slate-500">Automated bank payouts via Stripe Connect are coming. You will be notified when this goes live.</p>
+            <p className="text-xs text-slate-500">Automated bank payouts via Stripe Connect are planned. You will be notified before we transition.</p>
           </div>
         </div>
       </div>

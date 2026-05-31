@@ -186,16 +186,21 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
               {quote.vendor?.rating.toFixed(1)}
             </span>
           </div>
-          {/* Vendor trust signals */}
+          {/* Vendor trust signals — only show document-verified badges (level 2+) */}
           <div className="flex flex-wrap gap-1.5 mt-2">
-            {(quote.vendor?.verification_level ?? 0) >= 2 && (
+            {(quote.vendor?.verification_level ?? 0) >= 4 && (
               <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
                 <BadgeCheck className="w-3 h-3" /> Business Verified
               </span>
             )}
-            {(quote.vendor?.verification_level ?? 0) === 1 && (
+            {(quote.vendor?.verification_level ?? 0) === 3 && (
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
+                <BadgeCheck className="w-3 h-3" /> Address Verified
+              </span>
+            )}
+            {(quote.vendor?.verification_level ?? 0) === 2 && (
               <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-emerald-300">
-                <BadgeCheck className="w-3 h-3" /> Identity Verified
+                <BadgeCheck className="w-3 h-3" /> ID Verified
               </span>
             )}
             {(quote.vendor?.response_rate ?? 0) >= 80 && (

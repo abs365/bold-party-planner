@@ -62,7 +62,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 pb-28 lg:pb-10">
-      {/* Lightbox â€” intentionally dark overlay */}
+      {/* Lightbox - intentionally dark overlay */}
       {lightboxIndex !== null && mediaList[lightboxIndex] && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeLightbox}>
           <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20">

@@ -155,6 +155,27 @@ export async function POST(req: Request) {
     p_link: "/vendor/quotes",
   });
 
+  // Transactional email to vendor
+  void (async () => {
+    const { data: vendorContact } = await supabase
+      .from("profiles")
+      .select("email, full_name")
+      .eq("id", vendor.user_id)
+      .maybeSingle();
+    if (vendorContact?.email) {
+      const { sendQuoteRequestToVendor } = await import("@/lib/resend");
+      void sendQuoteRequestToVendor(
+        vendorContact.email,
+        vendorContact.full_name ?? "there",
+        (await supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle()).data?.full_name ?? "A customer",
+        rest.event_type ?? "event",
+        rest.event_date ?? null,
+        rest.budget_max ?? null,
+        data.id
+      );
+    }
+  })();
+
   return NextResponse.json(data, {
     headers: {
       "X-RateLimit-Limit": "20",

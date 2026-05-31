@@ -3,7 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { SignOutButton } from "@/components/auth/SignOutButton";
-import { Bell, Shield, CreditCard, CheckCircle2 } from "lucide-react";
+import { Bell, Shield, CreditCard, CheckCircle2, KeyRound } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -83,13 +83,16 @@ export default async function AccountSettingsPage() {
               </div>
             </Link>
 
-            <div className="flex items-center gap-3 p-4 rounded-xl border border-white/8 opacity-50 cursor-not-allowed">
-              <Shield size={18} className="text-slate-500" />
+            <Link
+              href="/forgot-password"
+              className="flex items-center gap-3 p-4 rounded-xl border border-white/8 hover:bg-white/5 hover:border-white/15 transition-all"
+            >
+              <KeyRound size={18} className="text-brand-400" />
               <div>
-                <div className="text-sm font-semibold text-slate-400">Security</div>
-                <div className="text-xs text-slate-600">Password management: coming soon</div>
+                <div className="text-sm font-semibold text-white">Change Password</div>
+                <div className="text-xs text-slate-500">Send a secure reset link to your email</div>
               </div>
-            </div>
+            </Link>
 
             <SignOutButton />
           </div>

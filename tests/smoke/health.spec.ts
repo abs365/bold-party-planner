@@ -1,10 +1,10 @@
-﻿import { test, expect } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
-// â”€â”€ Smoke tests â€” these run against any environment (local or staging) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Smoke tests - run against any environment (local or staging)
 // They test critical infrastructure with no login required.
 // Run with: npx playwright test tests/smoke/ --project=chromium
 
-test.describe("Smoke â€” Health & Infrastructure", () => {
+test.describe("Smoke - Health & Infrastructure", () => {
   test("health endpoint returns ok or degraded (not error)", async ({ request }) => {
     const res = await request.get("/api/health");
     expect([200, 503]).toContain(res.status());
@@ -55,7 +55,7 @@ test.describe("Smoke â€” Health & Infrastructure", () => {
   });
 });
 
-test.describe("Smoke â€” Legal Pages", () => {
+test.describe("Smoke - Legal Pages", () => {
   const LEGAL_PAGES = [
     { path: "/privacy", title: "Privacy" },
     { path: "/terms", title: "Terms" },
@@ -65,19 +65,18 @@ test.describe("Smoke â€” Legal Pages", () => {
     { path: "/community-guidelines", title: "Community" },
   ];
 
-  for (const { path, title } of LEGAL_PAGES) {
+  for (const { path } of LEGAL_PAGES) {
     test(`${path} loads without error`, async ({ page }) => {
       const res = await page.goto(path);
       expect(res?.status()).toBe(200);
       await expect(page.locator("body")).toBeVisible({ timeout: 8000 });
-      // Should contain "ELBOLD Events" somewhere
       const text = await page.locator("body").innerText();
       expect(text.length).toBeGreaterThan(500);
     });
   }
 });
 
-test.describe("Smoke â€” Stripe Webhook Endpoint", () => {
+test.describe("Smoke - Stripe Webhook Endpoint", () => {
   test("webhook endpoint rejects requests without signature", async ({ request }) => {
     const res = await request.post("/api/payments/webhook", {
       data: "{}",
@@ -88,7 +87,7 @@ test.describe("Smoke â€” Stripe Webhook Endpoint", () => {
   });
 });
 
-test.describe("Smoke â€” GDPR APIs", () => {
+test.describe("Smoke - GDPR APIs", () => {
   test("export API requires authentication", async ({ request }) => {
     const res = await request.get("/api/account/export");
     expect(res.status()).toBe(401);
