@@ -263,3 +263,38 @@ test.describe("Admin — Quote Pipeline (Phase 26)", () => {
     expect([200, 302, 403]).toContain(res?.status() ?? 200);
   });
 });
+
+test.describe("Push Notifications - UI (Phase 26.6)", () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAs(page, "customer");
+  });
+
+  test("notifications page renders Device Alerts section", async ({ page }) => {
+    await page.goto("/dashboard/notifications");
+    await expect(page.getByText(/device alerts/i).first()).toBeVisible({ timeout: 10000 });
+  });
+
+  test("push toggle renders with initial state", async ({ page }) => {
+    await page.goto("/dashboard/notifications");
+    // Component resolves to one of: "on" / "off" / "unavailable" / "blocked"
+    // Headless Chromium has Notification.permission = "denied" → shows blocked state
+    await expect(
+      page.getByText(/push notifications (on|off|unavailable)|notifications blocked/i).first()
+    ).toBeVisible({ timeout: 10000 });
+  });
+
+  test("push subscribe endpoint blocks unauthenticated POST", async ({ page }) => {
+    await page.context().clearCookies();
+    const res = await page.request.post("/api/push/subscribe", {
+      data: { endpoint: "https://fake", keys: { p256dh: "x", auth: "y" } },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test("push send endpoint blocks customer (non-admin)", async ({ page }) => {
+    const res = await page.request.post("/api/push/send", {
+      data: { userId: "test-id", title: "Test", body: "Test body" },
+    });
+    expect([401, 403]).toContain(res.status());
+  });
+});

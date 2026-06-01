@@ -32,6 +32,9 @@ async function runChecks() {
     { label: "STRIPE_ELITE_ANNUAL_PRICE_ID",    ok: !!process.env.STRIPE_ELITE_ANNUAL_PRICE_ID,   warn: !process.env.STRIPE_ELITE_ANNUAL_PRICE_ID },
     { label: "RESEND_API_KEY",                  ok: !!process.env.RESEND_API_KEY },
     { label: "OPENAI_API_KEY",                  ok: !!process.env.OPENAI_API_KEY, warn: !process.env.OPENAI_API_KEY, note: "Required for AI planner" },
+    { label: "NEXT_PUBLIC_VAPID_PUBLIC_KEY",    ok: !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY, note: "Required for push notifications" },
+    { label: "VAPID_PRIVATE_KEY",               ok: !!process.env.VAPID_PRIVATE_KEY, note: "Required for push notifications" },
+    { label: "VAPID_SUBJECT",                   ok: !!process.env.VAPID_SUBJECT, warn: !process.env.VAPID_SUBJECT, note: "Push notification sender — e.g. mailto:hello@elbold.com" },
     { label: "SENTRY_DSN",                      ok: !!process.env.SENTRY_DSN, warn: !process.env.SENTRY_DSN, note: "Recommended for error monitoring" },
     { label: "ELBOLD_SEED_SECRET (dev only)",   ok: true, note: "Dev/test only - not required in production" },
   ];

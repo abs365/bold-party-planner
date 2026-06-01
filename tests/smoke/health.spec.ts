@@ -98,3 +98,65 @@ test.describe("Smoke - GDPR APIs", () => {
     expect(res.status()).toBe(401);
   });
 });
+
+test.describe("Smoke - Push Notifications Infrastructure", () => {
+  test("service worker is served with correct content type", async ({ request }) => {
+    const res = await request.get("/sw.js");
+    expect(res.status()).toBe(200);
+    const ct = res.headers()["content-type"] ?? "";
+    expect(ct).toMatch(/javascript/);
+  });
+
+  test("service worker contains push event handler", async ({ request }) => {
+    const res = await request.get("/sw.js");
+    const body = await res.text();
+    expect(body).toContain("push");
+    expect(body).toContain("showNotification");
+    expect(body).toContain("pushsubscriptionchange");
+    expect(body).toContain("SET_VAPID_KEY");
+  });
+
+  test("service worker contains fixed pushsubscriptionchange with applicationServerKey", async ({ request }) => {
+    const res = await request.get("/sw.js");
+    const body = await res.text();
+    expect(body).toContain("applicationServerKey");
+    expect(body).toContain("urlBase64ToUint8Array");
+  });
+
+  test("push subscribe endpoint requires authentication", async ({ request }) => {
+    const res = await request.post("/api/push/subscribe", {
+      data: { endpoint: "https://test", keys: { p256dh: "test", auth: "test" } },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test("push subscribe DELETE requires authentication", async ({ request }) => {
+    const res = await request.delete("/api/push/subscribe", {
+      data: { endpoint: "https://test" },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test("push send endpoint requires admin authentication", async ({ request }) => {
+    const res = await request.post("/api/push/send", {
+      data: { userId: "test", title: "Test", body: "Test" },
+    });
+    expect(res.status()).toBe(401);
+  });
+
+  test("PWA manifest is served correctly", async ({ request }) => {
+    const res = await request.get("/manifest.webmanifest");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toMatch(/manifest\+json/);
+    const body = await res.json() as { name: string; display: string };
+    expect(body.name).toBe("ELBOLD Events");
+    expect(body.display).toBe("standalone");
+  });
+
+  test("notifications page is accessible (auth redirect for unauthenticated)", async ({ request }) => {
+    // The page requires auth; unauthenticated curl-style request hits the middleware
+    const res = await request.get("/dashboard/notifications");
+    // Either redirected (200 after redirect chain) or 307 redirect — either way not a 500
+    expect([200, 307, 308]).toContain(res.status());
+  });
+});

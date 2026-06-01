@@ -14,6 +14,9 @@ const STATIC_PATTERNS = [
   /\.(?:png|jpg|jpeg|svg|gif|webp|ico|woff2?|ttf)$/,
 ];
 
+// Stored by the main thread after subscribing (see lib/push.ts sendVapidKeyToSW)
+let vapidPublicKey = null;
+
 // ── Install ──────────────────────────────────────────────────────────────────
 
 self.addEventListener("install", (event) => {
@@ -42,6 +45,14 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// ── Message (receives VAPID key from main thread) ─────────────────────────────
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SET_VAPID_KEY") {
+    vapidPublicKey = event.data.key;
+  }
+});
+
 // ── Fetch ─────────────────────────────────────────────────────────────────────
 
 self.addEventListener("fetch", (event) => {
@@ -57,13 +68,13 @@ self.addEventListener("fetch", (event) => {
   // Never intercept Next.js internals
   if (url.pathname.startsWith("/_next/webpack-hmr")) return;
 
-  // Static assets → cache-first, then network, then store
+  // Static assets — cache-first, then network, then store
   if (STATIC_PATTERNS.some((p) => p.test(url.pathname))) {
     event.respondWith(cacheFirst(request, STATIC_CACHE_NAME));
     return;
   }
 
-  // Navigation → network-first, fallback to offline page
+  // Navigation — network-first, fallback to offline page
   if (request.mode === "navigate") {
     event.respondWith(networkFirstWithOfflineFallback(request));
     return;
@@ -148,10 +159,44 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
+// ── Push subscription renewal ──────────────────────────────────────────────────
+// Fires when the browser invalidates the existing subscription (key rotation, expiry).
+// Requires the VAPID public key — sent by the main thread via postMessage after any
+// successful subscribe call. Without it we cannot re-subscribe here.
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = self.atob(base64);
+  const buffer = new ArrayBuffer(rawData.length);
+  const outputArray = new Uint8Array(buffer);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 self.addEventListener("pushsubscriptionchange", (event) => {
+  if (!vapidPublicKey) {
+    // No key stored — ask the client page to re-subscribe
+    event.waitUntil(
+      self.clients
+        .matchAll({ type: "window" })
+        .then((clients) => {
+          clients.forEach((client) =>
+            client.postMessage({ type: "PUSH_SUBSCRIPTION_CHANGED" })
+          );
+        })
+    );
+    return;
+  }
+
   event.waitUntil(
     self.registration.pushManager
-      .subscribe({ userVisibleOnly: true })
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+      })
       .then((subscription) =>
         fetch("/api/push/subscribe", {
           method: "POST",
@@ -159,5 +204,8 @@ self.addEventListener("pushsubscriptionchange", (event) => {
           body: JSON.stringify(subscription),
         })
       )
+      .catch((err) => {
+        console.error("[SW] pushsubscriptionchange re-subscribe failed:", err);
+      })
   );
 });

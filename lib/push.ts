@@ -12,6 +12,12 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
   return outputArray;
 }
 
+// Send VAPID public key to the service worker so it can handle pushsubscriptionchange
+function sendVapidKeyToSW(registration: ServiceWorkerRegistration, key: string) {
+  const target = registration.active ?? registration.installing ?? registration.waiting;
+  target?.postMessage({ type: "SET_VAPID_KEY", key });
+}
+
 export async function subscribeToPush(): Promise<PushSubscription | null> {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
     return null;
@@ -27,16 +33,21 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
   if (permission !== "granted") return null;
 
   const registration = await navigator.serviceWorker.ready;
+
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicKey),
   });
 
+  // Store subscription via API
   await fetch("/api/push/subscribe", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(subscription),
   });
+
+  // Give the service worker the VAPID key so it can handle pushsubscriptionchange
+  sendVapidKeyToSW(registration, publicKey);
 
   return subscription;
 }
@@ -60,7 +71,25 @@ export async function unsubscribeFromPush(): Promise<void> {
 export async function isPushSubscribed(): Promise<boolean> {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) return false;
 
-  const registration = await navigator.serviceWorker.ready;
-  const subscription = await registration.pushManager.getSubscription();
+  // Use getRegistrations() instead of .ready to avoid hanging when no SW is installed
+  const registrations = await navigator.serviceWorker.getRegistrations();
+  if (registrations.length === 0) return false;
+
+  const subscription = await registrations[0].pushManager.getSubscription();
   return subscription !== null;
+}
+
+// Wire up the PUSH_SUBSCRIPTION_CHANGED message from the service worker.
+// Call once on app mount (e.g. in ServiceWorkerRegistration component).
+export function listenForSubscriptionChange(onChanged: () => void): () => void {
+  if (!("serviceWorker" in navigator)) return () => {};
+
+  const handler = (event: MessageEvent) => {
+    if ((event.data as { type?: string })?.type === "PUSH_SUBSCRIPTION_CHANGED") {
+      onChanged();
+    }
+  };
+
+  navigator.serviceWorker.addEventListener("message", handler);
+  return () => navigator.serviceWorker.removeEventListener("message", handler);
 }
