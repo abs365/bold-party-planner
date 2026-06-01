@@ -275,11 +275,12 @@ export default async function AdminPilotPage() {
     (v.lead_count ?? 0) >= 3 && (v.response_rate ?? 100) < 50
   ).length;
 
-  // ── Launch readiness targets ───────────────────────────────────────────────
+  // ── Launch readiness targets (Pilot Programme success criteria) ───────────
   const launchTargets = [
-    { label: "Pilot Vendors",      current: approvedVendors,  target: 10 },
-    { label: "Verified Vendors",   current: verifiedL2Plus,   target: 5  },
-    { label: "Quote Requests",     current: allQuotes.length, target: 20 },
+    { label: "Pilot Vendors",      current: approvedVendors,               target: 10 },
+    { label: "Verified Vendors",   current: verifiedL2Plus,                target: 5  },
+    { label: "Quote Requests",     current: allQuotes.length,              target: 20 },
+    { label: "Accepted Quotes",    current: acceptedQuotes,                target: 5  },
     { label: "First Booking",      current: Math.min(allBookings.length, 1), target: 1 },
     { label: "First Payout",
       current: allBookings.filter((b) => b.status === "completed").length > 0 ? 1 : 0,

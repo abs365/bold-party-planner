@@ -8,7 +8,7 @@ import {
   Bell, Menu, X, LogOut, User, ChevronRight, Star, Sparkles,
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
-  Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity,
+  Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -31,6 +31,7 @@ const CUSTOMER_NAV: NavItem[] = [
   { href: "/dashboard/saved", label: "Saved Vendors", icon: Heart },
   { href: "/dashboard/invitations", label: "Invitations", icon: Mail },
   { href: "/browse", label: "Browse Vendors", icon: Store },
+  { href: "/dashboard/feedback", label: "Share Feedback", icon: ThumbsUp },
 ];
 
 const VENDOR_NAV: NavItem[] = [
@@ -47,6 +48,7 @@ const VENDOR_NAV: NavItem[] = [
   { href: "/vendor/payouts", label: "Revenue & Payouts", icon: Wallet },
   { href: "/vendor/subscription", label: "Subscription", icon: BadgeCheck },
   { href: "/vendor/verification", label: "Get Verified", icon: Shield },
+  { href: "/vendor/feedback", label: "Share Feedback", icon: ThumbsUp },
 ];
 
 const ADMIN_NAV: NavItem[] = [
@@ -67,6 +69,9 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/support", label: "Support", icon: HelpCircle },
   { href: "/admin/system", label: "System", icon: Server },
   { href: "/admin/pilot", label: "Pilot Ops", icon: Activity },
+  { href: "/admin/pilot/vendors", label: "Pilot CRM", icon: Users },
+  { href: "/admin/pilot/report", label: "Pilot Report", icon: FileText },
+  { href: "/admin/pilot/outreach", label: "Outreach Pack", icon: MessageSquare },
   { href: "/admin/launch", label: "Launch Readiness", icon: Rocket },
 ];
 

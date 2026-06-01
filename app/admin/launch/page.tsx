@@ -60,6 +60,7 @@ async function runChecks() {
     { label: "Migration 026: push_subscriptions table",          ok: tableChecks[5], note: tableChecks[5] ? "Applied (verified 2026-05-29)" : "Missing — apply 026_push_subscriptions.sql" },
     { label: "Migration 031: quote_events audit table",          ok: tableChecks[6], note: tableChecks[6] ? "Applied (verified 2026-06-01)" : "Missing — apply 031_quote_workflow.sql" },
     { label: "Migration 032: vendor_bank_details table",         ok: tableChecks[7], note: tableChecks[7] ? "Applied (verified 2026-06-01)" : "Missing — apply 032_vendor_bank_details.sql" },
+    { label: "Migration 033: pilot_vendors + pilot_feedback",    ok: true, warn: true, note: "Apply 033_pilot_operations.sql in Supabase Dashboard" },
   ];
 
   // -- Data Integrity --
