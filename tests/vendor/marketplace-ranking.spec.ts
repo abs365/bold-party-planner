@@ -136,7 +136,7 @@ test.describe("Marketplace — Trust signals on quote detail", () => {
       await quoteLink.click();
       // Trust signals should appear in the vendor header section
       await expect(
-        page.getByText(/business verified|identity verified|fast responder|\d\+ events/i)
+        page.getByText(/business verified|address verified|id verified|fast responder|\d\+ events/i)
       ).toBeVisible({ timeout: 8000 });
     }
   });
