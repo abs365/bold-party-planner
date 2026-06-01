@@ -8,7 +8,7 @@ import {
   Bell, Menu, X, LogOut, User, ChevronRight, Star, Sparkles,
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
-  Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign,
+  Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -66,6 +66,7 @@ const ADMIN_NAV: NavItem[] = [
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/support", label: "Support", icon: HelpCircle },
   { href: "/admin/system", label: "System", icon: Server },
+  { href: "/admin/pilot", label: "Pilot Ops", icon: Activity },
   { href: "/admin/launch", label: "Launch Readiness", icon: Rocket },
 ];
 

@@ -164,3 +164,77 @@ test.describe("Admin — Verification Management", () => {
     }
   });
 });
+
+test.describe("Admin — Pilot Operations Dashboard", () => {
+  test.beforeEach(async ({ page }) => {
+    await loginAs(page, "admin");
+  });
+
+  test("pilot ops page loads and shows KPI sections", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByRole("heading", { name: /pilot operations/i })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/pilot kpis/i).first()).toBeVisible({ timeout: 8000 });
+  });
+
+  test("pilot ops period selector works", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByRole("button", { name: /30d/i })).toBeVisible({ timeout: 8000 });
+    await page.getByRole("button", { name: /7d/i }).click();
+    await expect(page.getByRole("button", { name: /7d/i })).toBeVisible();
+  });
+
+  test("vendor funnel section renders", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/vendor funnel/i).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/registered|approved/i).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("customer funnel section renders", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/customer funnel/i).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/signed up|created event/i).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("pilot vendor tracker table renders", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/pilot vendor tracker/i).first()).toBeVisible({ timeout: 8000 });
+  });
+
+  test("launch readiness widget shows targets", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/ceo launch readiness/i).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/pilot vendors/i).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("revenue tracking section renders", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/revenue tracking/i).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/platform earnings|subscription/i).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("operational alerts section renders", async ({ page }) => {
+    await page.goto("/admin/pilot");
+    await expect(page.getByText(/operational alerts/i).first()).toBeVisible({ timeout: 8000 });
+    await expect(page.getByText(/pending verifications/i).first()).toBeVisible({ timeout: 5000 });
+  });
+
+  test("pilot ops API returns data for admin", async ({ page }) => {
+    // beforeEach already logs in as admin; navigate first to establish session cookie
+    await page.goto("/admin");
+    await page.waitForURL(/\/admin/, { timeout: 8000 });
+    const res = await page.request.get("/api/admin/pilot?period=30d");
+    expect(res.status()).toBe(200);
+    const body = await res.json() as { kpis: Record<string, number>; activity: Record<string, number> };
+    expect(body.kpis).toBeDefined();
+    expect(body.activity).toBeDefined();
+    expect(typeof body.kpis.quotesRequested).toBe("number");
+    expect(typeof body.kpis.bookingsCreated).toBe("number");
+  });
+
+  test("pilot ops API blocked for non-admin", async ({ page }) => {
+    await page.context().clearCookies();
+    await loginAs(page, "customer");
+    const res = await page.request.get("/api/admin/pilot?period=30d");
+    expect([401, 403]).toContain(res.status());
+  });
+});
