@@ -25,10 +25,15 @@ const MIGRATIONS = [
   { id: "019", name: "force_demo_auth_cleanup",     status: "applied" },
   { id: "020", name: "restore_robust_trigger",      status: "applied" },
   { id: "021", name: "analytics_and_audit",          status: "applied" },
-  { id: "022", name: "vendor_governance",            status: "pending" },
-  { id: "023", name: "vendor_reviews_and_reputation", status: "pending" },
-  { id: "024", name: "subscription_infrastructure", status: "pending" },
-  { id: "025", name: "gdpr_and_production",         status: "pending" },
+  { id: "022", name: "vendor_governance",            status: "applied" },
+  { id: "023", name: "vendor_reviews_and_reputation", status: "applied" },
+  { id: "024", name: "subscription_infrastructure", status: "applied" },
+  { id: "025", name: "gdpr_and_production",         status: "applied" },
+  { id: "026", name: "push_subscriptions",          status: "applied" },
+  { id: "027", name: "event_planner_category",      status: "applied" },
+  { id: "030", name: "custom_category",             status: "applied" },
+  { id: "031", name: "quote_workflow",              status: "applied" },
+  { id: "032", name: "vendor_bank_details",         status: "applied" },
 ];
 
 export async function GET() {

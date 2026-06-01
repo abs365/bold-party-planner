@@ -1,6 +1,6 @@
 -- Migration 030: Add custom_category_description to vendors
 -- Stores the free-text description when a vendor selects category = 'other'.
--- Apply in Supabase Dashboard → SQL Editor before deploying.
+-- Status: APPLIED in Supabase (verified 2026-06-01)
 
 ALTER TABLE public.vendors
   ADD COLUMN IF NOT EXISTS custom_category_description TEXT;

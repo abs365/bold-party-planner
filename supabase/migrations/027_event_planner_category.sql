@@ -1,6 +1,6 @@
 -- Migration 027: Add event_planner to vendor category CHECK constraint
 -- Required by Phase 28B.5 — Event Planner Category Expansion
--- Apply in Supabase SQL Editor after deploying code changes.
+-- Status: APPLIED in Supabase (verified 2026-06-01)
 
 DO $$
 DECLARE

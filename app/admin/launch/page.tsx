@@ -44,15 +44,19 @@ async function runChecks() {
     db.from("subscription_plans").select("slug").limit(1).then(r => !r.error),
     db.from("subscription_billing_events").select("id").limit(1).then(r => !r.error),
     db.from("push_subscriptions").select("id").limit(1).then(r => !r.error),
+    db.from("quote_events").select("id").limit(1).then(r => !r.error),
+    db.from("vendor_bank_details").select("id").limit(1).then(r => !r.error),
   ]);
 
   checks["Database Migrations"] = [
-    { label: "Migration 022: vendor_governance table",           ok: tableChecks[0], note: tableChecks[0] ? undefined : "Apply 022_vendor_governance.sql in Supabase Dashboard" },
-    { label: "Migration 023: review_reports table",              ok: tableChecks[1], note: tableChecks[1] ? undefined : "Apply 023_vendor_reviews_and_reputation.sql" },
-    { label: "Migration 023: vendor_reputation_snapshots table", ok: tableChecks[2], note: tableChecks[2] ? undefined : "Apply 023_vendor_reviews_and_reputation.sql" },
-    { label: "Migration 024: subscription_plans table",          ok: tableChecks[3], note: tableChecks[3] ? undefined : "Apply 024_subscription_infrastructure.sql" },
-    { label: "Migration 024: subscription_billing_events table", ok: tableChecks[4], note: tableChecks[4] ? undefined : "Apply 024_subscription_infrastructure.sql" },
-    { label: "Migration 026: push_subscriptions table",          ok: tableChecks[5], note: tableChecks[5] ? "RLS + indexes verified 2026-05-29" : "Apply 026_push_subscriptions.sql in Supabase Dashboard" },
+    { label: "Migration 022: vendor_governance table",           ok: tableChecks[0], note: tableChecks[0] ? "Applied" : "Missing — apply 022_vendor_governance.sql" },
+    { label: "Migration 023: review_reports table",              ok: tableChecks[1], note: tableChecks[1] ? "Applied" : "Missing — apply 023_vendor_reviews_and_reputation.sql" },
+    { label: "Migration 023: vendor_reputation_snapshots table", ok: tableChecks[2], note: tableChecks[2] ? "Applied" : "Missing — apply 023_vendor_reviews_and_reputation.sql" },
+    { label: "Migration 024: subscription_plans table",          ok: tableChecks[3], note: tableChecks[3] ? "Applied" : "Missing — apply 024_subscription_infrastructure.sql" },
+    { label: "Migration 024: subscription_billing_events table", ok: tableChecks[4], note: tableChecks[4] ? "Applied" : "Missing — apply 024_subscription_infrastructure.sql" },
+    { label: "Migration 026: push_subscriptions table",          ok: tableChecks[5], note: tableChecks[5] ? "Applied (verified 2026-05-29)" : "Missing — apply 026_push_subscriptions.sql" },
+    { label: "Migration 031: quote_events audit table",          ok: tableChecks[6], note: tableChecks[6] ? "Applied (verified 2026-06-01)" : "Missing — apply 031_quote_workflow.sql" },
+    { label: "Migration 032: vendor_bank_details table",         ok: tableChecks[7], note: tableChecks[7] ? "Applied (verified 2026-06-01)" : "Missing — apply 032_vendor_bank_details.sql" },
   ];
 
   // -- Data Integrity --

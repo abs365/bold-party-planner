@@ -1,6 +1,6 @@
 -- Migration 031: Production-grade quote workflow
 -- Extends quotes and quote_responses, adds quote_events audit table.
--- Apply in Supabase Dashboard → SQL Editor.
+-- Status: APPLIED in Supabase (verified 2026-06-01)
 
 -- ── 1. Extend quotes table ────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 -- Migration 032: Vendor bank details for manual payouts
 -- Allows vendors to submit UK bank account details for manual payout processing.
--- Apply in Supabase Dashboard → SQL Editor.
+-- Status: APPLIED in Supabase (verified 2026-06-01)
 
 CREATE TABLE IF NOT EXISTS public.vendor_bank_details (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),

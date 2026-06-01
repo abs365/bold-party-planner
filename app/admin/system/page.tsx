@@ -36,6 +36,10 @@ const MIGRATIONS = [
   { id: "024", name: "subscription_infrastructure" },
   { id: "025", name: "gdpr_and_production" },
   { id: "026", name: "push_subscriptions" },
+  { id: "027", name: "event_planner_category" },
+  { id: "030", name: "custom_category" },
+  { id: "031", name: "quote_workflow" },
+  { id: "032", name: "vendor_bank_details" },
 ];
 
 function EnvRow({ label, present }: { label: string; present: boolean }) {
@@ -141,7 +145,7 @@ export default async function AdminSystemPage() {
         <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h2 className="font-semibold text-white mb-1 text-sm">Required Migrations</h2>
           <p className="text-xs text-slate-500 mb-4">
-            Apply these in the Supabase Dashboard → SQL Editor if not already run. All 25 are required.
+            All 30 migrations applied and verified in Supabase. Last applied: 032_vendor_bank_details (2026-06-01).
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {MIGRATIONS.map((m) => (
