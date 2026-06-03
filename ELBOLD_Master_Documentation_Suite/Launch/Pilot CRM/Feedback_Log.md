@@ -1,8 +1,9 @@
 # Feedback Log — ELBOLD Pilot
 
 **Document:** Feedback_Log  
-**Phase:** 28A — Validation Mode  
-**Updated:** 2026-06-03
+**Phase:** 29 — Pilot Validation Mode  
+**Updated:** 2026-06-03  
+**Platform:** https://www.elbold.com
 
 ---
 
