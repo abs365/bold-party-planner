@@ -30,20 +30,9 @@ export default async function VendorOnboardingPage() {
     .eq("user_id", user.id)
     .single();
 
-  // No vendor row â†’ initial application flow
-  if (!vendor) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 py-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold gradient-brand-text mb-2">Become a Vendor</h1>
-            <p className="text-white/60">Set up your profile to start receiving bookings on ELBOLD Events</p>
-          </div>
-          <VendorOnboardingWizard />
-        </div>
-      </main>
-    );
-  }
+  // No vendor row → send to the application form, not the onboarding wizard.
+  // The wizard requires an existing vendor row (for PATCH /api/vendor/profile).
+  if (!vendor) redirect("/vendor/apply");
 
   // Pending â†’ application under review
   if (vendor.status === "pending") {
