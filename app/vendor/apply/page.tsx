@@ -23,7 +23,6 @@ const FORM_DEFAULTS = {
   category: "" as VendorCategory | "",
   custom_category_description: "",
   bio: "",
-  location: "",
   city: "",
   phone: "",
   travel_radius_km: 30,
@@ -87,7 +86,6 @@ export default function VendorApplyPage() {
           category: formData.category,
           custom_category_description: formData.category === "other" ? formData.custom_category_description || null : null,
           bio: formData.bio || null,
-          location: formData.location,
           city: formData.city,
           phone: formData.phone || null,
           travel_radius_km: formData.travel_radius_km,
@@ -314,17 +312,6 @@ export default function VendorApplyPage() {
                         placeholder="e.g. London, Birmingham, Manchester"
                         className="input-light"
                         required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Area / Address</label>
-                      <input
-                        type="text"
-                        value={formData.location}
-                        onChange={(e) => update("location", e.target.value)}
-                        placeholder="e.g. East London, E1"
-                        className="input-light"
                       />
                     </div>
 

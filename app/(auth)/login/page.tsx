@@ -3,14 +3,15 @@
 import { useState, useEffect, useActionState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 import { loginAction } from "@/app/actions/login";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") ?? "/dashboard";
+  const redirectTo  = searchParams.get("redirect") ?? "/dashboard";
+  const errorParam  = searchParams.get("error");
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
@@ -104,6 +105,23 @@ function LoginForm() {
         </div>
 
         <div className="w-full max-w-sm">
+
+          {/* Auth callback error — shown when email confirmation link fails */}
+          {errorParam === "auth_callback_failed" && (
+            <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
+              <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-amber-800">Confirmation link didn&apos;t work</p>
+                <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                  This usually happens when the link expires or is opened on a different device.
+                  If your email is already confirmed, sign in below. Otherwise check your inbox
+                  for a newer confirmation email, or contact{" "}
+                  <a href="mailto:hello@elbold.com" className="underline font-medium">hello@elbold.com</a>.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="mb-8">
             <h1 className="text-2xl font-light text-gray-900 tracking-tight">Welcome back</h1>
             <p className="text-gray-400 text-sm mt-1 font-light">Sign in to your account</p>

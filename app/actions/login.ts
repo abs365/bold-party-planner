@@ -71,6 +71,18 @@ export async function loginAction(
     .eq("id", data.user.id)
     .maybeSingle();
 
-  const dest = profile?.role === "vendor" ? "/vendor/dashboard" : redirectTo;
+  let dest = redirectTo;
+  if (profile?.role === "vendor") {
+    // Verify the vendor record exists before routing to dashboard.
+    // If the application was never completed (e.g. email not confirmed during apply),
+    // route to /vendor/apply so they can finish the application.
+    const { data: vendorRow } = await supabase
+      .from("vendors")
+      .select("id")
+      .eq("user_id", data.user.id)
+      .maybeSingle();
+    dest = vendorRow ? "/vendor/dashboard" : "/vendor/apply";
+  }
+
   redirect(dest);
 }
