@@ -18,7 +18,7 @@ export default async function AdminSubscriptionsPage() {
 
   const adminClient = await createAdminClient();
   const { data: subs } = await adminClient
-    .from("subscriptions")
+    .from("vendor_subscriptions")
     .select("*, vendor:vendors(business_name, user_id)")
     .order("created_at", { ascending: false });
 
