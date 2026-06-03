@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   Search, CheckCircle2, XCircle, Star, MapPin, Package,
   Eye, Shield, Sparkles, Users, Building2, TrendingUp,
-  Square, CheckSquare, X,
+  Square, CheckSquare, X, Phone,
 } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { VENDOR_CATEGORIES } from "@/types";
@@ -262,6 +262,19 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       <div className="text-xs text-slate-500 mt-0.5">
                         {profile?.email} · Joined {formatDate(String(vendor.created_at))}
                       </div>
+                      {(() => {
+                        const vendorPhone = vendor.phone as string | null | undefined;
+                        const displayPhone = vendorPhone ?? profile?.phone;
+                        if (!displayPhone) return null;
+                        const phoneVerified = !!vendor.phone_verified;
+                        return (
+                          <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: phoneVerified ? "#34d399" : "#94a3b8" }}>
+                            <Phone size={10} />
+                            <span>{displayPhone}</span>
+                            {phoneVerified && <span className="text-emerald-400 ml-1">verified</span>}
+                          </div>
+                        );
+                      })()}
                       {!!vendor.tagline && <p className="text-xs text-slate-400 mt-1.5 italic truncate">&ldquo;{String(vendor.tagline)}&rdquo;</p>}
                     </div>
 
@@ -326,6 +339,14 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                           className={`flex-1 text-xs py-1.5 px-2 rounded-lg border transition-colors ${vendor.verified ? "bg-blue-500/20 text-blue-400 border-blue-500/30" : "bg-white/5 text-slate-400 border-white/10 hover:border-blue-500/30"}`}
                         >
                           <Shield size={11} className="mx-auto" />
+                        </button>
+                        <button
+                          onClick={() => updateVendor(vendorId, { phone_verified: !vendor.phone_verified }, vendor.phone_verified ? "Unverify phone" : "Verify phone")}
+                          disabled={!!actionLoading}
+                          title={vendor.phone_verified ? "Remove phone verified" : "Mark phone verified"}
+                          className={`flex-1 text-xs py-1.5 px-2 rounded-lg border transition-colors ${vendor.phone_verified ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" : "bg-white/5 text-slate-400 border-white/10 hover:border-emerald-500/30"}`}
+                        >
+                          <Phone size={11} className="mx-auto" />
                         </button>
                       </div>
                     </div>

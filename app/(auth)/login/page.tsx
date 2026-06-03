@@ -181,19 +181,6 @@ function LoginForm() {
             </Link>
           </p>
 
-          <div
-            className="mt-8 rounded-xl p-4 text-xs"
-            style={{ background: "#f8f7f5", border: "1px solid #f0ede8" }}
-          >
-            <p className="font-semibold text-gray-500 mb-2 tracking-wide uppercase" style={{ fontSize: "10px" }}>
-              Test accounts
-            </p>
-            <div className="space-y-1 text-gray-400 font-light">
-              <p><span className="text-gray-600">Customer:</span> emily.carter@elbold.demo</p>
-              <p><span className="text-gray-600">Vendor:</span> james.bennett@elbold.demo</p>
-              <p><span className="text-gray-600">Password:</span> ElboldDemo2026!</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

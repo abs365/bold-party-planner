@@ -32,7 +32,8 @@ export async function requestPasswordResetAction(
   }
 
   const headersList = await headers();
-  const origin = headersList.get("origin") ?? headersList.get("x-forwarded-host") ?? "http://localhost:3000";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const origin = headersList.get("origin") ?? appUrl;
   const redirectTo = `${origin.startsWith("http") ? origin : `https://${origin}`}/api/auth/callback?next=/reset-password&type=recovery`;
 
   const supabase = await makeClient();

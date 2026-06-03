@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     | "registration" | "approval" | "quote" | "booking";
 
   const apiKey = process.env.RESEND_API_KEY;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
 
   // ── 1. Domain verification status ─────────────────────────────────────────
   let domainStatus: {

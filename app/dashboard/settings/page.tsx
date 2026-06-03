@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { Bell, Shield, CreditCard, CheckCircle2, KeyRound } from "lucide-react";
 import type { Profile } from "@/types";
+import { PhoneEditForm } from "@/components/account/PhoneEditForm";
 
 export const dynamic = "force-dynamic";
 
@@ -42,18 +43,35 @@ export default async function AccountSettingsPage() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-0">
             {[
               { label: "Full Name", value: typedProfile.full_name ?? "Not set" },
               { label: "Email", value: typedProfile.email },
-              { label: "Phone", value: typedProfile.phone ?? "Not set" },
               { label: "Role", value: typedProfile.role },
             ].map((item) => (
-              <div key={item.label} className="flex items-center justify-between py-3 border-b border-white/6 last:border-0">
+              <div key={item.label} className="flex items-center justify-between py-3 border-b border-white/6">
                 <span className="text-sm text-slate-400">{item.label}</span>
                 <span className="text-sm font-medium text-white capitalize">{item.value}</span>
               </div>
             ))}
+            <PhoneEditForm
+              currentPhone={typedProfile.phone}
+              phoneVerified={typedProfile.phone_verified}
+            />
+
+            {/* Trust indicators */}
+            <div className="pt-4">
+              <p className="text-xs text-slate-500 mb-2 uppercase tracking-wide">Identity status</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-white/4 border border-white/8 text-emerald-400">
+                  <CheckCircle2 size={11} /> Email verified
+                </span>
+                <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-full border ${typedProfile.phone_verified ? "bg-white/4 border-white/8 text-emerald-400" : "bg-white/2 border-white/5 text-slate-600"}`}>
+                  <CheckCircle2 size={11} />
+                  {typedProfile.phone_verified ? "Phone verified" : "Phone not verified"}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 

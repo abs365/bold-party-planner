@@ -158,7 +158,7 @@ export const env = {
   stripeFeaturedPriceId: () => optionalEnv("STRIPE_FEATURED_PRICE_ID"),
   resendApiKey: () => requireEnv("RESEND_API_KEY"),
   openaiApiKey: () => requireEnv("OPENAI_API_KEY"),
-  appUrl: () => optionalEnv("NEXT_PUBLIC_APP_URL", "https://elbold.com"),
+  appUrl: () => optionalEnv("NEXT_PUBLIC_APP_URL", "https://www.elbold.com"),
   adminEmails: () => optionalEnv("ADMIN_EMAILS", "").split(",").map((e) => e.trim()).filter(Boolean),
   cronSecret: () => optionalEnv("CRON_SECRET"),
   sentryDsn: () => optionalEnv("SENTRY_DSN"),

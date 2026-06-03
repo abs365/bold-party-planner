@@ -72,6 +72,7 @@ export interface Profile {
   email: string;
   full_name: string | null;
   phone: string | null;
+  phone_verified: boolean;
   avatar_url: string | null;
   role: UserRole;
   created_at: string;
@@ -120,6 +121,7 @@ export interface Vendor {
   reputation_score: number;
   repeat_customer_count: number;
   dispute_count: number;
+  phone_verified: boolean;
   created_at: string;
   updated_at: string | null;
   profile?: Profile;

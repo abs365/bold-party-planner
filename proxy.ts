@@ -72,6 +72,16 @@ export async function proxy(request: NextRequest) {
     if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(user.email ?? "")) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
+    // user_metadata.role is set at signup and kept in sync by /api/vendor/apply and /api/auth/set-role.
+    // This avoids a DB round-trip in middleware while still routing roles correctly.
+    const metaRole = user.user_metadata?.role as string | undefined;
+    if (metaRole === "vendor") {
+      return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
+    }
+    if (!metaRole) {
+      // Role is missing — guide user to pick one before entering the app.
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

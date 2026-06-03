@@ -89,7 +89,7 @@ export default async function AdminPilotPage() {
     // Governance flags
     db.from("vendor_governance_flags")
       .select("id, vendor_id, flag_type, created_at")
-      .eq("is_active", true)
+      .eq("is_open", true)
       .limit(100),
   ]);
 

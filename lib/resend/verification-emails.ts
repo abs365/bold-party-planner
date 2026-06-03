@@ -6,7 +6,7 @@ function getResend() {
 }
 
 const FROM = "ELBOLD <noreply@elbold.com>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
 const year = new Date().getFullYear();
 
 interface EmailResult { success: boolean; error?: string }

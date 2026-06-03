@@ -29,11 +29,12 @@ export async function PATCH(request: Request) {
   const auth = await requireAdmin();
   if (!auth) return forbidden();
 
-  const { vendor_id, status, featured, verified, rejection_reason } = await request.json() as {
+  const { vendor_id, status, featured, verified, phone_verified, rejection_reason } = await request.json() as {
     vendor_id: string;
     status?: string;
     featured?: boolean;
     verified?: boolean;
+    phone_verified?: boolean;
     rejection_reason?: string;
   };
 
@@ -41,6 +42,7 @@ export async function PATCH(request: Request) {
   if (status) updates.status = status;
   if (typeof featured === "boolean") updates.featured = featured;
   if (typeof verified === "boolean") updates.verified = verified;
+  if (typeof phone_verified === "boolean") updates.phone_verified = phone_verified;
 
   const { data: vendorBefore } = await auth.db
     .from("vendors")

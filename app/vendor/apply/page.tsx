@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2, Phone } from "lucide-react";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
@@ -16,6 +16,8 @@ const BENEFITS = [
   { icon: "💳", label: "Secure Stripe payments — no invoicing, no chasing, no disputes" },
 ];
 
+const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
+
 const FORM_DEFAULTS = {
   business_name: "",
   category: "" as VendorCategory | "",
@@ -23,6 +25,7 @@ const FORM_DEFAULTS = {
   bio: "",
   location: "",
   city: "",
+  phone: "",
   travel_radius_km: 30,
   min_price: "",
   max_price: "",
@@ -86,6 +89,7 @@ export default function VendorApplyPage() {
           bio: formData.bio || null,
           location: formData.location,
           city: formData.city,
+          phone: formData.phone || null,
           travel_radius_km: formData.travel_radius_km,
           min_price: formData.min_price ? Number(formData.min_price) : null,
           max_price: formData.max_price ? Number(formData.max_price) : null,
@@ -357,9 +361,38 @@ export default function VendorApplyPage() {
                       <input type="number" value={formData.years_experience} onChange={(e) => update("years_experience", e.target.value)} placeholder="e.g. 5" min={0} className="input-light" />
                     </div>
 
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        <Phone size={13} className="inline mr-1 text-gray-400" />Contact Phone *
+                      </label>
+                      <p className="text-xs text-gray-400 mb-1.5 font-light">
+                        UK number. Admin-only — not shown publicly to customers.
+                      </p>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => update("phone", e.target.value)}
+                        placeholder="07700 900000 or +44 7700 900000"
+                        className="input-light"
+                        required
+                      />
+                    </div>
+
                     <div className="flex gap-3">
                       <button onClick={() => setStep(1)} className="btn-secondary-light flex-1">Back</button>
-                      <button onClick={() => setStep(3)} className="btn-luxury-dark flex-1">Continue <ArrowRight size={15} /></button>
+                      <button
+                        onClick={() => {
+                          if (!formData.city) { toast.error("Please enter your city"); return; }
+                          if (formData.phone && !UK_PHONE_RE.test(formData.phone.replace(/\s/g, ""))) {
+                            toast.error("Please enter a valid UK phone number");
+                            return;
+                          }
+                          setStep(3);
+                        }}
+                        className="btn-luxury-dark flex-1"
+                      >
+                        Continue <ArrowRight size={15} />
+                      </button>
                     </div>
                   </div>
                 )}

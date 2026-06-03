@@ -3,6 +3,7 @@ import { requireAuth, unauthorized } from "@/lib/auth/guards";
 import { createAdminClient } from "@/lib/supabase/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { track } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   const ctx = await requireAuth();
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
     bio?: string;
     location?: string;
     city: string;
+    phone?: string | null;
     travel_radius_km?: number;
     min_price?: number | null;
     max_price?: number | null;
@@ -49,8 +51,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "business_name, category, and city are required" }, { status: 400 });
   }
 
-  // Update profile role to vendor
+  logger.info("vendor.apply.submit", { userId: user.id, category: body.category, city: body.city });
+
+  // Update profile role to vendor in the profiles table
   await supabase.from("profiles").update({ role: "vendor" }).eq("id", user.id);
+
+  // Keep user_metadata in sync so proxy.ts can route returning vendors correctly
+  // without a DB round-trip. This is non-blocking — failure does not abort the application.
+  void supabase.auth.updateUser({ data: { role: "vendor" } }).then(({ error }) => {
+    if (error) logger.warn("vendor.apply.metadata_sync_failed", { userId: user.id, err: error });
+  });
 
   // Insert vendor row
   const db = await createAdminClient();
@@ -64,6 +74,7 @@ export async function POST(request: Request) {
       bio: body.bio || null,
       location: body.location || null,
       city: body.city,
+      phone: body.phone || null,
       travel_radius_km: body.travel_radius_km ?? 30,
       min_price: body.min_price ?? null,
       max_price: body.max_price ?? null,
@@ -76,11 +87,14 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
+    logger.warn("vendor.apply.insert_failed", { userId: user.id, code: error.code, err: error });
     if (error.code === "23505") {
       return NextResponse.json({ error: "You already have a vendor application." }, { status: 409 });
     }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
+  logger.info("vendor.apply.created", { userId: user.id, vendorId: vendor.id, status: "pending" });
 
   // Fetch profile for email
   const { data: profile } = await supabase

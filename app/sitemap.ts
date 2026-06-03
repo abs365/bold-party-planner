@@ -5,7 +5,7 @@ import { VENDOR_CATEGORIES } from "@/types";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://elbold.com";
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [

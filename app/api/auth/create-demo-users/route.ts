@@ -148,6 +148,12 @@ const DEMO_VENDOR_ROWS = [
 ];
 
 export async function POST(request: Request) {
+  // Block entirely on production deployments. CI sets NODE_ENV=production but also
+  // CI=true, so the seed pipeline is preserved. Local dev is always unblocked.
+  if (process.env.NODE_ENV === "production" && !process.env.CI) {
+    return NextResponse.json({ error: "Not available in production" }, { status: 403 });
+  }
+
   try {
     const body = (await request.json()) as { secret?: string };
     if (body.secret !== DEMO_SECRET) {
