@@ -22,6 +22,10 @@ export default async function CustomerDashboard() {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile) redirect("/login");
 
+  // Role-based routing — each role has its own portal
+  if (profile.role === "vendor") redirect("/vendor/dashboard");
+  if (profile.role === "admin") redirect("/admin");
+
   const [eventsRes, bookingsRes] = await Promise.all([
     supabase
       .from("events")

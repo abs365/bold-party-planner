@@ -82,12 +82,21 @@ export function VendorSubscriptionView() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: slug, billing_cycle: annual ? "annual" : "monthly" }),
       });
-      const result = await res.json() as { checkout_url?: string; success?: boolean; plan?: string };
-      if (result.checkout_url) window.location.assign(result.checkout_url);
-      else if (result.success) {
+      const result = await res.json() as { checkout_url?: string; success?: boolean; plan?: string; error?: string };
+      if (result.error) {
+        const { default: toast } = await import("react-hot-toast");
+        toast.error(result.error.includes("price ID not configured")
+          ? "Stripe is not configured yet. Contact support."
+          : result.error);
+      } else if (result.checkout_url) {
+        window.location.assign(result.checkout_url);
+      } else if (result.success) {
         setData((prev) => prev ? { ...prev, subscription: { ...prev.subscription!, plan: result.plan ?? "free" } } : prev);
       }
-    } catch { /* silent */ }
+    } catch (err) {
+      const { default: toast } = await import("react-hot-toast");
+      toast.error(err instanceof Error ? err.message : "Upgrade failed. Please try again.");
+    }
     setUpgrading(null);
   }
 
@@ -95,9 +104,17 @@ export function VendorSubscriptionView() {
     setOpeningPortal(true);
     try {
       const res = await fetch("/api/subscriptions/portal", { method: "POST" });
-      const { url } = await res.json() as { url?: string };
-      if (url) window.location.assign(url);
-    } catch { /* silent */ }
+      const result = await res.json() as { url?: string; error?: string };
+      if (result.url) {
+        window.location.assign(result.url);
+      } else if (result.error) {
+        const { default: toast } = await import("react-hot-toast");
+        toast.error(result.error);
+      }
+    } catch (err) {
+      const { default: toast } = await import("react-hot-toast");
+      toast.error(err instanceof Error ? err.message : "Could not open billing portal.");
+    }
     setOpeningPortal(false);
   }
 

@@ -199,32 +199,40 @@ export function CreateEventWizard({ userId }: { userId: string }) {
     }
     setSaving(true);
     try {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-
-      // Create the event
-      const { data: event, error } = await supabase
-        .from("events")
-        .insert({
-          customer_id: userId,
+      // Use server-side API route so auth cookies are reliably read
+      const eventRes = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           title: data.title,
           event_type: data.event_type,
           date: data.date,
           start_time: data.start_time || null,
           city: data.city,
           venue_name: data.venue_name || null,
-          venue_address: data.postcode ? `${data.venue_name ?? ""}, ${data.postcode}`.trim() : null,
+          venue_address: data.postcode
+            ? `${data.venue_name ?? ""}, ${data.postcode}`.trim()
+            : null,
           guest_count: data.guest_count,
           budget: data.budget,
           theme: data.theme || null,
           notes: data.notes || null,
-          status: "planning",
+          setting: data.setting,
+          vendor_needs: data.vendor_needs,
           ai_plan: aiPlan,
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (error) throw error;
+      const eventPayload = await eventRes.json() as { id?: string; error?: string };
+
+      if (!eventRes.ok || !eventPayload.id) {
+        throw new Error(eventPayload.error ?? "Failed to create event");
+      }
+
+      const event = eventPayload;
+
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
 
       // Auto-generate RFQ quotes for selected vendor needs
       let quotesCreated = 0;
@@ -297,9 +305,10 @@ export function CreateEventWizard({ userId }: { userId: string }) {
       } else {
         toast.success("Event created successfully!");
       }
-      router.push(`/dashboard/events/${event.id}`);
+      router.push(`/dashboard/events/${event.id!}`);
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Failed to create event");
+      const msg = err instanceof Error ? err.message : "Failed to create event";
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
