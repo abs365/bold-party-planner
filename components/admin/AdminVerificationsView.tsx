@@ -190,7 +190,14 @@ export function AdminVerificationsView({ initialVerifications, stats }: AdminVer
       ) : filtered.length === 0 ? (
         <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
           <CheckCircle2 size={40} className="text-white/15 mx-auto mb-3" />
-          <p className="text-white/50">No {statusFilter} verifications</p>
+          <p className="text-white font-medium">
+            {statusFilter === "pending" ? "No pending verifications" : `No ${statusFilter} verifications`}
+          </p>
+          <p className="text-white/40 text-sm mt-1 max-w-sm mx-auto">
+            {statusFilter === "pending"
+              ? "Phone, email, business document, and ID checks will appear here when vendors submit for review."
+              : "No verification records match this filter."}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">

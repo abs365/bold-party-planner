@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
   let query = auth.db
     .from("vendors")
-    .select("*, profile:profiles(full_name, email, phone)")
+    .select("*, profile:profiles(full_name, email)")
     .order("created_at", { ascending: false });
 
   if (status) query = query.eq("status", status);

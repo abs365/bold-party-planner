@@ -75,7 +75,7 @@ const SERVER_ENV: Record<string, EnvVar> = {
   SENTRY_PROJECT: {
     value: process.env.SENTRY_PROJECT,
     required: false,
-    description: "Sentry project slug (defaults to bold-party-planner)",
+    description: "Sentry project slug (defaults to elbold-events)",
   },
   SENTRY_AUTH_TOKEN: {
     value: process.env.SENTRY_AUTH_TOKEN,

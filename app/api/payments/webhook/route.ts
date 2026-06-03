@@ -63,6 +63,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
+    // Validate ownership — prevents metadata tampering from associating payment with wrong booking
+    if (customerId && booking.customer_id !== customerId) {
+      console.error("Webhook: customer_id mismatch", { bookingId, meta: customerId, db: booking.customer_id });
+      return NextResponse.json({ error: "Ownership validation failed" }, { status: 400 });
+    }
+
     const newPaymentStatus = paymentType === "deposit" ? "deposit_paid" : "fully_paid";
     const newBookingStatus = booking.status === "accepted" ? "confirmed" : booking.status;
 

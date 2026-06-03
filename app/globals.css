@@ -136,7 +136,7 @@
     border-radius: 0.5rem;
     font-weight: 600;
     font-size: 0.875rem;
-    transition: background 0.2s, transform 0.1s;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s, box-shadow 0.2s;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -144,8 +144,39 @@
     gap: 0.5rem;
     text-decoration: none;
   }
-  .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-1px); }
-  .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+  .btn-secondary:active { transform: translateY(0); box-shadow: none; }
+  .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  /* Danger button — destructive actions */
+  .btn-danger {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #fca5a5;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    transform: translateY(-1px);
+  }
+  .btn-danger:active { transform: translateY(0); }
+  .btn-danger:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
   .badge {
     display: inline-flex;
@@ -343,6 +374,67 @@ table { border-collapse: collapse; width: 100%; }
     transition: color 0.2s;
   }
   .footer-link:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* ── Premium admin / dashboard styles ─────────────────────────────────────── */
+
+/* KPI card with left-side accent bar */
+.kpi-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 2px solid transparent;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: block;
+}
+.kpi-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+.kpi-card-brand  { border-left-color: #d946ef; }
+.kpi-card-gold   { border-left-color: #C9A84C; }
+.kpi-card-emerald{ border-left-color: #10b981; }
+.kpi-card-red    { border-left-color: #ef4444; }
+.kpi-card-amber  { border-left-color: #f59e0b; }
+.kpi-card-blue   { border-left-color: #3b82f6; }
+
+/* Section label used in admin command centre */
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.5);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Table row used in premium admin tables */
+.table-row-premium {
+  transition: background 0.15s;
+}
+.table-row-premium:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Subtle glass panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Inline status pill (tighter than .badge) */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
 
 /* Gold animated text */
 .gradient-gold-text {

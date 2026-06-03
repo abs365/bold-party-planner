@@ -5,8 +5,8 @@ import { createAdminClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  // Block in production
-  if (process.env.NODE_ENV === "production") {
+  // Block in all production-like environments
+  if (process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production") {
     return NextResponse.json({ error: "Not Found" }, { status: 404 });
   }
 

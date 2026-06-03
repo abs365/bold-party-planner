@@ -87,7 +87,15 @@ export function AdminPayoutsView({ payouts }: AdminPayoutsViewProps) {
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-10 text-white/40">No payouts found</td></tr>
+                <tr>
+                  <td colSpan={7} className="text-center py-14">
+                    <Wallet size={28} className="text-white/15 mx-auto mb-3" />
+                    <p className="text-white/50 font-medium">No payouts pending</p>
+                    <p className="text-white/30 text-sm mt-1">
+                      Vendor payouts will appear here after bookings are completed.
+                    </p>
+                  </td>
+                </tr>
               ) : (
                 filtered.map((payout) => (
                   <tr key={payout.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">

@@ -273,8 +273,18 @@ export function PilotCRM({ initialVendors, funnel }: { initialVendors: PilotVend
             <tbody className="divide-y divide-white/5">
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="text-center py-10 text-white/30">
-                    {total === 0 ? "No prospects yet — click Add Prospect to get started." : "No matches."}
+                  <td colSpan={7} className="text-center py-14">
+                    {total === 0 ? (
+                      <>
+                        <div className="text-3xl mb-3">🚀</div>
+                        <p className="text-white/50 font-medium">No pilot records yet</p>
+                        <p className="text-white/30 text-sm mt-1">
+                          Add vendors and testers before launch — click Add Prospect to get started.
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-white/30">No matches for this filter.</p>
+                    )}
                   </td>
                 </tr>
               )}

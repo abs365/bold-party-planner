@@ -9,6 +9,7 @@ import {
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
+  Scale, Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -19,6 +20,11 @@ interface NavItem {
   href: string;
   label: string;
   icon: React.ElementType;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
 }
 
 const CUSTOMER_NAV: NavItem[] = [
@@ -51,40 +57,88 @@ const VENDOR_NAV: NavItem[] = [
   { href: "/vendor/feedback", label: "Share Feedback", icon: ThumbsUp },
 ];
 
-const ADMIN_NAV: NavItem[] = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/vendors", label: "Vendors", icon: Store },
-  { href: "/admin/customers", label: "Customers", icon: Users },
-  { href: "/admin/bookings", label: "Bookings", icon: ShoppingBag },
-  { href: "/admin/quotes", label: "Quote Pipeline", icon: Inbox },
-  { href: "/admin/payouts", label: "Payouts", icon: Wallet },
-  { href: "/admin/disputes", label: "Disputes", icon: AlertCircle },
-  { href: "/admin/verifications", label: "Verifications", icon: BadgeCheck },
-  { href: "/admin/moderation", label: "Moderation", icon: Shield },
-  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/admin/subscriptions", label: "Subscriptions", icon: BadgeCheck },
-  { href: "/admin/monetization", label: "Monetization", icon: DollarSign },
-  { href: "/admin/governance", label: "Governance", icon: Shield },
-  { href: "/admin/reviews", label: "Reviews", icon: Star },
-  { href: "/admin/support", label: "Support", icon: HelpCircle },
-  { href: "/admin/system", label: "System", icon: Server },
-  { href: "/admin/pilot", label: "Pilot Ops", icon: Activity },
-  { href: "/admin/pilot/vendors", label: "Pilot CRM", icon: Users },
-  { href: "/admin/pilot/report", label: "Pilot Report", icon: FileText },
-  { href: "/admin/pilot/outreach", label: "Outreach Pack", icon: MessageSquare },
-  { href: "/admin/launch", label: "Launch Readiness", icon: Rocket },
+// Kept for type compatibility with nav prop; admin uses ADMIN_NAV_GROUPS below
+const ADMIN_NAV: NavItem[] = [];
+
+const ADMIN_NAV_GROUPS: NavGroup[] = [
+  {
+    label: "Marketplace",
+    items: [
+      { href: "/admin",           label: "Overview",       icon: LayoutDashboard },
+      { href: "/admin/vendors",   label: "Vendors",        icon: Store },
+      { href: "/admin/customers", label: "Customers",      icon: Users },
+      { href: "/admin/bookings",  label: "Bookings",       icon: ShoppingBag },
+      { href: "/admin/quotes",    label: "Quote Pipeline", icon: Inbox },
+      { href: "/admin/reviews",   label: "Reviews",        icon: Star },
+    ],
+  },
+  {
+    label: "Trust & Safety",
+    items: [
+      { href: "/admin/disputes",      label: "Disputes",      icon: Scale },
+      { href: "/admin/verifications", label: "Verifications", icon: BadgeCheck },
+      { href: "/admin/moderation",    label: "Moderation",    icon: Eye },
+      { href: "/admin/governance",    label: "Governance",    icon: Shield },
+    ],
+  },
+  {
+    label: "Finance",
+    items: [
+      { href: "/admin/payouts",       label: "Payouts",       icon: Wallet },
+      { href: "/admin/subscriptions", label: "Subscriptions", icon: BadgeCheck },
+      { href: "/admin/monetization",  label: "Monetization",  icon: DollarSign },
+    ],
+  },
+  {
+    label: "Operations",
+    items: [
+      { href: "/admin/support",   label: "Support",   icon: HelpCircle },
+      { href: "/admin/system",    label: "System",    icon: Server },
+      { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Pilot Launch",
+    items: [
+      { href: "/admin/pilot",          label: "Pilot Ops",        icon: Activity },
+      { href: "/admin/pilot/vendors",  label: "Pilot CRM",        icon: Users },
+      { href: "/admin/pilot/report",   label: "Pilot Report",     icon: FileText },
+      { href: "/admin/pilot/outreach", label: "Outreach Pack",    icon: MessageSquare },
+      { href: "/admin/launch",         label: "Launch Readiness", icon: Rocket },
+    ],
+  },
 ];
 
 interface SidebarContentProps {
   user: Profile;
   nav: NavItem[];
+  navGroups?: NavGroup[];
   roleLabel: string;
   pathname: string;
   onClose: () => void;
   onSignOut: () => void;
 }
 
-function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: SidebarContentProps) {
+function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, onSignOut }: SidebarContentProps) {
+  function NavLink({ href, label, icon: Icon }: NavItem) {
+    const active = pathname === href;
+    return (
+      <Link
+        href={href}
+        onClick={onClose}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+          active
+            ? "bg-brand-500/12 text-brand-400"
+            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+        )}
+      >
+        <Icon size={16} className={active ? "text-brand-400" : "text-slate-500"} />
+        {label}
+      </Link>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full">
       <Link href="/" className="flex items-center gap-2.5 px-6 py-5 border-b border-white/6">
@@ -105,26 +159,25 @@ function SidebarContent({ user, nav, roleLabel, pathname, onClose, onSignOut }: 
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {nav.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              onClick={onClose}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                active
-                  ? "bg-brand-500/12 text-brand-400"
-                  : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
-              )}
-            >
-              <Icon size={16} className={active ? "text-brand-400" : "text-slate-500"} />
-              {label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto">
+        {navGroups ? (
+          // Grouped nav — admin command centre
+          navGroups.map((group) => (
+            <div key={group.label} className="mb-4">
+              <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 mb-1">
+                {group.label}
+              </p>
+              <div className="space-y-0.5">
+                {group.items.map((item) => <NavLink key={item.href} {...item} />)}
+              </div>
+            </div>
+          ))
+        ) : (
+          // Flat nav — customer / vendor
+          <div className="space-y-0.5">
+            {nav.map((item) => <NavLink key={item.href} {...item} />)}
+          </div>
+        )}
       </nav>
 
       <div className="px-3 py-4 border-t border-white/6 space-y-0.5">
@@ -182,6 +235,7 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
 
   const sidebarProps: SidebarContentProps = {
     user, nav, roleLabel, pathname,
+    navGroups: user.role === "admin" ? ADMIN_NAV_GROUPS : undefined,
     onClose: () => setSidebarOpen(false),
     onSignOut: handleSignOut,
   };

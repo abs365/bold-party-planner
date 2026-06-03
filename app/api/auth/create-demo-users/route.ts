@@ -11,8 +11,8 @@ import { createAdminClient } from "@/lib/supabase/server";
  * Idempotent: already-clean users return status "already_exists" (treated as OK).
  */
 
-const DEMO_SECRET = "ELBOLD_DEMO_2026";
-const DEMO_PASSWORD = "ElboldDemo2026!";
+const DEMO_SECRET = process.env.DEMO_SECRET ?? "ELBOLD_DEMO_2026";
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD ?? "ElboldDemo2026!";
 
 const DEMO_USERS = [
   { id: "a0000001-0000-0000-0000-000000000001", email: "james.bennett@elbold.demo",    name: "James Bennett",    role: "vendor"   },
@@ -148,9 +148,11 @@ const DEMO_VENDOR_ROWS = [
 ];
 
 export async function POST(request: Request) {
-  // Block entirely on production deployments. CI sets NODE_ENV=production but also
-  // CI=true, so the seed pipeline is preserved. Local dev is always unblocked.
-  if (process.env.NODE_ENV === "production" && !process.env.CI) {
+  // Block in production deployments (Vercel production or non-Vercel server).
+  const isProductionDeployment =
+    process.env.VERCEL_ENV === "production" ||
+    (process.env.NODE_ENV === "production" && !process.env.CI);
+  if (isProductionDeployment) {
     return NextResponse.json({ error: "Not available in production" }, { status: 403 });
   }
 

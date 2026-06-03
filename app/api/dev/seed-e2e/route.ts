@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 
-const SEED_SECRET = "ELBOLD_SEED_2026";
+const SEED_SECRET = process.env.SEED_SECRET ?? "ELBOLD_SEED_2026";
 
 // ── Canonical demo user IDs (must match create-demo-users route) ─────────────
 const USER = {
@@ -140,8 +140,12 @@ const ID = {
 } as const;
 
 export async function POST(request: Request) {
-  // Block in production deployments; allow in CI (NODE_ENV=production but CI=true)
-  if (process.env.NODE_ENV === "production" && !process.env.CI) {
+  // Block in production deployments. Vercel production = VERCEL_ENV==="production".
+  // Non-Vercel production = NODE_ENV==="production" without CI flag.
+  const isProductionDeployment =
+    process.env.VERCEL_ENV === "production" ||
+    (process.env.NODE_ENV === "production" && !process.env.CI);
+  if (isProductionDeployment) {
     return NextResponse.json({ error: "Not available in production" }, { status: 403 });
   }
 

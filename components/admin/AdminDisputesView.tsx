@@ -95,7 +95,12 @@ export function AdminDisputesView({ disputes }: AdminDisputesViewProps) {
       {filtered.length === 0 ? (
         <div className="text-center py-16">
           <Scale className="w-10 h-10 text-white/20 mx-auto mb-3" />
-          <p className="text-white/40">No {activeTab === "all" ? "" : activeTab} disputes</p>
+          <p className="text-white font-medium">
+            {activeTab === "open" ? "No open disputes" : activeTab === "investigating" ? "Nothing under investigation" : activeTab === "resolved" ? "No resolved disputes yet" : "No disputes on record"}
+          </p>
+          <p className="text-white/40 text-sm mt-1 max-w-xs mx-auto">
+            When a customer or vendor raises an issue, it will appear here for review and resolution.
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
