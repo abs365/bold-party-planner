@@ -29,6 +29,17 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       return;
     }
 
+    // Warn about oversized videos before attempting upload.
+    // Vercel serverless functions have a payload limit (~4.5 MB on Hobby).
+    // Videos beyond that are rejected before the API route runs, returning an
+    // HTML error page that cannot be parsed as JSON.
+    for (const file of acceptedFiles) {
+      if (file.type.startsWith("video/") && file.size > 50 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (${(file.size / 1024 / 1024).toFixed(0)} MB). Videos must be under 50 MB.`);
+        return;
+      }
+    }
+
     setUploading(true);
     const results: VendorMedia[] = [];
 
@@ -44,11 +55,23 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
         formData.append("sortOrder", String(media.length + results.length));
 
         const res = await fetch("/api/uploads", { method: "POST", body: formData });
+
+        // Parse error safely — non-JSON bodies (e.g. Vercel 413 HTML) must not crash.
         if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error ?? "Upload failed");
+          let errorMessage = `Upload failed (HTTP ${res.status})`;
+          const contentType = res.headers.get("content-type") ?? "";
+          if (contentType.includes("application/json")) {
+            try {
+              const err = await res.json() as { error?: string };
+              errorMessage = err.error ?? errorMessage;
+            } catch { /* leave default message */ }
+          } else if (res.status === 413) {
+            errorMessage = "File too large — reduce the file size and try again";
+          }
+          throw new Error(errorMessage);
         }
-        const uploaded = await res.json();
+
+        const uploaded = await res.json() as VendorMedia;
         results.push(uploaded);
         setUploadProgress((prev) => ({ ...prev, [tempId]: 100 }));
       } catch (err: unknown) {
@@ -75,8 +98,15 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       "image/*": [".jpg", ".jpeg", ".png", ".webp"],
       "video/*": [".mp4", ".mov", ".webm"],
     },
-    maxSize: 100 * 1024 * 1024, // 100MB
+    maxSize: 50 * 1024 * 1024, // 50 MB — Vercel payload limit is ~4.5 MB Hobby / higher Pro
     disabled: uploading,
+    onDropRejected: (rejections) => {
+      for (const r of rejections) {
+        if (r.errors.some((e) => e.code === "file-too-large")) {
+          toast.error(`${r.file.name} exceeds the 50 MB limit`);
+        }
+      }
+    },
   });
 
   async function setCover(mediaId: string) {

@@ -17,7 +17,7 @@ export default async function VendorMessagesPage({
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
   if (!vendor) redirect("/vendor/apply");

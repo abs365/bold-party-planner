@@ -11,7 +11,7 @@ export default async function NewEventPage() {
   if (!user) redirect("/login?redirect=/dashboard/events/new");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   return (
     <DashboardLayout user={profile}>

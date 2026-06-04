@@ -13,7 +13,7 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: quote } = await supabase
     .from("quotes")

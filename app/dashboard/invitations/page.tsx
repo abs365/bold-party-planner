@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -13,7 +13,7 @@ export default async function InvitationsPage() {
   if (!user) redirect("/login?redirect=/dashboard/invitations");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   return (
     <DashboardLayout user={profile as Profile}>
@@ -41,10 +41,10 @@ export default async function InvitationsPage() {
           <h3 className="font-semibold text-white mb-3">About Invitations</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { icon: "📩", title: "Received invitations", desc: "RSVPs and event invites from other planners" },
-              { icon: "📬", title: "Sent invitations", desc: "Track RSVPs from guests you have invited" },
-              { icon: "🗓️", title: "Calendar sync", desc: "Accept invites to add events to your calendar" },
-              { icon: "💌", title: "Custom messages", desc: "Personalised invite messages and reminders" },
+              { icon: "??", title: "Received invitations", desc: "RSVPs and event invites from other planners" },
+              { icon: "??", title: "Sent invitations", desc: "Track RSVPs from guests you have invited" },
+              { icon: "???", title: "Calendar sync", desc: "Accept invites to add events to your calendar" },
+              { icon: "??", title: "Custom messages", desc: "Personalised invite messages and reminders" },
             ].map((item) => (
               <div key={item.title} className="p-4 rounded-xl bg-white/4 border border-white/6">
                 <div className="text-2xl mb-2">{item.icon}</div>

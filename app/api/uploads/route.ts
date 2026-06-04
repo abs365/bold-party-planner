@@ -5,6 +5,13 @@ import { track } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
 import { rateLimit } from "@/lib/rate-limit";
 
+// Allow up to 60 s for large file uploads on Vercel Pro/Enterprise.
+// Note: serverActions.bodySizeLimit in next.config.ts does NOT apply to Route
+// Handlers. The effective payload limit is set by Vercel's infrastructure
+// (4.5 MB Hobby, higher on Pro). Client-side size checks in VendorMediaManager
+// guard against oversized uploads before they reach this function.
+export const maxDuration = 60;
+
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 const MIN_FILE_SIZE = 1024;              // 1 KB — reject empty/corrupt files
 

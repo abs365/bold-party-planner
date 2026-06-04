@@ -12,7 +12,7 @@ export default async function CustomerFeedbackPage() {
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   return (
     <DashboardLayout user={profile as Profile}>

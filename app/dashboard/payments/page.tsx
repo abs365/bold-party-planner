@@ -11,7 +11,7 @@ export default async function CustomerPaymentsPage() {
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const [paymentsRes, invoicesRes] = await Promise.all([
     supabase

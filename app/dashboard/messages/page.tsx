@@ -17,7 +17,7 @@ export default async function MessagesPage({
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   // Determine role to fetch correct threads
   const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();

@@ -12,7 +12,7 @@ export default async function CustomerQuotesPage() {
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: quotes } = await supabase
     .from("quotes")

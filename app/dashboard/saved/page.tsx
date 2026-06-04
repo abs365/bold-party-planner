@@ -1,9 +1,9 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Heart, Store, Search } from "lucide-react";
+import { Heart, Store, Search, Star } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export default async function SavedVendorsPage() {
   if (!user) redirect("/login?redirect=/dashboard/saved");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: saved } = await supabase
     .from("saved_vendors")
@@ -66,12 +66,12 @@ export default async function SavedVendorsPage() {
               <h3 className="font-semibold text-white mb-3">How saving works</h3>
               <div className="grid sm:grid-cols-3 gap-4">
                 {[
-                  { icon: "❤️", title: "Heart a vendor", desc: "Tap the heart icon on any vendor profile or listing card" },
-                  { icon: "📋", title: "Organise by event", desc: "Saved vendors stay here so you can compare and shortlist" },
-                  { icon: "📨", title: "Request quotes", desc: "Send a quote request directly from your saved list" },
+                  { icon: Heart, title: "Heart a vendor", desc: "Tap the heart icon on any vendor profile or listing card" },
+                  { icon: Store, title: "Organise by event", desc: "Saved vendors stay here so you can compare and shortlist" },
+                  { icon: Search, title: "Request quotes", desc: "Send a quote request directly from your saved list" },
                 ].map((step) => (
                   <div key={step.title} className="p-4 rounded-xl bg-white/4 border border-white/6">
-                    <div className="text-2xl mb-2">{step.icon}</div>
+                    <step.icon size={20} className="text-brand-400 mb-2" />
                     <div className="text-sm font-semibold text-white mb-1">{step.title}</div>
                     <div className="text-xs text-slate-400">{step.desc}</div>
                   </div>
@@ -85,8 +85,6 @@ export default async function SavedVendorsPage() {
               const vendor = v as { id: string; business_name: string; category: string; city: string; rating: number; review_count: number; media?: { url: string; is_cover: boolean }[]; saved_at: string };
               const cover = vendor.media?.find((m) => m.is_cover)?.url;
               return (
-                // Outer div prevents nested <a> tags (invalid HTML).
-                // Vendor profile link wraps the info; Quote link is a sibling.
                 <div key={vendor.id} className="bg-white/4 border border-white/6 rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors">
                   <Link href={`/vendors/${vendor.id}`} className="flex gap-4 flex-1 min-w-0">
                     <div className="w-16 h-16 rounded-xl bg-brand-500/15 flex-shrink-0 overflow-hidden">
@@ -100,9 +98,11 @@ export default async function SavedVendorsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-white font-semibold truncate">{vendor.business_name}</h3>
-                      <p className="text-slate-400 text-xs capitalize mt-0.5">{vendor.category.replace("_", " ")} · {vendor.city}</p>
+                      <p className="text-slate-400 text-xs capitalize mt-0.5">
+                        {vendor.category.replace(/_/g, " ")} &middot; {vendor.city}
+                      </p>
                       <div className="flex items-center gap-1 mt-1">
-                        <span className="text-yellow-400 text-xs">★</span>
+                        <Star size={11} className="text-yellow-400 fill-yellow-400" />
                         <span className="text-white text-xs font-medium">{vendor.rating.toFixed(1)}</span>
                         <span className="text-slate-500 text-xs">({vendor.review_count})</span>
                       </div>

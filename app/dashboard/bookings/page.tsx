@@ -1,10 +1,10 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { ShoppingBag, ArrowRight, Calendar, MapPin, Plus } from "lucide-react";
+import { ShoppingBag, ArrowRight, Calendar, MapPin, Plus, Store } from "lucide-react";
 import type { Profile, Booking } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -15,7 +15,7 @@ export default async function BookingsListPage() {
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: bookings } = await supabase
     .from("bookings")
@@ -39,7 +39,6 @@ export default async function BookingsListPage() {
   return (
     <DashboardLayout user={typedProfile}>
       <div className="max-w-4xl mx-auto space-y-8">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 data-testid="bookings" className="text-2xl font-bold text-white flex items-center gap-2">
@@ -56,7 +55,9 @@ export default async function BookingsListPage() {
 
         {allBookings.length === 0 ? (
           <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
-            <div className="text-5xl mb-4">📦</div>
+            <div className="w-16 h-16 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
+              <ShoppingBag size={28} className="text-brand-400" />
+            </div>
             <h3 className="text-lg font-bold text-white mb-2">No bookings yet</h3>
             <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
               Browse our verified vendors and make your first booking to get started.
@@ -69,7 +70,11 @@ export default async function BookingsListPage() {
           <div className="space-y-8">
             {Object.entries(grouped).map(([group, items]) => {
               if (items.length === 0) return null;
-              const labels: Record<string, string> = { active: "Active Bookings", completed: "Completed", other: "Cancelled / Declined" };
+              const labels: Record<string, string> = {
+                active: "Active Bookings",
+                completed: "Completed",
+                other: "Cancelled / Declined",
+              };
               return (
                 <div key={group}>
                   <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">{labels[group]}</h2>
@@ -84,20 +89,20 @@ export default async function BookingsListPage() {
                           className="bg-white/4 border border-white/6 rounded-xl p-5 flex items-center justify-between hover:border-brand-500/30 transition-all card-hover group"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-brand-500/15 flex items-center justify-center text-xl flex-shrink-0">
-                              🎉
+                            <div className="w-12 h-12 rounded-xl bg-brand-500/15 flex items-center justify-center flex-shrink-0">
+                              <Store size={20} className="text-brand-400" />
                             </div>
                             <div>
                               <h3 className="font-semibold text-white group-hover:text-brand-400 transition-colors">
                                 {vendor?.business_name ?? "Vendor"}
                               </h3>
                               <p className="text-xs text-slate-500 capitalize mt-0.5">
-                                {vendor?.category?.replace("_", " ")}
+                                {vendor?.category?.replace(/_/g, " ")}
                               </p>
                               {event && (
                                 <div className="flex items-center gap-3 mt-1.5">
                                   <span className="flex items-center gap-1 text-xs text-slate-600">
-                                    <Calendar size={10} /> {event.date ? formatDate(event.date) : "—"}
+                                    <Calendar size={10} /> {event.date ? formatDate(event.date) : "TBD"}
                                   </span>
                                   {event.city && (
                                     <span className="flex items-center gap-1 text-xs text-slate-600">

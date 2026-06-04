@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -22,7 +22,7 @@ export default async function VendorOnboardingPage() {
     .eq("id", user.id)
     .single();
 
-  if (!profile) redirect("/login");
+  if (!profile) redirect("/onboarding");
 
   const { data: vendor } = await supabase
     .from("vendors")
@@ -30,11 +30,11 @@ export default async function VendorOnboardingPage() {
     .eq("user_id", user.id)
     .single();
 
-  // No vendor row → send to the application form, not the onboarding wizard.
+  // No vendor row ? send to the application form, not the onboarding wizard.
   // The wizard requires an existing vendor row (for PATCH /api/vendor/profile).
   if (!vendor) redirect("/vendor/apply");
 
-  // Pending â†’ application under review
+  // Pending → application under review
   if (vendor.status === "pending") {
     return (
       <DashboardLayout user={profile as Profile}>
@@ -71,7 +71,7 @@ export default async function VendorOnboardingPage() {
     );
   }
 
-  // Rejected â†’ show reason and option to reapply
+  // Rejected → show reason and option to reapply
   if (vendor.status === "rejected") {
     return (
       <DashboardLayout user={profile as Profile}>
@@ -126,7 +126,7 @@ export default async function VendorOnboardingPage() {
     );
   }
 
-  // Approved â†’ post-approval onboarding journey
+  // Approved → post-approval onboarding journey
   const [mediaRes, packageRes, availabilityRes] = await Promise.all([
     supabase
       .from("vendor_media")
