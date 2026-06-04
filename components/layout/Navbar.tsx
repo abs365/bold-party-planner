@@ -71,23 +71,17 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
   return (
     <header className={headerClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5">
+        {/* Logo — full wordmark SVG */}
+        <Link href="/" className="flex items-center flex-shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={lightBg ? "/brand/elbold-mark-navy.svg" : "/brand/elbold-mark.svg"}
-            width="34"
-            height="34"
-            alt="ELBOLD mark"
-            className="flex-shrink-0"
+            src={lightBg ? "/brand/elbold-wordmark.svg" : "/brand/elbold-wordmark-white.svg"}
+            width="130"
+            height="28"
+            alt="ELBOLD"
+            className="h-7 w-auto"
             fetchPriority="high"
           />
-          <span
-            className="font-bold tracking-[0.18em] text-sm"
-            style={{ color: lightBg ? "#0D1B3E" : "#C9A84C" }}
-          >
-            ELBOLD
-          </span>
         </Link>
 
         {/* Desktop Nav */}
