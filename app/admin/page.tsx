@@ -14,13 +14,18 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
+  .split(",")
+  .map((e) => e.trim())
+  .filter(Boolean);
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
+  // Redirect to homepage — NOT /dashboard — to avoid the loop:
+  // /admin (email mismatch) → /dashboard → (profile.role=admin) → /admin → …
+  if (ADMIN_EMAILS.length === 0 || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
 
   // Service-role client bypasses RLS — admin sees all data
   const db = await createAdminClient();

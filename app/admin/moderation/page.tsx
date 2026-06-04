@@ -5,7 +5,7 @@ import { AdminModerationView } from "@/components/admin/AdminModerationView";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 export default async function AdminModerationPage() {
   const supabase = await createClient();

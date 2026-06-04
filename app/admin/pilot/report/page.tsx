@@ -6,7 +6,7 @@ import { startOfWeek, subWeeks, format } from "date-fns";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 function weekStart(weeksAgo: number) {
   return startOfWeek(subWeeks(new Date(), weeksAgo), { weekStartsOn: 1 }).toISOString();

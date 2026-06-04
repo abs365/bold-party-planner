@@ -19,12 +19,15 @@ export default async function CustomerDashboard() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   if (!profile) redirect("/onboarding");
 
-  // Role-based routing — each role has its own portal
+  // Role-based routing — vendor gets their own portal
+  // Admin is intentionally NOT auto-redirected to /admin here. Doing so creates
+  // a loop when /admin cannot be reached (ADMIN_EMAILS mismatch or env var missing):
+  //   /admin → /dashboard → /admin → …
+  // Admins reach /admin directly or via the auth callback.
   if (profile.role === "vendor") redirect("/vendor/dashboard");
-  if (profile.role === "admin") redirect("/admin");
 
   const [eventsRes, bookingsRes] = await Promise.all([
     supabase
