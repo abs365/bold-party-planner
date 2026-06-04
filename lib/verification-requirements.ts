@@ -30,7 +30,7 @@ export const DOCUMENT_DESCRIPTIONS: Record<DocumentType, string> = {
   food_hygiene:            "Level 2 Food Hygiene Certificate (must be current)",
   sia_license:             "Valid Security Industry Authority licence",
   operator_license:        "Vehicle operator licence for passenger transport",
-  proof_of_address:        "Utility bill or bank statement (issued within last 3 months)",
+  proof_of_address:        "Utility bill, bank statement, council tax letter, or official letter (issued within last 3 months)",
   bank_verification:       "Bank statement or voided cheque showing account details",
   portfolio_authenticity:  "Declaration that all portfolio images are your own original work",
 };

@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
   // Service-role client bypasses RLS — admin sees all data
   const db = await createAdminClient();
 
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const cutoff7  = new Date(); cutoff7.setDate(cutoff7.getDate() - 7);
   const cutoff30 = new Date(); cutoff30.setDate(cutoff30.getDate() - 30);
@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
       .order("created_at", { ascending: false }).limit(4),
     db.from("vendors").select("id, business_name, category, status, created_at")
       .order("created_at", { ascending: false }).limit(4),
-    db.from("pilot_vendors").select("status, business_name, created_at"),
+    db.from("pilot_vendors").select("status, business_name, created_at").then((r) => r.error ? { data: [], error: null } : r),
   ]);
 
   // ── Derived values ──────────────────────────────────────────────────────────
@@ -141,7 +141,7 @@ export default async function AdminDashboard() {
     .slice(0, 8);
 
   return (
-    <DashboardLayout user={{ ...profile!, role: "admin" }}>
+    <DashboardLayout user={{ id: user.id, email: user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }}>
       <div data-testid="admin-dashboard" className="max-w-7xl mx-auto space-y-7">
 
         {/* ── Header ─────────────────────────────────────────────────────────── */}

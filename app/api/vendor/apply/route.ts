@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       category: body.category,
       custom_category_description: body.category === "other" ? (body.custom_category_description || null) : null,
       bio: body.bio || null,
-      location: body.location || null,
+      location: body.location || "",
       city: body.city,
       phone: body.phone || null,
       travel_radius_km: body.travel_radius_km ?? 30,
@@ -88,6 +88,8 @@ export async function POST(request: Request) {
 
   if (error) {
     logger.warn("vendor.apply.insert_failed", { userId: user.id, code: error.code, err: error });
+    // Revert profile role so the user isn't stuck as a vendor with no vendor row
+    void supabase.from("profiles").update({ role: "customer" }).eq("id", user.id);
     if (error.code === "23505") {
       return NextResponse.json({ error: "You already have a vendor application." }, { status: 409 });
     }

@@ -29,7 +29,8 @@ export default async function VendorDashboardPage() {
   if (!user) redirect("/login?redirect=/vendor/dashboard");
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile || profile.role !== "vendor") redirect("/dashboard");
+  if (!profile) redirect("/onboarding");
+  if (profile.role !== "vendor") redirect("/dashboard");
 
   const { data: vendor } = await supabase
     .from("vendors")

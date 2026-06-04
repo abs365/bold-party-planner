@@ -519,20 +519,29 @@ export function CreateEventWizard({ userId }: { userId: string }) {
               <div className="flex items-center gap-4 mb-2">
                 <input
                   type="range"
-                  min={10}
-                  max={500}
-                  step={5}
+                  min={1}
+                  max={1000}
+                  step={1}
                   value={data.guest_count}
                   onChange={(e) => update("guest_count", Number(e.target.value))}
                   className="flex-1 accent-brand-500"
                 />
-                <div className="w-20 text-center bg-white/8 border border-white/10 px-3 py-2 rounded-lg text-white font-bold text-lg">
-                  {data.guest_count}
-                </div>
+                <input
+                  type="number"
+                  min={1}
+                  max={10000}
+                  value={data.guest_count}
+                  onChange={(e) => {
+                    const v = Math.max(1, Math.min(10000, Number(e.target.value) || 1));
+                    update("guest_count", v);
+                  }}
+                  className="w-24 text-center bg-white/8 border border-white/10 px-3 py-2 rounded-lg text-white font-bold text-lg focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+                />
               </div>
               <div className="flex justify-between text-xs text-slate-600">
-                <span>10</span><span>100</span><span>200</span><span>300</span><span>500</span>
+                <span>1</span><span>250</span><span>500</span><span>750</span><span>1000+</span>
               </div>
+              <p className="text-xs text-slate-500 mt-1">Type any number or drag the slider.</p>
             </div>
 
             <div>
