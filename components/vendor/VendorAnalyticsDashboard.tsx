@@ -10,6 +10,7 @@ import { formatCurrency } from "@/lib/utils";
 
 interface AnalyticsSummary {
   profile_views: number;
+  showcase_views: number;
   quote_requests: number;
   confirmed_bookings: number;
   revenue: number;
@@ -83,12 +84,13 @@ export function VendorAnalyticsDashboard() {
   const chartData = chart.map((d) => ({ ...d, label: formatDay(d.date) }));
 
   const stats = [
-    { label: "Profile Views", value: summary.profile_views, icon: Eye, color: "text-blue-400", bg: "bg-blue-500/10", sub: `last ${period} days` },
-    { label: "Quote Requests", value: summary.quote_requests, icon: MessageSquare, color: "text-slate-400", bg: "bg-slate-500/10", sub: "from customers" },
+    { label: "Profile Views",    value: summary.profile_views,   icon: Eye,         color: "text-blue-400",    bg: "bg-blue-500/10",    sub: `last ${period} days` },
+    { label: "Showcase Views",   value: summary.showcase_views ?? 0, icon: Eye,     color: "text-sky-400",     bg: "bg-sky-500/10",     sub: "from /inspire page" },
+    { label: "Quote Requests",   value: summary.quote_requests,  icon: MessageSquare, color: "text-slate-400", bg: "bg-slate-500/10",   sub: "from customers" },
     { label: "Confirmed Bookings", value: summary.confirmed_bookings, icon: ShoppingBag, color: "text-green-400", bg: "bg-green-500/10", sub: "completed" },
-    { label: "Revenue", value: formatCurrency(summary.revenue), icon: DollarSign, color: "text-amber-400", bg: "bg-amber-500/10", sub: "from paid bookings" },
-    { label: "Conversion Rate", value: `${summary.conversion_rate}%`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", sub: "quotes → bookings" },
-    { label: "Average Rating", value: summary.avg_rating.toFixed(1), icon: Star, color: "text-yellow-400", bg: "bg-yellow-500/10", sub: `${summary.total_reviews} reviews` },
+    { label: "Revenue",          value: formatCurrency(summary.revenue), icon: DollarSign, color: "text-amber-400", bg: "bg-amber-500/10", sub: "from paid bookings" },
+    { label: "Conversion Rate",  value: `${summary.conversion_rate}%`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", sub: "quotes to bookings" },
+    { label: "Average Rating",   value: summary.avg_rating.toFixed(1), icon: Star,   color: "text-yellow-400",  bg: "bg-yellow-500/10",  sub: `${summary.total_reviews} reviews` },
   ];
 
   return (

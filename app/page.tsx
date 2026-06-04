@@ -60,16 +60,27 @@ export default async function Home() {
     profile = data;
   }
 
-  const featuredRes = await supabase
-    .from("vendors")
-    .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, media:vendor_media(url, type, is_cover)")
-    .eq("status", "approved")
-    .in("subscription_plan", ["featured", "pro"])
-    .order("subscription_plan", { ascending: false })
-    .order("rating", { ascending: false })
-    .limit(6);
+  const [featuredRes, vendorCountRes, bookingCountRes, reviewRes] = await Promise.all([
+    supabase
+      .from("vendors")
+      .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, media:vendor_media(url, type, is_cover)")
+      .eq("status", "approved")
+      .in("subscription_plan", ["featured", "pro"])
+      .order("subscription_plan", { ascending: false })
+      .order("rating", { ascending: false })
+      .limit(6),
+    supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
+    supabase.from("bookings").select("id", { count: "exact", head: true }).in("status", ["completed", "confirmed"]),
+    supabase.from("reviews").select("rating"),
+  ]);
 
   const vendors = (featuredRes.data ?? []) as FeaturedVendor[];
+  const vendorCount = vendorCountRes.count ?? 0;
+  const bookingCount = bookingCountRes.count ?? 0;
+  const reviews = reviewRes.data ?? [];
+  const avgRatingAll = reviews.length > 0
+    ? reviews.reduce((s, r) => s + (r.rating ?? 0), 0) / reviews.length
+    : 0;
 
   return (
     <div className="min-h-screen">
@@ -377,6 +388,38 @@ export default async function Home() {
               <Link href="/browse" className="btn-luxury-dark text-sm">
                 Browse All Vendors <ArrowRight size={14} />
               </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── TRUST STATS ────────────────────────────────────────────────────── */}
+      {(vendorCount > 0 || bookingCount > 0) && (
+        <section className="py-16 px-4 bg-white border-y border-gray-100">
+          <div className="max-w-4xl mx-auto text-center">
+            <p
+              className="text-xs tracking-[0.25em] font-semibold mb-8 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              Trusted Across the UK
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+              {[
+                { value: vendorCount > 0 ? String(vendorCount) : "—", label: "Verified Vendors" },
+                { value: bookingCount > 0 ? String(bookingCount) : "—", label: "Events Booked" },
+                { value: reviews.length > 0 ? String(reviews.length) : "—", label: "Reviews Written" },
+                { value: avgRatingAll >= 4 ? `${avgRatingAll.toFixed(1)} / 5` : "—", label: "Avg Vendor Rating" },
+              ].map(({ value, label }) => (
+                <div key={label}>
+                  <div
+                    className="text-3xl font-light tracking-tight mb-1"
+                    style={{ color: "#0B1F4D" }}
+                  >
+                    {value}
+                  </div>
+                  <div className="text-xs text-gray-400 font-light">{label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

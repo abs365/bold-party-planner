@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { VendorProfileView } from "@/components/vendor/VendorProfileView";
 import { VENDOR_CATEGORIES } from "@/types";
 import { Star, CheckCircle2, MapPin } from "lucide-react";
+import { VendorTrustPanel } from "@/components/vendor/VendorTrustPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -146,6 +147,15 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
       />
       <div className="pt-16">
         <VendorProfileView vendor={vendor} currentUser={profile} />
+
+        {/* Trust Panel — positioned between profile and similar vendors */}
+        <section className="px-4 py-8 border-t border-gray-100">
+          <div className="max-w-6xl mx-auto">
+            <div className="max-w-sm">
+              <VendorTrustPanel vendor={vendor} />
+            </div>
+          </div>
+        </section>
 
         {/* Similar vendors */}
         {(similarVendors?.length ?? 0) > 0 && (

@@ -41,7 +41,8 @@ export async function GET(req: Request) {
   const quotes = quotesRes.data ?? [];
   const reviews = reviewsRes.data ?? [];
 
-  const profileViews = analytics.filter((a) => a.event_type === "profile_view").length;
+  const profileViews  = analytics.filter((a) => a.event_type === "profile_view").length;
+  const showcaseViews = analytics.filter((a) => a.event_type === "showcase_view").length;
   const quoteRequests = quotes.length;
   const confirmedBookings = bookings.filter((b) => ["confirmed", "accepted", "completed"].includes(b.status)).length;
   const revenue = bookings
@@ -63,7 +64,8 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     summary: {
-      profile_views: profileViews,
+      profile_views:  profileViews,
+      showcase_views: showcaseViews,
       quote_requests: quoteRequests,
       confirmed_bookings: confirmedBookings,
       revenue,
@@ -73,9 +75,10 @@ export async function GET(req: Request) {
     },
     chart: last14,
     event_breakdown: {
-      profile_view: analytics.filter((a) => a.event_type === "profile_view").length,
+      profile_view:  analytics.filter((a) => a.event_type === "profile_view").length,
+      showcase_view: analytics.filter((a) => a.event_type === "showcase_view").length,
       quote_request: analytics.filter((a) => a.event_type === "quote_request").length,
-      media_view: analytics.filter((a) => a.event_type === "media_view").length,
+      media_view:    analytics.filter((a) => a.event_type === "media_view").length,
     },
   });
 }
@@ -86,6 +89,11 @@ export async function POST(req: Request) {
 
   const { vendor_id, event_type } = await req.json() as { vendor_id: string; event_type: string };
   if (!vendor_id || !event_type) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+
+  const ALLOWED_EVENTS = ["profile_view", "showcase_view", "quote_request", "media_view"];
+  if (!ALLOWED_EVENTS.includes(event_type)) {
+    return NextResponse.json({ error: "Invalid event_type" }, { status: 400 });
+  }
 
   await supabase.from("vendor_analytics").insert({
     vendor_id,
