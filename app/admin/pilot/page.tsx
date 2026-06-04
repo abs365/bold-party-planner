@@ -15,7 +15,7 @@ export default async function AdminPilotPage() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   const db = await createAdminClient();
 
   // ── All parallel queries ───────────────────────────────────────────────────
@@ -289,7 +289,7 @@ export default async function AdminPilotPage() {
   ];
 
   return (
-    <DashboardLayout user={profile as Profile}>
+    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Pilot Operations</h1>

@@ -65,7 +65,7 @@ export default async function AdminSystemPage() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const envVars = {
     NEXT_PUBLIC_SUPABASE_URL:    !!process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -94,7 +94,7 @@ export default async function AdminSystemPage() {
   };
 
   return (
-    <DashboardLayout user={profileData as Profile}>
+    <DashboardLayout user={(profileData ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-start justify-between">
           <div>

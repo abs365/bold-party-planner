@@ -76,6 +76,28 @@ export async function POST(request: Request) {
       properties: { event_id: event.id, event_type, city },
     });
 
+    // Send confirmation email — fire and forget
+    void (async () => {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("email, full_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (profile?.email) {
+        const { sendEventCreated } = await import("@/lib/resend");
+        void sendEventCreated(
+          profile.email,
+          profile.full_name ?? "there",
+          title,
+          event_type,
+          date,
+          city,
+          body.guest_count ?? 50,
+          event.id
+        );
+      }
+    })();
+
     logger.info("events.created", { userId: user.id, eventId: event.id });
     return NextResponse.json(event);
   } catch (err) {

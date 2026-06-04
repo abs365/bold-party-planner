@@ -15,7 +15,7 @@ export default async function AdminReviewsPage() {
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
   const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const { data: reviews } = await db
     .from("reviews")
@@ -32,7 +32,7 @@ export default async function AdminReviewsPage() {
     .limit(300);
 
   return (
-    <DashboardLayout user={profile as Profile}>
+    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
       <div className="p-6 space-y-6 max-w-5xl mx-auto">
         <div>
           <h1 className="text-2xl font-bold text-gray-100">Review Moderation</h1>

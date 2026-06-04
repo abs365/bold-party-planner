@@ -14,7 +14,7 @@ export default async function AdminVerificationsPage() {
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
   const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const [pendingRes] = await Promise.all([
     db
@@ -43,7 +43,7 @@ export default async function AdminVerificationsPage() {
     .eq("suspicious_flag", true)).count ?? 0;
 
   return (
-    <DashboardLayout user={profile}>
+    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
       <AdminVerificationsView
         initialVerifications={(pendingRes.data ?? []) as unknown as Parameters<typeof AdminVerificationsView>[0]["initialVerifications"]}
         stats={{ pending: pendingCount, approved: approvedCount, flagged: flaggedCount }}

@@ -1,30 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #fdf4ff;
-  --color-brand-100: #fae8ff;
-  --color-brand-200: #f5d0fe;
-  --color-brand-300: #f0abfc;
-  --color-brand-400: #e879f9;
-  --color-brand-500: #d946ef;
-  --color-brand-600: #c026d3;
-  --color-brand-700: #a21caf;
-  --color-brand-800: #86198f;
-  --color-brand-900: #701a75;
+  /* Brand = Navy spectrum (replaces purple/magenta) */
+  --color-brand-50:  #f0f4ff;
+  --color-brand-100: #dce8f8;
+  --color-brand-200: #b5cdf5;
+  --color-brand-300: #7aaaee;
+  --color-brand-400: #D4AF37;   /* Gold — highlight / badge accent */
+  --color-brand-500: #0B1F4D;   /* Deep Navy — primary action */
+  --color-brand-600: #091629;
+  --color-brand-700: #070f1d;
+  --color-brand-800: #040a14;
+  --color-brand-900: #02060d;
 
-  --color-gold-50: #fffbeb;
+  /* Gold system — exact ELBOLD brand values */
+  --color-gold-50:  #fffbeb;
   --color-gold-100: #fef3c7;
-  --color-gold-400: #fbbf24;
-  --color-gold-500: #f59e0b;
-  --color-gold-600: #d97706;
+  --color-gold-400: #D4AF37;
+  --color-gold-500: #C9A84C;
+  --color-gold-600: #b8932a;
 
-  /* ELBOLD luxury palette */
-  --color-elbold-navy: #0D1B3E;
-  --color-elbold-navy-deep: #091529;
-  --color-elbold-navy-mid: #162447;
-  --color-elbold-gold: #C9A84C;
-  --color-elbold-gold-light: #DEC178;
-  --color-elbold-gold-muted: rgba(201, 168, 76, 0.65);
+  /* ELBOLD luxury palette — canonical values */
+  --color-elbold-navy:       #0B1F4D;
+  --color-elbold-navy-deep:  #07152E;
+  --color-elbold-navy-mid:   #162447;
+  --color-elbold-gold:       #D4AF37;
+  --color-elbold-gold-light: #E8C96A;
+  --color-elbold-gold-muted: rgba(212, 175, 55, 0.65);
+  --color-elbold-silver:     #E8EDF5;
+  --color-elbold-sky:        #DCEEFF;
 }
 
 @layer base {
@@ -43,8 +47,8 @@
   }
 
   ::selection {
-    background-color: #d946ef22;
-    color: #86198f;
+    background-color: rgba(11, 31, 77, 0.15);
+    color: #0B1F4D;
   }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -55,11 +59,11 @@
 
 @layer utilities {
   .gradient-brand {
-    background: linear-gradient(135deg, #d946ef, #8b5cf6, #3b82f6);
+    background: linear-gradient(135deg, #0B1F4D, #162447, #1e3a6e);
   }
 
   .gradient-brand-text {
-    background: linear-gradient(135deg, #e879f9, #a78bfa, #60a5fa);
+    background: linear-gradient(135deg, #D4AF37, #E8C96A, #C9A84C);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -87,8 +91,8 @@
   .input-field::placeholder { color: rgba(248, 250, 252, 0.3); }
   .input-field:hover:not(:focus) { border-color: rgba(255, 255, 255, 0.18); }
   .input-field:focus {
-    border-color: #d946ef;
-    box-shadow: 0 0 0 3px rgba(217, 70, 239, 0.12);
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
     background: rgba(255, 255, 255, 0.07);
   }
   .input-field.pl-icon { padding-left: 2.75rem; }
@@ -109,14 +113,15 @@
   .form-hint { font-size: 0.75rem; color: rgba(148, 163, 184, 0.7); margin-top: 0.3rem; }
 
   .btn-primary {
-    background: linear-gradient(135deg, #d946ef, #8b5cf6);
-    color: white;
+    background: #0B1F4D;
+    color: #D4AF37;
     padding: 0.625rem 1.5rem;
     border-radius: 0.5rem;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.875rem;
-    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-    border: none;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    border: 1px solid rgba(212, 175, 55, 0.35);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -124,7 +129,7 @@
     gap: 0.5rem;
     text-decoration: none;
   }
-  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4); }
+  .btn-primary:hover { background: #162447; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(11, 31, 77, 0.45); }
   .btn-primary:active { transform: translateY(0); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
@@ -227,8 +232,8 @@
   .input-light::placeholder { color: rgba(17, 17, 24, 0.35); }
   .input-light:hover:not(:focus) { border-color: #d1d5db; }
   .input-light:focus {
-    border-color: #d946ef;
-    box-shadow: 0 0 0 3px rgba(217, 70, 239, 0.08);
+    border-color: #0B1F4D;
+    box-shadow: 0 0 0 3px rgba(11, 31, 77, 0.10);
   }
   .input-light.pl-icon { padding-left: 2.75rem; }
   .input-light[data-error="true"],
@@ -263,7 +268,7 @@
 
 /* Better focus rings */
 *:focus-visible {
-  outline: 2px solid #d946ef;
+  outline: 2px solid #D4AF37;
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
@@ -393,7 +398,7 @@ table { border-collapse: collapse; width: 100%; }
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
-.kpi-card-brand  { border-left-color: #d946ef; }
+.kpi-card-brand  { border-left-color: #D4AF37; }
 .kpi-card-gold   { border-left-color: #C9A84C; }
 .kpi-card-emerald{ border-left-color: #10b981; }
 .kpi-card-red    { border-left-color: #ef4444; }

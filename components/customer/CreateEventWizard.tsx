@@ -392,10 +392,10 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                     type="button"
                     onClick={() => update("event_type", key as EventType)}
                     className={cn(
-                      "flex items-center gap-2.5 p-3.5 rounded-xl text-sm font-medium text-left transition-all",
+                      "flex items-center gap-2.5 p-3.5 rounded-xl text-sm font-medium text-left transition-all border",
                       data.event_type === key
-                        ? "bg-brand-500/20 border border-brand-500/40 text-brand-300"
-                        : "bg-white/4 border border-white/8 text-slate-400 hover:bg-white/8 hover:text-white"
+                        ? "bg-[#0B1F4D] border-[rgba(212,175,55,0.5)] text-[#D4AF37]"
+                        : "bg-white/4 border-white/8 text-slate-400 hover:bg-white/8 hover:text-white"
                     )}
                   >
                     <span className="text-xl">{icon}</span>
@@ -553,10 +553,10 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                     type="button"
                     onClick={() => update("budget", b.max)}
                     className={cn(
-                      "p-3.5 rounded-xl text-sm font-semibold text-center transition-all",
+                      "p-3.5 rounded-xl text-sm font-semibold text-center transition-all border",
                       data.budget === b.max
-                        ? "bg-brand-500/20 border border-brand-500/40 text-brand-300"
-                        : "bg-white/4 border border-white/8 text-slate-400 hover:bg-white/8 hover:text-white"
+                        ? "bg-[#0B1F4D] border-[rgba(212,175,55,0.5)] text-[#D4AF37]"
+                        : "bg-white/4 border-white/8 text-slate-400 hover:bg-white/8 hover:text-white"
                     )}
                   >
                     {b.label}
@@ -566,14 +566,15 @@ export function CreateEventWizard({ userId }: { userId: string }) {
               <div>
                 <label className="block text-sm font-medium text-slate-400 mb-1.5">Or enter exact amount</label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-medium pointer-events-none">£</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold pointer-events-none select-none text-sm">£</span>
                   <input
                     type="number"
                     value={data.budget || ""}
                     onChange={(e) => update("budget", Number(e.target.value))}
                     min={100}
-                    className="input-field pl-8"
-                    placeholder="e.g. 3500"
+                    max={500000}
+                    className="input-field pl-icon"
+                    placeholder="3500"
                   />
                 </div>
               </div>

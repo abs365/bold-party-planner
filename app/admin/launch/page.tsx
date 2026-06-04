@@ -174,7 +174,7 @@ export default async function AdminLaunchPage() {
   if (!user) redirect("/login");
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const checks = await runChecks();
 
@@ -188,7 +188,7 @@ export default async function AdminLaunchPage() {
   const readinessColor = score >= 90 ? "text-emerald-400" : score >= 70 ? "text-amber-400" : "text-red-400";
 
   return (
-    <DashboardLayout user={profile as Profile}>
+    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-start justify-between">
           <div>

@@ -14,7 +14,7 @@ export default async function AdminAnalyticsPage() {
   const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
   if (!adminEmails.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const [statsRes, recentPaymentsRes, bookingsByStatusRes, vendorsByCatRes] = await Promise.all([
     adminSupabase.from("platform_stats").select("*").single(),
@@ -35,7 +35,7 @@ export default async function AdminAnalyticsPage() {
   ]);
 
   return (
-    <DashboardLayout user={profile!}>
+    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
       <AdminAnalytics
         stats={statsRes.data}
         recentPayments={recentPaymentsRes.data ?? []}

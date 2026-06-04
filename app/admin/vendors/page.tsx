@@ -19,7 +19,7 @@ export default async function AdminVendorsPage({
   const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
   if (!adminEmails.includes(user.email ?? "")) redirect("/dashboard");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   let query = adminSupabase
     .from("vendors")
@@ -41,7 +41,7 @@ export default async function AdminVendorsPage({
   const { data: stats } = await adminSupabase.from("platform_stats").select("*").single();
 
   return (
-    <DashboardLayout user={profile!}>
+    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
       <AdminVendorTable
         vendors={vendors ?? []}
         stats={stats}

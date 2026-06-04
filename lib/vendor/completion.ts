@@ -192,30 +192,35 @@ export function computeVerificationTrustScore(vendor: {
   return { level: 5, trustScore: 100, label: "Trusted Professional", badgeId: "trusted_pro", isVerified: true };
 }
 
-export function getActivationMessages(completion: CompletionResult): string[] {
-  const messages: string[] = [];
+export interface ActivationMessage {
+  message: string;
+  href: string;
+}
+
+export function getActivationMessages(completion: CompletionResult): ActivationMessage[] {
+  const msgs: ActivationMessage[] = [];
   const { steps, score } = completion;
 
   const mediaStep = steps.find((s) => s.id === "media");
   const mediaCount = mediaStep?.items[1]?.done ? 5 : (mediaStep?.items[0]?.done ? 1 : 0);
-  if (mediaCount === 0) messages.push("Upload photos to increase your enquiry rate by 5x");
-  else if (mediaCount < 5) messages.push(`Upload ${5 - mediaCount} more photos to unlock full visibility`);
+  if (mediaCount === 0) msgs.push({ message: "Upload photos to increase your enquiry rate by 5x", href: "/vendor/media" });
+  else if (mediaCount < 5) msgs.push({ message: `Upload ${5 - mediaCount} more photos to unlock full visibility`, href: "/vendor/media" });
 
   const verStep = steps.find((s) => s.id === "verification");
-  if (verStep && !verStep.items[1].done) messages.push("Submit a government ID to get 'ID Verified' — customers trust verified vendors more");
-  else if (verStep && !verStep.items[2].done) messages.push("Submit proof of address or business registration for 'Business Verified' status");
+  if (verStep && !verStep.items[1].done) msgs.push({ message: "Submit a government ID to get 'ID Verified' — customers trust verified vendors more", href: "/vendor/verification" });
+  else if (verStep && !verStep.items[2].done) msgs.push({ message: "Submit proof of address or business registration for 'Business Verified' status", href: "/vendor/verification" });
 
   const svcStep = steps.find((s) => s.id === "services");
-  if (svcStep && !svcStep.items[0].done) messages.push("Create a service package so customers can request quotes");
-  else if (svcStep && !svcStep.items[1].done) messages.push("Add your starting price to appear in budget searches");
+  if (svcStep && !svcStep.items[0].done) msgs.push({ message: "Create a service package so customers can request quotes", href: "/vendor/services" });
+  else if (svcStep && !svcStep.items[1].done) msgs.push({ message: "Add your starting price to appear in budget searches", href: "/vendor/services" });
 
   const profileStep = steps.find((s) => s.id === "profile");
-  if (profileStep && !profileStep.items[0].done) messages.push("Write a bio of 50+ characters to improve your search ranking");
+  if (profileStep && !profileStep.items[0].done) msgs.push({ message: "Write a bio of 50+ characters to improve your search ranking", href: "/vendor/profile" });
 
   const trustStep = steps.find((s) => s.id === "trust");
-  if (trustStep && !trustStep.items[1].done) messages.push("Set your availability so customers can see when you're bookable");
+  if (trustStep && !trustStep.items[1].done) msgs.push({ message: "Set your availability so customers can see when you're bookable", href: "/vendor/availability" });
 
-  if (score >= 90) messages.push("Profile fully optimised — you rank at the top of marketplace search");
+  if (score >= 90) msgs.push({ message: "Profile fully optimised — you rank at the top of marketplace search", href: "/vendor/dashboard" });
 
-  return messages.slice(0, 3);
+  return msgs.slice(0, 3);
 }

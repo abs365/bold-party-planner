@@ -13,7 +13,7 @@ export default async function AdminBookingsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   if (!profile || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
   const adminClient = await createAdminClient();
@@ -28,7 +28,7 @@ export default async function AdminBookingsPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <DashboardLayout user={profile as Profile}>
+    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
       <div className="max-w-6xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white">All Bookings</h1>

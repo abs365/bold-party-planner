@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, TrendingUp, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CompletionResult } from "@/lib/vendor/completion";
-import { getActivationMessages } from "@/lib/vendor/completion";
+import { getActivationMessages, type ActivationMessage } from "@/lib/vendor/completion";
 
 interface Props {
   completion: CompletionResult;
@@ -21,8 +21,7 @@ const scoreTextColor = (score: number) =>
 
 export function ProfileStrengthWidget({ completion, compact = false }: Props) {
   const { score, strengthLabel, steps, isMarketplaceReady } = completion;
-  const messages = getActivationMessages(completion);
-  const incompleteSteps = steps.filter((s) => !s.complete);
+  const messages: ActivationMessage[] = getActivationMessages(completion);
 
   if (compact) {
     return (
@@ -43,19 +42,16 @@ export function ProfileStrengthWidget({ completion, compact = false }: Props) {
         <div className="text-xs text-slate-500 mb-3">{strengthLabel}</div>
         {messages.length > 0 && (
           <div className="space-y-1.5 mb-3">
-            {messages.slice(0, 2).map((msg, i) => {
-              const step = incompleteSteps[i];
-              return (
-                <Link
-                  key={i}
-                  href={step?.href ?? "/vendor/profile"}
-                  className="flex items-start gap-1.5 hover:text-white transition-colors group"
-                >
-                  <AlertCircle size={10} className="text-amber-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-xs text-slate-400 group-hover:text-slate-300 leading-tight">{msg}</span>
-                </Link>
-              );
-            })}
+            {messages.slice(0, 2).map((item, i) => (
+              <Link
+                key={i}
+                href={item.href}
+                className="flex items-start gap-1.5 hover:text-white transition-colors group"
+              >
+                <AlertCircle size={10} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                <span className="text-xs text-slate-400 group-hover:text-slate-300 leading-tight">{item.message}</span>
+              </Link>
+            ))}
           </div>
         )}
         {isMarketplaceReady && messages.length === 0 && (
@@ -93,20 +89,17 @@ export function ProfileStrengthWidget({ completion, compact = false }: Props) {
 
       {messages.length > 0 && (
         <div className="space-y-2 mb-4">
-          {messages.map((msg, i) => {
-            const step = incompleteSteps[i];
-            return (
-              <Link
-                key={i}
-                href={step?.href ?? "/vendor/profile"}
-                className="flex items-start gap-2 p-2.5 rounded-lg bg-white/3 border border-white/6 hover:border-white/10 hover:bg-white/5 transition-all group"
-              >
-                <AlertCircle size={12} className="text-amber-400 flex-shrink-0 mt-0.5" />
-                <span className="text-xs text-slate-300 group-hover:text-white transition-colors leading-tight flex-1">{msg}</span>
-                <ArrowRight size={11} className="text-slate-600 group-hover:text-slate-400 flex-shrink-0 mt-0.5 transition-colors" />
-              </Link>
-            );
-          })}
+          {messages.map((item, i) => (
+            <Link
+              key={i}
+              href={item.href}
+              className="flex items-start gap-2 p-2.5 rounded-lg bg-white/3 border border-white/6 hover:border-white/10 hover:bg-white/5 transition-all group"
+            >
+              <AlertCircle size={12} className="text-amber-400 flex-shrink-0 mt-0.5" />
+              <span className="text-xs text-slate-300 group-hover:text-white transition-colors leading-tight flex-1">{item.message}</span>
+              <ArrowRight size={11} className="text-slate-600 group-hover:text-slate-400 flex-shrink-0 mt-0.5 transition-colors" />
+            </Link>
+          ))}
         </div>
       )}
 

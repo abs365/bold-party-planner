@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { BadgeCheck, TrendingUp, Users, Wallet } from "lucide-react";
@@ -13,8 +13,8 @@ export default async function AdminSubscriptionsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  if (!profile || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
   const adminClient = await createAdminClient();
   const { data: subs } = await adminClient
@@ -26,9 +26,21 @@ export default async function AdminSubscriptionsPage() {
   const proSubs = activeSubs.filter((s) => s.plan === "pro");
   const featuredSubs = activeSubs.filter((s) => s.plan === "featured");
   const mrr = proSubs.length * 29 + featuredSubs.length * 79;
+  const mrrFormatted = mrr.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
+
+  const safeUser: Profile = profile ?? {
+    id: user.id,
+    email: user.email ?? "",
+    role: "admin",
+    full_name: null,
+    phone: null,
+    phone_verified: false,
+    avatar_url: null,
+    created_at: new Date().toISOString(),
+  };
 
   return (
-    <DashboardLayout user={profile as Profile}>
+    <DashboardLayout user={safeUser}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Subscriptions</h1>
@@ -37,10 +49,10 @@ export default async function AdminSubscriptionsPage() {
 
         <div className="grid sm:grid-cols-4 gap-4">
           {[
-            { label: "Active Subscriptions", value: activeSubs.length, icon: BadgeCheck, color: "text-brand-400" },
-            { label: "Pro Plan", value: proSubs.length, icon: TrendingUp, color: "text-emerald-400" },
-            { label: "Featured Plan", value: featuredSubs.length, icon: Users, color: "text-amber-400" },
-            { label: "Est. MRR", value: `£${mrr}`, icon: Wallet, color: "text-blue-400" },
+            { label: "Active Subscriptions", value: String(activeSubs.length), icon: BadgeCheck, color: "text-brand-400" },
+            { label: "Pro Plan", value: String(proSubs.length), icon: TrendingUp, color: "text-emerald-400" },
+            { label: "Featured Plan", value: String(featuredSubs.length), icon: Users, color: "text-amber-400" },
+            { label: "Est. MRR", value: mrrFormatted, icon: Wallet, color: "text-blue-400" },
           ].map((stat) => (
             <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <stat.icon size={18} className={`${stat.color} mb-2`} />
@@ -74,7 +86,7 @@ export default async function AdminSubscriptionsPage() {
                         {sub.status}
                       </span>
                       <div className="text-xs text-slate-400">
-                        {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString("en-GB") : "—"}
+                        {sub.current_period_end ? new Date(sub.current_period_end as string).toLocaleDateString("en-GB") : "-"}
                       </div>
                     </div>
                   </div>

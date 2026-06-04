@@ -324,3 +324,34 @@ export async function sendQuoteRejectedToVendor(
     <p style="margin-top:16px;font-size:13px;color:#9ca3af">Tip: Vendors who upload 8+ photos and respond within 2 hours win significantly more bookings.</p>`
   ));
 }
+
+export async function sendEventCreated(
+  to: string,
+  name: string,
+  eventTitle: string,
+  eventType: string,
+  eventDate: string,
+  city: string,
+  guestCount: number,
+  eventId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const dateFormatted = new Date(eventDate).toLocaleDateString("en-GB", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric",
+  });
+  return send(to, `Your event has been created — ${eventTitle}`, wrap(
+    "Event Created",
+    `<p>Hi ${name},</p>
+    <p>Your event has been saved on ELBOLD Events. Here is a summary:</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Event:</span> <span class="detail-value">${eventTitle}</span></p>
+      <p><span class="detail-label">Type:</span> <span class="detail-value">${eventType.replace(/_/g, " ")}</span></p>
+      <p><span class="detail-label">Date:</span> <span class="detail-value">${dateFormatted}</span></p>
+      <p><span class="detail-label">Location:</span> <span class="detail-value">${city}</span></p>
+      <p><span class="detail-label">Guests:</span> <span class="detail-value">${guestCount}</span></p>
+    </div>
+    <p>Your Smart Plan has been generated. View vendor recommendations, manage your checklist, and track your budget from your dashboard.</p>
+    <a href="${appUrl}/dashboard/events/${eventId}" class="btn">View My Event</a>
+    <p style="margin-top:24px;font-size:13px;color:#6b7280">If quote requests were sent to vendors, you will hear back within 24 hours.</p>`
+  ));
+}

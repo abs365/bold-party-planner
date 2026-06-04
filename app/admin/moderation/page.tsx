@@ -14,7 +14,7 @@ export default async function AdminModerationPage() {
   if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
 
   const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).single();
+  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
   const [reportsRes, mediaRes] = await Promise.all([
     db
@@ -40,7 +40,7 @@ export default async function AdminModerationPage() {
   ]);
 
   return (
-    <DashboardLayout user={profile}>
+    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
       <AdminModerationView
         reports={(reportsRes.data ?? []) as unknown as Parameters<typeof AdminModerationView>[0]["reports"]}
         pendingMedia={(mediaRes.data ?? []) as unknown as Parameters<typeof AdminModerationView>[0]["pendingMedia"]}
