@@ -29,7 +29,7 @@ const TYPE_COLOR: Record<string, string> = {
   booking: "bg-blue-500/15 text-blue-400",
   payment: "bg-green-500/15 text-green-400",
   review: "bg-yellow-500/15 text-yellow-400",
-  reminder: "bg-purple-500/15 text-purple-400",
+  reminder: "bg-slate-500/15 text-slate-400",
   system: "bg-white/8 text-white/50",
 };
 

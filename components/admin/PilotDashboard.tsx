@@ -286,7 +286,7 @@ export function PilotDashboard({
       <section>
         <SectionHeader title="Pilot KPIs" sub={`Activity over the last ${periodLabel[period]}`} />
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
-          <KpiCard icon={Store}        label="New Vendors"         value={loading ? "..." : (kpis?.newVendors ?? 0)}    color="text-purple-400" />
+          <KpiCard icon={Store}        label="New Vendors"         value={loading ? "..." : (kpis?.newVendors ?? 0)}    color="text-slate-400" />
           <KpiCard icon={Users}        label="New Customers"       value={loading ? "..." : (kpis?.newCustomers ?? 0)}  color="text-blue-400" />
           <KpiCard icon={FileText}     label="Quote Requests"      value={loading ? "..." : (kpis?.quotesRequested ?? 0)} color="text-yellow-400" />
           <KpiCard icon={TrendingUp}   label="Quotes Submitted"    value={loading ? "..." : (kpis?.quotesSubmitted ?? 0)} color="text-amber-400" />
@@ -365,7 +365,7 @@ export function PilotDashboard({
           {[
             { label: "Quotes",    v24: act?.quotes24h ?? 0,   v7: loading ? "..." : (kpis?.quotesRequested ?? 0),  icon: FileText,  color: "text-yellow-400" },
             { label: "Bookings",  v24: act?.bookings24h ?? 0, v7: loading ? "..." : (kpis?.bookingsCreated ?? 0),  icon: ShoppingBag, color: "text-green-400" },
-            { label: "Vendors",   v24: act?.vendors24h ?? 0,  v7: loading ? "..." : (kpis?.newVendors ?? 0),       icon: Store,    color: "text-purple-400" },
+            { label: "Vendors",   v24: act?.vendors24h ?? 0,  v7: loading ? "..." : (kpis?.newVendors ?? 0),       icon: Store,    color: "text-slate-400" },
             { label: "Reviews",   v24: act?.reviews24h ?? 0,  v7: loading ? "..." : (kpis?.newReviews ?? 0),       icon: Star,     color: "text-amber-400" },
           ].map(({ label, v24, v7, icon: Icon, color }) => (
             <Card key={label} className="p-4 space-y-3">

@@ -221,7 +221,7 @@ export default async function AdminDashboard() {
               { label: "Total Vendors",       value: totalVendors,                icon: Store,        color: "text-slate-400",   href: "/admin/vendors" },
               { label: "Approved Vendors",    value: approvedVendors,             icon: CheckCircle2, color: "text-brand-400",   href: "/admin/vendors?status=approved" },
               { label: "Pending Applications",value: pendingVendorCount,          icon: Clock,        color: pendingVendorCount > 0 ? "text-amber-400" : "text-slate-500", href: "/admin/vendors?status=pending" },
-              { label: "Total Bookings",      value: allBookings.length,          icon: ShoppingBag,  color: "text-purple-400",  href: "/admin/bookings" },
+              { label: "Total Bookings",      value: allBookings.length,          icon: ShoppingBag,  color: "text-slate-400",  href: "/admin/bookings" },
               { label: "Platform Revenue",    value: formatCurrency(totalRevenue),icon: CreditCard,   color: "text-gold-400",    href: "/admin/payouts" },
               { label: "Pending Quotes",      value: pendingQuotes,               icon: Inbox,        color: pendingQuotes > 0 ? "text-sky-400" : "text-slate-500",  href: "/admin/quotes" },
               { label: "Open Disputes",       value: disputeCount,                icon: Scale,        color: disputeCount > 0 ? "text-red-400" : "text-emerald-400", href: "/admin/disputes" },
@@ -257,7 +257,7 @@ export default async function AdminDashboard() {
               { label: "Vendors Contacted",  value: String(pilotContacted), note: `of ${pilotVendors.length} tracked`, color: "text-blue-400",    href: "/admin/pilot/vendors" },
               { label: "Vendors Approved",   value: String(pilotApproved),  note: "reached approval",                  color: "text-brand-400",   href: "/admin/pilot/vendors" },
               { label: "Active on Platform", value: String(pilotActive),    note: "fully active",                      color: "text-emerald-400", href: "/admin/pilot" },
-              { label: "Events Created",     value: String(totalEvents),    note: "customer events",                   color: "text-purple-400",  href: "/admin/bookings" },
+              { label: "Events Created",     value: String(totalEvents),    note: "customer events",                   color: "text-slate-400",  href: "/admin/bookings" },
               { label: "Feedback Items",     value: "0",                    note: "check pilot report",                color: "text-slate-500",   href: "/admin/pilot/report" },
               { label: "Bugs Open",          value: "—",                    note: "track externally",                  color: "text-slate-600",   href: "/admin/system" },
               { label: "Launch Readiness",   value: "→",                    note: "view checklist",                    color: "text-gold-400",    href: "/admin/launch" },
@@ -345,7 +345,7 @@ export default async function AdminDashboard() {
           {[
             { label: "This Week's Revenue", value: formatCurrency(weeklyRevenue),  sub: `${weeklyBookings.length} bookings`, icon: TrendingUp, color: "text-emerald-400" },
             { label: "Monthly Revenue",     value: formatCurrency(monthlyRevenue), sub: `${monthlyBookings.length} bookings`, icon: BarChart2,  color: "text-brand-400" },
-            { label: "Weekly GMV",          value: formatCurrency(weeklyVolume),   sub: "Gross merchandise value",            icon: CreditCard, color: "text-purple-400" },
+            { label: "Weekly GMV",          value: formatCurrency(weeklyVolume),   sub: "Gross merchandise value",            icon: CreditCard, color: "text-slate-400" },
           ].map(({ label, value, sub, icon: Icon, color }) => (
             <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">

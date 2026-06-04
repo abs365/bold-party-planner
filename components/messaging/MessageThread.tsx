@@ -83,7 +83,7 @@ export function MessageThread({ threadId, currentUserId, otherPartyName, onBack 
             <ArrowLeft className="w-4 h-4" />
           </button>
         )}
-        <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+        <div className="w-8 h-8 rounded-full bg-slate-500/20 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
           {otherPartyName[0]?.toUpperCase() ?? "?"}
         </div>
         <div>
@@ -104,7 +104,7 @@ export function MessageThread({ threadId, currentUserId, otherPartyName, onBack 
             return (
               <div key={msg.id} className={cn("flex gap-2", isMe ? "justify-end" : "justify-start")}>
                 {!isMe && (
-                  <div className="w-7 h-7 rounded-full bg-purple-500/20 flex items-center justify-center text-xs text-white font-semibold flex-shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-full bg-slate-500/20 flex items-center justify-center text-xs text-white font-semibold flex-shrink-0 mt-0.5">
                     {(msg.sender?.full_name ?? otherPartyName)[0]?.toUpperCase()}
                   </div>
                 )}

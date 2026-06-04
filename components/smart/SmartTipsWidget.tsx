@@ -63,9 +63,9 @@ function getDailyTip() {
 const CATEGORY_COLOR: Record<string, string> = {
   Budget: "bg-emerald-500/20 text-emerald-400",
   Planning: "bg-blue-500/20 text-blue-400",
-  Decoration: "bg-pink-500/20 text-pink-400",
+  Decoration: "bg-slate-500/15 text-slate-400",
   Catering: "bg-amber-500/20 text-amber-400",
-  Timeline: "bg-purple-500/20 text-purple-400",
+  Timeline: "bg-slate-500/20 text-slate-400",
   "Backup plan": "bg-orange-500/20 text-orange-400",
   Photography: "bg-cyan-500/20 text-cyan-400",
 };

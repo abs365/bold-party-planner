@@ -210,7 +210,7 @@ export function QuoteComparisonView({ quotes, eventTitle, eventId }: QuoteCompar
                     </span>
                   )}
                   {(quote.vendor?.response_rate ?? 0) >= 80 && (
-                    <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/25 text-purple-300">
+                    <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-[#0B1F4D]/10 border border-[#0B1F4D]/12 text-slate-300">
                       <Zap className="w-3 h-3" /> Fast
                     </span>
                   )}

@@ -293,7 +293,7 @@ export default async function VendorDashboardPage() {
         <div className="grid grid-cols-3 gap-4">
           {[
             { label: "Profile Views",   value: profileViews,   icon: Eye,       color: "text-brand-400",   href: "/vendor/analytics" },
-            { label: "Quote Requests",  value: quoteRequests,  icon: TrendingUp, color: "text-purple-400",  href: "/vendor/quotes" },
+            { label: "Quote Requests",  value: quoteRequests,  icon: TrendingUp, color: "text-slate-400",  href: "/vendor/quotes" },
             { label: "Conversion Rate", value: `${conversionRate}%`, icon: BarChart2, color: "text-emerald-400", href: "/vendor/analytics" },
           ].map(({ label, value, icon: Icon, color, href }) => (
             <Link key={label} href={href} className="bg-white/4 border border-white/6 rounded-xl p-4 hover:border-white/10 transition-colors group">
@@ -359,7 +359,7 @@ export default async function VendorDashboardPage() {
                           isPending ? "border-amber-500/20 bg-amber-500/3" : "border-white/5 bg-white/2"
                         )}
                       >
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#0B1F4D] to-[#162447] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
                           {(cust?.full_name ?? "?").charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -385,11 +385,11 @@ export default async function VendorDashboardPage() {
 
             {/* Pending Quotes Alert */}
             {pendingQuotes.length > 0 && (
-              <div className="bg-white/4 border border-purple-500/25 rounded-xl p-5 animate-fade-in-up">
+              <div className="bg-white/4 border border-[#0B1F4D]/12 rounded-xl p-5 animate-fade-in-up">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                      <Quote size={15} className="text-purple-400" />
+                    <div className="w-9 h-9 rounded-xl bg-slate-500/15 flex items-center justify-center">
+                      <Quote size={15} className="text-slate-400" />
                     </div>
                     <div>
                       <div className="font-semibold text-white text-sm">
@@ -416,7 +416,7 @@ export default async function VendorDashboardPage() {
               <div className="space-y-2">
                 {[
                   { href: "/vendor/bookings",     icon: ShoppingBag,   label: "Manage Bookings",    badge: pending.length > 0 ? pending.length : null,   color: "text-amber-400" },
-                  { href: "/vendor/quotes",        icon: Quote,          label: "Quote Requests",     badge: pendingQuotes.length > 0 ? pendingQuotes.length : null, color: "text-purple-400" },
+                  { href: "/vendor/quotes",        icon: Quote,          label: "Quote Requests",     badge: pendingQuotes.length > 0 ? pendingQuotes.length : null, color: "text-slate-400" },
                   { href: "/vendor/messages",      icon: MessageSquare,  label: "Messages",           badge: null,             color: "text-blue-400" },
                   { href: "/vendor/availability",  icon: Calendar,       label: "Update Availability", badge: null,             color: "text-emerald-400" },
                   { href: "/vendor/analytics",     icon: BarChart2,      label: "View Analytics",     badge: null,             color: "text-brand-400" },

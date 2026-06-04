@@ -271,7 +271,7 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
             <div className="space-y-3">
               {[
                 { label: "Customer Testing Form", url: "/testing/customer", icon: Users, color: "text-brand-400", desc: "Account creation, events, quotes, bookings" },
-                { label: "Vendor Testing Form",   url: "/testing/vendor",   icon: Store, color: "text-purple-400", desc: "Registration, profile, media upload, verification" },
+                { label: "Vendor Testing Form",   url: "/testing/vendor",   icon: Store, color: "text-slate-400", desc: "Registration, profile, media upload, verification" },
                 { label: "Admin Testing Form",    url: "/testing/admin",    icon: Shield, color: "text-amber-400", desc: "Vendor queue, approvals, pipeline, analytics" },
               ].map(({ label, url, icon: Icon, color, desc }) => (
                 <div key={url} className="flex items-center gap-4 p-4 rounded-xl bg-white/3 border border-white/6">
@@ -301,7 +301,7 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
                 <div key={s.id} className="flex items-center gap-4 px-5 py-3.5">
                   <div className={cn("text-xs font-semibold px-2 py-0.5 rounded-full capitalize",
                     s.test_type === "customer" ? "bg-brand-500/20 text-brand-300" :
-                    s.test_type === "vendor"   ? "bg-purple-500/20 text-purple-300" :
+                    s.test_type === "vendor"   ? "bg-slate-500/20 text-slate-300" :
                     "bg-amber-500/20 text-amber-300"
                   )}>
                     {s.test_type}

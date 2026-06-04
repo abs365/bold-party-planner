@@ -141,7 +141,7 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: string; 
   return (
     <div className="bg-white/4 border border-white/6 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-1">
-        <Icon className="w-4 h-4 text-purple-400" />
+        <Icon className="w-4 h-4 text-slate-400" />
         <span className="text-white/50 text-xs">{label}</span>
       </div>
       <p className="text-white text-xl font-bold">{value}</p>

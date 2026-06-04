@@ -105,7 +105,7 @@ export function AdminPayoutsView({ payouts }: AdminPayoutsViewProps) {
                       {payout.event?.date && <p className="text-white/40 text-xs">{new Date(payout.event.date).toLocaleDateString("en-GB")}</p>}
                     </td>
                     <td className="px-4 py-3 text-right text-white">£{payout.total_amount.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-right text-purple-300">£{(payout.commission_amount ?? 0).toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right text-slate-300">£{(payout.commission_amount ?? 0).toFixed(2)}</td>
                     <td className="px-4 py-3 text-right text-green-300 font-semibold">£{(payout.vendor_payout ?? 0).toFixed(2)}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-full text-xs ${PAYMENT_COLOR[payout.payment_status] ?? "bg-white/10 text-white/60"}`}>
@@ -137,7 +137,7 @@ function StatCard({ label, value, highlight }: { label: string; value: string; h
   return (
     <div className={`bg-white/4 border rounded-xl p-4 ${highlight ? "border-yellow-500/30" : "border-white/6"}`}>
       <div className="flex items-center gap-2 mb-1">
-        <Wallet className={`w-4 h-4 ${highlight ? "text-yellow-400" : "text-purple-400"}`} />
+        <Wallet className={`w-4 h-4 ${highlight ? "text-yellow-400" : "text-slate-400"}`} />
         <span className="text-white/50 text-xs">{label}</span>
       </div>
       <p className={`text-xl font-bold ${highlight ? "text-yellow-300" : "text-white"}`}>{value}</p>

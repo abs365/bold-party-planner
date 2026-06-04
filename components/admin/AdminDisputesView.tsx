@@ -86,7 +86,7 @@ export function AdminDisputesView({ disputes }: AdminDisputesViewProps) {
       <div className="flex gap-2 mb-6 flex-wrap">
         {(["open", "investigating", "resolved", "all"] as const).map((tab) => (
           <button key={tab} onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab ? "bg-purple-500/30 text-purple-300 border border-purple-500/50" : "text-white/60 hover:text-white border border-white/10"}`}>
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab ? "bg-[#0B1F4D]/18 text-slate-300 border border-[#0B1F4D]/25" : "text-white/60 hover:text-white border border-white/10"}`}>
             {tab.charAt(0).toUpperCase() + tab.slice(1)} ({counts[tab]})
           </button>
         ))}
@@ -181,7 +181,7 @@ export function AdminDisputesView({ disputes }: AdminDisputesViewProps) {
                               className="btn-secondary">Close Without Resolution</button>
                           </div>
                         ) : (
-                          <div className="border border-purple-500/30 rounded-lg p-4 space-y-3 bg-purple-500/5">
+                          <div className="border border-[#0B1F4D]/15 rounded-lg p-4 space-y-3 bg-slate-500/5">
                             <h4 className="text-white font-medium text-sm">Resolve Dispute</h4>
                             <div>
                               <label className="block text-white/60 text-xs mb-1">Resolution *</label>

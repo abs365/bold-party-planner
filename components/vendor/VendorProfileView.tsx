@@ -238,7 +238,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                 <Badge variant="gold">â­ Featured</Badge>
               )}
               {vendor.subscription_plan === "pro" && !vendor.featured && (
-                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-medium">
+                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-slate-50 text-[#0B1F4D] border border-slate-200 font-medium">
                   <CheckCircle2 size={11} /> Pro Vendor
                 </span>
               )}
@@ -252,7 +252,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   href={vendor.instagram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-pink-200 bg-pink-50 text-pink-600 text-xs font-medium hover:bg-pink-100 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium hover:bg-pink-100 transition-colors"
                 >
                   <span className="font-bold text-[10px] leading-none">IG</span> Instagram
                 </a>

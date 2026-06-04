@@ -85,9 +85,9 @@ export function getVendorBadges(vendor: {
     label: "Fast Responder",
     description: `${Math.round(responseRate)}% quote response rate`,
     icon: Zap,
-    bgClass: "bg-purple-50",
-    borderClass: "border-purple-200",
-    textClass: "text-purple-700",
+    bgClass: "bg-slate-50",
+    borderClass: "border-slate-200",
+    textClass: "text-[#0B1F4D]",
   });
 
   const rating = vendor.rating ?? 0;

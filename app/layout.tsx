@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
               fontSize: "0.875rem",
             },
-            success: { iconTheme: { primary: "#d946ef", secondary: "#fff" } },
+            success: { iconTheme: { primary: "#0B1F4D", secondary: "#fff" } },
             error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
           }}
         />

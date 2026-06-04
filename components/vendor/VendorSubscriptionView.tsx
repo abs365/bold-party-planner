@@ -39,10 +39,10 @@ const PLAN_ICONS: Record<string, React.ElementType> = {
 
 const PLAN_COLORS: Record<string, { border: string; icon: string; bg: string; badge?: string; badgeText?: string }> = {
   free:     { border: "border-white/20",      icon: "text-white/60",   bg: "bg-white/10" },
-  pro:      { border: "border-purple-500/50", icon: "text-purple-400", bg: "bg-purple-500/20", badge: "Most Popular",       badgeText: "gradient-brand text-white" },
+  pro:      { border: "border-[#0B1F4D]/25", icon: "text-slate-400", bg: "bg-slate-500/20", badge: "Most Popular",       badgeText: "gradient-brand text-white" },
   premium:  { border: "border-amber-500/50",  icon: "text-amber-400",  bg: "bg-amber-500/20",  badge: "Maximum Visibility", badgeText: "bg-amber-500 text-white" },
   featured: { border: "border-amber-500/50",  icon: "text-amber-400",  bg: "bg-amber-500/20" },
-  elite:    { border: "border-rose-500/50",   icon: "text-rose-400",   bg: "bg-rose-500/20",   badge: "Elite",              badgeText: "bg-gradient-to-r from-rose-500 to-purple-600 text-white" },
+  elite:    { border: "border-rose-500/50",   icon: "text-rose-400",   bg: "bg-rose-500/20",   badge: "Elite",              badgeText: "bg-gradient-to-r from-[#D4AF37] to-[#b8932a] text-white" },
 };
 
 const FEATURE_COMPARISON = [
@@ -148,11 +148,11 @@ export function VendorSubscriptionView() {
       {sub && sub.plan !== "free" && (
         <div className={cn(
           "border rounded-xl p-4 flex items-center justify-between",
-          isPastDue ? "bg-red-500/10 border-red-500/30" : "bg-white/4 border-purple-500/30"
+          isPastDue ? "bg-red-500/10 border-red-500/30" : "bg-white/4 border-[#0B1F4D]/15"
         )}>
           <div>
             <p className="text-white font-medium">
-              Current plan: <span className="text-purple-300 capitalize">{sub.plan}</span>
+              Current plan: <span className="text-slate-300 capitalize">{sub.plan}</span>
               {sub.billing_cycle && <span className="text-white/40 text-sm ml-2">({sub.billing_cycle})</span>}
             </p>
             {sub.current_period_end && (
@@ -275,7 +275,7 @@ export function VendorSubscriptionView() {
                   disabled={!!upgrading || (hasPaidPlan && slug === "free")}
                   className={cn(
                     "btn-primary flex items-center justify-center gap-2 text-sm py-2 disabled:opacity-40",
-                    slug === "elite"   ? "bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-600 hover:to-purple-700" :
+                    slug === "elite"   ? "bg-gradient-to-r from-[#D4AF37] to-[#b8932a] hover:from-[#E8C96A] hover:to-[#C9A84C]" :
                     slug === "premium" ? "bg-amber-500 hover:bg-amber-600" : ""
                   )}
                 >
@@ -305,7 +305,7 @@ export function VendorSubscriptionView() {
             <tr className="border-b border-white/10">
               <th className="text-left text-slate-400 font-normal py-2 pr-4">Feature</th>
               <th className="text-center text-slate-400 font-normal py-2 px-3">Free</th>
-              <th className="text-center text-purple-400 font-semibold py-2 px-3">Pro</th>
+              <th className="text-center text-slate-400 font-semibold py-2 px-3">Pro</th>
               <th className="text-center text-amber-400 font-semibold py-2 px-3">Premium</th>
               <th className="text-center text-rose-400 font-semibold py-2 px-3">Elite</th>
             </tr>
@@ -315,7 +315,7 @@ export function VendorSubscriptionView() {
               <tr key={row.feature}>
                 <td className="py-2.5 pr-4 text-slate-400">{row.feature}</td>
                 <td className="py-2.5 px-3 text-center text-slate-500">{row.free}</td>
-                <td className="py-2.5 px-3 text-center text-purple-300">{row.pro}</td>
+                <td className="py-2.5 px-3 text-center text-slate-300">{row.pro}</td>
                 <td className="py-2.5 px-3 text-center text-amber-300">{row.premium}</td>
                 <td className="py-2.5 px-3 text-center text-rose-300">{row.elite}</td>
               </tr>

@@ -12,7 +12,7 @@ interface Props {
 const barColor = (score: number) =>
   score >= 75 ? "from-emerald-500 to-emerald-400"
   : score >= 50 ? "from-amber-500 to-amber-400"
-  : "from-brand-500 to-purple-500";
+  : "from-[#0B1F4D] to-[#D4AF37]";
 
 const scoreTextColor = (score: number) =>
   score >= 75 ? "text-emerald-400"

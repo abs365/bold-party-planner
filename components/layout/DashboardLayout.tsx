@@ -289,7 +289,7 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
             )}
             <Link href="/dashboard/notifications" className="relative p-2 rounded-lg hover:bg-white/5">
               <Bell size={17} className="text-slate-400" />
-              <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full" />
+              <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
             </Link>
           </div>
         </header>

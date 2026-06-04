@@ -20,7 +20,7 @@ const STEP_ICONS: Record<string, React.ElementType> = {
 const SCORE_COLOR = (score: number) =>
   score >= 75 ? "from-emerald-500 to-emerald-400"
   : score >= 50 ? "from-amber-500 to-amber-400"
-  : score >= 25 ? "from-brand-500 to-purple-500"
+  : score >= 25 ? "from-[#0B1F4D] to-[#D4AF37]"
   : "from-slate-500 to-slate-400";
 
 const SCORE_TEXT = (score: number) =>

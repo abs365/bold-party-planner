@@ -19,7 +19,7 @@ type PilotStatus = typeof STATUSES[number];
 const STATUS_COLORS: Record<PilotStatus, string> = {
   prospect:   "bg-white/10 text-white/40 border-white/15",
   contacted:  "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  interested: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  interested: "bg-[#0B1F4D]/12 text-slate-300 border-[#0B1F4D]/15",
   registered: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
   approved:   "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
   verified:   "bg-teal-500/20 text-teal-300 border-teal-500/30",

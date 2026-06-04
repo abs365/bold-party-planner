@@ -165,8 +165,8 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
             style={{ width: 72, height: 72 }}
           />
         ) : (
-          <div className="w-[72px] h-[72px] rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-            <CalendarCheck className="w-7 h-7 text-purple-400" />
+          <div className="w-[72px] h-[72px] rounded-xl bg-slate-500/20 flex items-center justify-center flex-shrink-0">
+            <CalendarCheck className="w-7 h-7 text-slate-400" />
           </div>
         )}
         <div className="flex-1 min-w-0">
@@ -204,7 +204,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
               </span>
             )}
             {(quote.vendor?.response_rate ?? 0) >= 80 && (
-              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-purple-500/15 border border-purple-500/25 text-purple-300">
+              <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#0B1F4D]/10 border border-[#0B1F4D]/12 text-slate-300">
                 <Zap className="w-3 h-3" /> Fast Responder
               </span>
             )}

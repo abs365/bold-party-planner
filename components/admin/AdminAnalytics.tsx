@@ -41,7 +41,7 @@ export function AdminAnalytics({ stats, recentPayments, bookings, vendors }: Adm
     { icon: <Users size={20} className="text-blue-400" />, label: "Total Customers", value: String(stats?.total_customers ?? 0), sub: "Registered accounts" },
     { icon: <Building2 size={20} className="text-green-400" />, label: "Active Vendors", value: String(stats?.total_vendors ?? 0), sub: `${stats?.pending_vendors ?? 0} pending approval` },
     { icon: <ShoppingBag size={20} className="text-amber-400" />, label: "Total Bookings", value: String(stats?.total_bookings ?? 0), sub: `${bookingStatusCounts.completed ?? 0} completed` },
-    { icon: <Calendar size={20} className="text-purple-400" />, label: "Events Created", value: String(stats?.total_events ?? 0), sub: "Across all customers" },
+    { icon: <Calendar size={20} className="text-slate-400" />, label: "Events Created", value: String(stats?.total_events ?? 0), sub: "Across all customers" },
     { icon: <Star size={20} className="text-yellow-400" />, label: "Platform Rating", value: Number(stats?.avg_vendor_rating ?? 0).toFixed(1), sub: "Average vendor rating" },
   ];
 

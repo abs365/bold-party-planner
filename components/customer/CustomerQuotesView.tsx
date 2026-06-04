@@ -35,7 +35,7 @@ const STATUS_BADGE: Record<string, { label: string; color: string; icon: React.C
   pending:     { label: "Awaiting Response", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",  icon: Clock },
   responded:   { label: "Response Received", color: "bg-blue-500/20 text-blue-300 border-blue-500/30",        icon: MessageSquare },
   viewed:      { label: "Quote Viewed",      color: "bg-blue-500/20 text-blue-300 border-blue-500/30",        icon: MessageSquare },
-  shortlisted: { label: "Shortlisted",       color: "bg-purple-500/20 text-purple-300 border-purple-500/30",  icon: CheckCircle },
+  shortlisted: { label: "Shortlisted",       color: "bg-[#0B1F4D]/12 text-slate-300 border-[#0B1F4D]/15",  icon: CheckCircle },
   accepted:    { label: "Accepted",          color: "bg-green-500/20 text-green-300 border-green-500/30",     icon: CheckCircle },
   converted:   { label: "Booking Created",   color: "bg-green-500/20 text-green-300 border-green-500/30",     icon: CheckCircle },
   rejected:    { label: "Not Selected",      color: "bg-white/10 text-white/40 border-white/20",              icon: MessageSquare },
@@ -129,8 +129,8 @@ export function CustomerQuotesView({ quotes }: CustomerQuotesViewProps) {
             {cover ? (
               <Image src={cover.url} alt="" width={64} height={64} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
             ) : (
-              <div className="w-16 h-16 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-                <MessageSquare className="w-6 h-6 text-purple-400" />
+              <div className="w-16 h-16 rounded-lg bg-slate-500/20 flex items-center justify-center flex-shrink-0">
+                <MessageSquare className="w-6 h-6 text-slate-400" />
               </div>
             )}
 

@@ -56,7 +56,7 @@ const TIER_META: Record<TrustTier, { label: string; badgeClass: string; minRevie
   new:         { label: "New",          badgeClass: "bg-slate-50 text-slate-500 border-slate-200",     minReviews: 0,  minScore: 0  },
   trusted:     { label: "Trusted",      badgeClass: "bg-blue-50 text-blue-700 border-blue-200",        minReviews: 5,  minScore: 50 },
   top_rated:   { label: "Top Rated",    badgeClass: "bg-amber-50 text-amber-700 border-amber-200",     minReviews: 15, minScore: 75 },
-  exceptional: { label: "Exceptional",  badgeClass: "bg-purple-50 text-purple-700 border-purple-200",  minReviews: 30, minScore: 90 },
+  exceptional: { label: "Exceptional",  badgeClass: "bg-slate-50 text-[#0B1F4D] border-slate-200",  minReviews: 30, minScore: 90 },
 };
 
 function resolveTier(score: number, reviewCount: number): TrustTier {

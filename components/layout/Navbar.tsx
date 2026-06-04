@@ -120,7 +120,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                 )}
               >
                 <Bell size={18} className={lightBg ? "text-gray-500" : "text-slate-400"} />
-                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-500 rounded-full" />
+                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full" />
               </Link>
 
               <div className="relative" ref={profileRef}>

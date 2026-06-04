@@ -67,7 +67,7 @@ export function getStatusColor(status: string): string {
     planning: "bg-blue-100 text-blue-800",
     deposit_paid: "bg-cyan-100 text-cyan-800",
     fully_paid: "bg-green-100 text-green-800",
-    refunded: "bg-purple-100 text-purple-800",
+    refunded: "bg-slate-100 text-slate-700",
     failed: "bg-red-100 text-red-800",
   };
   return colors[status] ?? "bg-slate-100 text-slate-800";

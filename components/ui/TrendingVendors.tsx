@@ -70,7 +70,7 @@ function TrendingVendorCard({ vendor, rank }: { vendor: Vendor; rank: number }) 
               sizes="(max-width: 640px) 240px, 25vw"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-900/40 to-violet-900/40">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-900/40 to-[#0B1F4D]/40">
               <span className="text-5xl">{cat?.icon}</span>
             </div>
           )}

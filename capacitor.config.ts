@@ -27,7 +27,7 @@ const config: CapacitorConfig = {
       androidScaleType: "CENTER_CROP",
       showSpinner: false,
       iosSpinnerStyle: "small",
-      spinnerColor: "#d946ef",
+      spinnerColor: "#0B1F4D",
     },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],

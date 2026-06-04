@@ -54,7 +54,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending:     "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
   responded:   "bg-blue-500/20 text-blue-300 border-blue-500/30",
   viewed:      "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  shortlisted: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  shortlisted: "bg-[#0B1F4D]/12 text-slate-300 border-[#0B1F4D]/15",
   converted:   "bg-green-500/20 text-green-300 border-green-500/30",
   accepted:    "bg-green-500/20 text-green-300 border-green-500/30",
   rejected:    "bg-white/10 text-white/40 border-white/20",
@@ -95,7 +95,7 @@ function getActionSignal(quote: QuoteRow): { label: string; color: string; urgen
     return { label: "Customer reviewing",  color: "text-blue-400",   urgent: false };
   }
   if (quote.status === "shortlisted") {
-    return { label: "Comparing quotes",    color: "text-purple-400", urgent: false };
+    return { label: "Comparing quotes",    color: "text-slate-400", urgent: false };
   }
   if (quote.status === "converted") {
     return { label: "Booking live",        color: "text-emerald-400",urgent: false };
@@ -184,7 +184,7 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
         <StatCard label="Total"        value={stats.total}                  color="text-slate-400"   icon={Filter} />
         <StatCard label="Pending"      value={stats.pending}                color="text-yellow-400"  icon={Clock} />
         <StatCard label="Responded"    value={stats.responded}              color="text-blue-400"    icon={MessageSquare} />
-        <StatCard label="Shortlisted"  value={stats.shortlisted}            color="text-purple-400"  icon={Eye} />
+        <StatCard label="Shortlisted"  value={stats.shortlisted}            color="text-slate-400"  icon={Eye} />
         <StatCard label="Converted"    value={stats.converted}              color="text-emerald-400" icon={CheckCircle} />
         <StatCard label="Declined"     value={stats.declined}               color="text-red-400"     icon={XCircle} />
         <StatCard label="Expired"      value={stats.expired}                color="text-slate-500"   icon={AlertCircle} />

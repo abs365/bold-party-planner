@@ -41,7 +41,7 @@ interface Props {
 
 const PLAN_COLOR: Record<string, string> = {
   free:     "bg-slate-500/30 text-slate-300",
-  pro:      "bg-purple-500/30 text-purple-300",
+  pro:      "bg-slate-500/20 text-slate-300",
   featured: "bg-amber-500/30 text-amber-300",
   premium:  "bg-amber-500/30 text-amber-300",
   elite:    "bg-rose-500/30 text-rose-300",
@@ -126,7 +126,7 @@ export function AdminMonetizationDashboard({ initialData }: Props) {
           </div>
           <div className="mt-4 pt-3 border-t border-white/10 flex justify-between text-xs text-gray-500">
             <span>Total vendors: {summary.total_vendors}</span>
-            <span className="text-purple-400">{summary.paying_vendors} paying</span>
+            <span className="text-slate-400">{summary.paying_vendors} paying</span>
           </div>
         </div>
 

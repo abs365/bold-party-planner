@@ -209,8 +209,8 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
               <div className="w-12 h-12 rounded-xl bg-brand-500/15 flex items-center justify-center">
                 <ImageIcon size={22} className="text-brand-400" />
               </div>
-              <div className="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                <Video size={22} className="text-purple-400" />
+              <div className="w-12 h-12 rounded-xl bg-slate-500/15 flex items-center justify-center">
+                <Video size={22} className="text-slate-400" />
               </div>
             </div>
             <div>

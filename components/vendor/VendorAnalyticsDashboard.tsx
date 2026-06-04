@@ -84,7 +84,7 @@ export function VendorAnalyticsDashboard() {
 
   const stats = [
     { label: "Profile Views", value: summary.profile_views, icon: Eye, color: "text-blue-400", bg: "bg-blue-500/10", sub: `last ${period} days` },
-    { label: "Quote Requests", value: summary.quote_requests, icon: MessageSquare, color: "text-purple-400", bg: "bg-purple-500/10", sub: "from customers" },
+    { label: "Quote Requests", value: summary.quote_requests, icon: MessageSquare, color: "text-slate-400", bg: "bg-slate-500/10", sub: "from customers" },
     { label: "Confirmed Bookings", value: summary.confirmed_bookings, icon: ShoppingBag, color: "text-green-400", bg: "bg-green-500/10", sub: "completed" },
     { label: "Revenue", value: formatCurrency(summary.revenue), icon: DollarSign, color: "text-amber-400", bg: "bg-amber-500/10", sub: "from paid bookings" },
     { label: "Conversion Rate", value: `${summary.conversion_rate}%`, icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", sub: "quotes → bookings" },
@@ -211,7 +211,7 @@ export function VendorAnalyticsDashboard() {
               labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
               formatter={(val) => [Number(val ?? 0), "Bookings"]}
             />
-            <Bar dataKey="bookings" fill="#d946ef" opacity={0.8} radius={[3, 3, 0, 0]} />
+            <Bar dataKey="bookings" fill="#0B1F4D" opacity={0.8} radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

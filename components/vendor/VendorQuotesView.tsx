@@ -18,7 +18,7 @@ const STATUS_COLORS: Record<string, string> = {
   pending:     "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
   responded:   "bg-blue-500/20 text-blue-300 border-blue-500/30",
   viewed:      "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  shortlisted: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  shortlisted: "bg-[#0B1F4D]/12 text-slate-300 border-[#0B1F4D]/15",
   converted:   "bg-green-500/20 text-green-300 border-green-500/30",
   accepted:    "bg-green-500/20 text-green-300 border-green-500/30",
   declined:    "bg-red-500/20 text-red-300 border-red-500/30",
@@ -381,7 +381,7 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
     <div className="space-y-8">
       <div className="flex items-center gap-6 flex-wrap text-sm">
         <Stat icon={Clock}       label="Needs Response" count={actionable.length}  color="text-yellow-400" />
-        <Stat icon={MessageSquare} label="Shortlisted"   count={shortlisted.length} color="text-purple-400" />
+        <Stat icon={MessageSquare} label="Shortlisted"   count={shortlisted.length} color="text-slate-400" />
         <Stat icon={CheckCircle} label="Won"             count={historical.filter(q => ["converted","accepted"].includes(q.status)).length} color="text-green-400" />
         <Stat icon={XCircle}     label="Lost"            count={historical.filter(q => !["converted","accepted"].includes(q.status)).length} color="text-white/30" />
       </div>

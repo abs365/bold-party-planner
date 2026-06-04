@@ -92,7 +92,7 @@ export function VendorTrustBadge({
     badges.push({ icon: Clock,      label: "Fast Responder",    color: "text-blue-400" });
   }
   if (yearsExperience && yearsExperience >= 3) {
-    badges.push({ icon: Award,      label: `${yearsExperience}+ Years Exp.`, color: "text-purple-400" });
+    badges.push({ icon: Award,      label: `${yearsExperience}+ Years Exp.`, color: "text-slate-400" });
   }
 
   if (badges.length === 0) return null;
@@ -227,7 +227,7 @@ export function CompletedJobsPill({ reviewCount, className }: CompletedJobsPillP
   if (!reviewCount || reviewCount < 1) return null;
   const jobsEstimate = Math.floor(reviewCount * 1.4);
   return (
-    <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-purple-200 bg-purple-50 text-purple-700 text-xs font-medium", className)}>
+    <span className={cn("inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-[#0B1F4D] text-xs font-medium", className)}>
       <Users size={10} />
       {jobsEstimate}+ events completed
     </span>

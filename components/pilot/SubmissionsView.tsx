@@ -155,7 +155,7 @@ export function SubmissionsView({ submissions }: SubmissionsViewProps) {
                   <div className="col-span-1">
                     <span className={cn("text-xs font-semibold px-2 py-0.5 rounded-full capitalize",
                       s.test_type === "customer" ? "bg-brand-500/20 text-brand-300" :
-                      s.test_type === "vendor"   ? "bg-purple-500/20 text-purple-300" :
+                      s.test_type === "vendor"   ? "bg-slate-500/20 text-slate-300" :
                       "bg-amber-500/20 text-amber-300")}>
                       {s.test_type.slice(0,3)}
                     </span>
