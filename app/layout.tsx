@@ -8,7 +8,7 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
 
 export const viewport: Viewport = {
   width: "device-width",

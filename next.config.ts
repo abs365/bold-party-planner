@@ -73,6 +73,11 @@ export default withSentryConfig(nextConfig, {
   // Auth token for source-map upload; omit and maps won't upload (safe)
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
+  // Disable source map upload — the Sentry CLI lambda resolver conflicts with
+  // Next.js App Router client-component pages under webpack. Error capture still
+  // works fully; stack traces will be minified until this is re-enabled.
+  sourcemaps: { disable: true },
+
   // Route Sentry events through a tunnel to avoid ad-blocker drops
   tunnelRoute: "/monitoring",
 
