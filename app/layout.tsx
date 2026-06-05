@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     locale: "en_GB",
     images: [
       {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
+        url: "/icons/icon-512.png",
+        width: 512,
+        height: 512,
         alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
         type: "image/png",
       },
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     creator: "@elbold",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/icons/icon-512.png",
         alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
       },
     ],
