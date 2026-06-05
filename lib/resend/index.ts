@@ -355,3 +355,30 @@ export async function sendEventCreated(
     <p style="margin-top:24px;font-size:13px;color:#6b7280">If quote requests were sent to vendors, you will hear back within 24 hours.</p>`
   ));
 }
+
+export async function sendSubscriptionPaymentFailed(
+  to: string,
+  vendorName: string,
+  plan: string,
+  failCount: number
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+  const retriesLeft = Math.max(0, 4 - failCount);
+  const retriesLine = retriesLeft > 0
+    ? `<p><span class="detail-label">Retries remaining:</span> <span class="detail-value">${retriesLeft} (Stripe will retry automatically)</span></p>`
+    : `<p><span class="detail-label">Status:</span> <span class="detail-value" style="color:#dc2626">Final attempt reached — subscription will cancel if unpaid</span></p>`;
+  return send(to, "Action required: subscription payment failed — ELBOLD Events", wrap(
+    "Payment Failed — Action Required",
+    `<p>Hi ${vendorName},</p>
+    <p>We were unable to process your <span class="highlight">${planLabel} plan</span> subscription renewal.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Plan:</span> <span class="detail-value">${planLabel}</span></p>
+      <p><span class="detail-label">Attempt:</span> <span class="detail-value">${failCount} of 4</span></p>
+      ${retriesLine}
+    </div>
+    <p>To avoid losing your paid features, please update your payment method now.</p>
+    <a href="${appUrl}/vendor/subscription" class="btn">Update Payment Method</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">Once your payment is updated, your features will be restored immediately. If you believe this is an error, contact <a href="mailto:support@elbold.com" style="color:#0d1b3e">support@elbold.com</a>.</p>`
+  ));
+}

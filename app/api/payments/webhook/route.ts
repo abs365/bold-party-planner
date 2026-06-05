@@ -282,6 +282,12 @@ export async function POST(request: Request) {
           last_payment_at: new Date().toISOString(),
         }).eq("id", sub.id);
 
+        // Restore featured flag for plans that are featured-eligible.
+        // This reinstates featured placement removed during invoice.payment_failed.
+        const featuredEligiblePlans = ["featured", "premium", "elite"];
+        const shouldBeFeatured = featuredEligiblePlans.includes(sub.plan ?? "");
+        await supabase.from("vendors").update({ featured: shouldBeFeatured }).eq("id", sub.vendor_id);
+
         await supabase.from("subscription_billing_events").insert({
           vendor_id: sub.vendor_id,
           vendor_subscription_id: sub.id,
@@ -312,6 +318,11 @@ export async function POST(request: Request) {
           failed_payment_count: failCount,
         }).eq("id", sub.id);
 
+        // Remove featured placement immediately — featured slot has monetary value and
+        // must not be held by a non-paying vendor during the Stripe retry window (up to 14 days).
+        // Restored automatically when invoice.paid fires.
+        await supabase.from("vendors").update({ featured: false }).eq("id", sub.vendor_id);
+
         await supabase.from("subscription_billing_events").insert({
           vendor_id: sub.vendor_id,
           vendor_subscription_id: sub.id,
@@ -323,16 +334,37 @@ export async function POST(request: Request) {
           failure_reason: (invoice.last_finalization_error as Record<string, string> | null)?.message ?? "Payment failed",
         });
 
-        // Notify vendor
-        const { data: vendor } = await supabase.from("vendors").select("user_id").eq("id", sub.vendor_id).maybeSingle();
+        // Notify vendor in-app + email
+        const { data: vendor } = await supabase
+          .from("vendors")
+          .select("user_id, business_name")
+          .eq("id", sub.vendor_id)
+          .maybeSingle();
+
         if (vendor?.user_id) {
           void supabase.rpc("notify_user", {
             p_user_id: vendor.user_id,
-            p_title: "Payment Failed",
-            p_message: "Your subscription payment failed. Please update your payment method to avoid losing access.",
+            p_title: "Payment Failed — Action Required",
+            p_message: "Your subscription payment failed. Please update your payment method to restore your features.",
             p_type: "system",
             p_link: "/vendor/subscription",
           });
+
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("email, full_name")
+            .eq("id", vendor.user_id)
+            .maybeSingle();
+
+          if (profile?.email) {
+            const { sendSubscriptionPaymentFailed } = await import("@/lib/resend");
+            void sendSubscriptionPaymentFailed(
+              profile.email,
+              profile.full_name ?? vendor.business_name ?? "Vendor",
+              sub.plan,
+              failCount
+            );
+          }
         }
       }
     }

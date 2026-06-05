@@ -4,6 +4,7 @@ import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
 import { rateLimit } from "@/lib/rate-limit";
+import { getMaxImages, planDisplayName } from "@/lib/vendor/entitlements";
 
 // Allow up to 60 s for large file uploads on Vercel Pro/Enterprise.
 // Note: serverActions.bodySizeLimit in next.config.ts does NOT apply to Route
@@ -118,7 +119,7 @@ export async function POST(request: Request) {
     // ── Vendor ownership check ────────────────────────────────────────────────
     const { data: vendor } = await supabase
       .from("vendors")
-      .select("id")
+      .select("id, subscription_plan")
       .eq("id", vendorId)
       .eq("user_id", user.id)
       .single();
@@ -127,15 +128,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Vendor not found or access denied" }, { status: 403 });
     }
 
-    // Check media count limit (max 20)
+    // Check media count against the vendor's plan limit
     const { count } = await supabase
       .from("vendor_media")
       .select("id", { count: "exact", head: true })
       .eq("vendor_id", vendorId)
       .is("deleted_at", null);
 
-    if ((count ?? 0) >= 20) {
-      return NextResponse.json({ error: "Maximum of 20 media files per vendor" }, { status: 400 });
+    const mediaLimit = getMaxImages(vendor.subscription_plan ?? "free");
+    // -1 means unlimited (Elite plan); only enforce finite limits
+    if (mediaLimit !== -1 && (count ?? 0) >= mediaLimit) {
+      const planName = planDisplayName(vendor.subscription_plan ?? "free");
+      return NextResponse.json(
+        { error: `Your ${planName} plan allows a maximum of ${mediaLimit} media files. Upgrade your plan to upload more.` },
+        { status: 400 }
+      );
     }
 
     // ── Upload to Supabase Storage ────────────────────────────────────────────
