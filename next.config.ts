@@ -70,12 +70,13 @@ export default withSentryConfig(nextConfig, {
   org:     process.env.SENTRY_ORG     ?? "",
   project: process.env.SENTRY_PROJECT ?? "elbold-events",
 
-  // Auth token for source-map upload; omit and maps won't upload (safe)
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-
-  // Disable source map upload — the Sentry CLI lambda resolver conflicts with
-  // Next.js App Router client-component pages under webpack. Error capture still
-  // works fully; stack traces will be minified until this is re-enabled.
+  // Auth token is intentionally omitted so sentry-cli does not run during the
+  // build. The CLI requires SENTRY_ORG + SENTRY_PROJECT to match an existing
+  // Sentry project — until those are confirmed, keeping this undefined prevents
+  // "Project not found" build failures. Error capture via DSN works without it.
+  // Re-enable by setting authToken: process.env.SENTRY_AUTH_TOKEN once the
+  // org/project names are verified in the Sentry dashboard.
+  authToken: undefined,
   sourcemaps: { disable: true },
 
   // Route Sentry events through a tunnel to avoid ad-blocker drops
