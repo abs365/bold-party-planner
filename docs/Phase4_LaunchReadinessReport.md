@@ -1,82 +1,115 @@
-# ELBOLD Phase 4 — Launch Readiness Report
+# ELBOLD Launch Readiness Report
 
-**Date:** 2026-06-07  
-**Prepared by:** Founder review  
-**Branch:** design/phase-2-visual-improvements  
-**Evidence basis:** Code inspection + real-world mission results (complete Missions 3–5 before finalising sections 4–8)
+**Updated:** 2026-06-07
+**Sprint:** Pre-Launch Operations
+**Branch:** design/phase-2-visual-improvements
+**Evidence basis:** Code inspection complete (Phases 1-5). Real-world evidence to be completed during Pre-Launch Operations Sprint.
 
 ---
 
 ## Final Recommendation
 
-> **[ ] GO**  
-> **[ ] GO WITH CAUTION** ← Complete this after Mission 5  
+> **[ ] GO**
+> **[ ] GO WITH CAUTION**
 > **[ ] NO-GO**
 
-*Update this box after completing all 8 missions. The recommendation must be based on real-world evidence, not code inspection.*
+Complete this box after all 6 pre-launch priorities are resolved.
+
+GO requires: verified vendor cohort live, quote/booking/payment cycle tested end-to-end, concierge system operational.
+
+GO WITH CAUTION: platform functional but vendor cohort below 5, or payment test deferred.
+
+NO-GO: fewer than 3 approved vendors, or quote/booking/payment test produces critical failures.
 
 ---
 
 ## Section 1 — Technology
 
 ### Build Status
-- Build: **PASSING** — 91 pages compiled, 0 TypeScript errors (as of 2026-06-07)
-- Branch: `design/phase-2-visual-improvements`
+
+- Build: PASSING — confirmed clean 2026-06-07 after Phase 5 commit
+- Branch: design/phase-2-visual-improvements
+- Commit: 072100e (Phase 5 complete)
 - Hosting: Vercel (Hobby plan)
 - Framework: Next.js 16 App Router + Supabase + Stripe + Resend
 
-### Infrastructure Assessment
+### Infrastructure
 
 | Component | Status | Notes |
 |---|---|---|
-| Next.js App Router | ✅ Operational | `force-dynamic` applied to all data pages |
-| Supabase (Auth + DB) | ✅ Operational | Admin client (RLS bypass) in place |
-| Stripe Payments | ✅ Wired | Checkout + webhook handler implemented |
-| Resend Email | ✅ Wired | 28 email types, ELBOLD-branded templates |
-| Vercel Edge Functions | ✅ Within limits | OG image removed; Edge Functions < 1MB |
-| Cron Jobs | ✅ Wired | Reminders, expiry, review requests automated |
-| Sentry Error Tracking | ✅ Active | `--webpack` build flag required |
+| Next.js App Router | Ready | force-dynamic on all data pages |
+| Supabase Auth + DB | Ready | Admin client (RLS bypass) in place |
+| Stripe Payments | Ready | Checkout + webhook implemented |
+| Resend Email | Ready | 28+ email types, branded templates |
+| Cron Jobs | Ready | Reminders, expiry, review requests |
+| Sentry Error Tracking | Ready | webpack build flag required |
+| Push Notifications | Ready | VAPID keys configured |
 
-### Known Limitations
-- **Vercel Hobby plan:** 100GB bandwidth, no SLA — acceptable for launch, monitor usage
-- **No Redis/rate limiting beyond Supabase RPC:** Quote creation rate limited at application level (20/hour, 100/day per user)
-- **No CDN for media uploads:** Vendor images served from Supabase Storage — monitor if slow
+### Phase 5 Additions (all compiled and passing)
 
-### Technology Verdict: **READY**
+| Feature | Route | Status |
+|---|---|---|
+| Concierge request form | /concierge | Live — migration 041 needed |
+| Concierge API | /api/concierge | Live |
+| Admin concierge panel | /admin/concierge | Live |
+| Vendor recruitment dashboard | /admin/recruitment | Live |
+| Founding vendor FAQ | /vendor-faq | Live |
+| Vendor cohort queue | /admin/cohort | Live |
+| Verification audit | /admin/verification-audit | Live |
+| Founder dashboard | /admin/founder | Live |
+| Vendor activation tracker | /admin/vendor-activation | Live |
+
+### Pending Manual Actions (technology)
+
+- [ ] Apply migration 041_concierge_requests.sql in Supabase SQL Editor
+- [ ] Confirm Stripe webhook registered in Stripe Dashboard (checkout.session.completed, invoice.paid, payment_intent.payment_failed)
+- [ ] Confirm DKIM/SPF records active for noreply@elbold.com in Resend dashboard
+- [ ] Confirm ADMIN_EMAILS env var set in Vercel production
+
+### Technology Verdict: READY (pending manual actions above)
 
 ---
 
 ## Section 2 — Vendors
 
-### Cohort Status
+### Cohort Status (fill from /admin/cohort after Priority 2)
 
 | Status | Count | Target |
 |---|---|---|
-| Approved | *[fill after Mission 1]* | 10 |
-| Pending | *[fill after Mission 1]* | — |
-| Verified (ID+) | *[fill after Mission 2]* | All approved |
+| Approved | | 10 |
+| Pending — approve-ready | | |
+| Pending — needs work | | |
+| Verified (ID+ Level 2) | | All approved |
 
-### Priority Vendors Approved?
-- [ ] Mastaly — approved: Y/N · readiness: __%
-- [ ] Baptist — approved: Y/N · readiness: __%  
-- [ ] Tinms — approved: Y/N · readiness: __%
+### Priority Vendors
 
-### Vendor Quality Bar
-Average readiness score of approved vendors: **__%**  
-Vendors with 3+ photos: **__ / [total]**  
-Vendors with 1+ packages: **__ / [total]**  
-Vendors with 50+ char bio: **__ / [total]**
+- [ ] Mastaly — approved: Y/N · readiness score: __%
+- [ ] Baptist — approved: Y/N · readiness score: __%
+- [ ] Tinms — approved: Y/N · readiness score: __%
+
+### Vendor Quality
+
+Average readiness score of all approved vendors: __%
+
+| Quality Check | Count | Total Approved |
+|---|---|---|
+| 3+ photos | | |
+| 1+ packages | | |
+| 50+ char bio | | |
+| Phone provided | | |
+| ID verified (L2+) | | |
 
 ### Vendors Verdict
-- [ ] **READY** — 5+ approved vendors, all with packages and photos
-- [ ] **CAUTION** — Fewer than 5 approved vendors or significant quality gaps
-- [ ] **NO-GO** — Fewer than 3 approved vendors
+
+- [ ] READY — 5+ approved vendors, all with packages and photos
+- [ ] CAUTION — fewer than 5 approved, or significant quality gaps
+- [ ] NO-GO — fewer than 3 approved vendors
 
 ---
 
 ## Section 3 — Verification
 
-### Audit Results (from Mission 2)
+### Audit Results (fill from /admin/verification-audit after Priority 3)
 
 | Check | Passed | Failed |
 |---|---|---|
@@ -86,126 +119,136 @@ Vendors with 50+ char bio: **__ / [total]**
 | ID verified (L2+) | | |
 | Address verified (L3+) | | |
 
-### Trust Badge Policy Compliance
-Are any vendors displaying trust badges they haven't earned?  
+### Trust Badge Compliance
+
+Are any vendors displaying trust badges they have not earned?
+
 - [ ] No — all badges match verification evidence
-- [ ] Yes — **list vendors:** _____________
+- [ ] Yes — list vendors: _____________
 
 ### Verification Verdict
-- [ ] **READY** — All approved vendors have at minimum email + phone verified
-- [ ] **CAUTION** — Some vendors unverified but not displaying false badges
-- [ ] **NO-GO** — Verified badges appearing without supporting evidence
+
+- [ ] READY — all approved vendors have phone provided + email confirmed
+- [ ] CAUTION — some vendors unverified but no false badges displaying
+- [ ] NO-GO — any verified badge displaying without supporting ID document reviewed
 
 ---
 
 ## Section 4 — Quotes
 
-*Complete Mission 3 before filling this section.*
+Complete Priority 6 (First Booking Mission — Part 1) before filling this.
 
-### Mission 3 Results
-
-| Metric | Result |
-|---|---|
-| Test quote created successfully | Y/N |
-| Customer confirmation email delivered | Y/N |
-| Vendor in-app notification received | Y/N |
-| Vendor email delivered | Y/N |
-| Vendor response submitted | Y/N |
-| Customer received vendor quote notification | Y/N |
-| Response time | __ minutes |
-| Any errors observed | |
+| Test | Result | Notes |
+|---|---|---|
+| Test quote created successfully | | |
+| Customer confirmation displayed | | |
+| Vendor in-app notification received | | |
+| Vendor email delivered | | |
+| Vendor response submitted | | |
+| Customer received vendor response notification | | |
+| Response time | | minutes |
 
 ### Quote Flow Verdict
-- [ ] **READY** — All steps completed without errors, all emails delivered
-- [ ] **CAUTION** — Minor issues (e.g. email in spam, slight delay)
-- [ ] **NO-GO** — Critical failure (quote not created, vendor not notified, or no email delivery)
+
+- [ ] READY — all steps completed, all notifications delivered
+- [ ] CAUTION — minor issues (email in spam, slight delay)
+- [ ] NO-GO — quote not created, vendor not notified, or no email delivery
 
 ---
 
 ## Section 5 — Bookings
 
-*Complete Mission 4 before filling this section.*
+Complete Priority 6 (First Booking Mission — Part 2) before filling this.
 
-### Mission 4 Results
-
-| Metric | Result |
-|---|---|
-| Quote accepted successfully | Y/N |
-| Booking record created in DB | Y/N |
-| Booking status correct (pending_payment) | Y/N |
-| Vendor notified (in-app + email) | Y/N |
-| Customer received booking email | Y/N |
-| Booking visible in admin panel | Y/N |
-| Any errors observed | |
+| Test | Result | Notes |
+|---|---|---|
+| Quote accepted successfully | | |
+| Booking record created in DB | | |
+| Booking status = pending_payment | | |
+| Vendor notified (in-app + email) | | |
+| Customer received booking email | | |
+| Booking visible in admin panel | | |
 
 ### Bookings Verdict
-- [ ] **READY** — Booking created correctly, all notifications delivered
-- [ ] **CAUTION** — Minor issues (duplicate notifications, UI inconsistency)
-- [ ] **NO-GO** — Booking not created or vendor not notified
+
+- [ ] READY — booking created, all notifications delivered
+- [ ] CAUTION — minor issues (duplicate notifications, UI inconsistency)
+- [ ] NO-GO — booking not created or vendor not notified
 
 ---
 
 ## Section 6 — Payments
 
-*Complete Mission 5 before filling this section.*
+Complete Priority 6 (First Booking Mission — Part 3) before filling this.
 
-### Mission 5 Results
-
-| Metric | Result |
-|---|---|
-| Stripe Checkout loaded correctly | Y/N |
-| Test card accepted | Y/N |
-| Redirect to success page | Y/N |
-| Success page shows correct booking | Y/N |
-| Booking payment_status = deposit_paid | Y/N |
-| Booking status = confirmed | Y/N |
-| Payment record in DB | Y/N |
-| Commission amount correct (10%) | Y/N |
-| Customer payment email delivered | Y/N |
-| Vendor payment notification delivered | Y/N |
-| Stripe Dashboard shows payment | Y/N |
-| Stripe Payment Intent ID | |
-| Any errors observed | |
+| Test | Result | Notes |
+|---|---|---|
+| Stripe Checkout loaded correctly | | |
+| Checkout amount correct | | |
+| Booking status = confirmed after payment | | |
+| Booking payment_status = deposit_paid | | |
+| Payment record in DB | | |
+| Commission amount correct (10%) | | |
+| Customer payment email delivered | | |
+| Vendor payment notification delivered | | |
+| Stripe Dashboard shows payment | | |
+| Stripe Payment Intent ID | | |
 
 ### Payments Verdict
-- [ ] **READY** — Full payment cycle completed, webhook processed, all records correct
-- [ ] **CAUTION** — Payment succeeded but minor issues (email delay, minor UI)
-- [ ] **NO-GO** — Payment failed, webhook not processed, or records missing
+
+- [ ] READY — full cycle completed, webhook processed, records correct
+- [ ] DEFERRED — checkout confirmed working, real payment deferred to first real customer
+- [ ] NO-GO — Stripe Checkout fails to load, or webhook not processing
 
 ---
 
-## Section 7 — Reviews
+## Section 7 — Concierge System
 
-### Review Infrastructure Assessment
+Complete Priority 1 and Priority 5 before filling this.
+
+| Test | Result | Notes |
+|---|---|---|
+| Migration 041 applied | | |
+| Form submission stores to DB | | |
+| Admin notification email received | | |
+| Customer confirmation email received | | |
+| Request appears in /admin/concierge | | |
+| Status update functional | | |
+| Full concierge journey completed | | |
+| Time from submission to vendor contact | | hours |
+| Vendor responded to admin | | |
+| Customer received vendor introduction | | |
+
+### Concierge Verdict
+
+- [ ] READY — system operational, full journey completed
+- [ ] PARTIAL — system operational but full journey not yet run
+- [ ] NO-GO — migration not applied, form not saving, or emails not delivering
+
+---
+
+## Section 8 — Reviews
+
+### Review Infrastructure
 
 | Component | Status |
 |---|---|
-| Review table in Supabase | ✅ Exists |
-| Cron job triggers review request 3 days post-event | ✅ Wired |
-| `sendReviewRequest` email function | ✅ Implemented |
-| Review submission page | ✅ Exists at `/reviews/submit` |
-| Reviews visible on vendor profile | ✅ Implemented |
-| Rating aggregation | ✅ Updates `vendor.rating` + `review_count` |
+| Review table in Supabase | Exists (migration 023) |
+| Cron job triggers review request 3 days post-event | Wired |
+| sendReviewRequest email function | Implemented |
+| Review submission page | At /reviews/submit |
+| Reviews visible on vendor profile | Implemented |
+| Rating aggregation | Updates vendor.rating + review_count |
 
-### Review Status
-- Live reviews collected: **__ reviews** (fill after Mission 5)
-- Average rating: **__ stars**
-- Review request email delivery: Y/N / not yet tested
+Live reviews collected: __ (zero until first booking completes)
 
-### Reviews Verdict
-- **READY** (infrastructure only — live reviews will follow first completed booking)
+### Reviews Verdict: READY (infrastructure complete, reviews follow first completed booking)
 
 ---
 
-## Section 8 — Marketplace Liquidity
+## Section 9 — Marketplace Liquidity
 
-### Liquidity Definition
-A marketplace is liquid when customers can find what they're looking for, and vendors can fill their calendars. Minimum viable liquidity requires:
-- 3+ vendors per major category in target geography
-- Vendors responding to quotes within 24 hours
-- At least 1 completed booking to prove the full loop works
-
-### Current Liquidity Assessment
+Fill this from /admin/vendors?status=approved after completing Priority 2.
 
 | Category | Approved Vendors | Packages | Photos | Verdict |
 |---|---|---|---|---|
@@ -213,41 +256,64 @@ A marketplace is liquid when customers can find what they're looking for, and ve
 | Photographer | | | | |
 | Decorator | | | | |
 | Caterer | | | | |
-| Cake | | | | |
-| *Other* | | | | |
+| Cake designer | | | | |
+| Other | | | | |
 
-*Fill this table from `/admin/vendors?status=approved` after Mission 1 is complete.*
+Geographic coverage (London / Kent / Essex vendors): __ / __ total approved
 
-### Geographic Coverage
-Primary target: **Essex / London**  
-Vendors with Essex/London city set: **__ / [total approved]**
+### Liquidity Verdict
 
-### Marketplace Liquidity Verdict
-- [ ] **READY** — 2+ vendors in 3+ categories, all with packages and photos
-- [ ] **CAUTION** — Coverage in 1–2 categories only; soft-launch to a narrow audience
-- [ ] **NO-GO** — Single category covered; full marketplace launch premature
+- [ ] READY — 2+ vendors in 2+ categories, all with packages and photos
+- [ ] CAUTION — 1 category covered, soft-launch to matched concierge customers only
+- [ ] NO-GO — single vendor, no geographic spread
 
 ---
 
 ## Final Assessment Summary
 
-| Section | Verdict |
-|---|---|
-| 1. Technology | READY |
-| 2. Vendors | *Fill after Mission 1* |
-| 3. Verification | *Fill after Mission 2* |
-| 4. Quotes | *Fill after Mission 3* |
-| 5. Bookings | *Fill after Mission 4* |
-| 6. Payments | *Fill after Mission 5* |
-| 7. Reviews | READY (infrastructure) |
-| 8. Marketplace Liquidity | *Fill after Mission 1* |
-
-### Overall Recommendation
-
-**GO:** All sections READY, 5+ approved vendors, first payment successfully processed  
-**GO WITH CAUTION:** Technology, quotes, bookings, payments all pass — but vendor count < 5 or < 2 categories covered  
-**NO-GO:** Any critical failure in quotes, bookings, or payments; or fewer than 3 approved vendors
+| Section | Verdict | Updated |
+|---|---|---|
+| 1. Technology | READY (pending manual actions) | 2026-06-07 |
+| 2. Vendors | Fill after Priority 2 | |
+| 3. Verification | Fill after Priority 3 | |
+| 4. Quotes | Fill after Priority 6 | |
+| 5. Bookings | Fill after Priority 6 | |
+| 6. Payments | Fill after Priority 6 | |
+| 7. Concierge System | Fill after Priorities 1 and 5 | |
+| 8. Reviews | READY (infrastructure) | 2026-06-07 |
+| 9. Marketplace Liquidity | Fill after Priority 2 | |
 
 ---
 
-*This report is a living document. Update each section immediately after completing the corresponding mission. Do not update Section 8 until real vendor and booking data is in hand.*
+## Overall Recommendation Criteria
+
+### GO
+
+All of the following are true:
+- 5+ approved vendors, all with packages and photos
+- At least 3 vendors ID verified (Level 2+)
+- Quote, booking, and payment test completed without errors
+- Concierge system operational (migration applied, emails delivering)
+- No trust badges displaying without supporting evidence
+
+### GO WITH CAUTION
+
+The following are true, with documented exceptions:
+- 3-4 approved vendors (working toward 5)
+- Payment flow tested and confirmed working, or deferred with Stripe Checkout confirmed loading
+- Concierge system operational
+- All technology manual actions completed
+
+Soft-launch strategy: accept customers only through the concierge form (not open marketplace) until vendor count reaches 5.
+
+### NO-GO
+
+Any of the following:
+- Fewer than 3 approved vendors
+- Quote or booking flow produces critical failure (no notification, no DB record)
+- Stripe webhook not registered and payments cannot complete
+- Trust badges displaying without supporting verification documents
+
+---
+
+*Update each section as soon as the corresponding pre-launch priority is complete. The final recommendation should be updated on the day the last priority is resolved.*
