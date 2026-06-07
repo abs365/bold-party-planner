@@ -1,19 +1,22 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Phone, CheckCircle2, Loader2 } from "lucide-react";
+import { Phone, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
 import { updateProfilePhoneAction } from "@/app/actions/profile";
+import { PhoneVerifyModal } from "@/components/vendor/PhoneVerifyModal";
 
 interface PhoneEditFormProps {
   currentPhone: string | null;
   phoneVerified: boolean;
 }
 
-export function PhoneEditForm({ currentPhone, phoneVerified }: PhoneEditFormProps) {
+export function PhoneEditForm({ currentPhone, phoneVerified: initialPhoneVerified }: PhoneEditFormProps) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [pending, startTransition] = useTransition();
+  const [isVerified, setIsVerified] = useState(initialPhoneVerified);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   function handleSubmit(formData: FormData) {
     setError(null);
@@ -24,6 +27,7 @@ export function PhoneEditForm({ currentPhone, phoneVerified }: PhoneEditFormProp
         setError(result.error);
       } else {
         setSuccess(true);
+        setIsVerified(false);
         setEditing(false);
       }
     });
@@ -31,25 +35,41 @@ export function PhoneEditForm({ currentPhone, phoneVerified }: PhoneEditFormProp
 
   if (!editing) {
     return (
-      <div className="flex items-center justify-between py-3 border-b border-white/6">
-        <span className="text-sm text-slate-400">Phone</span>
-        <div className="flex items-center gap-2">
-          {phoneVerified && (
-            <span className="flex items-center gap-1 text-xs text-emerald-400">
-              <CheckCircle2 size={11} /> Verified
+      <>
+        <div className="flex items-center justify-between py-3 border-b border-white/6">
+          <span className="text-sm text-slate-400">Phone</span>
+          <div className="flex items-center gap-2">
+            {isVerified ? (
+              <span className="flex items-center gap-1 text-xs text-emerald-400">
+                <CheckCircle2 size={11} /> Verified
+              </span>
+            ) : currentPhone ? (
+              <button
+                onClick={() => setShowVerifyModal(true)}
+                className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 border border-amber-400/30 rounded-md px-2 py-0.5 transition-colors"
+              >
+                <ShieldCheck size={11} /> Verify
+              </button>
+            ) : null}
+            <span className="text-sm font-medium text-white">
+              {currentPhone ?? "Not set"}
             </span>
-          )}
-          <span className="text-sm font-medium text-white capitalize">
-            {currentPhone ?? "Not set"}
-          </span>
-          <button
-            onClick={() => { setEditing(true); setSuccess(false); }}
-            className="text-xs text-slate-500 hover:text-slate-300 underline transition-colors ml-2"
-          >
-            Edit
-          </button>
+            <button
+              onClick={() => { setEditing(true); setSuccess(false); }}
+              className="text-xs text-slate-500 hover:text-slate-300 underline transition-colors ml-2"
+            >
+              Edit
+            </button>
+          </div>
         </div>
-      </div>
+        {showVerifyModal && currentPhone && (
+          <PhoneVerifyModal
+            phone={currentPhone}
+            onVerified={() => setIsVerified(true)}
+            onClose={() => setShowVerifyModal(false)}
+          />
+        )}
+      </>
     );
   }
 
@@ -81,8 +101,8 @@ export function PhoneEditForm({ currentPhone, phoneVerified }: PhoneEditFormProp
         </button>
       </form>
       {error && <p className="text-xs text-red-400 mt-1.5 ml-5">{error}</p>}
-      {success && <p className="text-xs text-emerald-400 mt-1.5 ml-5">Phone number saved.</p>}
-      <p className="text-xs text-slate-600 mt-1.5 ml-5">UK numbers only. Visible to ELBOLD admin — not shown on your public profile.</p>
+      {success && <p className="text-xs text-emerald-400 mt-1.5 ml-5">Phone number saved. Click Verify to confirm your number.</p>}
+      <p className="text-xs text-slate-600 mt-1.5 ml-5">UK numbers only. Visible to ELBOLD admin - not shown on your public profile.</p>
     </div>
   );
 }

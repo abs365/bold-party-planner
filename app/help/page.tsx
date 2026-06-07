@@ -22,11 +22,11 @@ const CUSTOMER_FAQS = [
   },
   {
     q: "What is Booking Protection?",
-    a: "If a confirmed vendor cancels within 14 days of your event, ELBOLD will help you find a replacement and cover reasonable additional costs up to £100. Full details are on our Booking Protection page.",
+    a: "If a vendor cancels a confirmed booking for any reason, you receive a 100% refund of all amounts paid. We also help you find a replacement vendor. Full details are on our Booking Protection page.",
   },
   {
     q: "Can I get a refund?",
-    a: "Refund eligibility depends on when you cancel and the vendor's stated terms. Deposits are generally non-refundable within 60 days of the event. Contact support@elbold.com — we handle all disputes fairly.",
+    a: "Refund eligibility depends on when you cancel. Cancelling more than 30 days before the event: full refund minus a 5% processing fee. 15–30 days: 50% refund. 8–14 days: 25% refund. 7 days or fewer: no refund. See our Refund Policy page for full details.",
   },
   {
     q: "How do I cancel a quote request?",

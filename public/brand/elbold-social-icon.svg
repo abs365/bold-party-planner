@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!--
+    ELBOLD SOCIAL PROFILE ICON — 512x512
+    Navy background square with rounded corners, starburst mark centred.
+    Use for: Instagram profile, Facebook page, Twitter/X, LinkedIn, WhatsApp business
+  -->
+
+  <!-- Navy background -->
+  <rect width="512" height="512" rx="80" fill="#0B1F4D"/>
+
+  <!-- Starburst: 8 primary rays -->
+  <line x1="256" y1="256" x2="256" y2="60"   stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="394.6" y2="117.4" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="452" y2="256"  stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="394.6" y2="394.6" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="256" y2="452"  stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="117.4" y2="394.6" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="60"  y2="256"  stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  <line x1="256" y1="256" x2="117.4" y2="117.4" stroke="#D4AF37" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Starburst: 8 secondary rays -->
+  <line x1="256" y1="256" x2="256" y2="148"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="334" y2="178"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="364" y2="256"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="334" y2="334"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="256" y2="364"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="178" y2="334"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="148" y2="256"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+  <line x1="256" y1="256" x2="178" y2="178"  stroke="#D4AF37" stroke-width="5" stroke-linecap="round" opacity="0.36"/>
+
+  <!-- Centre disc — lighter navy so it sits on the bg -->
+  <circle cx="256" cy="256" r="110" fill="#162447"/>
+  <circle cx="256" cy="256" r="105" stroke="#D4AF37" stroke-width="2.5" fill="none" opacity="0.3"/>
+
+  <!-- EB monogram -->
+  <text
+    x="256" y="282"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-weight="700"
+    font-size="100"
+    letter-spacing="12"
+    fill="#D4AF37"
+  >EB</text>
+</svg>

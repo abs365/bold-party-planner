@@ -16,6 +16,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/founding-vendors`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
     { url: `${base}/login`, priority: 0.4, changeFrequency: "yearly", lastModified: now },
     { url: `${base}/signup`, priority: 0.5, changeFrequency: "yearly", lastModified: now },
+    // Trust & content pages
+    { url: `${base}/about`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/trust`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/our-commitments`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/vendor-standards`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/why-elbold`, priority: 0.7, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/how-we-verify`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
+    // Vendor acquisition & spotlights
+    { url: `${base}/vendor-spotlights`, priority: 0.7, changeFrequency: "weekly", lastModified: now },
+    // Resources hub
+    { url: `${base}/resources`, priority: 0.8, changeFrequency: "weekly", lastModified: now },
+    // Inspiration
+    { url: `${base}/inspire`, priority: 0.7, changeFrequency: "weekly", lastModified: now },
+    // Guides hub
+    { url: `${base}/guides`, priority: 0.8, changeFrequency: "weekly", lastModified: now },
+    // Support
+    { url: `${base}/support`, priority: 0.6, changeFrequency: "monthly", lastModified: now },
+    { url: `${base}/help`, priority: 0.5, changeFrequency: "monthly", lastModified: now },
     // Legal & trust pages
     { url: `${base}/booking-protection`, priority: 0.5, changeFrequency: "monthly", lastModified: now },
     { url: `${base}/privacy`, priority: 0.3, changeFrequency: "yearly", lastModified: now },
@@ -32,6 +50,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly" as const,
     lastModified: now,
   }));
+
+  // Location SEO pages
+  const locationRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}/essex`, priority: 0.85, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/kent`, priority: 0.85, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/london`, priority: 0.9, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/essex/djs`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/essex/photographers`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/essex/caterers`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/kent/djs`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/kent/photographers`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/kent/caterers`, priority: 0.8, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/london/djs`, priority: 0.85, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/london/photographers`, priority: 0.85, changeFrequency: "weekly" as const, lastModified: now },
+    { url: `${base}/london/caterers`, priority: 0.85, changeFrequency: "weekly" as const, lastModified: now },
+  ];
 
   // Approved vendor profile pages
   let vendorRoutes: MetadataRoute.Sitemap = [];
@@ -52,5 +86,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   } catch { /* non-fatal — sitemap still works without vendor URLs */ }
 
-  return [...staticRoutes, ...categoryRoutes, ...vendorRoutes];
+  const guideRoutes: MetadataRoute.Sitemap = [
+    "how-much-does-a-dj-cost-in-essex",
+    "wedding-planning-checklist-uk",
+    "how-to-choose-a-photographer",
+    "birthday-party-planning-guide",
+    "corporate-event-planning-checklist",
+  ].map((slug) => ({
+    url: `${base}/guides/${slug}`,
+    priority: 0.7,
+    changeFrequency: "monthly" as const,
+    lastModified: now,
+  }));
+
+  return [...staticRoutes, ...categoryRoutes, ...locationRoutes, ...guideRoutes, ...vendorRoutes];
 }

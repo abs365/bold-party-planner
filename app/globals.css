@@ -278,6 +278,10 @@
 .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .line-clamp-3 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
 
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
 /* iOS safe-area insets (used by MobileBottomNav and install prompt) */
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);

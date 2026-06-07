@@ -194,7 +194,10 @@ function LoginForm() {
 
           <p className="text-center text-sm text-gray-400 mt-6 font-light">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-gray-900 hover:opacity-70 font-semibold transition-opacity">
+            <Link
+              href={redirectTo !== "/dashboard" ? `/signup?redirect=${encodeURIComponent(redirectTo)}` : "/signup"}
+              className="text-gray-900 hover:opacity-70 font-semibold transition-opacity"
+            >
               Create one free
             </Link>
           </p>

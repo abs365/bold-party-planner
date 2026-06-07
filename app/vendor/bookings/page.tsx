@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { ShoppingBag, Calendar, Users } from "lucide-react";
+import { ShoppingBag, Calendar, Users, Camera, ArrowRight } from "lucide-react";
 import type { Booking } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +27,7 @@ export default async function VendorBookingsPage() {
     .order("created_at", { ascending: false });
 
   const allBookings = (bookings ?? []) as Booking[];
-  const statuses = ["pending", "accepted", "confirmed", "completed", "rejected", "cancelled"];
+  const statuses = ["pending", "accepted", "pending_payment", "confirmed", "completed", "rejected", "cancelled"];
 
   return (
     <DashboardLayout user={profile}>
@@ -53,10 +53,24 @@ export default async function VendorBookingsPage() {
 
         <div className="space-y-3">
           {allBookings.length === 0 ? (
-            <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
-              <ShoppingBag size={40} className="mx-auto mb-3 text-slate-700" />
-              <h3 className="font-bold text-white mb-2">No bookings yet</h3>
-              <p className="text-slate-400 text-sm">Complete your profile and upload photos to attract more customers</p>
+            <div className="space-y-4">
+              <div className="bg-white/4 border border-white/6 rounded-2xl p-12 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-center mx-auto mb-4">
+                  <ShoppingBag size={24} className="text-slate-500" />
+                </div>
+                <h3 className="font-bold text-white mb-2">No bookings yet</h3>
+                <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
+                  Bookings appear here once customers reserve your services. A complete profile with photos and availability set gets 4x more enquiries.
+                </p>
+                <div className="flex gap-3 justify-center flex-wrap">
+                  <Link href="/vendor/media" className="btn-primary text-sm py-2 px-4">
+                    <Camera size={14} /> Upload Photos
+                  </Link>
+                  <Link href="/vendor/quotes" className="btn-secondary text-sm py-2 px-4">
+                    View Leads <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
             </div>
           ) : (
             allBookings.map((booking) => {

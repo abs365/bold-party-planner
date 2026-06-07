@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { assertStripeKey, assertWebhookSecret } from "@/lib/stripe";
+import {
+  createLedgerEntry,
+  updateLedgerPaymentStatus,
+  appendLedgerEvent,
+} from "@/lib/finance/ledger";
 
 export const runtime = "nodejs";
 
@@ -23,19 +28,26 @@ export async function POST(request: Request) {
 
   const supabase = await createAdminClient();
 
-  // ── Idempotency check ─────────────────────────────────────────────────────
-  const { data: existing } = await supabase
+  // ── Atomic idempotency check ──────────────────────────────────────────────
+  // A single INSERT on the primary-key column is atomic: the DB unique constraint
+  // guarantees exactly-once processing even under simultaneous duplicate deliveries.
+  // The prior SELECT+INSERT pattern had a TOCTOU race where two concurrent requests
+  // could both pass the SELECT check and both execute business logic.
+  const { error: dupError } = await supabase
     .from("stripe_events")
-    .select("id")
-    .eq("id", event.id)
-    .maybeSingle();
+    .insert({ id: event.id, type: event.type });
 
-  if (existing) {
-    return NextResponse.json({ received: true, duplicate: true });
+  if (dupError) {
+    // PostgreSQL error code 23505 = unique_violation (duplicate event)
+    if (dupError.code === "23505") {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+    console.error("Webhook: failed to record stripe event:", dupError);
+    return NextResponse.json({ error: "Event recording failed" }, { status: 500 });
   }
 
-  // Mark event as processed
-  await supabase.from("stripe_events").insert({ id: event.id, type: event.type });
+  // Log every successfully verified webhook to the financial audit trail
+  void appendLedgerEvent(supabase, "WEBHOOK_RECEIVED", { event_id: event.id, event_type: event.type });
 
   // ── Handle checkout.session.completed ────────────────────────────────────
   if (event.type === "checkout.session.completed") {
@@ -70,7 +82,7 @@ export async function POST(request: Request) {
     }
 
     const newPaymentStatus = paymentType === "deposit" ? "deposit_paid" : "fully_paid";
-    const newBookingStatus = booking.status === "accepted" ? "confirmed" : booking.status;
+    const newBookingStatus = (booking.status === "accepted" || booking.status === "pending_payment") ? "confirmed" : booking.status;
 
     // Update booking
     await supabase.from("bookings").update({
@@ -94,6 +106,31 @@ export async function POST(request: Request) {
     await supabase.from("invoices")
       .update({ status: "paid", paid_at: new Date().toISOString() })
       .eq("booking_id", bookingId);
+
+    // ── Financial Ledger ───────────────────────────────────────────────────
+    // Create (or upsert if this is a second payment on same booking) ledger entry.
+    // Non-fatal: a ledger failure never retries Stripe or blocks the response.
+    void (async () => {
+      const ledgerId = await createLedgerEntry(supabase, {
+        bookingId,
+        customerId,
+        vendorId: booking.vendor_id,
+        grossAmount: amount,
+        stripePaymentIntentId:   session.payment_intent as string ?? null,
+        stripeCheckoutSessionId: session.id,
+        currency: session.currency ?? "gbp",
+        paymentStatus: "paid",
+        payoutStatus:  paymentType === "full" ? "scheduled" : "not_due",
+      });
+      await appendLedgerEvent(supabase, "PAYMENT_RECEIVED", {
+        booking_id: bookingId, amount, payment_type: paymentType,
+        stripe_payment_intent_id: session.payment_intent,
+        stripe_checkout_session_id: session.id,
+      }, ledgerId);
+      await appendLedgerEvent(supabase, "BOOKING_CONFIRMED", {
+        booking_id: bookingId, customer_id: customerId, vendor_id: booking.vendor_id,
+      }, ledgerId);
+    })();
 
     // Notifications
     const vendor = booking.vendor as Record<string, string>;
@@ -157,10 +194,79 @@ export async function POST(request: Request) {
   // ── Handle payment_intent.payment_failed ──────────────────────────────────
   if (event.type === "payment_intent.payment_failed") {
     const intent = event.data.object as import("stripe").Stripe.PaymentIntent;
+    const meta       = intent.metadata ?? {};
+    const bookingId  = meta.booking_id  ?? null;
+    const customerId = meta.customer_id ?? null;
+    const amount     = Number(meta.amount ?? 0);
+
+    // Update any existing payments row
     await supabase
       .from("payments")
       .update({ status: "failed" })
       .eq("stripe_payment_intent_id", intent.id);
+
+    // Ledger: mark as failed + log event
+    void (async () => {
+      await updateLedgerPaymentStatus(supabase, intent.id, "failed");
+      await appendLedgerEvent(supabase, "PAYMENT_FAILED", {
+        stripe_payment_intent_id: intent.id,
+        booking_id: bookingId, customer_id: customerId, amount,
+        failure_message: intent.last_payment_error?.message ?? null,
+      });
+    })();
+
+    // Notify customer and vendor when metadata is present (populated via payment_intent_data)
+    if (bookingId && customerId) {
+      // Customer in-app notification
+      void supabase.rpc("notify_user", {
+        p_user_id: customerId,
+        p_title: "Payment Failed — Action Required",
+        p_message: "Your payment was declined. Please try again with a different card.",
+        p_type: "payment",
+        p_link: `/dashboard/bookings/${bookingId}`,
+      });
+
+      // Fetch booking for event title + vendor user_id
+      const { data: booking } = await supabase
+        .from("bookings")
+        .select("*, vendor:vendors(user_id), event:events(title)")
+        .eq("id", bookingId)
+        .maybeSingle();
+
+      if (booking) {
+        const eventData = booking.event as Record<string, string>;
+        const vendor    = booking.vendor as Record<string, string>;
+
+        // Customer email
+        const { data: customerProfile } = await supabase
+          .from("profiles")
+          .select("email, full_name")
+          .eq("id", customerId)
+          .maybeSingle();
+
+        if (customerProfile?.email) {
+          const { sendBookingPaymentFailed } = await import("@/lib/resend");
+          void sendBookingPaymentFailed(
+            customerProfile.email,
+            customerProfile.full_name ?? "Customer",
+            eventData.title ?? "your event",
+            bookingId,
+            amount
+          );
+        }
+
+        // Vendor in-app notification
+        if (vendor?.user_id) {
+          void supabase.rpc("notify_user", {
+            p_user_id: vendor.user_id,
+            p_title: "Customer Payment Failed",
+            p_message: `A payment for ${eventData.title ?? "a booking"} was declined. The customer has been notified to retry.`,
+            p_type: "payment",
+            p_link: `/vendor/bookings/${bookingId}`,
+          });
+        }
+      }
+    }
   }
 
   // ── Handle charge.refunded ────────────────────────────────────────────────
@@ -188,6 +294,48 @@ export async function POST(request: Request) {
         currency: charge.currency,
         description: "Stripe refund",
       });
+
+      // Ledger: record refund amount + log event
+      void (async () => {
+        const ledgerId = await updateLedgerPaymentStatus(
+          supabase,
+          charge.payment_intent as string,
+          refundAmount >= (charge.amount / 100) ? "refunded" : "partially_refunded",
+          { refundAmount, stripeChargeId: charge.id }
+        );
+        await appendLedgerEvent(supabase, "REFUND_COMPLETED", {
+          booking_id: payment.booking_id,
+          refund_amount: refundAmount,
+          stripe_charge_id: charge.id,
+          stripe_payment_intent_id: charge.payment_intent,
+        }, ledgerId);
+      })();
+
+      // Notify customer by email that their refund has been processed
+      void (async () => {
+        const { data: booking } = await supabase
+          .from("bookings")
+          .select("customer_id, event:events(title)")
+          .eq("id", payment.booking_id)
+          .maybeSingle();
+        if (booking?.customer_id) {
+          const { data: customerProfile } = await supabase
+            .from("profiles")
+            .select("email, full_name")
+            .eq("id", booking.customer_id)
+            .maybeSingle();
+          if (customerProfile?.email) {
+            const eventData = booking.event as unknown as Record<string, string> | null;
+            const { sendRefundProcessed } = await import("@/lib/resend");
+            void sendRefundProcessed(
+              customerProfile.email,
+              customerProfile.full_name ?? "Customer",
+              refundAmount,
+              eventData?.title ?? "your event"
+            );
+          }
+        }
+      })();
     }
   }
 
@@ -294,6 +442,13 @@ export async function POST(request: Request) {
           stripe_event_id: event.id,
           event_type: "payment_succeeded",
           plan_slug:  sub.plan,
+          amount_gbp: (invoice.amount_paid ?? 0) / 100,
+          stripe_invoice_id: invoice.id,
+        });
+        void appendLedgerEvent(supabase, "PAYMENT_RECEIVED", {
+          event_type: "subscription_renewal",
+          vendor_id: sub.vendor_id,
+          plan: sub.plan,
           amount_gbp: (invoice.amount_paid ?? 0) / 100,
           stripe_invoice_id: invoice.id,
         });

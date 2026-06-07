@@ -11,10 +11,14 @@ type Role = "customer" | "vendor";
 export default function SignupPage() {
   const [role, setRole] = useState<Role>(() => {
     if (typeof window === "undefined") return "customer";
-    return new URLSearchParams(window.location.search).get("role") === "vendor"
-      ? "vendor"
-      : "customer";
+    const params = new URLSearchParams(window.location.search);
+    return params.get("role") === "vendor" ? "vendor" : "customer";
   });
+
+  const getRedirectTo = () => {
+    if (typeof window === "undefined") return null;
+    return new URLSearchParams(window.location.search).get("redirect");
+  };
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +57,8 @@ export default function SignupPage() {
 
       if (json.hasSession) {
         toast.success("Account created! Welcome to ELBOLD Events.");
-        window.location.href = role === "vendor" ? "/vendor/apply" : "/dashboard";
+        const redirectTo = getRedirectTo();
+        window.location.href = redirectTo ?? (role === "vendor" ? "/vendor/apply" : "/dashboard");
         return;
       }
 

@@ -35,7 +35,7 @@ export default function VendorTerms() {
           content: [
             "ELBOLD charges a 10% commission on the total booking value. This is deducted from your payout before funds are transferred.",
             "Example: A £500 booking results in a £450 payout to you (90%).",
-            "Payouts are processed within 7 business days after the event is completed and the customer confirms satisfactory delivery.",
+            "Payouts are processed within 7 working days of the event completion date via bank transfer. You receive 90% of the agreed booking value.",
             "Payouts are made by bank transfer to the account details you provide. You are responsible for providing accurate bank details.",
             "Pro plan subscribers (£29/month) retain priority placement in search. Featured plan subscribers (£79/month) receive homepage placement.",
           ],

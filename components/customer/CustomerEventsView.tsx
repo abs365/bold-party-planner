@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { Calendar, MapPin, Users, Plus, ChevronRight, CheckSquare } from "lucide-react";
+import { Calendar, MapPin, Users, Plus, ChevronRight, CheckSquare, Sparkles } from "lucide-react";
 import { formatDate, daysUntilEvent, cn } from "@/lib/utils";
 import { EVENT_TYPES } from "@/types";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -93,12 +93,16 @@ export function CustomerEventsView({ events }: CustomerEventsViewProps) {
       </div>
 
       {events.length === 0 ? (
-        <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
-          <div className="text-5xl mb-4">🎉</div>
-          <h3 className="font-bold text-white mb-2">No events yet</h3>
-          <p className="text-slate-400 text-sm mb-6">Create your first event and let our Smart Planner guide you through every detail.</p>
+        <div className="bg-white/4 border border-white/6 rounded-2xl p-12 text-center">
+          <div className="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center mx-auto mb-4">
+            <Sparkles size={24} className="text-white" />
+          </div>
+          <h3 className="font-bold text-white mb-2">Start planning your first event</h3>
+          <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
+            Our Smart Planner builds a complete event plan — vendors, budget, timeline and checklist — in minutes.
+          </p>
           <Link href="/dashboard/events/new" className="btn-primary">
-            <Plus size={15} />Create Event
+            <Sparkles size={15} /> Plan My Event
           </Link>
         </div>
       ) : (

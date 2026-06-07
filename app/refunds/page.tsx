@@ -53,7 +53,7 @@ export default function RefundPolicy() {
         },
         {
           title: "6. No-Show by Vendor",
-          content: "If a vendor fails to appear for a confirmed booking without prior notice, you are entitled to a full refund of all amounts paid plus a platform credit of £50 as a goodwill gesture. Report no-shows immediately to support@elbold.com.",
+          content: "If a vendor fails to appear for a confirmed booking without prior notice, you are entitled to a full refund of all amounts paid. Report no-shows immediately to urgent@elbold.com — we will respond as a matter of priority and assist you in finding a replacement vendor.",
         },
         {
           title: "7. Force Majeure",

@@ -80,6 +80,7 @@ export default async function VendorDashboardPage() {
   const unreadCount  = unreadRes.count ?? 0;
 
   const pending   = allBookings.filter((b) => b.status === "pending");
+  const awaitingPayment = allBookings.filter((b) => b.status === "pending_payment");
   const confirmed = allBookings.filter((b) => b.status === "confirmed" || b.status === "accepted");
   const upcoming  = allBookings.filter((b) => {
     const ev = b.event as { date?: string } | undefined;
@@ -168,7 +169,7 @@ export default async function VendorDashboardPage() {
             {vendor.status === "pending" && (
               <p className="text-xs text-amber-400 mt-2 flex items-center gap-1.5">
                 <Clock size={11} />
-                Your application is under review. We usually approve within 24 hours.
+                Your application is under review. We review all applications within 2 working days.
               </p>
             )}
           </div>
@@ -248,8 +249,8 @@ export default async function VendorDashboardPage() {
               value: confirmed.length,
               icon: CheckCircle2,
               color: "text-blue-400",
-              urgent: false,
-              sub: `${upcoming.length} upcoming`,
+              urgent: awaitingPayment.length > 0,
+              sub: awaitingPayment.length > 0 ? `${awaitingPayment.length} awaiting payment` : `${upcoming.length} upcoming`,
               href: "/vendor/bookings",
             },
             {

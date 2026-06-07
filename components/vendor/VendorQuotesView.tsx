@@ -5,7 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import {
   MessageSquare, Clock, CheckCircle, XCircle, ChevronDown, ChevronUp,
   Send, Flame, TrendingUp, PoundSterling, Calendar, Users, MapPin,
-  AlertTriangle, Edit3, X,
+  AlertTriangle, Edit3, X, Camera, ShieldCheck,
 } from "lucide-react";
 import { scoreLead } from "@/lib/ai/scoring";
 import type { Quote, QuoteResponse } from "@/types";
@@ -362,14 +362,16 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
         </div>
         <div className="grid sm:grid-cols-3 gap-3">
           {[
-            { icon: "📸", title: "Upload 5+ photos", desc: "Profiles with more photos receive 3× more enquiries", href: "/vendor/media" },
-            { icon: "✅", title: "Complete verification", desc: "Verified vendors appear higher in search results", href: "/vendor/verification" },
-            { icon: "📅", title: "Set your availability", desc: "Customers check dates before enquiring — be bookable", href: "/vendor/availability" },
-          ].map((tip) => (
-            <a key={tip.title} href={tip.href} className="p-4 bg-white/3 border border-white/6 rounded-xl hover:bg-white/5 transition-colors block">
-              <div className="text-2xl mb-2">{tip.icon}</div>
-              <div className="text-sm font-semibold text-white mb-1">{tip.title}</div>
-              <div className="text-xs text-slate-400">{tip.desc}</div>
+            { icon: Camera,      title: "Upload 5+ photos",         desc: "Profiles with more photos receive 3x more enquiries",  href: "/vendor/media" },
+            { icon: ShieldCheck, title: "Complete verification",     desc: "Verified vendors appear higher in search results",      href: "/vendor/verification" },
+            { icon: Calendar,    title: "Set your availability",     desc: "Customers check dates before enquiring — be bookable", href: "/vendor/availability" },
+          ].map(({ icon: Icon, title, desc, href }) => (
+            <a key={title} href={href} className="p-4 bg-white/3 border border-white/6 rounded-xl hover:bg-white/5 transition-colors block group">
+              <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center mb-3">
+                <Icon size={16} className="text-brand-400 group-hover:text-brand-300 transition-colors" />
+              </div>
+              <div className="text-sm font-semibold text-white mb-1">{title}</div>
+              <div className="text-xs text-slate-400 leading-relaxed">{desc}</div>
             </a>
           ))}
         </div>

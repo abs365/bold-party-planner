@@ -2,12 +2,12 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowRight, CheckCircle2, Star, Shield, Zap, Calendar, Users, CreditCard } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Shield, Zap, Calendar, Users, CreditCard, ChevronDown, AtSign, MessageSquare, Lock, AlertTriangle } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How It Works",
-  description: "How ELBOLD Events connects event hosts with trusted, verified vendors across the United Kingdom.",
+  title: "How ELBOLD Works | Trusted Event Professionals in 3 Simple Steps",
+  description: "Discover how ELBOLD connects you with verified event professionals across the UK. Browse, compare and book trusted DJs, photographers, caterers and decorators with complete confidence.",
 };
 
 export const dynamic = "force-dynamic";
@@ -36,13 +36,14 @@ export default async function HowItWorksPage() {
           </p>
           <h1
             className="text-4xl md:text-5xl font-light tracking-tight mb-5"
-            style={{ color: "rgba(255,255,255,0.92)" }}
+            style={{ color: "rgba(255,255,255,0.95)" }}
           >
-            Simple. Trusted. Extraordinary.
+            From Idea to Extraordinary Celebration.
           </h1>
-          <p className="text-base font-light leading-relaxed max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
-            ELBOLD Events connects event hosts with verified professionals across the United Kingdom.
-            Secure payments, real reviews, and end-to-end event coordination.
+          <p className="text-base font-light leading-relaxed max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.42)" }}>
+            ELBOLD connects event hosts with verified, reviewed professionals across the United Kingdom.
+            Every vendor is individually approved. Every payment is secured by Stripe.
+            Every review comes from a real, completed booking.
           </p>
         </div>
       </div>
@@ -107,7 +108,7 @@ export default async function HowItWorksPage() {
               { step: "1", title: "Apply for free", desc: "Submit your vendor application in minutes. We review and approve within 24-48 hours." },
               { step: "2", title: "Build your profile", desc: "Upload photos and videos of your work. Add service packages with clear pricing." },
               { step: "3", title: "Receive booking requests", desc: "Customers send requests through the platform. Accept or decline bookings. You are always in control." },
-              { step: "4", title: "Get paid automatically", desc: "Payments go through Stripe. You receive 90% of the booking value directly to your account." },
+              { step: "4", title: "Get paid securely", desc: "You receive 90% of every booking. Payouts are processed by the ELBOLD team within 7 working days of event completion, directly to your registered UK bank account." },
               { step: "5", title: "Build your reputation", desc: "Collect verified reviews after every event. Higher ratings mean more visibility and bookings." },
             ].map(({ step, title, desc }) => (
               <div key={step} className="flex gap-5 bg-white border border-gray-100 rounded-xl p-6 hover:border-gray-200 hover:shadow-sm transition-all">
@@ -180,6 +181,130 @@ export default async function HowItWorksPage() {
                 <CheckCircle2 size={15} className="text-gray-300 shrink-0 mt-0.5" />
                 <p className="text-sm text-gray-500 font-light leading-relaxed">{point}</p>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Why ELBOLD instead of Instagram */}
+        <div className="border border-gray-100 rounded-2xl overflow-hidden">
+          <div
+            className="px-8 py-6"
+            style={{ background: "#0D1B3E" }}
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <MessageSquare size={16} style={{ color: "#C9A84C" }} />
+              <h2 className="text-lg font-light tracking-tight" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Why book through ELBOLD instead of messaging on Instagram?
+              </h2>
+            </div>
+            <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.4)" }}>
+              A question we encourage you to ask. Here is the honest answer.
+            </p>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {[
+              {
+                icon: Lock,
+                title: "Your money is protected",
+                elbold: "Your deposit is held by Stripe until your event. If the vendor cancels, you get a full refund. Disputes are handled by ELBOLD.",
+                instagram: "You transfer money to a personal account. No recourse if things go wrong.",
+              },
+              {
+                icon: CheckCircle2,
+                title: "Vendors are verified",
+                elbold: "Every vendor on ELBOLD has been manually reviewed by our team for identity, quality, and legitimacy before they can accept bookings.",
+                instagram: "Anyone can create a profile. Follower count is not a quality signal.",
+              },
+              {
+                icon: Star,
+                title: "Reviews are real",
+                elbold: "Reviews on ELBOLD come exclusively from customers who completed a real booking through the platform. They cannot be faked.",
+                instagram: "Comments and testimonials on social media cannot be verified. They can be curated, purchased, or hidden.",
+              },
+              {
+                icon: AlertTriangle,
+                title: "Contracts and documentation",
+                elbold: "Every booking generates a digital record of what was agreed: service, date, location, payment terms. Both parties have a copy.",
+                instagram: "DMs are informal. What was agreed is often disputed. There is no enforceable record.",
+              },
+            ].map(({ icon: Icon, title, elbold, instagram }) => (
+              <div key={title} className="grid sm:grid-cols-[200px_1fr_1fr] gap-0">
+                <div className="p-5 flex items-center gap-2.5 bg-gray-50 border-b sm:border-b-0 sm:border-r border-gray-100">
+                  <Icon size={14} className="text-gray-400 flex-shrink-0" />
+                  <span className="text-sm font-semibold text-gray-700">{title}</span>
+                </div>
+                <div className="p-5 border-b sm:border-b-0 sm:border-r border-gray-100">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 size={12} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="text-xs font-semibold text-emerald-700 mb-1">ELBOLD</div>
+                      <p className="text-xs text-gray-600 leading-relaxed">{elbold}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-start gap-2">
+                    <AtSign size={12} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="text-xs font-semibold text-gray-400 mb-1">Social media DM</div>
+                      <p className="text-xs text-gray-400 leading-relaxed">{instagram}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-8">
+            Frequently asked questions
+          </h2>
+          <div className="space-y-0 border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
+            {[
+              {
+                q: "Do I pay the full amount upfront?",
+                a: "No. You pay a 30% deposit when you confirm the booking. The remaining 70% is due closer to the event date, as agreed with the vendor. Your deposit is held securely and not released to the vendor until your event takes place.",
+              },
+              {
+                q: "Can I cancel my booking?",
+                a: "Yes. If you cancel more than 30 days before your event, you receive a full refund of your deposit minus a 5% processing fee. Cancellations within 7 days of the event are non-refundable, as the vendor has reserved that date exclusively for you. Full cancellation terms are at elbold.com/refunds.",
+              },
+              {
+                q: "What if the vendor cancels my booking?",
+                a: "If a vendor cancels a confirmed booking, you receive a 100% refund of all amounts paid. We will also assist you in finding a replacement from our approved vendor list. Vendors who cancel confirmed bookings receive a formal warning and may be suspended.",
+              },
+              {
+                q: "What if the vendor doesn't show up?",
+                a: "Contact us immediately at urgent@elbold.com. If a vendor fails to appear for a confirmed booking without prior notice, you receive a full refund of all amounts paid. This protection applies to every booking made through ELBOLD.",
+              },
+              {
+                q: "What if I'm unhappy with the service on the day?",
+                a: "Contact our team within 48 hours of the event with details of your concern. We will review evidence from both parties and reach a fair resolution within 5 working days. Outcomes may include partial or full refunds depending on the circumstances.",
+              },
+              {
+                q: "How are vendors verified?",
+                a: "Every vendor application is reviewed by a member of the ELBOLD team. We assess business identity, portfolio quality, pricing realism, and service legitimacy. No vendor is approved by algorithm. Full details are at elbold.com/how-we-verify.",
+              },
+              {
+                q: "How long does vendor approval take?",
+                a: "We review most applications within 24–48 hours. You will receive a confirmation email immediately after submitting, and an approval notification once reviewed. If we have questions about your application, we will contact you directly.",
+              },
+              {
+                q: "Does ELBOLD take a commission from vendors?",
+                a: "Yes. ELBOLD earns a 10% service fee on completed bookings, deducted from the vendor payout. Customers pay the listed price — no surcharges. Vendors keep 90% of every booking they accept.",
+              },
+            ].map(({ q, a }) => (
+              <details key={q} className="group">
+                <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none hover:bg-gray-50 transition-colors">
+                  <span className="text-sm font-semibold text-gray-900">{q}</span>
+                  <ChevronDown size={15} className="text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                </summary>
+                <div className="px-6 pb-5">
+                  <p className="text-sm text-gray-500 font-light leading-relaxed">{a}</p>
+                </div>
+              </details>
             ))}
           </div>
         </div>

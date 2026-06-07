@@ -105,14 +105,26 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .maybeSingle();
 
-  // Send welcome email — fire and forget
+  // Send welcome email to vendor — fire and forget
   if (profile?.email) {
-    const { sendVendorApplicationReceived } = await import("@/lib/resend");
+    const { sendVendorApplicationReceived, sendAdminNewVendorAlert } = await import("@/lib/resend");
     void sendVendorApplicationReceived(
       profile.email,
       profile.full_name ?? body.business_name,
       body.business_name
     );
+    // Notify all admins of the new application
+    const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
+    if (adminEmails.length > 0) {
+      void sendAdminNewVendorAlert(
+        adminEmails,
+        body.business_name,
+        body.category,
+        body.city,
+        profile.email,
+        vendor.id
+      );
+    }
   }
 
   void track({

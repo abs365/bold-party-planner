@@ -84,9 +84,10 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
   {
     label: "Finance",
     items: [
-      { href: "/admin/payouts",       label: "Payouts",       icon: Wallet },
-      { href: "/admin/subscriptions", label: "Subscriptions", icon: BadgeCheck },
-      { href: "/admin/monetization",  label: "Monetization",  icon: DollarSign },
+      { href: "/admin/finance",       label: "Finance Dashboard", icon: TrendingUp },
+      { href: "/admin/payouts",       label: "Payouts",           icon: Wallet },
+      { href: "/admin/subscriptions", label: "Subscriptions",     icon: BadgeCheck },
+      { href: "/admin/monetization",  label: "Monetization",      icon: DollarSign },
     ],
   },
   {

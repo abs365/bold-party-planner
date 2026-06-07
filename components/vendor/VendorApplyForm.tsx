@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2, Phone } from "lucide-react";
+import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2, Phone, Search, Calendar, Star, CreditCard, TrendingUp, Mail } from "lucide-react";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
@@ -15,10 +15,11 @@ interface VendorApplyFormProps {
 }
 
 const BENEFITS = [
-  { icon: "🔍", label: "Get found by customers searching for your category and location" },
-  { icon: "📅", label: "Manage enquiries, bookings and availability in one place" },
-  { icon: "⭐", label: "Build your reputation with verified reviews from real clients" },
-  { icon: "💳", label: "Secure Stripe payments — no invoicing, no chasing, no disputes" },
+  { icon: Search, label: "Get found by customers searching for your category and location" },
+  { icon: Calendar, label: "Manage enquiries, bookings and availability in one place" },
+  { icon: Star, label: "Build your reputation with verified reviews from real clients" },
+  { icon: CreditCard, label: "Secure Stripe payments — no invoicing, no chasing, no disputes" },
+  { icon: TrendingUp, label: "You keep 90% of every booking — ELBOLD earns 10% only when you earn" },
 ];
 
 const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
@@ -61,6 +62,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
   });
 
   const [submitting, setSubmitting] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   function update(key: string, value: string | number) {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -114,13 +116,73 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
       }
 
       sessionStorage.removeItem("vendor_apply_draft");
-      toast.success("Application submitted! Check your email — we'll be in touch within 24–48 hours.");
-      window.location.assign("/vendor/dashboard");
+      setSubmittedEmail(user.email ?? formData.business_name);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Submission failed");
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (submittedEmail) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar user={profile ?? undefined} />
+        <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
+          <div className="max-w-md w-full text-center py-16">
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+              style={{ background: "rgba(5,150,105,0.1)", border: "2px solid rgba(5,150,105,0.25)" }}
+            >
+              <CheckCircle2 size={28} style={{ color: "#059669" }} />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">Application Submitted</h1>
+            <p className="text-gray-500 mb-2">
+              Thank you for applying to list on ELBOLD.
+            </p>
+            <div
+              className="flex items-center justify-center gap-2 text-sm mb-6"
+              style={{ color: "#059669" }}
+            >
+              <Mail size={14} />
+              <span>Confirmation sent to <strong>{submittedEmail}</strong></span>
+            </div>
+            <div
+              className="rounded-2xl p-5 text-left mb-8"
+              style={{ background: "#f9fafb", border: "1px solid #e5e7eb" }}
+            >
+              <p className="text-sm font-semibold text-gray-700 mb-3">What happens next</p>
+              <div className="space-y-3">
+                {[
+                  { n: "1", text: "Our team reviews your application — usually within 24–48 hours" },
+                  { n: "2", text: "You receive an approval email with a link to complete your profile" },
+                  { n: "3", text: "Add your photos, packages and pricing to your vendor profile" },
+                  { n: "4", text: "Go live and start receiving enquiries from customers" },
+                ].map(({ n, text }) => (
+                  <div key={n} className="flex items-start gap-3">
+                    <div
+                      className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
+                      style={{ background: "rgba(13,27,62,0.08)", color: "#0D1B3E" }}
+                    >
+                      {n}
+                    </div>
+                    <p className="text-sm text-gray-600">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <a
+              href="/vendor/dashboard"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm"
+              style={{ background: "#0D1B3E", color: "#D4AF37" }}
+            >
+              Go to Your Dashboard <ArrowRight size={14} />
+            </a>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -162,8 +224,8 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                 <h2 className="text-base font-semibold text-gray-900 mb-4">What you get</h2>
                 <div className="space-y-3">
                   {BENEFITS.map((b) => (
-                    <div key={b.label} className="flex items-center gap-3">
-                      <span className="text-lg">{b.icon}</span>
+                    <div key={b.label} className="flex items-start gap-3">
+                      <b.icon size={16} className="text-gray-400 flex-shrink-0 mt-0.5" />
                       <span className="text-sm text-gray-600">{b.label}</span>
                     </div>
                   ))}

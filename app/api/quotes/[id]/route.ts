@@ -189,9 +189,25 @@ export async function PATCH(req: Request, { params }: Params) {
       return NextResponse.json({ error: "Quote cannot be accepted in its current state" }, { status: 400 });
     }
 
+    // event_id is required — bookings.event_id is NOT NULL in the schema.
+    // Quotes can be created without an event, but acceptance must be linked.
+    if (!quote.event_id) {
+      return NextResponse.json({
+        error: "This quote is not linked to an event. Please create an event first and request a new quote from the vendor.",
+      }, { status: 400 });
+    }
+
     const { data: response } = await supabase
       .from("quote_responses").select("*").eq("quote_id", id).maybeSingle();
     if (!response) return NextResponse.json({ error: "No vendor quote to accept" }, { status: 400 });
+
+    // Enforce quote expiry — if valid_until is set and in the past, reject the accept
+    if (response.valid_until && new Date(response.valid_until) < new Date()) {
+      return NextResponse.json(
+        { error: "This quote has expired. Please request a new quote from this vendor." },
+        { status: 409 }
+      );
+    }
 
     const { data: booking, error: bookErr } = await db
       .from("bookings")
@@ -203,7 +219,7 @@ export async function PATCH(req: Request, { params }: Params) {
         deposit_amount: response.deposit_amount ?? Math.round(response.price * 0.3),
         vendor_payout:  response.price * 0.9,
         commission_amount: response.price * 0.1,
-        status: "confirmed",
+        status: "pending_payment",
         payment_status: "pending",
         notes: `Accepted from quote ${id}. Requirements: ${quote.requirements ?? quote.notes ?? "None"}`,
       })
@@ -240,9 +256,17 @@ export async function PATCH(req: Request, { params }: Params) {
       properties: { quote_id: id, price: response.price, booking_id: booking.id } });
     void supabase.rpc("notify_user", {
       p_user_id: quote.vendor_id,
-      p_title: "Quote Accepted! Booking Confirmed",
-      p_message: "A customer has accepted your quote. A booking has been created.",
+      p_title: "Quote Accepted — Awaiting Payment",
+      p_message: "A customer has accepted your quote. A booking has been created and awaits payment.",
       p_type: "booking", p_link: `/vendor/bookings/${booking.id}`,
+    });
+
+    // In-app notification to customer — prompt them to pay
+    void supabase.rpc("notify_user", {
+      p_user_id: quote.customer_id,
+      p_title: "Booking Created — Pay Deposit to Confirm",
+      p_message: "Your booking has been created. Pay the deposit now to secure your date.",
+      p_type: "payment", p_link: `/dashboard/bookings/${booking.id}`,
     });
 
     // Transactional email to vendor on acceptance
@@ -262,6 +286,25 @@ export async function PATCH(req: Request, { params }: Params) {
             booking.id
           );
         }
+      }
+    })();
+
+    // Transactional email to customer — prompt deposit payment
+    void (async () => {
+      const { data: customerContact } = await db.from("profiles").select("email, full_name").eq("id", quote.customer_id).maybeSingle();
+      if (customerContact?.email) {
+        const { data: vendorInfo } = await db.from("vendors").select("business_name").eq("id", quote.vendor_id).maybeSingle();
+        const { data: eventInfo } = await db.from("events").select("title, date").eq("id", quote.event_id).maybeSingle();
+        const { sendBookingAwaitingPayment } = await import("@/lib/resend");
+        void sendBookingAwaitingPayment(
+          customerContact.email,
+          customerContact.full_name ?? "there",
+          vendorInfo?.business_name ?? "your vendor",
+          eventInfo?.title ?? "your event",
+          eventInfo?.date ?? null,
+          booking.deposit_amount,
+          booking.id
+        );
       }
     })();
 

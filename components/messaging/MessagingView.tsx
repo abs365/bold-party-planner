@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { MessageSquare, ChevronRight } from "lucide-react";
+import { MessageSquare, ChevronRight, Store } from "lucide-react";
 import { MessageThread } from "./MessageThread";
 import { usePolling, useRefreshOnFocus } from "@/lib/polling";
 import { cn } from "@/lib/utils";
@@ -75,14 +75,23 @@ export function MessagingView({ threads: rawThreads, currentUserId, initialThrea
 
   if (threads.length === 0) {
     return (
-      <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
-        <MessageSquare className="w-12 h-12 text-white/20 mx-auto mb-3" />
-        <h3 className="text-white/60 text-lg">No messages yet</h3>
-        <p className="text-white/40 text-sm mt-1">
+      <div className="bg-white/4 border border-white/6 rounded-2xl p-12 text-center">
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-white/5 border border-white/8">
+          <MessageSquare size={24} className="text-slate-500" />
+        </div>
+        <h3 className="text-white font-semibold mb-2">
+          {isVendor ? "No messages yet" : "No conversations yet"}
+        </h3>
+        <p className="text-slate-400 text-sm mb-6 max-w-xs mx-auto">
           {isVendor
-            ? "Messages from customers about quotes and bookings will appear here"
-            : "Start a conversation with a vendor from their profile page"}
+            ? "Messages from customers about quotes and bookings appear here. Respond quickly — vendors who reply within 2 hours win more bookings."
+            : "Conversations with vendors appear here. Visit a vendor profile and request a quote to start a conversation."}
         </p>
+        {!isVendor && (
+          <a href="/browse" className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl" style={{ background: "#D4AF37", color: "#0B1F4D" }}>
+            <Store size={14} /> Browse Vendors
+          </a>
+        )}
       </div>
     );
   }

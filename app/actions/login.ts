@@ -71,11 +71,11 @@ export async function loginAction(
     .eq("id", data.user.id)
     .maybeSingle();
 
+  // Only override the destination for vendor role when the user hasn't specified a
+  // particular page to return to (i.e. redirectTo is the default "/dashboard").
+  // If redirectTo is a specific path (e.g. /vendor/apply after auth redirect), honour it.
   let dest = redirectTo;
-  if (profile?.role === "vendor") {
-    // Verify the vendor record exists before routing to dashboard.
-    // If the application was never completed (e.g. email not confirmed during apply),
-    // route to /vendor/apply so they can finish the application.
+  if (profile?.role === "vendor" && redirectTo === "/dashboard") {
     const { data: vendorRow } = await supabase
       .from("vendors")
       .select("id")

@@ -159,16 +159,9 @@ export function VendorMarketplace({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="pt-10 pb-8 px-4 text-center border-b border-gray-100">
+      {/* Search header — h2 because the browse page already renders the page h1 */}
+      <div className="pt-8 pb-6 px-4 text-center border-b border-gray-100">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-            Find your event vendors
-          </h1>
-          <p className="text-gray-500 mb-8">
-            Browse verified professionals across 19 categories. Real photos, real reviews.
-          </p>
-
           <div className="flex gap-3 max-w-xl mx-auto">
             <div className="relative flex-1">
               <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -348,9 +341,9 @@ export function VendorMarketplace({
         </div>
       )}
 
-      {/* Category Pills */}
-      <div className="px-4 py-5 border-b border-gray-100 max-w-7xl mx-auto">
-        <div className="flex flex-wrap gap-2 mb-2">
+      {/* Category Pills — horizontally scrollable on mobile */}
+      <div className="py-4 border-b border-gray-100">
+        <div className="flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none" style={{ WebkitOverflowScrolling: "touch" }}>
           <button
             onClick={() => setCategory("")}
             className={cn(
@@ -394,7 +387,7 @@ export function VendorMarketplace({
         </div>
 
         {showAllCats && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 pt-3 border-t border-gray-100 mt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 pt-3 border-t border-gray-100 mt-2 px-4">
             {Object.entries(VENDOR_CATEGORIES).map(([key, { label, icon, description }]) => (
               <button
                 key={key}
@@ -447,10 +440,20 @@ export function VendorMarketplace({
 
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4">🔍</div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendors found</h3>
-            <p className="text-gray-500 text-sm mb-4">Try adjusting your search or filters</p>
-            <button onClick={clearFilters} className="btn-secondary-light">Clear Filters</button>
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
+              style={{ background: "#0B1F4D" }}
+            >
+              <Search size={24} style={{ color: "#D4AF37" }} />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendors match your search</h3>
+            <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
+              Try a different category, location, or budget range — or browse all verified professionals.
+            </p>
+            <div className="flex gap-3 justify-center flex-wrap">
+              <button onClick={clearFilters} className="btn-luxury-dark text-sm">Clear Filters</button>
+              <Link href="/founding-vendors" className="btn-secondary-light text-sm">Join as a Vendor</Link>
+            </div>
           </div>
         ) : (
           <>

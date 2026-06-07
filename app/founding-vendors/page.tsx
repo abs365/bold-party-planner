@@ -3,61 +3,171 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { createClient } from "@/lib/supabase/server";
-import { CheckCircle2, Star, TrendingUp, Shield, Zap, Award } from "lucide-react";
+import {
+  CheckCircle2,
+  Star,
+  TrendingUp,
+  Shield,
+  Zap,
+  Award,
+  ArrowRight,
+  X,
+  AlertCircle,
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Founding Vendor Programme",
-  description: "Join as one of ELBOLD's first trusted vendors. Free profile, priority placement, and the exclusive Founding Vendor badge. Limited places available.",
+  title: "Join as a Founding Vendor | List Your Services Free | ELBOLD Events",
+  description:
+    "Be one of ELBOLD's first verified event professionals. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach clients who are actively searching and ready to book — not just browsing a social media feed.",
+  openGraph: {
+    title: "Founding Vendor Programme | ELBOLD Events",
+    description:
+      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available.",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
+  },
 };
 
 const BENEFITS = [
   {
     icon: CheckCircle2,
     title: "Free to list your services.",
-    description: "Creating your profile and receiving enquiries costs nothing. ELBOLD earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
+    description:
+      "Creating your profile and receiving enquiries costs nothing. ELBOLD earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
   },
   {
     icon: Star,
     title: "Founding Vendor badge on your profile",
-    description: "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
+    description:
+      "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
   },
   {
     icon: TrendingUp,
     title: "Permanent top-of-page placement",
-    description: "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you. Customers typically contact the first 3–5 vendors they see. That set is yours.",
+    description:
+      "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you. Customers typically contact the first 3–5 vendors they see. That set is yours.",
   },
   {
     icon: Zap,
     title: "First access to new features",
-    description: "Founding Vendors are first to access new tools as ELBOLD grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
+    description:
+      "Founding Vendors are first to access new tools as ELBOLD grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
   },
   {
     icon: Shield,
     title: "Stripe-secured payments on every booking",
-    description: "Every booking on ELBOLD goes through Stripe. Your payment is protected, released to you after completion, and covered by our dispute resolution process. You never chase invoices.",
+    description:
+      "Every booking on ELBOLD goes through Stripe. Your payment is protected, released to you after completion, and covered by our dispute resolution process. You never chase invoices.",
   },
   {
     icon: Award,
     title: "Founding Vendor status — permanent",
-    description: "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
+    description:
+      "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
   },
 ];
 
 const STEPS = [
-  { n: "1", label: "Apply — takes 5 minutes", sub: "Business name, category, city, pricing. Nothing complicated." },
-  { n: "2", label: "We verify and activate you", sub: "Every vendor is reviewed before going live. Usually 24–48 hours." },
-  { n: "3", label: "Complete your profile", sub: "Add photos, packages and a bio. Better profiles receive more enquiries." },
-  { n: "4", label: "Start receiving enquiries", sub: "Customers searching in your category find your profile and contact you directly." },
+  {
+    n: "1",
+    label: "Apply — takes 5 minutes",
+    sub: "Business name, category, city, pricing. Nothing complicated.",
+  },
+  {
+    n: "2",
+    label: "We verify and activate you",
+    sub: "Every vendor is reviewed before going live. Usually 24–48 hours.",
+  },
+  {
+    n: "3",
+    label: "Complete your profile",
+    sub: "Add photos, packages and a bio. Better profiles receive more enquiries.",
+  },
+  {
+    n: "4",
+    label: "Start receiving enquiries",
+    sub: "Customers searching in your category find your profile and contact you directly.",
+  },
+];
+
+// Comparison table: ELBOLD vs social media vs other directories
+const COMPARISON_ROWS = [
+  {
+    feature: "Free to list",
+    elbold: true,
+    social: true,
+    directories: false,
+    dirNote: "Most charge monthly",
+  },
+  {
+    feature: "Customers actively searching to book",
+    elbold: true,
+    social: false,
+    socialNote: "Followers ≠ buyers",
+    directories: true,
+  },
+  {
+    feature: "Payment protection on every booking",
+    elbold: true,
+    social: false,
+    socialNote: "You chase invoices",
+    directories: false,
+    dirNote: "Varies by platform",
+  },
+  {
+    feature: "Independently verified professionals only",
+    elbold: true,
+    social: false,
+    socialNote: "Anyone can post",
+    directories: false,
+    dirNote: "Usually self-reported",
+  },
+  {
+    feature: "Verified reviews from real bookings",
+    elbold: true,
+    social: false,
+    socialNote: "Unverified testimonials",
+    directories: false,
+    dirNote: "Often unverified",
+  },
+  {
+    feature: "Permanent priority placement",
+    elbold: true,
+    social: false,
+    socialNote: "Algorithm-controlled",
+    directories: false,
+    dirNote: "Paid upgrades required",
+  },
+  {
+    feature: "Founding Vendor badge",
+    elbold: true,
+    social: false,
+    directories: false,
+  },
+  {
+    feature: "Dispute resolution if something goes wrong",
+    elbold: true,
+    social: false,
+    directories: false,
+    dirNote: "Rare exceptions",
+  },
 ];
 
 async function getProfile() {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return null;
-    const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
     return data;
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 export default async function FoundingVendorsPage() {
@@ -67,12 +177,16 @@ export default async function FoundingVendorsPage() {
     <div className="min-h-screen bg-white">
       <Navbar user={profile} />
 
-      {/* Hero */}
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="pt-16 pb-24 px-4" style={{ background: "#0D1B3E" }}>
         <div className="max-w-4xl mx-auto text-center pt-20">
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-10 tracking-[0.2em] uppercase"
-            style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "rgba(201,168,76,0.8)" }}
+            style={{
+              background: "rgba(201,168,76,0.1)",
+              border: "1px solid rgba(201,168,76,0.25)",
+              color: "rgba(201,168,76,0.8)",
+            }}
           >
             <Award size={12} />
             Founding Vendor Programme &nbsp;·&nbsp; 20 places available
@@ -90,8 +204,9 @@ export default async function FoundingVendorsPage() {
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
             Event hosts use ELBOLD to find and book DJs, photographers, caterers,
-            decorators and more. List your services free, receive verified enquiries,
-            and build your reputation on a marketplace designed for UK professionals.
+            decorators and more. List your services free, receive verified
+            enquiries, and build your reputation on a marketplace designed for UK
+            professionals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
@@ -105,48 +220,403 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-7"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            20 founding places available. No credit card. No monthly fees. Cancel anytime.
+            20 founding places available. No credit card. No monthly fees. Cancel
+            anytime.
           </p>
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* ── WHY NOW — FOUNDING WINDOW ────────────────────────────────────── */}
+      <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p
+                className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+                style={{ color: "#C9A84C" }}
+              >
+                Why Now
+              </p>
+              <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
+                The founding window is real.
+                <br />
+                Once it closes, it closes.
+              </h2>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
+                The 20 Founding Vendor places exist because ELBOLD is building
+                something that requires trust from both sides — customers and
+                professionals. The vendors who join now help establish the
+                platform standard, and in return receive permanent advantages
+                that no later applicant can access.
+              </p>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
+                When the founding period closes, new vendor applications enter a
+                standard queue. No priority placement. No Founding Vendor badge.
+                No early access to features. The window is specific and finite —
+                not a marketing tactic.
+              </p>
+              <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
+                <AlertCircle size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
+                <p className="text-xs font-light leading-relaxed" style={{ color: "rgba(11,31,77,0.6)" }}>
+                  Customers searching for event professionals in your area will
+                  see whichever vendors appear at the top of their results. Those
+                  positions belong to whoever applied first.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                {
+                  title: "Before the window closes",
+                  items: [
+                    "Founding Vendor badge on your profile — permanent",
+                    "Permanent top placement in your category and city",
+                    "First access to every new feature ELBOLD releases",
+                    "Input into what gets built next",
+                    "A profile that predates every vendor who joins after",
+                  ],
+                  positive: true,
+                },
+                {
+                  title: "After the window closes",
+                  items: [
+                    "Standard placement — below all Founding Vendors",
+                    "No founding badge",
+                    "Features released to Founding Vendors first",
+                    "Same quality review process — same platform",
+                  ],
+                  positive: false,
+                },
+              ].map(({ title, items, positive }) => (
+                <div
+                  key={title}
+                  className="rounded-2xl p-6"
+                  style={{
+                    background: positive ? "#0B1F4D" : "white",
+                    border: positive ? "none" : "1px solid #e5e7eb",
+                  }}
+                >
+                  <div
+                    className="text-xs font-semibold tracking-wider uppercase mb-4"
+                    style={{ color: positive ? "rgba(201,168,76,0.7)" : "#9ca3af" }}
+                  >
+                    {title}
+                  </div>
+                  <ul className="space-y-2.5">
+                    {items.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5">
+                        {positive ? (
+                          <CheckCircle2 size={13} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
+                        ) : (
+                          <div
+                            className="w-3 h-3 rounded-full flex-shrink-0 mt-0.5"
+                            style={{ background: "#e5e7eb" }}
+                          />
+                        )}
+                        <span
+                          className="text-xs font-light leading-relaxed"
+                          style={{ color: positive ? "rgba(255,255,255,0.75)" : "#6b7280" }}
+                        >
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── COMPARISON TABLE ─────────────────────────────────────────────── */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p
+              className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              Platform Comparison
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
+              Why ELBOLD, not Instagram or a directory?
+            </h2>
+            <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
+              Most event professionals use social media and maybe one or two
+              directories. Here is how they compare — honestly.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr>
+                  <th
+                    className="text-left pb-5 pr-6 font-light text-gray-400 text-xs"
+                    style={{ width: "40%" }}
+                  />
+                  <th className="pb-5 px-4 text-center">
+                    <div
+                      className="inline-flex flex-col items-center gap-1.5 px-4 py-2.5 rounded-xl"
+                      style={{ background: "#0B1F4D" }}
+                    >
+                      <span
+                        className="text-xs font-bold tracking-widest"
+                        style={{ color: "#D4AF37" }}
+                      >
+                        ELBOLD
+                      </span>
+                      <span
+                        className="text-xs font-light"
+                        style={{ color: "rgba(212,175,55,0.45)" }}
+                      >
+                        Founding Vendor
+                      </span>
+                    </div>
+                  </th>
+                  <th className="pb-5 px-4 text-center">
+                    <div className="inline-flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-100">
+                      <span className="text-xs font-semibold text-gray-500">Social Media</span>
+                      <span className="text-xs font-light text-gray-300">Instagram / Facebook</span>
+                    </div>
+                  </th>
+                  <th className="pb-5 px-4 text-center">
+                    <div className="inline-flex flex-col items-center gap-1 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-100">
+                      <span className="text-xs font-semibold text-gray-500">Directories</span>
+                      <span className="text-xs font-light text-gray-300">Bark, Poptop etc.</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON_ROWS.map(
+                  ({ feature, elbold, social, socialNote, directories, dirNote }, i) => (
+                    <tr
+                      key={feature}
+                      style={{
+                        background: i % 2 === 0 ? "white" : "#fafafa",
+                        borderTop: "1px solid #f3f4f6",
+                      }}
+                    >
+                      <td className="py-4 pr-6 text-xs text-gray-600 font-light">{feature}</td>
+
+                      {/* ELBOLD */}
+                      <td className="py-4 px-4 text-center">
+                        {elbold ? (
+                          <div className="flex justify-center">
+                            <CheckCircle2 size={16} style={{ color: "#0B1F4D" }} />
+                          </div>
+                        ) : (
+                          <div className="flex justify-center">
+                            <X size={14} className="text-gray-300" />
+                          </div>
+                        )}
+                      </td>
+
+                      {/* Social */}
+                      <td className="py-4 px-4 text-center">
+                        {social ? (
+                          <div className="flex justify-center">
+                            <CheckCircle2 size={16} className="text-gray-400" />
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <X size={14} className="text-gray-300" />
+                            {socialNote && (
+                              <span className="text-xs text-gray-300 font-light">
+                                {socialNote}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </td>
+
+                      {/* Directories */}
+                      <td className="py-4 px-4 text-center">
+                        {directories ? (
+                          <div className="flex justify-center">
+                            <CheckCircle2 size={16} className="text-gray-400" />
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <X size={14} className="text-gray-300" />
+                            {dirNote && (
+                              <span className="text-xs text-gray-300 font-light">
+                                {dirNote}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-xs text-gray-300 font-light mt-5 text-center">
+            Comparison reflects typical platform policies — individual platforms vary.
+          </p>
+        </div>
+      </section>
+
+      {/* ── BENEFITS ─────────────────────────────────────────────────────── */}
+      <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">What you get as a Founding Vendor</h2>
-            <p className="text-gray-400 max-w-xl mx-auto font-light">Everything you need to start receiving enquiries from day one, with placement advantages that stay with you permanently.</p>
+            <p
+              className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              What You Get
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">
+              What you get as a Founding Vendor
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto font-light text-sm">
+              Everything you need to start receiving enquiries from day one, with
+              placement advantages that stay with you permanently.
+            </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {BENEFITS.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="bg-white border border-gray-100 rounded-2xl p-7 hover:shadow-md transition-shadow">
-                <div className="w-11 h-11 rounded-xl bg-[#0d1b3e] flex items-center justify-center mb-5">
+              <div
+                key={title}
+                className="bg-white border border-gray-100 rounded-2xl p-7 hover:shadow-md transition-shadow"
+              >
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
+                  style={{ background: "#0d1b3e" }}
+                >
                   <Icon size={20} style={{ color: "#C9A84C" }} />
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
+                <p className="text-sm text-gray-500 leading-relaxed font-light">
+                  {description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 px-4 bg-gray-50">
+      {/* ── WHAT ELBOLD EXPECTS FROM YOU ──────────────────────────────────── */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div>
+              <p
+                className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+                style={{ color: "#C9A84C" }}
+              >
+                Vendor Standards
+              </p>
+              <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
+                We take our reputation seriously.
+                <br />
+                We expect you to as well.
+              </h2>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
+                ELBOLD is a curated platform. We review every application, and we
+                maintain standards after approval. That is what makes the
+                verification badge meaningful — and what protects the platform
+                for every vendor on it.
+              </p>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
+                Our full Vendor Standards document is published and publicly
+                available. We believe vendors should know exactly what we expect
+                — and exactly what happens if standards are not maintained.
+              </p>
+              <Link
+                href="/vendor-standards"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity hover:opacity-70"
+                style={{ color: "#0B1F4D" }}
+              >
+                Read the Vendor Standards <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                {
+                  title: "Genuine portfolio",
+                  desc: "Images and samples must represent your actual, current work — not other vendors' work or stock photography.",
+                },
+                {
+                  title: "Accurate pricing",
+                  desc: "Prices listed on your profile should reflect what customers are actually charged when they book.",
+                },
+                {
+                  title: "Professional response times",
+                  desc: "Enquiries should be responded to within 48 hours. Customers who do not hear back are a bad experience for everyone.",
+                },
+                {
+                  title: "Honour confirmed bookings",
+                  desc: "Cancelling a confirmed booking has serious consequences for the customer. ELBOLD's dispute process will investigate any cancellation.",
+                },
+                {
+                  title: "Treat every customer as a reference",
+                  desc: "Reviews are from real bookings only. How you deliver will be visible to every future customer who views your profile.",
+                },
+              ].map(({ title, desc }) => (
+                <div
+                  key={title}
+                  className="flex gap-3 rounded-xl p-5 border border-gray-100"
+                >
+                  <CheckCircle2
+                    size={14}
+                    style={{ color: "#0B1F4D", flexShrink: 0, marginTop: 1 }}
+                  />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900 mb-0.5">
+                      {title}
+                    </div>
+                    <div className="text-xs text-gray-400 font-light leading-relaxed">
+                      {desc}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ─────────────────────────────────────────────────── */}
+      <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">From application to first enquiry</h2>
-            <p className="text-gray-400 font-light">Four steps. Free throughout. No commitment required.</p>
+            <p
+              className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              The Process
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 mb-3 tracking-tight">
+              From application to first enquiry
+            </h2>
+            <p className="text-gray-400 font-light text-sm">
+              Four steps. Free throughout. No commitment required.
+            </p>
           </div>
           <div className="space-y-6">
             {STEPS.map(({ n, label, sub }) => (
-              <div key={n} className="flex items-start gap-5 bg-white border border-gray-100 rounded-2xl p-6">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" style={{ background: "#0d1b3e" }}>
+              <div
+                key={n}
+                className="flex items-start gap-5 bg-white border border-gray-100 rounded-2xl p-6"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0"
+                  style={{ background: "#0d1b3e" }}
+                >
                   {n}
                 </div>
                 <div>
                   <div className="font-semibold text-gray-900">{label}</div>
-                  <div className="text-sm text-gray-500 mt-0.5">{sub}</div>
+                  <div className="text-sm text-gray-500 mt-0.5 font-light">{sub}</div>
                 </div>
               </div>
             ))}
@@ -154,11 +624,10 @@ export default async function FoundingVendorsPage() {
         </div>
       </section>
 
-      {/* Trust signals — factual, not fabricated */}
+      {/* ── TRUST SIGNALS ────────────────────────────────────────────────── */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="grid sm:grid-cols-3 gap-6">
-
             <div className="text-center p-6 border border-gray-100 rounded-2xl">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-4"
@@ -166,9 +635,12 @@ export default async function FoundingVendorsPage() {
               >
                 <CheckCircle2 size={18} style={{ color: "#C9A84C" }} />
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-2">Every vendor is reviewed</h3>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">
+                Every vendor is reviewed
+              </h3>
               <p className="text-xs text-gray-400 font-light leading-relaxed">
-                We individually verify every vendor before they appear on the platform. Customers know that means something.
+                We individually verify every vendor before they appear on the
+                platform. Customers know that means something.
               </p>
             </div>
 
@@ -179,9 +651,12 @@ export default async function FoundingVendorsPage() {
               >
                 <Shield size={18} style={{ color: "#C9A84C" }} />
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-2">Payments through Stripe</h3>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">
+                Payments through Stripe
+              </h3>
               <p className="text-xs text-gray-400 font-light leading-relaxed">
-                Every booking is paid through Stripe. Your earnings are protected and released to you after the event completes.
+                Every booking is paid through Stripe. Your earnings are protected
+                and released to you after the event completes.
               </p>
             </div>
 
@@ -192,17 +667,20 @@ export default async function FoundingVendorsPage() {
               >
                 <Award size={18} style={{ color: "#C9A84C" }} />
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm mb-2">No lock-in</h3>
+              <h3 className="font-semibold text-gray-900 text-sm mb-2">
+                No lock-in
+              </h3>
               <p className="text-xs text-gray-400 font-light leading-relaxed">
-                Your profile is free. There is no contract and no minimum term. If ELBOLD does not work for your business, you can leave at any time.
+                Your profile is free. There is no contract and no minimum term.
+                If ELBOLD does not work for your business, you can leave at any
+                time.
               </p>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
       <section className="py-24 px-4" style={{ background: "#0D1B3E" }}>
         <div className="max-w-2xl mx-auto text-center">
           <p
@@ -218,21 +696,27 @@ export default async function FoundingVendorsPage() {
             Start receiving booking enquiries.
           </h2>
           <p
-            className="font-light mb-10 leading-relaxed max-w-md mx-auto"
+            className="font-light mb-10 leading-relaxed max-w-md mx-auto text-sm"
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
-            Apply in under 5 minutes. We review within 24–48 hours.
-            Your profile goes live immediately upon approval.
-            Once the 20 founding places are filled, new vendors join a standard queue.
+            Apply in under 5 minutes. We review within 24–48 hours. Your profile
+            goes live immediately upon approval. Once the 20 founding places are
+            filled, new vendors join a standard queue.
           </p>
-          <Link href="/vendor/apply" className="btn-luxury">
-            Apply Now — It&apos;s Free
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/vendor/apply" className="btn-luxury">
+              Apply Now — It&apos;s Free
+            </Link>
+            <Link href="/vendor-standards" className="btn-luxury-outline">
+              Read Our Standards
+            </Link>
+          </div>
           <p
             className="text-xs font-light mt-6"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; ELBOLD earns only when you do &nbsp;·&nbsp; Cancel anytime
+            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; ELBOLD earns
+            only when you do &nbsp;·&nbsp; Cancel anytime
           </p>
         </div>
       </section>

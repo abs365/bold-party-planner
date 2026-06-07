@@ -2,17 +2,34 @@ import Link from "next/link";
 
 const PLATFORM_LINKS = [
   { label: "Browse Vendors", href: "/browse" },
+  { label: "Planning Resources", href: "/resources" },
+  { label: "Event Inspiration", href: "/inspire" },
+  { label: "Planning Guides", href: "/guides" },
   { label: "How It Works", href: "/how-it-works" },
-  { label: "About ELBOLD", href: "/about" },
-  { label: "Create an Event", href: "/dashboard/create-event" },
+];
+
+const TRUST_LINKS = [
+  { label: "The ELBOLD Trust System", href: "/trust" },
+  { label: "How We Verify Vendors", href: "/how-we-verify" },
+  { label: "Vendor Standards", href: "/vendor-standards" },
+  { label: "Our Commitments", href: "/our-commitments" },
   { label: "Booking Protection", href: "/booking-protection" },
+];
+
+const LOCATION_LINKS = [
+  { label: "Event Vendors in Essex", href: "/essex" },
+  { label: "Event Vendors in Kent", href: "/kent" },
+  { label: "Event Vendors in London", href: "/london" },
+  { label: "DJs in Essex", href: "/essex/djs" },
+  { label: "Photographers in London", href: "/london/photographers" },
+  { label: "Caterers in Kent", href: "/kent/caterers" },
 ];
 
 const VENDOR_LINKS = [
   { label: "Founding Vendor Programme", href: "/founding-vendors" },
+  { label: "Vendor Spotlights", href: "/vendor-spotlights" },
   { label: "Join as a Vendor", href: "/vendor/apply" },
-  { label: "Vendor Dashboard", href: "/vendor/dashboard" },
-  { label: "Subscription Plans", href: "/vendor/subscription" },
+  { label: "Vendor Standards", href: "/vendor-standards" },
   { label: "Vendor Terms", href: "/vendor-terms" },
 ];
 
@@ -35,16 +52,13 @@ export function Footer() {
   return (
     <footer style={{ background: "#091529", borderTop: "1px solid rgba(201,168,76,0.1)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-8 mb-14">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5 mb-5">
+            <Link href="/" className="block mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/elbold-mark.svg" width="30" height="30" alt="ELBOLD" />
-              <span className="font-bold tracking-[0.18em] text-sm" style={{ color: "#C9A84C" }}>
-                ELBOLD
-              </span>
+              <img src="/brand/elbold-logo-white.svg" width="120" height="24" alt="ELBOLD Events" />
             </Link>
             <p
               className="text-sm leading-relaxed mb-5 font-light"
@@ -82,9 +96,10 @@ export function Footer() {
 
           {[
             { heading: "Platform", links: PLATFORM_LINKS },
+            { heading: "Trust", links: TRUST_LINKS },
             { heading: "Vendors", links: VENDOR_LINKS },
+            { heading: "Locations", links: LOCATION_LINKS },
             { heading: "Legal", links: LEGAL_LINKS },
-            { heading: "Support", links: SUPPORT_LINKS },
           ].map(({ heading, links }) => (
             <div key={heading}>
               <h4

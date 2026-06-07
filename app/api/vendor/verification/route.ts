@@ -6,7 +6,7 @@ import { track } from "@/lib/analytics";
 
 const submitSchema = z.object({
   type: z.string().min(1),
-  document_url: z.string().url(),
+  document_url: z.string().min(1),
   file_name: z.string().optional(),
   notes: z.string().max(500).optional(),
 });

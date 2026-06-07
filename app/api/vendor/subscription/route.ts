@@ -69,7 +69,8 @@ export async function POST(req: Request) {
     const { data: sub } = await supabase.from("vendor_subscriptions").select("stripe_subscription_id").eq("vendor_id", vendor.id).maybeSingle();
     if (sub?.stripe_subscription_id) {
       const Stripe = (await import("stripe")).default;
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+      const { assertStripeKey } = await import("@/lib/stripe");
+      const stripe = new Stripe(assertStripeKey());
       await stripe.subscriptions.update(sub.stripe_subscription_id, { cancel_at_period_end: true });
       await supabase.from("vendor_subscriptions").update({ cancel_at_period_end: true }).eq("vendor_id", vendor.id);
     }
@@ -101,7 +102,8 @@ export async function POST(req: Request) {
   const { data: profile } = await supabase.from("profiles").select("email, full_name").eq("id", user.id).maybeSingle();
 
   const Stripe = (await import("stripe")).default;
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  const { assertStripeKey } = await import("@/lib/stripe");
+  const stripe = new Stripe(assertStripeKey());
 
   const { data: existingSub } = await supabase.from("vendor_subscriptions").select("stripe_customer_id").eq("vendor_id", vendor.id).maybeSingle();
   let customerId = existingSub?.stripe_customer_id;

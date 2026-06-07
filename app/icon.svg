@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!--
+    ELBOLD SVG Favicon — Concept B (Celebration Luxury)
+    SVG scales perfectly so rays are included — browser renders at any size cleanly.
+  -->
+
+  <!-- Navy background -->
+  <rect width="64" height="64" rx="12" fill="#0B1F4D"/>
+
+  <!-- Starburst rays -->
+  <line x1="32" y1="32" x2="32" y2="7"    stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="49.7" y2="14.3" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="57" y2="32"   stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="49.7" y2="49.7" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="32" y2="57"   stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="14.3" y2="49.7" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="7"   y2="32"   stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+  <line x1="32" y1="32" x2="14.3" y2="14.3" stroke="#D4AF37" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- Secondary rays -->
+  <line x1="32" y1="32" x2="32" y2="17"   stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="42.5" y2="21.5" stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="47" y2="32"   stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="42.5" y2="42.5" stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="32" y2="47"   stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="21.5" y2="42.5" stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="17" y2="32"   stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+  <line x1="32" y1="32" x2="21.5" y2="21.5" stroke="#D4AF37" stroke-width="0.7" stroke-linecap="round" opacity="0.32"/>
+
+  <!-- Centre disc — slightly lighter to contrast with bg -->
+  <circle cx="32" cy="32" r="14" fill="#162447"/>
+  <circle cx="32" cy="32" r="13.3" stroke="#D4AF37" stroke-width="0.55" fill="none" opacity="0.35"/>
+
+  <!-- EB monogram -->
+  <text
+    x="32" y="38"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-weight="700"
+    font-size="14"
+    letter-spacing="1.5"
+    fill="#D4AF37"
+  >EB</text>
+</svg>

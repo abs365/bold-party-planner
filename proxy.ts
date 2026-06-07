@@ -5,6 +5,7 @@ import { createServerClient } from "@supabase/ssr";
 // Routes that require any authenticated session
 const PROTECTED_PREFIXES = [
   "/dashboard",
+  "/vendor/apply",
   "/vendor/dashboard",
   "/vendor/profile",
   "/vendor/media",
@@ -67,8 +68,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // 2. Authenticated → auth page: bounce to appropriate dashboard
+  // 2. Authenticated → auth page: bounce to appropriate dashboard (or honour explicit redirect)
   if (isAuthPage && user) {
+    // If the user was sent to the auth page to authenticate before reaching a specific destination,
+    // return them there now that they are authenticated — regardless of role.
+    const redirectParam = request.nextUrl.searchParams.get("redirect");
+    if (redirectParam && !AUTH_PAGES.some((p) => redirectParam.startsWith(p))) {
+      return NextResponse.redirect(new URL(redirectParam, request.url));
+    }
+
     if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(user.email ?? "")) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }

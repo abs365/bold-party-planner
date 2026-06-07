@@ -65,19 +65,20 @@ const nextConfig: NextConfig = {
   compress: true,
 };
 
+// Treat placeholder .env values as absent — real tokens are non-empty and never start with "RESTORE_"
+const sentryAuthToken =
+  process.env.SENTRY_AUTH_TOKEN && !process.env.SENTRY_AUTH_TOKEN.startsWith("RESTORE_")
+    ? process.env.SENTRY_AUTH_TOKEN
+    : undefined;
+
 export default withSentryConfig(nextConfig, {
   // Sentry project details — set via CI secrets or .env.local
-  org:     process.env.SENTRY_ORG     ?? "",
-  project: process.env.SENTRY_PROJECT ?? "elbold-events",
+  org:     process.env.SENTRY_ORG?.startsWith("RESTORE_")     ? "" : (process.env.SENTRY_ORG ?? ""),
+  project: process.env.SENTRY_PROJECT?.startsWith("RESTORE_") ? "elbold-events" : (process.env.SENTRY_PROJECT ?? "elbold-events"),
 
-  // Auth token is intentionally omitted so sentry-cli does not run during the
-  // build. The CLI requires SENTRY_ORG + SENTRY_PROJECT to match an existing
-  // Sentry project — until those are confirmed, keeping this undefined prevents
-  // "Project not found" build failures. Error capture via DSN works without it.
-  // Re-enable by setting authToken: process.env.SENTRY_AUTH_TOKEN once the
-  // org/project names are verified in the Sentry dashboard.
-  authToken: undefined,
-  sourcemaps: { disable: true },
+  // Only upload source maps / create releases when a real auth token is present
+  authToken: sentryAuthToken,
+  sourcemaps: { disable: !sentryAuthToken },
 
   // Route Sentry events through a tunnel to avoid ad-blocker drops
   tunnelRoute: "/monitoring",
@@ -91,6 +92,6 @@ export default withSentryConfig(nextConfig, {
   // Suppress tree-shaking warnings
   disableLogger: true,
 
-  // Automatically monitor Vercel cron jobs
-  automaticVercelMonitors: true,
+  // Automatically monitor Vercel cron jobs — requires auth token; disabled locally
+  automaticVercelMonitors: !!sentryAuthToken,
 });

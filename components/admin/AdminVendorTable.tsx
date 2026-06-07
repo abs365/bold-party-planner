@@ -140,7 +140,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { icon: <Building2 size={18} className="text-brand-400" />, label: "Total Vendors", value: String(stats?.total_vendors ?? stats?.approved_vendors ?? 0) },
-          { icon: <CheckCircle2 size={18} className="text-green-400" />, label: "Approved", value: String(vendors.filter(v => v.status === "approved").length) },
+          { icon: <CheckCircle2 size={18} className="text-green-400" />, label: "Approved", value: String(stats?.approved_vendors ?? 0) },
           { icon: <Shield size={18} className="text-amber-400" />, label: "Pending Review", value: String(stats?.pending_vendors ?? 0) },
           { icon: <TrendingUp size={18} className="text-blue-400" />, label: "Platform Revenue", value: formatCurrency(Number(stats?.total_revenue ?? 0)) },
         ].map((stat) => (

@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { BadgeCheck, TrendingUp, Users, Wallet } from "lucide-react";
+import { BadgeCheck, TrendingUp, Users, Wallet, AlertTriangle } from "lucide-react";
+import { planMRRContribution } from "@/lib/vendor/entitlements";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -23,9 +24,12 @@ export default async function AdminSubscriptionsPage() {
     .order("created_at", { ascending: false });
 
   const activeSubs = (subs ?? []).filter((s) => s.status === "active");
-  const proSubs = activeSubs.filter((s) => s.plan === "pro");
-  const featuredSubs = activeSubs.filter((s) => s.plan === "featured");
-  const mrr = proSubs.length * 29 + featuredSubs.length * 79;
+  const pastDueSubs = (subs ?? []).filter((s) => s.status === "past_due");
+  const proSubs     = activeSubs.filter((s) => s.plan === "pro");
+  const premiumSubs = activeSubs.filter((s) => s.plan === "premium" || s.plan === "featured");
+  const eliteSubs   = activeSubs.filter((s) => s.plan === "elite");
+  // Correct MRR: uses planMRRContribution() which is the canonical plan-price source of truth
+  const mrr = activeSubs.reduce((sum, s) => sum + planMRRContribution(s.plan ?? "free"), 0);
   const mrrFormatted = mrr.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
 
   const safeUser: Profile = profile ?? {
@@ -50,9 +54,9 @@ export default async function AdminSubscriptionsPage() {
         <div className="grid sm:grid-cols-4 gap-4">
           {[
             { label: "Active Subscriptions", value: String(activeSubs.length), icon: BadgeCheck, color: "text-brand-400" },
-            { label: "Pro Plan", value: String(proSubs.length), icon: TrendingUp, color: "text-emerald-400" },
-            { label: "Featured Plan", value: String(featuredSubs.length), icon: Users, color: "text-amber-400" },
-            { label: "Est. MRR", value: mrrFormatted, icon: Wallet, color: "text-blue-400" },
+            { label: `Pro (${proSubs.length}) / Premium (${premiumSubs.length}) / Elite (${eliteSubs.length})`, value: `${proSubs.length + premiumSubs.length + eliteSubs.length} paid`, icon: TrendingUp, color: "text-emerald-400" },
+            { label: "Past Due", value: String(pastDueSubs.length), icon: AlertTriangle, color: pastDueSubs.length > 0 ? "text-amber-400" : "text-slate-500" },
+            { label: "Verified MRR", value: mrrFormatted, icon: Wallet, color: "text-blue-400" },
           ].map((stat) => (
             <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
               <stat.icon size={18} className={`${stat.color} mb-2`} />

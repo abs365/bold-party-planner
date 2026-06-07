@@ -32,6 +32,7 @@ export function StatusBadge({ status }: { status: string }) {
     completed: { variant: "success", label: "Completed" },
     cancelled: { variant: "danger", label: "Cancelled" },
     rejected: { variant: "danger", label: "Rejected" },
+    pending_payment: { variant: "warning", label: "Awaiting Payment" },
     disputed: { variant: "warning", label: "Disputed" },
     approved: { variant: "success", label: "Approved" },
     suspended: { variant: "danger", label: "Suspended" },

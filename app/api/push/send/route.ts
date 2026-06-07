@@ -2,11 +2,16 @@ import { NextResponse } from "next/server";
 import webpush from "web-push";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 
-if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+const vapidPublic  = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+const vapidPrivate = process.env.VAPID_PRIVATE_KEY;
+const vapidReady   = vapidPublic && !vapidPublic.startsWith("RESTORE_") &&
+                     vapidPrivate && !vapidPrivate.startsWith("RESTORE_");
+
+if (vapidReady) {
   webpush.setVapidDetails(
     process.env.VAPID_SUBJECT ?? "mailto:hello@elbold.com",
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
+    vapidPublic!,
+    vapidPrivate!
   );
 }
 

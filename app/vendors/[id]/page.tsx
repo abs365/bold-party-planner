@@ -8,7 +8,6 @@ import { Footer } from "@/components/layout/Footer";
 import { VendorProfileView } from "@/components/vendor/VendorProfileView";
 import { VENDOR_CATEGORIES } from "@/types";
 import { Star, CheckCircle2, MapPin } from "lucide-react";
-import { VendorTrustPanel } from "@/components/vendor/VendorTrustPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -36,21 +35,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       title,
       description,
       type: "profile",
-      images: [
-        {
-          url: "/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: title,
-          type: "image/png",
-        },
-      ],
+      images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [{ url: "/opengraph-image", alt: title }],
+      images: [{ url: "/icons/icon-512.png", alt: title }],
     },
   };
 }
@@ -119,7 +110,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     "@type": "LocalBusiness",
     "name": vendor.business_name,
     "description": vendor.description ?? undefined,
-    "url": `https://elbold.com/vendors/${id}`,
+    "url": `https://www.elbold.com/vendors/${id}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": vendor.city,
@@ -148,20 +139,11 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
       <div className="pt-16">
         <VendorProfileView vendor={vendor} currentUser={profile} />
 
-        {/* Trust Panel — positioned between profile and similar vendors */}
-        <section className="px-4 py-8 border-t border-gray-100">
-          <div className="max-w-6xl mx-auto">
-            <div className="max-w-sm">
-              <VendorTrustPanel vendor={vendor} />
-            </div>
-          </div>
-        </section>
-
         {/* Similar vendors */}
         {(similarVendors?.length ?? 0) > 0 && (
           <section className="py-12 px-4 border-t border-gray-100">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
                 More {cat?.label ?? "Vendors"} Near You
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -186,8 +168,11 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                             sizes="(max-width: 640px) 50vw, 25vw"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-3xl">
-                            {vcat?.icon ?? "🎉"}
+                          <div
+                            className="w-full h-full flex items-center justify-center text-xs font-semibold tracking-widest"
+                            style={{ background: "linear-gradient(135deg, #0B1F4D, #162447)", color: "rgba(212,175,55,0.35)" }}
+                          >
+                            ELBOLD
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -198,7 +183,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                         )}
                       </div>
                       <div className="p-3">
-                        <h3 className="text-xs font-semibold text-gray-900 truncate group-hover:text-brand-600 transition-colors">
+                        <h3 className="text-xs font-semibold text-gray-900 truncate group-hover:text-gray-600 transition-colors">
                           {v.business_name}
                         </h3>
                         <div className="flex items-center justify-between mt-1.5">

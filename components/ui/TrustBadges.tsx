@@ -1,4 +1,4 @@
-﻿import { ShieldCheck, Clock, Star, Award, Zap, Lock, BadgeCheck, Users, TrendingUp, CheckCircle2, Sparkles } from "lucide-react";
+﻿import { ShieldCheck, Clock, Star, Award, Zap, Lock, BadgeCheck, Users, TrendingUp, CheckCircle2, Sparkles, CreditCard, RotateCcw, Wallet, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TrustBadgesProps {
@@ -61,7 +61,7 @@ interface VendorTrustBadgeProps {
   responseTimeHours?: number | null;
   reviewCount?: number;
   yearsExperience?: number | null;
-  subscriptionPlan?: "free" | "pro" | "featured";
+  subscriptionPlan?: "free" | "pro" | "featured" | "premium" | "elite";
   className?: string;
 }
 
@@ -78,7 +78,9 @@ export function VendorTrustBadge({
   if (verified) {
     badges.push({ icon: BadgeCheck, label: "Verified",          color: "text-emerald-400" });
   }
-  if (subscriptionPlan === "featured") {
+  if (subscriptionPlan === "elite") {
+    badges.push({ icon: Award,      label: "Elite",             color: "text-gold-400" });
+  } else if (subscriptionPlan === "premium" || subscriptionPlan === "featured") {
     badges.push({ icon: Award,      label: "Featured",          color: "text-gold-400" });
   } else if (subscriptionPlan === "pro") {
     badges.push({ icon: Zap,        label: "Pro Vendor",        color: "text-brand-400" });
@@ -123,7 +125,7 @@ export function PlatformGuaranteeBanner({ className }: { className?: string }) {
           <div className="flex gap-3 mt-2">
             <span className="text-xs text-emerald-400">✓ Secure deposits</span>
             <span className="text-xs text-emerald-400">✓ Refund protection</span>
-            <span className="text-xs text-emerald-400">✓ 24/7 support</span>
+            <span className="text-xs text-emerald-400">✓ Email support</span>
           </div>
         </div>
       </div>
@@ -231,5 +233,97 @@ export function CompletedJobsPill({ reviewCount, className }: CompletedJobsPillP
       <Users size={10} />
       {jobsEstimate}+ events completed
     </span>
+  );
+}
+
+// ── Vendor-facing payment trust panel ─────────────────────────────────────────
+
+interface VendorPaymentTrustProps {
+  pendingPayouts?: number;
+  pendingAmount?: number;
+  totalEarned?: number;
+  commissionRate?: number;
+  className?: string;
+}
+
+export function VendorPaymentTrust({
+  pendingPayouts = 0,
+  pendingAmount = 0,
+  totalEarned = 0,
+  commissionRate = 10,
+  className,
+}: VendorPaymentTrustProps) {
+  return (
+    <div className={cn("rounded-xl border border-white/8 bg-white/4 p-5 space-y-4", className)}>
+      <div className="flex items-center gap-2">
+        <Wallet size={15} className="text-emerald-400" />
+        <h4 className="text-sm font-semibold text-white">Payment Transparency</h4>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="p-3 rounded-xl bg-white/4">
+          <div className="text-xs text-slate-500 mb-1">Total Earned</div>
+          <div className="text-base font-bold text-white tabular-nums">
+            £{totalEarned.toFixed(2)}
+          </div>
+        </div>
+        <div className="p-3 rounded-xl bg-white/4">
+          <div className="text-xs text-slate-500 mb-1">Pending Payouts</div>
+          <div className={`text-base font-bold tabular-nums ${pendingPayouts > 0 ? "text-amber-400" : "text-slate-500"}`}>
+            £{pendingAmount.toFixed(2)}
+          </div>
+        </div>
+      </div>
+      <div className="space-y-2">
+        {[
+          { icon: CreditCard,  text: `ELBOLD retains ${commissionRate}% platform commission on every booking`,  color: "text-slate-400" },
+          { icon: Wallet,      text: "Your 90% payout is processed after full payment is received",              color: "text-slate-400" },
+          { icon: FileText,    text: "Full booking and payment history available in your dashboard",              color: "text-slate-400" },
+          { icon: RotateCcw,   text: "Refunds and dispute resolutions are handled transparently",                color: "text-slate-400" },
+        ].map(({ icon: Icon, text, color }, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <Icon size={11} className={cn("flex-shrink-0 mt-0.5", color)} />
+            <p className="text-xs text-slate-500 leading-relaxed">{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Refund policy trust element (customer-facing) ─────────────────────────────
+
+interface RefundPolicyCardProps {
+  className?: string;
+  depositAmount?: number;
+}
+
+export function RefundPolicyCard({ className, depositAmount }: RefundPolicyCardProps) {
+  return (
+    <div className={cn("rounded-xl border border-white/8 bg-white/4 p-4", className)}>
+      <div className="flex items-center gap-2 mb-3">
+        <RotateCcw size={13} className="text-blue-400" />
+        <h4 className="text-xs font-semibold text-white">Transparent Refund Process</h4>
+      </div>
+      <div className="space-y-2">
+        {[
+          { label: "Vendor cancels",         outcome: "Full refund within 5 days" },
+          { label: "Event cancelled by you",  outcome: "Deposit may be non-refundable (see terms)" },
+          { label: "Dispute raised",          outcome: "Resolution within 48 hours" },
+          { label: "Vendor no-show",          outcome: "Full refund guaranteed" },
+        ].map(({ label, outcome }) => (
+          <div key={label} className="flex items-start justify-between gap-3 py-1.5 border-b border-white/4 last:border-0">
+            <span className="text-xs text-slate-500 leading-tight">{label}</span>
+            <span className="text-xs text-emerald-400 text-right leading-tight flex-shrink-0">{outcome}</span>
+          </div>
+        ))}
+      </div>
+      {depositAmount != null && (
+        <div className="mt-3 p-2.5 rounded-lg bg-blue-500/8 border border-blue-500/15">
+          <p className="text-xs text-blue-300 text-center">
+            Your deposit of £{depositAmount.toFixed(2)} is held securely by ELBOLD
+          </p>
+        </div>
+      )}
+    </div>
   );
 }

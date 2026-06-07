@@ -18,10 +18,16 @@ export async function updateProfilePhoneAction(formData: FormData): Promise<{ er
 
   const { error } = await supabase
     .from("profiles")
-    .update({ phone: phone || null })
+    .update({ phone: phone || null, phone_verified: false })
     .eq("id", user.id);
 
   if (error) return { error: error.message };
+
+  // Reset phone_verified on the vendor row too (fire-and-forget; no-op if no vendor row)
+  await supabase
+    .from("vendors")
+    .update({ phone_verified: false })
+    .eq("user_id", user.id);
 
   revalidatePath("/dashboard/settings");
   return {};

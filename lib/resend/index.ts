@@ -82,7 +82,7 @@ export async function sendVendorApplicationReceived(to: string, name: string, bu
   return send(to, "Your application has been received — ELBOLD Events", wrap(
     "Application Received",
     `<p>Hi ${name},</p>
-    <p>We've received your vendor application for <span class="highlight">${businessName}</span>. Our team will review it within <strong>24–48 hours</strong>.</p>
+    <p>We've received your vendor application for <span class="highlight">${businessName}</span>. Our team reviews all applications within <strong>2 working days</strong> and will email you with the outcome.</p>
     <p>Once approved, your profile will go live on ELBOLD Events and you can start receiving enquiries immediately.</p>
     <p>In the meantime, you can log in to add more details to your profile, upload photos, and set up your packages.</p>
     <a href="${appUrl}/vendor/dashboard" class="btn">Visit Your Dashboard</a>
@@ -190,7 +190,7 @@ export async function sendVendorPaymentNotification(
     "Payment Received",
     `<p>Hi ${vendorName},</p>
     <p>A payment of <strong>£${amount.toFixed(2)}</strong> has been made for your booking: <strong>${eventTitle}</strong>.</p>
-    <p>Your payout of <span class="highlight">£${(amount * 0.9).toFixed(2)}</span> will be processed after the event is completed.</p>
+    <p>Your payout of <span class="highlight">£${(amount * 0.9).toFixed(2)}</span> will be processed within 7 working days of event completion via bank transfer to your registered account.</p>
     <a href="${appUrl}/vendor/bookings/${bookingId}" class="btn">View Booking</a>`
   ));
 }
@@ -219,6 +219,26 @@ export async function sendReviewRequest(
     <p>Sharing your experience helps other customers find great vendors — and helps vendors grow their business.</p>
     <a href="${appUrl}/dashboard/bookings/${bookingId}?review=1" class="btn">Leave a Review</a>
     <p style="font-size:13px;color:#9ca3af;margin-top:16px">Takes less than 60 seconds.</p>`
+  ));
+}
+
+export async function sendBookingPaymentFailed(
+  to: string, name: string, eventTitle: string, bookingId: string, amount: number
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  return send(to, `Payment failed — action required — ELBOLD Events`, wrap(
+    "Payment Failed — Action Required",
+    `<p>Hi ${name},</p>
+    <p>Your payment of <span class="highlight">£${amount.toFixed(2)}</span> for <strong>${eventTitle}</strong> was declined by your bank or card provider.</p>
+    <div class="detail-box">
+      <p>Common reasons for a declined payment:</p>
+      <p>• Insufficient funds or credit limit reached</p>
+      <p>• Card expired or incorrect details</p>
+      <p>• Bank security block on online transactions</p>
+    </div>
+    <p>Your booking is still on hold. Please try again with a different payment method or contact your bank.</p>
+    <a href="${appUrl}/dashboard/bookings/${bookingId}" class="btn">Retry Payment</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">If you continue to experience issues, contact <a href="mailto:support@elbold.com" style="color:#9ca3af">support@elbold.com</a></p>`
   ));
 }
 
@@ -303,8 +323,75 @@ export async function sendQuoteAcceptedToVendor(
       <p><span class="detail-label">Agreed price:</span> <span class="detail-value">£${price.toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
       <p><span class="detail-label">Your payout (90%):</span> <span class="detail-value">£${(price * 0.9).toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
     </div>
-    <p>The customer will pay the deposit to secure the date. You will be notified when payment is received.</p>
+    <p>The booking is awaiting deposit payment from the customer. You will be notified as soon as payment is received and the booking is confirmed.</p>
     <a href="${appUrl}/vendor/bookings/${bookingId}" class="btn">View Booking</a>`
+  ));
+}
+
+export async function sendBookingAwaitingPayment(
+  to: string,
+  customerName: string,
+  vendorBusiness: string,
+  eventTitle: string,
+  eventDate: string | null,
+  depositAmount: number,
+  bookingId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const dateLine = eventDate
+    ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>`
+    : "";
+  return send(to, `Pay your deposit to confirm your booking — ELBOLD Events`, wrap(
+    "One Step Away From Confirming",
+    `<p>Hi ${customerName},</p>
+    <p>You have selected <span class="highlight">${vendorBusiness}</span> for <strong>${eventTitle}</strong>. To confirm your booking, please pay the deposit now.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Vendor:</span> <span class="detail-value">${vendorBusiness}</span></p>
+      ${dateLine}
+      <p><span class="detail-label">Deposit due now:</span> <span class="detail-value">£${depositAmount.toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
+    </div>
+    <p>Your deposit is held securely by Stripe and only released to the vendor after your event is completed.</p>
+    <a href="${appUrl}/dashboard/bookings/${bookingId}" class="btn">Pay Deposit &amp; Confirm</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">Your date is reserved but not confirmed until the deposit is paid. Pay now to lock it in.</p>`
+  ));
+}
+
+export async function sendQuoteSubmittedToCustomer(
+  to: string,
+  customerName: string,
+  vendorBusiness: string,
+  eventType: string,
+  eventDate: string | null,
+  quoteId: string,
+  eventTitle?: string | null
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const dateStr = eventDate
+    ? new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+    : null;
+  const eventLabel = eventTitle ?? eventType.replace(/_/g, " ");
+  const dateLine = dateStr
+    ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${dateStr}</span></p>`
+    : "";
+  return send(to, `Quote request received — ELBOLD Events`, wrap(
+    "Quote Request Received",
+    `<p>Hi ${customerName},</p>
+    <p>Your quote request has been sent to <span class="highlight">${vendorBusiness}</span>. We have notified them and they will review your request shortly.</p>
+    <div class="detail-box">
+      <p><span class="detail-label">Vendor:</span> <span class="detail-value">${vendorBusiness}</span></p>
+      <p><span class="detail-label">Event:</span> <span class="detail-value">${eventLabel}</span></p>
+      ${dateLine}
+    </div>
+    <p><strong>What happens next:</strong></p>
+    <div class="detail-box">
+      <p>1. ${vendorBusiness} reviews your request</p>
+      <p>2. If available, they send you a detailed quote with pricing</p>
+      <p>3. You receive an email notification when your quote arrives</p>
+      <p>4. You can compare, accept, and book securely through ELBOLD</p>
+    </div>
+    <p>Most vendors respond within 2–24 hours. You can track your request at any time from your dashboard.</p>
+    <a href="${appUrl}/dashboard/quotes/${quoteId}" class="btn">View Your Request</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">You are under no obligation until you accept a quote. Your payment is protected by Stripe.</p>`
   ));
 }
 
@@ -353,6 +440,52 @@ export async function sendEventCreated(
     <p>Your Smart Plan has been generated. View vendor recommendations, manage your checklist, and track your budget from your dashboard.</p>
     <a href="${appUrl}/dashboard/events/${eventId}" class="btn">View My Event</a>
     <p style="margin-top:24px;font-size:13px;color:#6b7280">If quote requests were sent to vendors, you will hear back within 24 hours.</p>`
+  ));
+}
+
+export async function sendAdminNewVendorAlert(
+  adminEmails: string[],
+  businessName: string,
+  category: string,
+  city: string,
+  vendorEmail: string,
+  vendorId: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const results = await Promise.allSettled(
+    adminEmails.map((adminEmail) =>
+      send(adminEmail, `New vendor application: ${businessName} - ELBOLD Admin`, wrap(
+        "New Vendor Application",
+        `<p>A new vendor has submitted an application and is awaiting review.</p>
+        <div class="detail-box">
+          <p><span class="detail-label">Business:</span> <span class="detail-value">${businessName}</span></p>
+          <p><span class="detail-label">Category:</span> <span class="detail-value">${category}</span></p>
+          <p><span class="detail-label">City:</span> <span class="detail-value">${city}</span></p>
+          <p><span class="detail-label">Email:</span> <span class="detail-value">${vendorEmail}</span></p>
+        </div>
+        <a href="${appUrl}/admin/vendors?status=pending" class="btn">Review Application</a>`
+      ))
+    )
+  );
+  const allOk = results.every((r) => r.status === "fulfilled" && r.value.success);
+  return { success: allOk };
+}
+
+export async function sendPhoneOtpCode(
+  to: string,
+  name: string,
+  code: string,
+  phone: string
+) {
+  return send(to, "Your ELBOLD phone verification code", wrap(
+    "Phone Verification",
+    `<p>Hi ${name},</p>
+    <p>Use the code below to verify your phone number <span class="highlight">${phone}</span>.</p>
+    <div class="detail-box" style="text-align:center">
+      <p style="font-size:32px;font-weight:800;letter-spacing:8px;color:#0d1b3e;margin:8px 0">${code}</p>
+      <p style="margin:0;font-size:12px;color:#9ca3af">This code expires in 15 minutes</p>
+    </div>
+    <p>If you did not request this, you can safely ignore this email.</p>`
   ));
 }
 

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminVendorTable } from "@/components/admin/AdminVendorTable";
+import { logger } from "@/lib/logger";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,10 @@ export default async function AdminVendorsPage({
     query = query.or(`business_name.ilike.%${sp.search}%,city.ilike.%${sp.search}%`);
   }
 
-  const { data: vendors } = await query;
+  const { data: vendors, error: vendorQueryError } = await query;
+  if (vendorQueryError) {
+    logger.error("admin.vendors.query_failed", { err: vendorQueryError });
+  }
 
   const { data: stats } = await adminSupabase.from("platform_stats").select("*").single();
 

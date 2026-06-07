@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       .maybeSingle();
 
     if (!booking) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
-    if (!["accepted", "confirmed"].includes(booking.status)) {
+    if (!["accepted", "confirmed", "pending_payment"].includes(booking.status)) {
       return NextResponse.json({ error: "Booking must be accepted before payment" }, { status: 400 });
     }
 
@@ -88,6 +88,16 @@ export async function POST(request: Request) {
         vendor_payout: String(paymentType === "deposit"
           ? booking.deposit_amount * 0.9
           : booking.vendor_payout),
+      },
+      // Propagate booking context to the PaymentIntent so payment_intent.payment_failed
+      // webhook can identify the booking and notify the customer.
+      payment_intent_data: {
+        metadata: {
+          booking_id: bookingId,
+          customer_id: user.id,
+          payment_type: paymentType,
+          amount: String(amount),
+        },
       },
       success_url: `${appUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}&booking_id=${bookingId}`,
       cancel_url: `${appUrl}/payment/cancel?booking_id=${bookingId}`,

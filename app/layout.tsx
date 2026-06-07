@@ -20,22 +20,23 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
+    default: "ELBOLD Events | Find Trusted Event Professionals Across the UK",
     template: "%s | ELBOLD Events",
   },
   description:
-    "The UK's premium event vendor marketplace. Book verified DJs, decorators, caterers, photographers and more for weddings, birthdays, corporate events and every occasion.",
+    "Find trusted event professionals for life's most important celebrations. Verified DJs, photographers, caterers, decorators and more for weddings, birthdays, corporate events and cultural celebrations across the UK.",
   keywords: [
-    "event vendors UK", "event marketplace UK", "book event vendors", "DJ hire UK",
-    "wedding vendors", "birthday event planning", "event photographer UK", "ELBOLD Events",
+    "event professionals UK", "wedding vendors UK", "find event vendors", "DJ hire UK",
+    "wedding photographer UK", "event caterer UK", "party decorator UK", "ELBOLD Events",
+    "verified event professionals", "book event vendors UK",
   ],
-  authors: [{ name: "ELBOLD", url: APP_URL }],
-  creator: "ELBOLD",
-  publisher: "ELBOLD",
+  authors: [{ name: "ELBOLD Events", url: APP_URL }],
+  creator: "ELBOLD Events",
+  publisher: "ELBOLD Events",
   openGraph: {
     siteName: "ELBOLD Events",
-    title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
-    description: "Book verified event vendors across the UK. DJs, caterers, photographers, decorators and more.",
+    title: "ELBOLD Events | Find Trusted Event Professionals Across the UK",
+    description: "Find trusted event professionals for life's most important celebrations. Every vendor individually reviewed.",
     type: "website",
     url: APP_URL,
     locale: "en_GB",

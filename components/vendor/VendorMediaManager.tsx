@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import {
   Upload, Trash2, Star, Play, Loader2,
-  Image as ImageIcon, Video, Plus, X, CheckCircle2,
+  Image as ImageIcon, Video, Plus, X, CheckCircle2, AlertCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { VendorMedia } from "@/types";
@@ -16,10 +16,18 @@ interface VendorMediaManagerProps {
   initialMedia: VendorMedia[];
 }
 
+interface PendingUpload {
+  id: string;
+  name: string;
+  sizeKb: number;
+  status: "uploading" | "done" | "failed";
+  error?: string;
+}
+
 export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManagerProps) {
   const [media, setMedia] = useState<VendorMedia[]>(initialMedia);
   const [uploading, setUploading] = useState(false);
-  const [, setUploadProgress] = useState<Record<string, number>>({});
+  const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([]);
   const [editingCaption, setEditingCaption] = useState<string | null>(null);
   const [captionText, setCaptionText] = useState("");
 
@@ -29,10 +37,6 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       return;
     }
 
-    // Warn about oversized videos before attempting upload.
-    // Vercel serverless functions have a payload limit (~4.5 MB on Hobby).
-    // Videos beyond that are rejected before the API route runs, returning an
-    // HTML error page that cannot be parsed as JSON.
     for (const file of acceptedFiles) {
       if (file.type.startsWith("video/") && file.size > 50 * 1024 * 1024) {
         toast.error(`${file.name} is too large (${(file.size / 1024 / 1024).toFixed(0)} MB). Videos must be under 50 MB.`);
@@ -41,11 +45,19 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
     }
 
     setUploading(true);
+    const initial: PendingUpload[] = acceptedFiles.map((f) => ({
+      id: `${Date.now()}_${Math.random()}`,
+      name: f.name,
+      sizeKb: Math.round(f.size / 1024),
+      status: "uploading",
+    }));
+    setPendingUploads(initial);
+
     const results: VendorMedia[] = [];
 
-    for (const file of acceptedFiles) {
-      const tempId = `temp_${Date.now()}_${Math.random()}`;
-      setUploadProgress((prev) => ({ ...prev, [tempId]: 0 }));
+    for (let i = 0; i < acceptedFiles.length; i++) {
+      const file = acceptedFiles[i];
+      const uploadId = initial[i].id;
 
       try {
         const formData = new FormData();
@@ -56,7 +68,6 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
 
         const res = await fetch("/api/uploads", { method: "POST", body: formData });
 
-        // Parse error safely — non-JSON bodies (e.g. Vercel 413 HTML) must not crash.
         if (!res.ok) {
           let errorMessage = `Upload failed (HTTP ${res.status})`;
           const contentType = res.headers.get("content-type") ?? "";
@@ -66,30 +77,27 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
               errorMessage = err.error ?? errorMessage;
             } catch { /* leave default message */ }
           } else if (res.status === 413) {
-            errorMessage = "File too large — reduce the file size and try again";
+            errorMessage = "File too large";
           }
           throw new Error(errorMessage);
         }
 
         const uploaded = await res.json() as VendorMedia;
         results.push(uploaded);
-        setUploadProgress((prev) => ({ ...prev, [tempId]: 100 }));
+        setPendingUploads((prev) => prev.map((p) => p.id === uploadId ? { ...p, status: "done" } : p));
       } catch (err: unknown) {
-        toast.error(`Failed to upload ${file.name}: ${err instanceof Error ? err.message : "Unknown error"}`);
-        setUploadProgress((prev) => {
-          const next = { ...prev };
-          delete next[tempId];
-          return next;
-        });
+        const msg = err instanceof Error ? err.message : "Unknown error";
+        setPendingUploads((prev) => prev.map((p) => p.id === uploadId ? { ...p, status: "failed", error: msg } : p));
       }
     }
 
     if (results.length > 0) {
       setMedia((prev) => [...prev, ...results]);
-      toast.success(`${results.length} file${results.length > 1 ? "s" : ""} uploaded!`);
     }
-    setUploadProgress({});
+
     setUploading(false);
+    // Keep status list visible briefly so vendor can see results, then clear
+    setTimeout(() => setPendingUploads([]), 3000);
   }, [vendorId, media.length]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -195,8 +203,10 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
         {uploading ? (
           <div className="flex flex-col items-center gap-3">
             <Loader2 size={36} className="text-brand-400 animate-spin" />
-            <p className="text-white font-semibold">Uploading files...</p>
-            <p className="text-sm text-slate-500">Please wait</p>
+            <p className="text-white font-semibold">
+              Uploading {pendingUploads.filter((p) => p.status === "done").length} of {pendingUploads.length} file{pendingUploads.length !== 1 ? "s" : ""}...
+            </p>
+            <p className="text-sm text-slate-500">See progress below</p>
           </div>
         ) : isDragActive ? (
           <div className="flex flex-col items-center gap-3">
@@ -225,6 +235,32 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
           </div>
         )}
       </div>
+
+      {/* Per-file upload status list */}
+      {pendingUploads.length > 0 && (
+        <div className="space-y-2">
+          {pendingUploads.map((p) => (
+            <div
+              key={p.id}
+              className={cn(
+                "flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-all",
+                p.status === "uploading" && "border-white/10 bg-white/4",
+                p.status === "done" && "border-emerald-500/30 bg-emerald-500/8",
+                p.status === "failed" && "border-red-500/30 bg-red-500/8"
+              )}
+            >
+              {p.status === "uploading" && <Loader2 size={15} className="flex-shrink-0 animate-spin text-brand-400" />}
+              {p.status === "done" && <CheckCircle2 size={15} className="flex-shrink-0 text-emerald-400" />}
+              {p.status === "failed" && <AlertCircle size={15} className="flex-shrink-0 text-red-400" />}
+              <span className="flex-1 truncate text-slate-300">{p.name}</span>
+              <span className="flex-shrink-0 text-xs text-slate-500">{p.sizeKb} KB</span>
+              {p.status === "uploading" && <span className="flex-shrink-0 text-xs text-slate-500">Uploading...</span>}
+              {p.status === "done" && <span className="flex-shrink-0 text-xs text-emerald-400">Uploaded</span>}
+              {p.status === "failed" && <span className="flex-shrink-0 text-xs text-red-400">{p.error ?? "Failed"}</span>}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Media Count */}
       <div className="flex items-center gap-4 text-sm text-slate-400">

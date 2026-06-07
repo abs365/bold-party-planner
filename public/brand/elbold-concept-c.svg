@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 60" fill="none">
+  <!--
+    CONCEPT C — PREMIUM WORDMARK + MONOGRAM
+    Philosophy: Confidence through restraint. A compact diamond monogram
+    paired with a commanding wordmark. No badge shape. Maximum clarity.
+    Inspired by Bang & Olufsen, Four Seasons, Aesop.
+  -->
+
+  <!-- Diamond monogram container — rotated square -->
+  <rect
+    x="20" y="12"
+    width="36" height="36"
+    rx="2"
+    transform="rotate(45 38 30)"
+    fill="#0B1F4D"
+    stroke="#D4AF37"
+    stroke-width="0.8"
+  />
+
+  <!-- EB — clean, unornamented, bold -->
+  <text
+    x="38" y="34"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-weight="700"
+    font-size="12"
+    letter-spacing="1"
+    fill="#D4AF37"
+  >EB</text>
+
+  <!-- Thin vertical rule separator -->
+  <line x1="68" y1="10" x2="68" y2="50" stroke="#D4AF37" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- ELBOLD — commanding, ultra-tracked wordmark -->
+  <text
+    x="84" y="29"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-weight="700"
+    font-size="21"
+    letter-spacing="5"
+    fill="#0B1F4D"
+  >ELBOLD</text>
+
+  <!-- Thin horizontal rule under ELBOLD -->
+  <line x1="84" y1="34" x2="296" y2="34" stroke="#D4AF37" stroke-width="0.4" opacity="0.35"/>
+
+  <!-- EVENTS — micro caption, wide tracking -->
+  <text
+    x="84" y="46"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-weight="400"
+    font-size="7.5"
+    letter-spacing="8"
+    fill="#C9A84C"
+    opacity="0.75"
+  >EVENTS</text>
+</svg>

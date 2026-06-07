@@ -147,6 +147,7 @@ export async function POST(req: Request) {
   void track({ event: "quote.requested", userId: user.id,
     properties: { vendor_id, event_id: rest.event_id ?? null, lead_score } });
 
+  // In-app notification — vendor
   void supabase.rpc("notify_user", {
     p_user_id: vendor.user_id,
     p_title: "New Quote Request",
@@ -155,23 +156,56 @@ export async function POST(req: Request) {
     p_link: "/vendor/quotes",
   });
 
-  // Transactional email to vendor
+  // In-app notification — customer (confirms the request was received)
+  void supabase.rpc("notify_user", {
+    p_user_id: user.id,
+    p_title: "Quote Request Sent",
+    p_message: "Your quote request has been sent. You will be notified when the vendor responds.",
+    p_type: "booking",
+    p_link: `/dashboard/quotes/${data.id}`,
+  });
+
+  // Transactional emails — vendor and customer
   void (async () => {
-    const { data: vendorContact } = await supabase
-      .from("profiles")
-      .select("email, full_name")
-      .eq("id", vendor.user_id)
-      .maybeSingle();
+    const [{ data: vendorContact }, { data: customerProfile }, { data: vendorInfo }] = await Promise.all([
+      supabase.from("profiles").select("email, full_name").eq("id", vendor.user_id).maybeSingle(),
+      supabase.from("profiles").select("email, full_name").eq("id", user.id).maybeSingle(),
+      supabase.from("vendors").select("business_name").eq("id", vendor_id).maybeSingle(),
+    ]);
+
+    // Fetch event title if event_id was provided
+    let eventTitle: string | null = null;
+    if (rest.event_id) {
+      const { data: eventRow } = await supabase.from("events").select("title").eq("id", rest.event_id).maybeSingle();
+      eventTitle = eventRow?.title ?? null;
+    }
+
+    const vendorBusiness = vendorInfo?.business_name ?? vendorContact?.full_name ?? "the vendor";
+    const customerName   = customerProfile?.full_name ?? "there";
+
     if (vendorContact?.email) {
       const { sendQuoteRequestToVendor } = await import("@/lib/resend");
       void sendQuoteRequestToVendor(
         vendorContact.email,
         vendorContact.full_name ?? "there",
-        (await supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle()).data?.full_name ?? "A customer",
+        customerName,
         rest.event_type ?? "event",
         rest.event_date ?? null,
         rest.budget_max ?? null,
         data.id
+      );
+    }
+
+    if (customerProfile?.email) {
+      const { sendQuoteSubmittedToCustomer } = await import("@/lib/resend");
+      void sendQuoteSubmittedToCustomer(
+        customerProfile.email,
+        customerName,
+        vendorBusiness,
+        rest.event_type ?? "event",
+        rest.event_date ?? null,
+        data.id,
+        eventTitle
       );
     }
   })();

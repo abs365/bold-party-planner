@@ -48,8 +48,8 @@ export function CustomerBookingDetail({
   const depositAmount = Number(booking.deposit_amount ?? 0);
   const vendorId = String(vendor?.id ?? "");
 
-  const canPayDeposit = ["accepted", "confirmed"].includes(status) && paymentStatus === "pending";
-  const canPayFull = ["accepted", "confirmed"].includes(status) && paymentStatus === "deposit_paid";
+  const canPayDeposit = ["accepted", "confirmed", "pending_payment"].includes(status) && paymentStatus === "pending";
+  const canPayFull = ["accepted", "confirmed", "pending_payment"].includes(status) && paymentStatus === "deposit_paid";
   const isCompleted = status === "completed";
 
   async function handlePayment(type: "deposit" | "full") {

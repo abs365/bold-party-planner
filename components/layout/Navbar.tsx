@@ -19,8 +19,8 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
   const profileRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
-    { href: "/browse", label: "Browse Vendors" },
-    { href: "/inspire", label: "Inspiration" },
+    { href: "/browse", label: "Find Vendors" },
+    { href: "/inspire", label: "Event Ideas" },
     { href: "/how-it-works", label: "How It Works" },
   ];
 
@@ -47,7 +47,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
 
   const headerClass = lightBg
     ? "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200"
-    : "fixed top-0 left-0 right-0 z-50 bg-white/4 border-b border-white/8";
+    : "fixed top-0 left-0 right-0 z-50 bg-[#0B1F4D]/70 backdrop-blur-md border-b border-white/6";
 
   const linkClass = (href: string) => cn(
     "text-sm font-medium transition-colors",
@@ -75,8 +75,8 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
         <Link href="/" className="flex items-center flex-shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={lightBg ? "/brand/elbold-wordmark.svg" : "/brand/elbold-wordmark-white.svg"}
-            width="130"
+            src={lightBg ? "/brand/elbold-logo-final.svg" : "/brand/elbold-logo-white.svg"}
+            width="140"
             height="28"
             alt="ELBOLD"
             className="h-7 w-auto"
@@ -215,8 +215,8 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                   <Link href="/login" className="btn-secondary text-sm py-2 px-4">
                     Sign In
                   </Link>
-                  <Link href="/signup" className="btn-primary text-sm py-2 px-4">
-                    Get Started Free
+                  <Link href="/browse" className="btn-luxury text-sm py-2 px-4">
+                    Get Quotes
                   </Link>
                 </>
               )}
@@ -277,8 +277,8 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                 <Link href="/login" className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Sign In
                 </Link>
-                <Link href="/signup" className="btn-primary text-sm" onClick={() => setMobileOpen(false)}>
-                  Get Started
+                <Link href="/browse" className="btn-luxury text-sm" onClick={() => setMobileOpen(false)}>
+                  Get Quotes
                 </Link>
               </>
             )}

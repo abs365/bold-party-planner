@@ -79,7 +79,7 @@ export async function GET(req: Request) {
   const { data: unpaidBookings } = await supabase
     .from("bookings")
     .select("id, customer_id, deposit_amount, vendor:vendors(business_name)")
-    .in("status", ["accepted", "confirmed"])
+    .in("status", ["accepted", "confirmed", "pending_payment"])
     .eq("payment_status", "pending")
     .lt("created_at", twoDaysAgo.toISOString());
 
@@ -95,34 +95,83 @@ export async function GET(req: Request) {
     results.unpaid_booking++;
   }
 
-  // ── 4. Review requests (event completed 1-2 days ago, no review) ──────────
-  const oneDayAgo = new Date(now);
-  oneDayAgo.setDate(now.getDate() - 1);
+  // ── 4. Review requests — triggered 3 days after event date ──────────────
+  // Looks for confirmed bookings whose event date was exactly 3 days ago
+  // and for which no review has been submitted yet. Does not require
+  // booking.completed_at to be set (which requires a manual admin action).
+  const threeDaysAgo = new Date(now);
+  threeDaysAgo.setDate(now.getDate() - 3);
+  const fourDaysAgo = new Date(now);
+  fourDaysAgo.setDate(now.getDate() - 4);
 
-  const { data: completedBookings } = await supabase
+  const threeDaysAgoStr = threeDaysAgo.toISOString().slice(0, 10);
+  const fourDaysAgoStr  = fourDaysAgo.toISOString().slice(0, 10);
+
+  const { data: reviewableBookings } = await supabase
     .from("bookings")
-    .select("id, customer_id, vendor_id")
-    .eq("status", "completed")
-    .gte("completed_at", twoDaysAgo.toISOString())
-    .lt("completed_at", oneDayAgo.toISOString());
+    .select(`
+      id, customer_id, vendor_id,
+      vendor:vendors(business_name),
+      customer:profiles!bookings_customer_id_fkey(email, full_name),
+      event:events(title, date)
+    `)
+    .in("status", ["confirmed", "completed"])
+    .not("payment_status", "eq", "pending");
 
-  for (const booking of completedBookings ?? []) {
+  for (const booking of reviewableBookings ?? []) {
+    const eventData = booking.event as unknown as Record<string, string> | null;
+    if (!eventData?.date) continue;
+
+    const eventDateStr = eventData.date.slice(0, 10);
+    if (eventDateStr < fourDaysAgoStr || eventDateStr > threeDaysAgoStr) continue;
+
     const { data: existingReview } = await supabase
       .from("reviews")
       .select("id")
       .eq("booking_id", booking.id)
-      .single();
+      .maybeSingle();
 
-    if (!existingReview) {
-      await supabase.rpc("notify_user", {
-        p_user_id: booking.customer_id,
-        p_title: "Share Your Experience",
-        p_message: "How did your event go? Leave a review to help other customers.",
-        p_type: "review",
-        p_link: `/dashboard/bookings/${booking.id}?review=1`,
-      });
-      results.review_request++;
+    if (existingReview) continue;
+
+    const { data: alreadyLogged } = await supabase
+      .from("automation_logs")
+      .select("id")
+      .eq("type", "review_request")
+      .eq("target_id", booking.id)
+      .maybeSingle();
+
+    if (alreadyLogged) continue;
+
+    const customer = booking.customer as unknown as Record<string, string> | null;
+    const vendorData = booking.vendor as unknown as Record<string, string> | null;
+    const vendorBusiness = vendorData?.business_name ?? "your vendor";
+
+    await supabase.rpc("notify_user", {
+      p_user_id: booking.customer_id,
+      p_title: "How did your event go?",
+      p_message: `Leave a review for ${vendorBusiness}. It takes 60 seconds and helps other customers.`,
+      p_type: "review",
+      p_link: `/dashboard/bookings/${booking.id}?review=1`,
+    });
+
+    if (customer?.email) {
+      const { sendReviewRequest } = await import("@/lib/resend");
+      void sendReviewRequest(
+        customer.email,
+        customer.full_name ?? "there",
+        vendorBusiness,
+        booking.id
+      );
     }
+
+    await supabase.from("automation_logs").insert({
+      type: "review_request",
+      target_id: booking.id,
+      target_type: "booking",
+      result: "sent",
+    });
+
+    results.review_request++;
   }
 
   // ── 5. Admin alerts for long-pending vendor applications ─────────────────

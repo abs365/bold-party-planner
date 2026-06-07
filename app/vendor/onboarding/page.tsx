@@ -6,7 +6,7 @@ import { VendorOnboardingWizard } from "@/components/vendor/VendorOnboardingWiza
 import { VendorOnboardingProgress } from "@/components/vendor/VendorOnboardingProgress";
 import { computeVendorCompletion } from "@/lib/vendor/completion";
 import { track } from "@/lib/analytics";
-import { Clock, XCircle, AlertCircle, ArrowRight } from "lucide-react";
+import { Clock, XCircle, AlertCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -34,38 +34,144 @@ export default async function VendorOnboardingPage() {
   // The wizard requires an existing vendor row (for PATCH /api/vendor/profile).
   if (!vendor) redirect("/vendor/apply");
 
-  // Pending → application under review
+  // Pending → application under review — show full lifecycle timeline
   if (vendor.status === "pending") {
+    const STAGES = [
+      {
+        id: "received",
+        label: "Application Received",
+        detail: "Your application has been submitted successfully.",
+        done: true,
+        active: false,
+      },
+      {
+        id: "review",
+        label: "Review In Progress",
+        detail: "Our team is reviewing your profile, portfolio, and business details. This takes up to 2 working days.",
+        done: false,
+        active: true,
+      },
+      {
+        id: "verification",
+        label: "Verification",
+        detail: "We may request ID or additional documents to reach a higher verification level.",
+        done: false,
+        active: false,
+      },
+      {
+        id: "approved",
+        label: "Profile Published",
+        detail: "Your profile goes live on the marketplace. Customers can browse and enquire immediately.",
+        done: false,
+        active: false,
+      },
+      {
+        id: "active",
+        label: "Active Vendor",
+        detail: "You receive quote requests, respond to customers, and start earning.",
+        done: false,
+        active: false,
+      },
+    ];
+
     return (
       <DashboardLayout user={profile as Profile}>
-        <div className="max-w-2xl mx-auto py-12 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-6">
-            <Clock size={32} className="text-amber-400" />
+        <div className="max-w-2xl mx-auto py-12">
+          <div className="text-center mb-10">
+            <div className="w-20 h-20 rounded-2xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center mx-auto mb-6">
+              <Clock size={32} className="text-amber-400" />
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-3">Application Under Review</h1>
+            <p className="text-slate-400">
+              Your application for{" "}
+              <span className="text-white font-medium">{vendor.business_name}</span>{" "}
+              is being reviewed. We aim to respond within 2 working days.
+            </p>
           </div>
-          <h1 className="text-2xl font-bold text-white mb-3">Application Under Review</h1>
-          <p className="text-slate-400 mb-8">
-            Your application for <span className="text-white font-medium">{vendor.business_name}</span> is
-            being reviewed by our team. We usually approve within 24 hours.
-          </p>
-          <div className="bg-white/4 border border-white/6 rounded-xl p-6 text-left space-y-3 mb-8">
-            <div className="text-sm font-semibold text-white mb-4">What happens next?</div>
-            {[
-              "Our team reviews your profile for quality and completeness",
-              "You'll receive an email notification when approved",
-              "Your profile goes live on the marketplace immediately after approval",
-              "You can then complete your full profile to start receiving leads",
-            ].map((step, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-brand-500/20 border border-brand-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold text-brand-400">{i + 1}</span>
+
+          {/* Status timeline */}
+          <div className="bg-white/4 border border-white/6 rounded-2xl p-6 mb-6">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-5">Your Application Journey</p>
+            <div className="space-y-0">
+              {STAGES.map((stage, i) => (
+                <div key={stage.id} className="flex gap-4">
+                  {/* connector column */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 ${
+                        stage.done
+                          ? "bg-emerald-500/20 border-emerald-500/50"
+                          : stage.active
+                          ? "bg-amber-500/20 border-amber-500/60"
+                          : "bg-white/4 border-white/12"
+                      }`}
+                    >
+                      {stage.done ? (
+                        <CheckCircle2 size={14} className="text-emerald-400" />
+                      ) : stage.active ? (
+                        <Clock size={14} className="text-amber-400" />
+                      ) : (
+                        <span className="text-xs font-bold text-slate-600">{i + 1}</span>
+                      )}
+                    </div>
+                    {i < STAGES.length - 1 && (
+                      <div className={`w-0.5 h-10 mt-1 ${stage.done ? "bg-emerald-500/30" : "bg-white/8"}`} />
+                    )}
+                  </div>
+                  {/* content */}
+                  <div className={`pb-8 ${i === STAGES.length - 1 ? "pb-0" : ""}`}>
+                    <p
+                      className={`text-sm font-semibold mb-0.5 ${
+                        stage.done ? "text-emerald-300" : stage.active ? "text-amber-300" : "text-slate-600"
+                      }`}
+                    >
+                      {stage.label}
+                      {stage.active && (
+                        <span className="ml-2 text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/25 px-1.5 py-0.5 rounded-full">
+                          Current
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-xs text-slate-500 leading-relaxed">{stage.detail}</p>
+                  </div>
                 </div>
-                <span className="text-sm text-slate-300">{step}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <Link href="/vendor/dashboard" className="btn-primary">
-            Go to Dashboard
-          </Link>
+
+          {/* While you wait */}
+          <div className="bg-white/3 border border-white/5 rounded-xl p-5 mb-6">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">While you wait</p>
+            <div className="space-y-3">
+              {[
+                { label: "Add photos to your portfolio", href: "/vendor/media", sub: "Profiles with 8+ photos receive 3× more enquiries" },
+                { label: "Write your bio", href: "/vendor/profile", sub: "Tell customers what makes your service worth booking" },
+                { label: "Set up your packages", href: "/vendor/services", sub: "Clear pricing builds customer confidence" },
+              ].map(({ label, href, sub }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="flex items-start justify-between gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
+                  style={{ border: "1px solid rgba(255,255,255,0.05)" }}
+                >
+                  <div>
+                    <p className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">{label}</p>
+                    <p className="text-xs text-slate-600 mt-0.5">{sub}</p>
+                  </div>
+                  <ArrowRight size={14} className="text-slate-600 group-hover:text-slate-400 transition-colors flex-shrink-0 mt-0.5" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Link href="/vendor/dashboard" className="btn-primary flex-1 text-center">
+              Go to Dashboard
+            </Link>
+            <Link href="/support" className="btn-secondary flex-1 text-center">
+              Contact Support
+            </Link>
+          </div>
         </div>
       </DashboardLayout>
     );
