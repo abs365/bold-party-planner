@@ -35,7 +35,7 @@ const CATEGORY_DISCOVERY = [
     label: "DJs & Music",
     sub: "Set the atmosphere",
     category: "dj",
-    photo: "https://images.unsplash.com/photo-1571266028243-8b6f6e85c5ae?auto=format&fit=crop&w=600&q=80",
+    photo: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=600&q=80",
   },
   {
     label: "Decorators",

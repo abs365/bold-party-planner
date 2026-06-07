@@ -11,7 +11,7 @@ import { Star, CheckCircle2, MapPin } from "lucide-react";
 
 const SIMILAR_VENDOR_FALLBACK: Partial<Record<VendorCategory, string>> = {
   photographer:      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=400&q=60",
-  dj:                "https://images.unsplash.com/photo-1571266028243-8b6f6e85c5ae?auto=format&fit=crop&w=400&q=60",
+  dj:                "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=60",
   decorator:         "https://images.unsplash.com/photo-1478146059778-26028b07395a?auto=format&fit=crop&w=400&q=60",
   caterer:           "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=400&q=60",
   cake_maker:        "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=400&q=60",
