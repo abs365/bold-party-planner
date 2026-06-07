@@ -256,7 +256,10 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                             {Number(vendor.rating).toFixed(1)} ({Number(vendor.total_reviews ?? 0)} reviews)
                           </span>
                         )}
-                        <span className="flex items-center gap-1"><Package size={10} />{packages?.length ?? 0} packages</span>
+                        <span className={`flex items-center gap-1 ${status === "pending" && (packages?.length ?? 0) === 0 ? "text-amber-400" : ""}`}>
+                          <Package size={10} />{packages?.length ?? 0} packages
+                          {status === "pending" && (packages?.length ?? 0) === 0 && <span className="text-amber-400 font-semibold">&nbsp;&#x26A0; no packages</span>}
+                        </span>
                         <span className="flex items-center gap-1"><Users size={10} />{profile?.full_name}</span>
                       </div>
                       <div className="text-xs text-slate-500 mt-0.5">
@@ -287,7 +290,13 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       {status === "pending" && (
                         <>
                           <button
-                            onClick={() => updateVendor(vendorId, { status: "approved" }, "Approval")}
+                            onClick={() => {
+                              const pkgCount = packages?.length ?? 0;
+                              if (pkgCount === 0) {
+                                if (!window.confirm(`${String(vendor.business_name)} has 0 service packages. Customers cannot request a quote without packages. Approve anyway?`)) return;
+                              }
+                              void updateVendor(vendorId, { status: "approved" }, "Approval");
+                            }}
                             disabled={!!actionLoading}
                             className="btn-primary text-xs py-1.5 px-3 flex items-center gap-1"
                           >

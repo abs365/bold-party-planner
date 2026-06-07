@@ -134,10 +134,10 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
           <div className="w-full h-full" style={{ background: "linear-gradient(160deg, #0B1F4D 0%, #091529 100%)" }} />
         )}
 
-        {/* Dark gradient overlay — stronger at bottom for text legibility */}
+        {/* Dark gradient overlay — anchors identity text at bottom, photography visible above */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(4,8,20,0.94) 0%, rgba(4,8,20,0.5) 45%, rgba(4,8,20,0.1) 100%)" }}
+          style={{ background: "linear-gradient(to top, rgba(4,8,20,0.88) 0%, rgba(4,8,20,0.42) 40%, rgba(4,8,20,0.06) 100%)" }}
         />
 
         {/* Top-right controls */}
@@ -382,10 +382,18 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               </div>
             )}
 
-            {/* Social / Highlights */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6">
-              <VendorSocialFeed vendorName={vendor.business_name} />
-            </div>
+            {/* Social / Highlights — only render when vendor has uploaded media to avoid
+                showing placeholder data ("Sample content") to prospective customers */}
+            {mediaList.length > 0 && (
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ background: "#0B1829", border: "1px solid rgba(255,255,255,0.07)" }}
+              >
+                <div className="p-6">
+                  <VendorSocialFeed vendorName={vendor.business_name} />
+                </div>
+              </div>
+            )}
 
             {/* Reviews */}
             {reviews.length > 0 && (

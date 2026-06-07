@@ -56,6 +56,7 @@ export const CATEGORY_REQUIREMENTS: Partial<Record<VendorCategory, DocumentType[
   transport:         ["government_id", "operator_license", "insurance"],
   cleaner:           ["government_id", "insurance"],
   event_staff:       ["government_id"],
+  event_planner:     ["government_id", "proof_of_address", "business_registration"],
   other:             ["government_id"],
 };
 
@@ -84,21 +85,21 @@ export const VERIFICATION_LEVELS = [
   },
   {
     level: 2,
-    label: "Business Verified",
+    label: "ID Verified",
     color: "text-blue-400",
     bg: "bg-blue-500/15",
     border: "border-blue-500/25",
     icon: "✓✓",
-    description: "Identity and business documents reviewed",
+    description: "Government ID verified by ELBOLD",
   },
   {
     level: 3,
-    label: "Trusted Pro",
+    label: "Business Verified",
     color: "text-brand-400",
     bg: "bg-brand-500/15",
     border: "border-brand-500/25",
-    icon: "★",
-    description: "Proven track record of excellent service",
+    icon: "✓✓✓",
+    description: "All required business documents verified",
   },
   {
     level: 4,

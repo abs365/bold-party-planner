@@ -6,8 +6,24 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { VendorProfileView } from "@/components/vendor/VendorProfileView";
-import { VENDOR_CATEGORIES } from "@/types";
+import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { Star, CheckCircle2, MapPin } from "lucide-react";
+
+const SIMILAR_VENDOR_FALLBACK: Partial<Record<VendorCategory, string>> = {
+  photographer:      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=400&q=60",
+  dj:                "https://images.unsplash.com/photo-1571266028243-8b6f6e85c5ae?auto=format&fit=crop&w=400&q=60",
+  decorator:         "https://images.unsplash.com/photo-1478146059778-26028b07395a?auto=format&fit=crop&w=400&q=60",
+  caterer:           "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=400&q=60",
+  cake_maker:        "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=400&q=60",
+  mc:                "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=60",
+  live_band:         "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=60",
+  marquee_rental:    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=400&q=60",
+  balloon_decorator: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=400&q=60",
+  videographer:      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=60",
+  makeup_artist:     "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=400&q=60",
+  event_planner:     "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=400&q=60",
+  luxury_services:   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=60",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -158,7 +174,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                       href={`/vendors/${v.id}`}
                       className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
                     >
-                      <div className="relative h-32 bg-gray-100 overflow-hidden">
+                      <div className="relative h-44 bg-gray-100 overflow-hidden">
                         {cover ? (
                           <Image
                             src={cover.url}
@@ -168,12 +184,13 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                             sizes="(max-width: 640px) 50vw, 25vw"
                           />
                         ) : (
-                          <div
-                            className="w-full h-full flex items-center justify-center text-xs font-semibold tracking-widest"
-                            style={{ background: "linear-gradient(135deg, #0B1F4D, #162447)", color: "rgba(212,175,55,0.35)" }}
-                          >
-                            ELBOLD
-                          </div>
+                          <Image
+                            src={SIMILAR_VENDOR_FALLBACK[v.category as VendorCategory] ?? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=60"}
+                            alt={vcat?.label ?? v.category}
+                            fill
+                            className="object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 640px) 50vw, 25vw"
+                          />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                         {v.verified && (

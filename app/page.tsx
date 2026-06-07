@@ -45,42 +45,42 @@ const OCCASIONS = [
     href: "/browse?event=wedding",
     photo: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #1a0610 0%, #3d1030 60%, #200a1e 100%)",
-    overlay: "rgba(8,3,12,0.62)",
+    overlay: "rgba(8,3,12,0.38)",
   },
   {
     label: "Birthdays",
     href: "/browse?event=birthday",
     photo: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #0a0820 0%, #1a1060 60%, #0f0840 100%)",
-    overlay: "rgba(4,4,20,0.62)",
+    overlay: "rgba(4,4,20,0.38)",
   },
   {
     label: "Corporate",
     href: "/browse?event=corporate",
     photo: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #051020 0%, #0d2040 60%, #091836 100%)",
-    overlay: "rgba(2,6,14,0.62)",
+    overlay: "rgba(2,6,14,0.38)",
   },
   {
     label: "Baby Showers",
     href: "/browse?event=baby_shower",
-    photo: null,
+    photo: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #0a1810 0%, #142b1a 60%, #0d2014 100%)",
-    overlay: "rgba(4,10,6,0.62)",
+    overlay: "rgba(4,10,6,0.38)",
   },
   {
     label: "Anniversaries",
     href: "/browse?event=anniversary",
     photo: "https://images.unsplash.com/photo-1516589091380-5d8259b23548?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #1a0810 0%, #3a0e20 60%, #240a18 100%)",
-    overlay: "rgba(12,4,8,0.62)",
+    overlay: "rgba(12,4,8,0.38)",
   },
   {
     label: "Cultural Celebrations",
     href: "/browse?event=cultural",
     photo: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #140820 0%, #281050 60%, #1a0838 100%)",
-    overlay: "rgba(8,4,18,0.62)",
+    overlay: "rgba(8,4,18,0.38)",
   },
 ];
 
@@ -194,11 +194,11 @@ export default async function Home() {
             />
           </div>
 
-          {/* Cinematic overlay */}
+          {/* Cinematic overlay — reduced to let photography breathe */}
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(160deg, rgba(6,14,36,0.85) 0%, rgba(8,18,42,0.78) 40%, rgba(5,10,24,0.90) 100%)",
+              background: "linear-gradient(160deg, rgba(6,14,36,0.48) 0%, rgba(8,18,42,0.38) 35%, rgba(5,10,24,0.68) 100%)",
             }}
           />
           {/* Gold bloom */}
@@ -237,7 +237,7 @@ export default async function Home() {
             {/* Subheadline */}
             <p
               className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-12"
-              style={{ color: "rgba(255,255,255,0.42)" }}
+              style={{ color: "rgba(255,255,255,0.72)" }}
             >
               Individually reviewed DJs, photographers, decorators, caterers and more.
               Every vendor vetted before they join. Every booking protected.
@@ -257,7 +257,7 @@ export default async function Home() {
             <div className="flex flex-col items-center gap-3">
               <span
                 className="text-xs tracking-[0.3em] font-light"
-                style={{ color: "rgba(255,255,255,0.2)" }}
+                style={{ color: "rgba(255,255,255,0.42)" }}
               >
                 WHAT ARE YOU PLANNING?
               </span>
@@ -266,10 +266,10 @@ export default async function Home() {
                   <Link
                     key={label}
                     href={href}
-                    className="text-xs px-4 py-2 rounded-full border transition-all duration-200 hover:bg-white/6"
+                    className="text-xs px-4 py-2 rounded-full border transition-all duration-200 hover:bg-white/10"
                     style={{
-                      borderColor: "rgba(212,175,55,0.2)",
-                      color: "rgba(255,255,255,0.38)",
+                      borderColor: "rgba(212,175,55,0.35)",
+                      color: "rgba(255,255,255,0.62)",
                       letterSpacing: "0.06em",
                     }}
                   >
@@ -301,8 +301,8 @@ export default async function Home() {
                 { icon: MapPin,       label: "Based in the United Kingdom" },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center justify-center gap-2.5 py-1">
-                  <Icon size={13} style={{ color: "rgba(212,175,55,0.55)", flexShrink: 0 }} />
-                  <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.38)" }}>
+                  <Icon size={15} style={{ color: "rgba(212,175,55,0.80)", flexShrink: 0 }} />
+                  <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.62)" }}>
                     {label}
                   </span>
                 </div>
@@ -349,12 +349,12 @@ export default async function Home() {
                     </div>
                   )}
 
-                  {/* Cinematic overlay — bottom-heavy so text is legible */}
+                  {/* Cinematic overlay — bottom-heavy so text is legible, reduced to show photography */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background: occasion.photo
-                        ? `linear-gradient(to top, rgba(4,8,20,0.88) 0%, ${occasion.overlay} 40%, rgba(4,8,20,0.22) 100%)`
+                        ? `linear-gradient(to top, rgba(4,8,20,0.82) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`
                         : occasion.gradient,
                     }}
                   />

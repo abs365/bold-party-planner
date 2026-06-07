@@ -14,6 +14,32 @@ import { VendorBadgesRow } from "@/components/vendor/VendorTrustBadges";
 
 const VENDOR_PAGE_SIZE = 20;
 
+// Category-specific Unsplash fallback photos for vendors without uploaded media.
+// Ensures vendor cards always show photography rather than emoji placeholders.
+const CATEGORY_FALLBACK: Partial<Record<VendorCategory, string>> = {
+  photographer:      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=60",
+  dj:                "https://images.unsplash.com/photo-1571266028243-8b6f6e85c5ae?auto=format&fit=crop&w=800&q=60",
+  decorator:         "https://images.unsplash.com/photo-1478146059778-26028b07395a?auto=format&fit=crop&w=800&q=60",
+  caterer:           "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=60",
+  cake_maker:        "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=800&q=60",
+  mc:                "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=60",
+  live_band:         "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=60",
+  marquee_rental:    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=60",
+  balloon_decorator: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=60",
+  videographer:      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=60",
+  makeup_artist:     "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=800&q=60",
+  lighting_stage:    "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=60",
+  furniture_rental:  "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=60",
+  luxury_services:   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=60",
+  transport:         "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=800&q=60",
+  event_planner:     "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=60",
+  security:          "https://images.unsplash.com/photo-1594745561149-2211ca8c5d98?auto=format&fit=crop&w=800&q=60",
+  usher:             "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=60",
+  cleaner:           "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=60",
+  event_staff:       "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=60",
+  other:             "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=60",
+};
+
 const EVENT_TYPES = [
   "wedding", "birthday", "corporate", "anniversary", "graduation",
   "baby_shower", "hen_party", "engagement", "christmas", "other",
@@ -490,7 +516,7 @@ function SmartPickCard({ vendor, priority = false }: { vendor: Vendor; priority?
   return (
     <Link href={`/vendors/${vendor.id}`} className="block group">
       <div className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md hover:border-gray-200 transition-all">
-        <div className="relative h-32 bg-gray-100 overflow-hidden">
+        <div className="relative h-44 bg-gray-100 overflow-hidden">
           {coverMedia?.type === "image" ? (
             <Image
               src={coverMedia.url}
@@ -501,9 +527,13 @@ function SmartPickCard({ vendor, priority = false }: { vendor: Vendor; priority?
               priority={priority}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <span className="text-4xl">{cat?.icon}</span>
-            </div>
+            <Image
+              src={CATEGORY_FALLBACK[vendor.category as VendorCategory] ?? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=60"}
+              alt={cat?.label ?? vendor.category}
+              fill
+              className="object-cover opacity-70"
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         </div>
@@ -544,7 +574,7 @@ function VendorCard({ vendor, priority = false }: { vendor: Vendor; priority?: b
       <Link href={`/vendors/${vendor.id}`} className="block">
         <div className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md hover:border-gray-200 transition-all">
           {/* Media */}
-          <div className="relative h-52 bg-gray-100 overflow-hidden">
+          <div className="relative h-60 bg-gray-100 overflow-hidden">
             {coverMedia ? (
               coverMedia.type === "image" ? (
                 <Image
@@ -566,9 +596,13 @@ function VendorCard({ vendor, priority = false }: { vendor: Vendor; priority?: b
                 />
               )
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                <span className="text-5xl">{cat?.icon}</span>
-              </div>
+              <Image
+                src={CATEGORY_FALLBACK[vendor.category as VendorCategory] ?? "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=60"}
+                alt={cat?.label ?? vendor.category}
+                fill
+                className="object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              />
             )}
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
