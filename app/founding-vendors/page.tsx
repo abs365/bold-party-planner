@@ -60,7 +60,7 @@ const BENEFITS = [
   },
   {
     icon: Award,
-    title: "Founding Vendor status — permanent",
+    title: "Founding Vendor status. Permanent.",
     description:
       "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
   },
@@ -210,7 +210,7 @@ export default async function FoundingVendorsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
-              Apply Free — Takes 5 Minutes
+              Apply Free. Takes 5 Minutes.
             </Link>
             <Link href="/browse" className="btn-luxury-outline">
               See the Marketplace
@@ -270,7 +270,7 @@ export default async function FoundingVendorsPage() {
                 {
                   title: "Before the window closes",
                   items: [
-                    "Founding Vendor badge on your profile — permanent",
+                    "Founding Vendor badge on your profile. Permanent.",
                     "Permanent top placement in your category and city",
                     "First access to every new feature ELBOLD releases",
                     "Input into what gets built next",
@@ -705,10 +705,19 @@ export default async function FoundingVendorsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
-              Apply Now — It&apos;s Free
+              Apply Now. It&apos;s Free.
             </Link>
             <Link href="/vendor-standards" className="btn-luxury-outline">
               Read Our Standards
+            </Link>
+          </div>
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <Link
+              href="/vendor-faq"
+              className="text-xs font-light transition-opacity hover:opacity-70 flex items-center gap-1"
+              style={{ color: "rgba(201,168,76,0.5)" }}
+            >
+              Read the Vendor FAQ <ArrowRight size={10} />
             </Link>
           </div>
           <p

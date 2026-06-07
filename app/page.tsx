@@ -509,6 +509,47 @@ export default async function Home() {
           </section>
         )}
 
+        {/* ── CONCIERGE BAND ───────────────────────────────────────────────── */}
+        <section className="py-16 px-4" style={{ background: "#f8f7f5" }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div>
+                <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
+                  Concierge Planning
+                </p>
+                <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-4">
+                  Not sure where to start?<br />Tell us about your event.
+                </h2>
+                <p className="text-sm text-gray-500 font-light leading-relaxed mb-6">
+                  If you would rather not browse on your own, submit your event details and a member of the ELBOLD team will personally recommend the right vendors for you. We respond within 24 hours and there is no obligation to book.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href="/concierge"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90"
+                    style={{ background: "#0D1B3E", color: "#C9A84C", border: "2px solid #C9A84C" }}
+                  >
+                    Request Help Planning My Event <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { n: "01", text: "Tell us your event type, date and budget" },
+                  { n: "02", text: "We identify verified vendors who fit your needs" },
+                  { n: "03", text: "You receive personalised recommendations" },
+                  { n: "04", text: "You choose who to contact. No pressure." },
+                ].map(({ n, text }) => (
+                  <div key={n} className="bg-white border border-gray-100 rounded-2xl p-5">
+                    <div className="text-xs font-bold tracking-wider mb-2" style={{ color: "#C9A84C" }}>{n}</div>
+                    <p className="text-xs text-gray-600 font-light leading-relaxed">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── SECTION 5: THE ELBOLD PROMISE ───────────────────────────────── */}
         <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
           <div className="max-w-5xl mx-auto">
