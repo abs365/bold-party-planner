@@ -105,6 +105,7 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/pilot/vendors",  label: "Pilot CRM",        icon: Users },
       { href: "/admin/pilot/report",   label: "Pilot Report",     icon: FileText },
       { href: "/admin/pilot/outreach", label: "Outreach Pack",    icon: MessageSquare },
+      { href: "/admin/founder",            label: "Founder Dashboard",   icon: LayoutDashboard },
       { href: "/admin/launch",             label: "Launch Readiness",    icon: Rocket },
       { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock },
       { href: "/admin/vendor-activation", label: "Vendor Activation",   icon: Zap },

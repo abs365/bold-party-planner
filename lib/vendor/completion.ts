@@ -158,6 +158,60 @@ export function computeVendorCompletion({
   return { score, steps, nextStep, isMarketplaceReady, strengthLabel, nextActionText, nextActionHref };
 }
 
+// ── Vendor Readiness Score (Phase 3A) ────────────────────────────────────────
+// Weighted score used for admin sorting and vendor profile quality display.
+// Weights: Photos 25%, Packages 20%, Verification 20%, Description 15%,
+//          Business Info 10%, Response Rate 10%.
+export interface VendorReadinessScore {
+  total: number;
+  breakdown: {
+    photos: number;       // max 25
+    packages: number;     // max 20
+    verification: number; // max 20
+    description: number;  // max 15
+    business: number;     // max 10
+    responseRate: number; // max 10
+  };
+  label: "Minimal" | "Starting" | "Building" | "Strong" | "Excellent";
+}
+
+export function computeVendorReadinessScore({
+  mediaCount,
+  packageCount,
+  verificationLevel,
+  bioLength,
+  hasPhone,
+  hasCity,
+  hasSocial,
+  responseRate,
+}: {
+  mediaCount: number;
+  packageCount: number;
+  verificationLevel: number;
+  bioLength: number;
+  hasPhone: boolean;
+  hasCity: boolean;
+  hasSocial: boolean;
+  responseRate: number;
+}): VendorReadinessScore {
+  const photos       = mediaCount >= 5 ? 25 : mediaCount >= 3 ? 18 : mediaCount >= 1 ? 10 : 0;
+  const packages     = packageCount >= 2 ? 20 : packageCount >= 1 ? 15 : 0;
+  const verification = verificationLevel >= 4 ? 20 : verificationLevel >= 3 ? 17 : verificationLevel >= 2 ? 13 : verificationLevel >= 1 ? 5 : 0;
+  const description  = bioLength >= 100 ? 15 : bioLength >= 50 ? 8 : 0;
+  const business     = (hasPhone ? 4 : 0) + (hasCity ? 3 : 0) + (hasSocial ? 3 : 0);
+  const responseRateScore = responseRate >= 80 ? 10 : responseRate >= 60 ? 7 : responseRate >= 30 ? 4 : 0;
+
+  const total = photos + packages + verification + description + business + responseRateScore;
+  const label: VendorReadinessScore["label"] =
+    total >= 90 ? "Excellent"
+    : total >= 75 ? "Strong"
+    : total >= 50 ? "Building"
+    : total >= 25 ? "Starting"
+    : "Minimal";
+
+  return { total, breakdown: { photos, packages, verification, description, business, responseRate: responseRateScore }, label };
+}
+
 // ── Customer-facing verification trust score ──────────────────────────────────
 // Separate from the vendor's internal profile completion score.
 // This is what customers see on vendor profiles and marketplace cards.

@@ -26,6 +26,7 @@ export function getVendorBadges(vendor: {
   repeat_customer_count?: number;
   status?: string | null;
   featured?: boolean;
+  is_founding_vendor?: boolean;
 }): TrustBadgeSpec[] {
   const badges: TrustBadgeSpec[] = [];
   if (vendor.status === "suspended") return badges;
@@ -82,6 +83,16 @@ export function getVendorBadges(vendor: {
   });
   // Level 1 (profile complete) intentionally shows no customer-facing badge —
   // no documents were checked so no "Verified" claim should appear to customers.
+
+  if (vendor.is_founding_vendor) badges.push({
+    id: "founding_vendor",
+    label: "Founding Vendor",
+    description: "One of ELBOLD's original founding vendors — joined in the founding window",
+    icon: Award,
+    bgClass: "bg-[#0B1F4D]/8",
+    borderClass: "border-[#D4AF37]/40",
+    textClass: "text-[#D4AF37]",
+  });
 
   if (vendor.featured) badges.push({
     id: "featured",
