@@ -9,7 +9,7 @@ import {
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
-  Scale, Eye, ClipboardList,
+  Scale, Eye, ClipboardList, Lock, Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -105,8 +105,10 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/pilot/vendors",  label: "Pilot CRM",        icon: Users },
       { href: "/admin/pilot/report",   label: "Pilot Report",     icon: FileText },
       { href: "/admin/pilot/outreach", label: "Outreach Pack",    icon: MessageSquare },
-      { href: "/admin/launch",          label: "Launch Readiness",    icon: Rocket },
-      { href: "/admin/pilot-testing",   label: "Pilot Testing Centre", icon: ClipboardList },
+      { href: "/admin/launch",             label: "Launch Readiness",    icon: Rocket },
+      { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock },
+      { href: "/admin/vendor-activation", label: "Vendor Activation",   icon: Zap },
+      { href: "/admin/pilot-testing",    label: "Pilot Testing Centre", icon: ClipboardList },
     ],
   },
 ];

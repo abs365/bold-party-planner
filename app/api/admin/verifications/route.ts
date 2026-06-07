@@ -9,6 +9,7 @@ import {
 } from "@/lib/resend/verification-emails";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
+import { getRequirementsForCategory } from "@/lib/verification-requirements";
 
 export async function GET(req: Request) {
   const auth = await requireAdmin();
@@ -23,13 +24,22 @@ export async function GET(req: Request) {
     .from("vendor_verifications")
     .select(`
       *,
-      vendor:vendors(id, business_name, category, city, verified, verification_level, suspicious_flag,
+      vendor:vendors(id, business_name, category, city, verified, verification_level, suspicious_flag, status,
         profile:profiles(full_name, email)
       )
     `)
     .order("submitted_at", { ascending: true });
 
-  if (status !== "all") query = query.eq("status", status);
+  if (status === "suspended") {
+    const { data: suspendedVendors } = await auth.db.from("vendors").select("id").eq("status", "suspended");
+    const ids = (suspendedVendors ?? []).map((v) => v.id);
+    if (ids.length === 0) return NextResponse.json([]);
+    query = query.in("vendor_id", ids);
+  } else if (status === "expired") {
+    return NextResponse.json([]);
+  } else if (status !== "all") {
+    query = query.eq("status", status);
+  }
   if (category) query = query.eq("vendor.category", category);
 
   const { data, error } = await query.limit(100);
@@ -72,13 +82,13 @@ export async function PATCH(req: Request) {
   // Get current verification
   const { data: verif } = await auth.db
     .from("vendor_verifications")
-    .select("*, vendor:vendors(id, verification_level, verified)")
+    .select("*, vendor:vendors(id, verification_level, verified, category, status)")
     .eq("id", id)
     .maybeSingle();
 
   if (!verif) return NextResponse.json({ error: "Verification not found" }, { status: 404 });
 
-  const vendor = verif.vendor as { id: string; verification_level: number; verified: boolean };
+  const vendor = verif.vendor as { id: string; verification_level: number; verified: boolean; category: string; status: string };
 
   // Fetch vendor contact for emails
   async function getVendorContact(): Promise<{ email: string; name: string } | null> {
@@ -116,21 +126,24 @@ export async function PATCH(req: Request) {
       .select("type, status")
       .eq("vendor_id", vendor.id);
 
-    const hasIdentity = allVerifs?.some((v) => v.type === "government_id" && v.status === "approved") ||
-                        allVerifs?.some((v) => v.type === "identity" && v.status === "approved");
+    // Level 2: government ID approved
+    const hasGovId = allVerifs?.some((v) =>
+      (v.type === "government_id" || v.type === "identity") && v.status === "approved"
+    );
 
     const updates: Record<string, unknown> = {};
-    if (hasIdentity) updates.verified = true;
+    if (hasGovId) {
+      updates.verified = true;
+      if (vendor.verification_level < 2) updates.verification_level = 2;
+    }
 
-    // Level 2 if any business document approved
-    const hasBusiness = allVerifs?.some((v) =>
-      ["business_registration", "insurance", "food_hygiene", "sia_license", "operator_license"].includes(v.type)
-      && v.status === "approved"
+    // Level 3: all category-required documents approved
+    const requiredDocs = getRequirementsForCategory(vendor.category);
+    const allRequiredApproved = requiredDocs.every((docType) =>
+      allVerifs?.some((v) => v.type === docType && v.status === "approved")
     );
-    if (hasIdentity && hasBusiness && vendor.verification_level < 2) {
-      updates.verification_level = 2;
-    } else if (hasIdentity && vendor.verification_level < 1) {
-      updates.verification_level = 1;
+    if (allRequiredApproved && vendor.verification_level < 3) {
+      updates.verification_level = 3;
     }
 
     if (Object.keys(updates).length > 0) {

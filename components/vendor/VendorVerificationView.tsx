@@ -332,7 +332,7 @@ export function VendorVerificationView({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Shield size={18} className={currentLevel >= 2 ? "text-blue-400" : "text-slate-500"} />
-                <span className="font-bold text-white">Level 2 — Business Verified</span>
+                <span className="font-bold text-white">Level 2 — ID Verified</span>
                 {currentLevel < 1 && <Lock size={12} className="text-slate-600" />}
               </div>
               {currentLevel >= 2 ? (
@@ -394,19 +394,16 @@ export function VendorVerificationView({
             </div>
           </div>
 
-          {/* Level 3 — Trusted Pro */}
+          {/* Level 3 — Business Verified */}
           <div className="rounded-2xl border bg-white/3 border-white/6 p-5 opacity-70">
             <div className="flex items-center gap-2 mb-3">
               <Star size={18} className="text-brand-400" />
-              <span className="font-bold text-white">Level 3 — Trusted Pro</span>
-              <span className="text-xs text-slate-500">(Automatic)</span>
+              <span className="font-bold text-white">Level 3 — Business Verified</span>
+              <span className="text-xs text-slate-500">(After document review)</span>
             </div>
-            <div className="space-y-1.5 text-sm text-slate-500">
-              <p className="flex items-center gap-2"><ChevronRight size={12} /> 5 or more completed bookings</p>
-              <p className="flex items-center gap-2"><ChevronRight size={12} /> Overall rating of 4.5 stars or higher</p>
-              <p className="flex items-center gap-2"><ChevronRight size={12} /> Response rate above 80%</p>
-              <p className="flex items-center gap-2"><ChevronRight size={12} /> Cancellation rate below 5%</p>
-            </div>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Achieved automatically when all your required documents are approved by the ELBOLD team. Submit your full document set in Level 2 above to progress.
+            </p>
           </div>
 
           {/* Level 4 — Premium Partner */}
