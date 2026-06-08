@@ -31,12 +31,12 @@ const STATUS_TABS = [
 ];
 
 const REJECTION_TEMPLATES = [
-  "Incomplete business description — please write a detailed bio of at least 50 characters",
+  "Incomplete business description: please write a detailed bio of at least 50 characters",
   "Missing service category or pricing information",
-  "Insufficient portfolio photos — please upload at least 3 photos of your work",
-  "Contact details not provided — please add a phone number",
+  "Insufficient portfolio photos: please upload at least 3 photos of your work",
+  "Contact details not provided: please add a phone number",
   "Business information could not be verified",
-  "Profile does not meet our current quality standards — please review our guidelines and reapply",
+  "Profile does not meet our current quality standards: please review our guidelines and reapply",
 ];
 
 export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch }: AdminVendorTableProps) {
@@ -329,7 +329,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                         <StatusBadge status={status} />
                       </div>
                       <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 flex-wrap">
-                        <span className="flex items-center gap-1"><MapPin size={10} />{String(vendor.city ?? "—")}</span>
+                        <span className="flex items-center gap-1"><MapPin size={10} />{String(vendor.city ?? "N/A")}</span>
                         <span>{vendor.category === "other" && vendor.custom_category_description ? `Other: ${String(vendor.custom_category_description)}` : cat?.label}</span>
                         {Number(vendor.rating) > 0 && (
                           <span className="flex items-center gap-1">

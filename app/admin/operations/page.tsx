@@ -297,28 +297,28 @@ export default async function OperationsPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               {
-                label: "Today — GMV",
+                label: "Today: GMV",
                 value: `£${todayGMV.toLocaleString("en-GB", { minimumFractionDigits: 2 })}`,
                 sub: `${todayBookingCount} booking${todayBookingCount === 1 ? "" : "s"}`,
                 icon: Calendar,
                 color: "text-slate-300",
               },
               {
-                label: "This Week — Revenue",
+                label: "This Week: Revenue",
                 value: `£${weekRevenue.toLocaleString("en-GB", { minimumFractionDigits: 2 })}`,
                 sub: "Platform commission",
                 icon: TrendingUp,
                 color: "text-emerald-400",
               },
               {
-                label: "This Week — GMV",
+                label: "This Week: GMV",
                 value: `£${weekGMV.toLocaleString("en-GB", { minimumFractionDigits: 2 })}`,
                 sub: "Gross booking value",
                 icon: Activity,
                 color: "text-slate-400",
               },
               {
-                label: "This Month — Revenue",
+                label: "This Month: Revenue",
                 value: `£${monthRevenue.toLocaleString("en-GB", { minimumFractionDigits: 2 })}`,
                 sub: "Platform commission",
                 icon: CreditCard,
@@ -343,7 +343,7 @@ export default async function OperationsPage() {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                 <Wallet size={11} className="text-amber-400" />
-                Payouts due — next up
+                Payouts due: next up
               </h2>
               <Link href="/admin/payouts" className="text-xs text-slate-500 hover:text-slate-300 flex items-center gap-1">
                 View all <ArrowRight size={11} />
@@ -379,7 +379,7 @@ export default async function OperationsPage() {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                 <Users size={11} className="text-blue-400" />
-                Vendor applications — oldest first
+                Vendor applications: oldest first
               </h2>
               <Link href="/admin/vendors?status=pending" className="text-xs text-slate-500 hover:text-slate-300 flex items-center gap-1">
                 Review all <ArrowRight size={11} />
@@ -412,7 +412,7 @@ export default async function OperationsPage() {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                 <RefreshCw size={11} className="text-slate-400" />
-                Refunds processed — this week
+                Refunds processed this week
               </h2>
               <Link href="/admin/bookings" className="text-xs text-slate-500 hover:text-slate-300 flex items-center gap-1">
                 All bookings <ArrowRight size={11} />

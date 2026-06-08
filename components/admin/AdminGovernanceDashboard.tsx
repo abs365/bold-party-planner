@@ -202,7 +202,7 @@ export function AdminGovernanceDashboard({ atRiskVendors, activeWarnings, health
           {atRiskVendors.length === 0 ? (
             <div className="bg-white/4 border border-white/6 rounded-xl p-12 text-center">
               <CheckCircle2 size={32} className="text-emerald-400 mx-auto mb-3" />
-              <p className="text-slate-400">No at-risk vendors — marketplace is healthy</p>
+              <p className="text-slate-400">No at-risk vendors. Marketplace is healthy.</p>
             </div>
           ) : (
             atRiskVendors.map((vendor) => {
@@ -312,7 +312,7 @@ export function AdminGovernanceDashboard({ atRiskVendors, activeWarnings, health
                                 <AlertTriangle size={11} className="flex-shrink-0 mt-0.5" />
                                 <div>
                                   <span className="font-medium">{w.title}</span>
-                                  <span className="text-opacity-70 ml-1">— {w.message}</span>
+                                  <span className="text-opacity-70 ml-1">: {w.message}</span>
                                 </div>
                               </div>
                             ))}

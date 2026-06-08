@@ -79,7 +79,7 @@ function wrap(title: string, body: string) {
 
 export async function sendVendorApplicationReceived(to: string, name: string, businessName: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, "Your application has been received — ELBOLD Events", wrap(
+  return send(to, "Your application has been received | ELBOLD Events", wrap(
     "Application Received",
     `<p>Hi ${name},</p>
     <p>We've received your vendor application for <span class="highlight">${businessName}</span>. Our team reviews all applications within <strong>2 working days</strong> and will email you with the outcome.</p>
@@ -92,10 +92,10 @@ export async function sendVendorApplicationReceived(to: string, name: string, bu
 
 export async function sendVendorApproved(to: string, name: string, businessName: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, "🎉 Your vendor profile is approved — ELBOLD Events", wrap(
+  return send(to, "🎉 Your vendor profile is approved | ELBOLD Events", wrap(
     "You're Live on ELBOLD Events!",
     `<p>Hi ${name},</p>
-    <p>Great news — <span class="highlight">${businessName}</span> has been approved and is now live on ELBOLD Events!</p>
+    <p>Great news! <span class="highlight">${businessName}</span> has been approved and is now live on ELBOLD Events!</p>
     <p>Customers across the UK can now find and book your services. Here's what to do next:</p>
     <div class="detail-box">
       <p>✅ Upload 8–15 high-quality photos of your work</p>
@@ -111,7 +111,7 @@ export async function sendVendorRejected(to: string, name: string, businessName:
   const reasonBlock = reason
     ? `<div class="detail-box"><p><strong>Reason:</strong> ${reason}</p></div>`
     : "";
-  return send(to, "Update on your vendor application — ELBOLD Events", wrap(
+  return send(to, "Update on your vendor application | ELBOLD Events", wrap(
     "Application Update",
     `<p>Hi ${name},</p>
     <p>Thank you for applying to ELBOLD Events. After review, we were unable to approve <span class="highlight">${businessName}</span> at this time.</p>
@@ -126,7 +126,7 @@ export async function sendBookingRequest(
   customerName: string, amount: number, bookingId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `New booking request for ${eventTitle} — ELBOLD Events`, wrap(
+  return send(to, `New booking request for ${eventTitle} | ELBOLD Events`, wrap(
     "New Booking Request",
     `<p>Hi ${vendorName},</p>
     <p>You have a new booking request from <span class="highlight">${customerName}</span>.</p>
@@ -145,7 +145,7 @@ export async function sendBookingAccepted(
   to: string, customerName: string, vendorBusiness: string, eventTitle: string, bookingId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Booking confirmed — ${vendorBusiness} accepted your request`, wrap(
+  return send(to, `Booking confirmed: ${vendorBusiness} accepted your request`, wrap(
     "Booking Accepted! 🎉",
     `<p>Hi ${customerName},</p>
     <p>Great news! <span class="highlight">${vendorBusiness}</span> has accepted your booking for <strong>${eventTitle}</strong>.</p>
@@ -159,11 +159,11 @@ export async function sendBookingRejected(
   to: string, customerName: string, vendorBusiness: string, eventTitle: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Booking update for ${eventTitle} — ELBOLD Events`, wrap(
+  return send(to, `Booking update for ${eventTitle} | ELBOLD Events`, wrap(
     "Booking Update",
     `<p>Hi ${customerName},</p>
     <p>Unfortunately, <span class="highlight">${vendorBusiness}</span> was unable to accept your booking for <strong>${eventTitle}</strong>.</p>
-    <p>Don't worry — there are hundreds of other verified vendors ready to help make your event a success.</p>
+    <p>Don't worry. There are plenty of other verified vendors ready to help make your event a success.</p>
     <a href="${appUrl}/browse" class="btn">Browse Other Vendors</a>`
   ));
 }
@@ -173,7 +173,7 @@ export async function sendPaymentReceived(
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   const label = type === "deposit" ? "Deposit Payment" : "Full Payment";
-  return send(to, `Payment received — ${label} for ${eventTitle}`, wrap(
+  return send(to, `Payment received: ${label} for ${eventTitle}`, wrap(
     `${label} Confirmed ✅`,
     `<p>Hi ${name},</p>
     <p>We've received your <span class="highlight">${label.toLowerCase()}</span> of <strong>£${amount.toFixed(2)}</strong> for <strong>${eventTitle}</strong>.</p>
@@ -186,7 +186,7 @@ export async function sendVendorPaymentNotification(
   to: string, vendorName: string, amount: number, eventTitle: string, bookingId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Payment received for ${eventTitle} — ELBOLD Events`, wrap(
+  return send(to, `Payment received for ${eventTitle} | ELBOLD Events`, wrap(
     "Payment Received",
     `<p>Hi ${vendorName},</p>
     <p>A payment of <strong>£${amount.toFixed(2)}</strong> has been made for your booking: <strong>${eventTitle}</strong>.</p>
@@ -199,7 +199,7 @@ export async function sendEventReminder(
   to: string, customerName: string, eventTitle: string, eventDate: string, daysLeft: number
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `${daysLeft} day${daysLeft !== 1 ? "s" : ""} until ${eventTitle} — ELBOLD Events`, wrap(
+  return send(to, `${daysLeft} day${daysLeft !== 1 ? "s" : ""} until ${eventTitle} | ELBOLD Events`, wrap(
     `${daysLeft} days to go!`,
     `<p>Hi ${customerName},</p>
     <p>Just a reminder that <span class="highlight">${eventTitle}</span> is in <strong>${daysLeft} day${daysLeft !== 1 ? "s" : ""}</strong> on <strong>${eventDate}</strong>.</p>
@@ -212,11 +212,11 @@ export async function sendReviewRequest(
   to: string, customerName: string, vendorBusiness: string, bookingId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `How was ${vendorBusiness}? Leave a review — ELBOLD Events`, wrap(
+  return send(to, `How was ${vendorBusiness}? Leave a review | ELBOLD Events`, wrap(
     "Share Your Experience",
     `<p>Hi ${customerName},</p>
     <p>We hope your event was amazing! How was <span class="highlight">${vendorBusiness}</span>?</p>
-    <p>Sharing your experience helps other customers find great vendors — and helps vendors grow their business.</p>
+    <p>Sharing your experience helps other customers find great vendors, and helps vendors grow their business.</p>
     <a href="${appUrl}/dashboard/bookings/${bookingId}?review=1" class="btn">Leave a Review</a>
     <p style="font-size:13px;color:#9ca3af;margin-top:16px">Takes less than 60 seconds.</p>`
   ));
@@ -226,8 +226,8 @@ export async function sendBookingPaymentFailed(
   to: string, name: string, eventTitle: string, bookingId: string, amount: number
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Payment failed — action required — ELBOLD Events`, wrap(
-    "Payment Failed — Action Required",
+  return send(to, `Payment failed: action required | ELBOLD Events`, wrap(
+    "Payment Failed: Action Required",
     `<p>Hi ${name},</p>
     <p>Your payment of <span class="highlight">£${amount.toFixed(2)}</span> for <strong>${eventTitle}</strong> was declined by your bank or card provider.</p>
     <div class="detail-box">
@@ -245,7 +245,7 @@ export async function sendBookingPaymentFailed(
 export async function sendRefundProcessed(
   to: string, name: string, amount: number, eventTitle: string
 ) {
-  return send(to, `Refund processed — ${eventTitle}`, wrap(
+  return send(to, `Refund processed: ${eventTitle}`, wrap(
     "Refund Processed",
     `<p>Hi ${name},</p>
     <p>A refund of <span class="highlight">£${amount.toFixed(2)}</span> for <strong>${eventTitle}</strong> has been processed.</p>
@@ -268,7 +268,7 @@ export async function sendQuoteRequestToVendor(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   const budgetLine = budgetMax ? `<p><span class="detail-label">Budget:</span> <span class="detail-value">up to £${budgetMax.toLocaleString("en-GB")}</span></p>` : "";
   const dateLine = eventDate ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>` : "";
-  return send(to, `New quote request from ${customerName} — ELBOLD Events`, wrap(
+  return send(to, `New quote request from ${customerName} | ELBOLD Events`, wrap(
     "New Quote Request",
     `<p>Hi ${vendorName},</p>
     <p><span class="highlight">${customerName}</span> has requested a quote for their event. Vendors who respond within 2 hours win significantly more bookings.</p>
@@ -291,7 +291,7 @@ export async function sendQuoteResponseToCustomer(
   quoteId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `${vendorBusiness} has responded to your quote — ELBOLD Events`, wrap(
+  return send(to, `${vendorBusiness} has responded to your quote | ELBOLD Events`, wrap(
     "Quote Response Received",
     `<p>Hi ${customerName},</p>
     <p><span class="highlight">${vendorBusiness}</span> has submitted a price for your event.</p>
@@ -314,8 +314,8 @@ export async function sendQuoteAcceptedToVendor(
   bookingId: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Quote accepted — ${customerName} has booked you! — ELBOLD Events`, wrap(
-    "Quote Accepted — Booking Created",
+  return send(to, `Quote accepted: ${customerName} has booked you! | ELBOLD Events`, wrap(
+    "Quote Accepted: Booking Created",
     `<p>Hi ${vendorName},</p>
     <p>Congratulations! <span class="highlight">${customerName}</span> has accepted your quote and a booking has been created.</p>
     <div class="detail-box">
@@ -341,7 +341,7 @@ export async function sendBookingAwaitingPayment(
   const dateLine = eventDate
     ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>`
     : "";
-  return send(to, `Pay your deposit to confirm your booking — ELBOLD Events`, wrap(
+  return send(to, `Pay your deposit to confirm your booking | ELBOLD Events`, wrap(
     "One Step Away From Confirming",
     `<p>Hi ${customerName},</p>
     <p>You have selected <span class="highlight">${vendorBusiness}</span> for <strong>${eventTitle}</strong>. To confirm your booking, please pay the deposit now.</p>
@@ -373,7 +373,7 @@ export async function sendQuoteSubmittedToCustomer(
   const dateLine = dateStr
     ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${dateStr}</span></p>`
     : "";
-  return send(to, `Quote request received — ELBOLD Events`, wrap(
+  return send(to, `Quote request received | ELBOLD Events`, wrap(
     "Quote Request Received",
     `<p>Hi ${customerName},</p>
     <p>Your quote request has been sent to <span class="highlight">${vendorBusiness}</span>. We have notified them and they will review your request shortly.</p>
@@ -402,11 +402,11 @@ export async function sendQuoteRejectedToVendor(
   eventType: string
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, `Quote update — ELBOLD Events`, wrap(
+  return send(to, `Quote update | ELBOLD Events`, wrap(
     "Quote Not Selected",
     `<p>Hi ${vendorName},</p>
     <p>${customerName} has chosen a different vendor for their ${eventType.replace(/_/g, " ")} event.</p>
-    <p>This happens — availability, budget, and timing all play a role. Your profile is still live and new enquiries will continue to arrive.</p>
+    <p>This happens. Availability, budget, and timing all play a role. Your profile is still live and new enquiries will continue to arrive.</p>
     <a href="${appUrl}/vendor/quotes" class="btn">View Your Leads</a>
     <p style="margin-top:16px;font-size:13px;color:#9ca3af">Tip: Vendors who upload 8+ photos and respond within 2 hours win significantly more bookings.</p>`
   ));
@@ -426,7 +426,7 @@ export async function sendEventCreated(
   const dateFormatted = new Date(eventDate).toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
-  return send(to, `Your event has been created — ${eventTitle}`, wrap(
+  return send(to, `Your event has been created: ${eventTitle}`, wrap(
     "Event Created",
     `<p>Hi ${name},</p>
     <p>Your event has been saved on ELBOLD Events. Here is a summary:</p>
@@ -500,9 +500,9 @@ export async function sendSubscriptionPaymentFailed(
   const retriesLeft = Math.max(0, 4 - failCount);
   const retriesLine = retriesLeft > 0
     ? `<p><span class="detail-label">Retries remaining:</span> <span class="detail-value">${retriesLeft} (Stripe will retry automatically)</span></p>`
-    : `<p><span class="detail-label">Status:</span> <span class="detail-value" style="color:#dc2626">Final attempt reached — subscription will cancel if unpaid</span></p>`;
-  return send(to, "Action required: subscription payment failed — ELBOLD Events", wrap(
-    "Payment Failed — Action Required",
+    : `<p><span class="detail-label">Status:</span> <span class="detail-value" style="color:#dc2626">Final attempt reached. Subscription will cancel if unpaid.</span></p>`;
+  return send(to, "Action required: subscription payment failed | ELBOLD Events", wrap(
+    "Payment Failed: Action Required",
     `<p>Hi ${vendorName},</p>
     <p>We were unable to process your <span class="highlight">${planLabel} plan</span> subscription renewal.</p>
     <div class="detail-box">

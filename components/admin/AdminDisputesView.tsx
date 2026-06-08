@@ -136,7 +136,7 @@ export function AdminDisputesView({ disputes }: AdminDisputesViewProps) {
                   <div className="border-t border-white/10 p-4 space-y-4">
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <InfoBlock label="Customer" value={`${dispute.customer?.full_name} (${dispute.customer?.email})`} />
-                      <InfoBlock label="Vendor" value={dispute.vendor?.business_name ?? "—"} />
+                      <InfoBlock label="Vendor" value={dispute.vendor?.business_name ?? "N/A"} />
                       <InfoBlock label="Booking Total" value={`£${(dispute.booking?.total_amount ?? 0).toFixed(2)}`} />
                       <InfoBlock label="Refund Requested" value={dispute.refund_amount ? `£${dispute.refund_amount.toFixed(2)}` : "None"} />
                     </div>
