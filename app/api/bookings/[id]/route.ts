@@ -3,6 +3,106 @@ import { createClient } from "@/lib/supabase/server";
 import { updateVendorMetrics } from "@/lib/verification-automation";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+interface RefundableBooking {
+  id: string;
+  payment_status: string;
+  total_amount: number;
+  deposit_amount: number;
+}
+
+async function issueRefundForCancellation(
+  supabase: SupabaseClient,
+  booking: RefundableBooking,
+  actorUserId: string,
+  actorRole: "customer" | "vendor" | "admin",
+  customerEmail: string,
+  customerName: string,
+  eventTitle: string,
+  ipAddress: string
+): Promise<void> {
+  if (!["deposit_paid", "fully_paid"].includes(booking.payment_status)) return;
+
+  const { data: payment } = await supabase
+    .from("payments")
+    .select("stripe_payment_intent_id, amount")
+    .eq("booking_id", booking.id)
+    .eq("status", "succeeded")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!payment?.stripe_payment_intent_id) {
+    console.warn("[refund] No succeeded payment found for booking", booking.id);
+    return;
+  }
+
+  const refundAmount =
+    booking.payment_status === "deposit_paid"
+      ? Number(booking.deposit_amount)
+      : Number(booking.total_amount);
+
+  try {
+    const { createRefund } = await import("@/lib/stripe/index");
+    await createRefund(payment.stripe_payment_intent_id, refundAmount);
+  } catch (err) {
+    console.error("[refund] Stripe refund failed for booking", booking.id, err);
+    return;
+  }
+
+  // Mark booking as refunded
+  void supabase
+    .from("bookings")
+    .update({ payment_status: "refunded" })
+    .eq("id", booking.id);
+
+  // Ledger — errors are internally swallowed by ledger helpers
+  const { updateLedgerPaymentStatus, appendLedgerEvent } = await import("@/lib/finance/ledger");
+  const ledgerId = await updateLedgerPaymentStatus(
+    supabase,
+    payment.stripe_payment_intent_id,
+    "refunded",
+    { refundAmount }
+  );
+  void appendLedgerEvent(
+    supabase,
+    "REFUND_COMPLETED",
+    {
+      booking_id: booking.id,
+      refund_amount: refundAmount,
+      cancelled_by: actorRole,
+      stripe_payment_intent_id: payment.stripe_payment_intent_id,
+    },
+    ledgerId
+  );
+
+  void createAuditLog({
+    actorUserId,
+    actorRole,
+    action: "booking.refund.issued",
+    entityType: "booking",
+    entityId: booking.id,
+    after: { refund_amount: refundAmount, payment_status: "refunded" },
+    ipAddress,
+  });
+
+  const { sendRefundProcessed, sendAdminRefundAlert } = await import("@/lib/resend");
+  void sendRefundProcessed(customerEmail, customerName, refundAmount, eventTitle);
+
+  const adminEmails = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean);
+  void sendAdminRefundAlert(
+    adminEmails,
+    booking.id,
+    refundAmount,
+    eventTitle,
+    customerEmail,
+    actorRole
+  );
+}
 
 export async function PATCH(
   request: Request,
@@ -21,11 +121,11 @@ export async function PATCH(
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("role")
+      .select("role, full_name")
       .eq("id", user.id)
       .maybeSingle();
 
-    // Vendor can accept/reject their own bookings
+    // Vendor can accept/reject/cancel their own bookings
     if (profile?.role === "vendor") {
       const { data: vendor } = await supabase
         .from("vendors")
@@ -39,6 +139,7 @@ export async function PATCH(
       if (status) updates.status = status;
       if (notes) updates.notes = notes;
       if (status === "accepted") updates.confirmed_at = new Date().toISOString();
+      if (status === "cancelled") updates.cancelled_at = new Date().toISOString();
 
       const { data: booking, error } = await supabase
         .from("bookings")
@@ -63,6 +164,8 @@ export async function PATCH(
         void track({ event: "booking.confirmed", userId: user.id, properties: { booking_id: id } });
       } else if (status === "completed") {
         void track({ event: "booking.completed", userId: user.id, properties: { booking_id: id } });
+      } else if (status === "cancelled") {
+        void track({ event: "booking.cancelled", userId: user.id, properties: { booking_id: id } });
       }
 
       // Refresh metrics when a booking is completed or cancelled
@@ -72,6 +175,20 @@ export async function PATCH(
 
       const event = booking.event as Record<string, string>;
       const customer = booking.customer as Record<string, string>;
+
+      // Automatic refund when vendor cancels a paid booking
+      if (status === "cancelled") {
+        void issueRefundForCancellation(
+          supabase as unknown as SupabaseClient,
+          booking as unknown as RefundableBooking,
+          user.id,
+          "vendor",
+          customer?.email ?? "",
+          customer?.full_name ?? "Customer",
+          event?.title ?? "your event",
+          ipFromRequest(request)
+        );
+      }
 
       // Email notification
       if (status === "accepted" && customer?.email) {
@@ -114,7 +231,7 @@ export async function PATCH(
         .update({ status: "cancelled", cancelled_at: new Date().toISOString() })
         .eq("id", id)
         .eq("customer_id", user.id)
-        .select()
+        .select("*, event:events(title)")
         .maybeSingle();
 
       if (error || !booking) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -128,6 +245,19 @@ export async function PATCH(
         ipAddress: ipFromRequest(request),
       });
       void track({ event: "booking.cancelled", userId: user.id, properties: { booking_id: id } });
+
+      // Automatic refund when customer cancels a paid booking
+      const eventData = booking.event as Record<string, string>;
+      void issueRefundForCancellation(
+        supabase as unknown as SupabaseClient,
+        booking as unknown as RefundableBooking,
+        user.id,
+        "customer",
+        user.email ?? "",
+        (profile as { role: string; full_name?: string } | null)?.full_name ?? "Customer",
+        eventData?.title ?? "your event",
+        ipFromRequest(request)
+      );
 
       return NextResponse.json(booking);
     }

@@ -471,6 +471,32 @@ export async function sendAdminNewVendorAlert(
   return { success: allOk };
 }
 
+export async function sendAdminRefundAlert(
+  adminEmails: string[],
+  bookingId: string,
+  amount: number,
+  eventTitle: string,
+  customerEmail: string,
+  cancelledBy: string
+) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  await Promise.allSettled(
+    adminEmails.map((adminEmail) =>
+      send(adminEmail, `Refund issued: ${eventTitle} — ELBOLD Admin`, wrap(
+        "Automatic Refund Issued",
+        `<p>A refund has been automatically issued following a booking cancellation.</p>
+        <div class="detail-box">
+          <p><span class="detail-label">Event:</span> <span class="detail-value">${eventTitle}</span></p>
+          <p><span class="detail-label">Refund amount:</span> <span class="detail-value">£${amount.toFixed(2)}</span></p>
+          <p><span class="detail-label">Customer:</span> <span class="detail-value">${customerEmail}</span></p>
+          <p><span class="detail-label">Cancelled by:</span> <span class="detail-value">${cancelledBy}</span></p>
+        </div>
+        <a href="${appUrl}/admin/bookings/${bookingId}" class="btn">View Booking</a>`
+      ))
+    )
+  );
+}
+
 export async function sendPhoneOtpCode(
   to: string,
   name: string,
