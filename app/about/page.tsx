@@ -79,7 +79,7 @@ export default async function AboutPage() {
             sizes="100vw"
           />
         </div>
-        <div className="absolute inset-0" style={{ background: "rgba(6,12,30,0.85)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(6,12,30,0.62)" }} />
 
         <div className="relative z-10 text-center max-w-3xl mx-auto px-6 py-28">
           <div className="flex items-center justify-center gap-4 mb-10">

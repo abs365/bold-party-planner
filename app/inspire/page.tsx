@@ -171,7 +171,7 @@ export default async function ShowcasePage() {
         </div>
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(160deg, rgba(4,10,28,0.88) 0%, rgba(6,14,36,0.82) 40%, rgba(4,8,22,0.92) 100%)" }}
+          style={{ background: "linear-gradient(160deg, rgba(4,10,28,0.64) 0%, rgba(6,14,36,0.54) 40%, rgba(4,8,22,0.70) 100%)" }}
         />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -254,7 +254,7 @@ export default async function ShowcasePage() {
                 )}
                 <div
                   className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgba(4,8,20,0.88) 0%, rgba(4,8,20,0.48) 40%, rgba(4,8,20,0.18) 100%)" }}
+                  style={{ background: "linear-gradient(to top, rgba(4,8,20,0.72) 0%, rgba(4,8,20,0.35) 40%, rgba(4,8,20,0.10) 100%)" }}
                 />
                 <div className="relative z-10 p-7 h-full flex flex-col justify-end" style={{ minHeight: "220px" }}>
                   <div className="text-xs tracking-[0.4em] font-semibold uppercase mb-2" style={{ color: "rgba(212,175,55,0.65)" }}>

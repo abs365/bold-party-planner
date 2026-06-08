@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -441,7 +441,7 @@ export function VendorVerificationView({
                   const status = getDocStatus(docType);
                   return (
                     <option key={docType} value={docType} disabled={status === "approved"}>
-                      {DOCUMENT_LABELS[docType]}{status === "approved" ? " âœ“ Approved" : status === "pending" ? " (In review)" : ""}
+                      {DOCUMENT_LABELS[docType]}{status === "approved" ? " (Approved)" : status === "pending" ? " (In review)" : ""}
                     </option>
                   );
                 })}
@@ -490,7 +490,7 @@ export function VendorVerificationView({
                 <div>
                   <Upload size={28} className="text-slate-500 mx-auto mb-2" />
                   <p className="text-slate-400 text-sm">Drag & drop or click to browse</p>
-                  <p className="text-slate-600 text-xs mt-1">JPG, PNG, PDF Â· Max 10MB</p>
+                  <p className="text-slate-600 text-xs mt-1">JPG, PNG, PDF - Max 10MB</p>
                 </div>
               )}
             </div>
@@ -607,7 +607,7 @@ export function VendorVerificationView({
                     <p className="text-xs text-slate-400 mt-0.5 italic">&ldquo;{entry.notes}&rdquo;</p>
                   )}
                   <p className="text-xs text-slate-600 mt-0.5">
-                    {entry.actor_type === "admin" ? "ELBOLD Events team" : "You"} Â·{" "}
+                    {entry.actor_type === "admin" ? "ELBOLD Events team" : "You"}{" - "}
                     {formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}
                   </p>
                 </div>

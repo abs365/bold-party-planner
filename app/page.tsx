@@ -198,7 +198,7 @@ export default async function Home() {
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(160deg, rgba(6,14,36,0.48) 0%, rgba(8,18,42,0.38) 35%, rgba(5,10,24,0.68) 100%)",
+              background: "linear-gradient(160deg, rgba(6,14,36,0.34) 0%, rgba(8,18,42,0.24) 35%, rgba(5,10,24,0.54) 100%)",
             }}
           />
           {/* Gold bloom */}
@@ -354,7 +354,7 @@ export default async function Home() {
                     className="absolute inset-0"
                     style={{
                       background: occasion.photo
-                        ? `linear-gradient(to top, rgba(4,8,20,0.82) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`
+                        ? `linear-gradient(to top, rgba(4,8,20,0.70) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`
                         : occasion.gradient,
                     }}
                   />
