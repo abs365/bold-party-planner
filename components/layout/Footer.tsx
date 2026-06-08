@@ -129,7 +129,7 @@ export function Footer() {
             className="text-xs font-light"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            &copy; {new Date().getFullYear()} ELBOLD Ltd. All rights reserved. Registered in England and Wales.
+            &copy; {new Date().getFullYear()} ELBOLD Ltd (trading as ELBOLD Events). Company No. [COMPANY_NUMBER]. Registered in England and Wales.
           </p>
           <div
             className="flex items-center gap-5 text-xs font-light"

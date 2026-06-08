@@ -58,7 +58,7 @@ function wrap(title: string, body: string) {
         <a href="${appUrl}/vendor/dashboard">Your Dashboard</a>
         <a href="mailto:support@elbold.com">Support</a>
       </div>
-      <p>© ${year} ELBOLD Ltd · Registered in England and Wales<br>
+      <p>© ${year} ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER] · Registered in England and Wales<br>
       <a href="${appUrl}/vendor/dashboard" style="color:#9ca3af;font-size:11px">Manage notifications</a></p>
     </div>
   </div></body></html>`;

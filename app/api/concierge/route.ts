@@ -92,7 +92,7 @@ export async function POST(request: Request) {
           <a href="${appUrl}/browse" class="btn">Browse Vendors</a>
           <p style="margin-top:24px;font-size:13px;color:#9ca3af">Questions? Reply to this email or contact us at support@elbold.com.</p>
         </div>
-        <div class="f"><p>ELBOLD Ltd, Registered in England and Wales</p></div>
+        <div class="f"><p>ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER] · Registered in England and Wales</p></div>
       </div></body></html>`,
     });
   } catch (err) {

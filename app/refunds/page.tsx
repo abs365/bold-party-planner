@@ -11,11 +11,14 @@ export default function RefundPolicy() {
     <LegalPage
       title="Refund Policy"
       subtitle="Our cancellation, refund, and dispute resolution process for bookings made through ELBOLD."
-      lastUpdated="May 2026"
+      lastUpdated="June 2026"
       sections={[
         {
           title: "1. Overview",
-          content: "All bookings made through ELBOLD are covered by this Refund Policy. We aim to be fair to both customers and vendors while maintaining a trustworthy marketplace.",
+          content: [
+            "This Refund Policy is issued by ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales, registered office: [REGISTERED_OFFICE].",
+            "All bookings made through ELBOLD are covered by this Refund Policy. We aim to be fair to both customers and vendors while maintaining a trustworthy marketplace.",
+          ],
         },
         {
           title: "2. Customer Cancellations",

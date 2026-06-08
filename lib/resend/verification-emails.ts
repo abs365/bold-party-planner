@@ -62,7 +62,7 @@ function wrap(headerTitle: string, headerSub: string, body: string): string {
         <a href="${APP_URL}/terms">Terms</a>
         <a href="${APP_URL}/vendor/verification">Verification Centre</a>
       </div>
-      <p>© ${year} ELBOLD Ltd. All rights reserved.<br>This email was sent regarding your ELBOLD Events vendor account.</p>
+      <p>© ${year} ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER]. All rights reserved.<br>This email was sent regarding your ELBOLD Events vendor account.</p>
     </div>
   </div></body></html>`;
 }
