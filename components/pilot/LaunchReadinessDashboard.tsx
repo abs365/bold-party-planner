@@ -45,7 +45,7 @@ function passRate(subs: Submission[]): number {
 }
 
 function avgRating(subs: Submission[]): string {
-  if (subs.length === 0) return "—";
+  if (subs.length === 0) return "N/A";
   const avg = subs.reduce((s, r) => s + r.rating, 0) / subs.length;
   return avg.toFixed(1);
 }
@@ -89,7 +89,7 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
 
   const overallRating = submissions.length > 0
     ? (submissions.reduce((s, r) => s + r.rating, 0) / submissions.length).toFixed(1)
-    : "—";
+    : "N/A";
 
   return (
     <div className="space-y-6">
@@ -113,7 +113,7 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
         </div>
       </div>
 
-      {/* Launch Readiness Score — hero card */}
+      {/* Launch Readiness Score: hero card */}
       <div className={cn("border rounded-2xl p-6", readiness.bg)}>
         <div className="flex flex-col sm:flex-row sm:items-center gap-6">
           <div className="flex-1">
@@ -150,17 +150,17 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
         <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
           <div>
             <div className="text-slate-400 text-xs mb-1">Customer Pass Rate</div>
-            <div className="font-bold text-white">{submissions.length === 0 ? "—" : `${readiness.cpr}%`}</div>
+            <div className="font-bold text-white">{submissions.length === 0 ? "N/A" : `${readiness.cpr}%`}</div>
             <div className="text-xs text-slate-500">{customerSubs.length} submission{customerSubs.length !== 1 ? "s" : ""}</div>
           </div>
           <div>
             <div className="text-slate-400 text-xs mb-1">Vendor Pass Rate</div>
-            <div className="font-bold text-white">{submissions.length === 0 ? "—" : `${readiness.vpr}%`}</div>
+            <div className="font-bold text-white">{submissions.length === 0 ? "N/A" : `${readiness.vpr}%`}</div>
             <div className="text-xs text-slate-500">{vendorSubs.length} submission{vendorSubs.length !== 1 ? "s" : ""}</div>
           </div>
           <div>
             <div className="text-slate-400 text-xs mb-1">Admin Pass Rate</div>
-            <div className="font-bold text-white">{submissions.length === 0 ? "—" : `${readiness.apr}%`}</div>
+            <div className="font-bold text-white">{submissions.length === 0 ? "N/A" : `${readiness.apr}%`}</div>
             <div className="text-xs text-slate-500">{adminSubs.length} submission{adminSubs.length !== 1 ? "s" : ""}</div>
           </div>
           <div>
@@ -267,7 +267,7 @@ export function LaunchReadinessDashboard({ submissions, bugCount }: LaunchReadin
 
         {activeTab === "overview" && (
           <div className="p-5 space-y-4">
-            <p className="text-sm text-slate-400">Share these links with pilot testers. No login required — they submit directly.</p>
+            <p className="text-sm text-slate-400">Share these links with pilot testers. No login required. They submit directly.</p>
             <div className="space-y-3">
               {[
                 { label: "Customer Testing Form", url: "/testing/customer", icon: Users, color: "text-brand-400", desc: "Account creation, events, quotes, bookings" },

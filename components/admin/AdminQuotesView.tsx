@@ -323,7 +323,7 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
                       </td>
 
                       <td className="px-4 py-3">
-                        <p className="text-white font-medium text-xs">{quote.vendor?.business_name ?? "—"}</p>
+                        <p className="text-white font-medium text-xs">{quote.vendor?.business_name ?? "N/A"}</p>
                         <p className="text-slate-600 text-xs capitalize">
                           {(quote.vendor?.category ?? quote.category ?? "").replace(/_/g, " ")}
                           {quote.vendor?.city ? ` · ${quote.vendor.city}` : ""}
@@ -331,12 +331,12 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
                       </td>
 
                       <td className="px-4 py-3 text-slate-400 text-xs">
-                        {quote.customer?.full_name ?? "—"}
+                        {quote.customer?.full_name ?? "N/A"}
                       </td>
 
                       <td className="px-4 py-3 text-xs">
                         <p className="text-slate-300">
-                          {quote.event?.title ?? quote.event_type?.replace(/_/g, " ") ?? "—"}
+                          {quote.event?.title ?? quote.event_type?.replace(/_/g, " ") ?? "N/A"}
                         </p>
                         {quote.event_date && (
                           <p className="text-slate-600">
@@ -371,7 +371,7 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
                             {action.label}
                           </span>
                         ) : (
-                          <span className="text-slate-700">—</span>
+                          <span className="text-slate-700">N/A</span>
                         )}
                       </td>
 
@@ -381,7 +381,7 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
                             £{price.toLocaleString("en-GB")}
                           </span>
                         ) : (
-                          <span className="text-slate-700 text-xs">—</span>
+                          <span className="text-slate-700 text-xs">N/A</span>
                         )}
                       </td>
 
@@ -398,7 +398,7 @@ export function AdminQuotesView({ quotes, stats }: AdminQuotesViewProps) {
                             {score}
                           </span>
                         ) : (
-                          <span className="text-slate-700 text-xs">—</span>
+                          <span className="text-slate-700 text-xs">N/A</span>
                         )}
                       </td>
 

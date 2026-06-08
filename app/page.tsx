@@ -45,42 +45,42 @@ const OCCASIONS = [
     href: "/browse?event=wedding",
     photo: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #1a0610 0%, #3d1030 60%, #200a1e 100%)",
-    overlay: "rgba(8,3,12,0.62)",
+    overlay: "rgba(8,3,12,0.38)",
   },
   {
     label: "Birthdays",
     href: "/browse?event=birthday",
     photo: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #0a0820 0%, #1a1060 60%, #0f0840 100%)",
-    overlay: "rgba(4,4,20,0.62)",
+    overlay: "rgba(4,4,20,0.38)",
   },
   {
     label: "Corporate",
     href: "/browse?event=corporate",
     photo: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #051020 0%, #0d2040 60%, #091836 100%)",
-    overlay: "rgba(2,6,14,0.62)",
+    overlay: "rgba(2,6,14,0.38)",
   },
   {
     label: "Baby Showers",
     href: "/browse?event=baby_shower",
-    photo: null,
+    photo: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #0a1810 0%, #142b1a 60%, #0d2014 100%)",
-    overlay: "rgba(4,10,6,0.62)",
+    overlay: "rgba(4,10,6,0.38)",
   },
   {
     label: "Anniversaries",
     href: "/browse?event=anniversary",
     photo: "https://images.unsplash.com/photo-1516589091380-5d8259b23548?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #1a0810 0%, #3a0e20 60%, #240a18 100%)",
-    overlay: "rgba(12,4,8,0.62)",
+    overlay: "rgba(12,4,8,0.38)",
   },
   {
     label: "Cultural Celebrations",
     href: "/browse?event=cultural",
     photo: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #140820 0%, #281050 60%, #1a0838 100%)",
-    overlay: "rgba(8,4,18,0.62)",
+    overlay: "rgba(8,4,18,0.38)",
   },
 ];
 
@@ -95,7 +95,7 @@ const QUICK_STARTS = [
 
 const VENDOR_BENEFITS = [
   {
-    title: "Reach customers actively planning events — not scrolling a feed",
+    title: "Reach customers actively planning events, not scrolling a feed",
     desc: "Every visitor on ELBOLD is searching for a vendor for a specific occasion. These are buyers, not browsers.",
   },
   {
@@ -194,11 +194,11 @@ export default async function Home() {
             />
           </div>
 
-          {/* Cinematic overlay */}
+          {/* Cinematic overlay — reduced to let photography breathe */}
           <div
             className="absolute inset-0"
             style={{
-              background: "linear-gradient(160deg, rgba(6,14,36,0.85) 0%, rgba(8,18,42,0.78) 40%, rgba(5,10,24,0.90) 100%)",
+              background: "linear-gradient(160deg, rgba(6,14,36,0.34) 0%, rgba(8,18,42,0.24) 35%, rgba(5,10,24,0.54) 100%)",
             }}
           />
           {/* Gold bloom */}
@@ -237,7 +237,7 @@ export default async function Home() {
             {/* Subheadline */}
             <p
               className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-12"
-              style={{ color: "rgba(255,255,255,0.42)" }}
+              style={{ color: "rgba(255,255,255,0.72)" }}
             >
               Individually reviewed DJs, photographers, decorators, caterers and more.
               Every vendor vetted before they join. Every booking protected.
@@ -257,7 +257,7 @@ export default async function Home() {
             <div className="flex flex-col items-center gap-3">
               <span
                 className="text-xs tracking-[0.3em] font-light"
-                style={{ color: "rgba(255,255,255,0.2)" }}
+                style={{ color: "rgba(255,255,255,0.42)" }}
               >
                 WHAT ARE YOU PLANNING?
               </span>
@@ -266,10 +266,10 @@ export default async function Home() {
                   <Link
                     key={label}
                     href={href}
-                    className="text-xs px-4 py-2 rounded-full border transition-all duration-200 hover:bg-white/6"
+                    className="text-xs px-4 py-2 rounded-full border transition-all duration-200 hover:bg-white/10"
                     style={{
-                      borderColor: "rgba(212,175,55,0.2)",
-                      color: "rgba(255,255,255,0.38)",
+                      borderColor: "rgba(212,175,55,0.35)",
+                      color: "rgba(255,255,255,0.62)",
                       letterSpacing: "0.06em",
                     }}
                   >
@@ -301,8 +301,8 @@ export default async function Home() {
                 { icon: MapPin,       label: "Based in the United Kingdom" },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center justify-center gap-2.5 py-1">
-                  <Icon size={13} style={{ color: "rgba(212,175,55,0.55)", flexShrink: 0 }} />
-                  <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.38)" }}>
+                  <Icon size={15} style={{ color: "rgba(212,175,55,0.80)", flexShrink: 0 }} />
+                  <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.62)" }}>
                     {label}
                   </span>
                 </div>
@@ -349,12 +349,12 @@ export default async function Home() {
                     </div>
                   )}
 
-                  {/* Cinematic overlay — bottom-heavy so text is legible */}
+                  {/* Cinematic overlay — bottom-heavy so text is legible, reduced to show photography */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background: occasion.photo
-                        ? `linear-gradient(to top, rgba(4,8,20,0.88) 0%, ${occasion.overlay} 40%, rgba(4,8,20,0.22) 100%)`
+                        ? `linear-gradient(to top, rgba(4,8,20,0.70) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`
                         : occasion.gradient,
                     }}
                   />
@@ -509,6 +509,47 @@ export default async function Home() {
           </section>
         )}
 
+        {/* ── CONCIERGE BAND ───────────────────────────────────────────────── */}
+        <section className="py-16 px-4" style={{ background: "#f8f7f5" }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div>
+                <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
+                  Concierge Planning
+                </p>
+                <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-4">
+                  Not sure where to start?<br />Tell us about your event.
+                </h2>
+                <p className="text-sm text-gray-500 font-light leading-relaxed mb-6">
+                  If you would rather not browse on your own, submit your event details and a member of the ELBOLD team will personally recommend the right vendors for you. We respond within 24 hours and there is no obligation to book.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href="/concierge"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm transition-opacity hover:opacity-90"
+                    style={{ background: "#0D1B3E", color: "#C9A84C", border: "2px solid #C9A84C" }}
+                  >
+                    Request Help Planning My Event <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { n: "01", text: "Tell us your event type, date and budget" },
+                  { n: "02", text: "We identify verified vendors who fit your needs" },
+                  { n: "03", text: "You receive personalised recommendations" },
+                  { n: "04", text: "You choose who to contact. No pressure." },
+                ].map(({ n, text }) => (
+                  <div key={n} className="bg-white border border-gray-100 rounded-2xl p-5">
+                    <div className="text-xs font-bold tracking-wider mb-2" style={{ color: "#C9A84C" }}>{n}</div>
+                    <p className="text-xs text-gray-600 font-light leading-relaxed">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── SECTION 5: THE ELBOLD PROMISE ───────────────────────────────── */}
         <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
           <div className="max-w-5xl mx-auto">
@@ -536,7 +577,7 @@ export default async function Home() {
                 {
                   icon: Shield,
                   title: "Your deposit is held safely until your event",
-                  body: "Your 30% deposit is held by Stripe — not released to the vendor until your event has taken place. If the vendor cancels, you receive a full refund.",
+                  body: "Your 30% deposit is held by Stripe and only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
                   link: "/booking-protection",
                   linkLabel: "Full booking protection",
                 },
@@ -611,8 +652,8 @@ export default async function Home() {
                 </h2>
                 <p className="text-gray-400 text-sm font-light leading-relaxed mb-10">
                   Instagram and Facebook are built for browsing. ELBOLD is built for booking.
-                  Customers who visit ELBOLD are actively searching for a vendor for a real event —
-                  and they are ready to commit.
+                  Customers who visit ELBOLD are actively searching for a vendor for a real event.
+                  They are ready to commit.
                 </p>
                 <div className="space-y-7">
                   {VENDOR_BENEFITS.map((b) => (

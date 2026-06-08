@@ -43,7 +43,7 @@ export async function requestPasswordResetAction(
     return { error: error.message };
   }
 
-  // Always return success — Supabase doesn't reveal whether the email exists (security best practice)
+  // Always return success. Supabase doesn't reveal whether the email exists (security best practice).
   return { success: true };
 }
 

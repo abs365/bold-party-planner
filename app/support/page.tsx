@@ -27,7 +27,7 @@ const SECTIONS = [
     questions: [
       {
         q: "How do I request a quote from a vendor?",
-        a: "Visit any vendor's profile and click 'Request a Quote'. Fill in your event details — date, location, guest count, and any requirements. The vendor will respond with a price within 24 hours.",
+        a: "Visit any vendor's profile and click 'Request a Quote'. Fill in your event details: date, location, guest count, and any requirements. The vendor will respond with a price within 24 hours.",
       },
       {
         q: "My quote request has had no response. What should I do?",
@@ -56,7 +56,7 @@ const SECTIONS = [
     questions: [
       {
         q: "Is my payment secure?",
-        a: "All payments are processed by Stripe, one of the world's most trusted payment processors. Your card details are never stored by ELBOLD. Stripe is PCI-DSS Level 1 certified — the highest security standard available.",
+        a: "All payments are processed by Stripe, one of the world's most trusted payment processors. Your card details are never stored by ELBOLD. Stripe is PCI-DSS Level 1 certified, the highest security standard available.",
       },
       {
         q: "How much deposit do I pay?",
@@ -156,7 +156,7 @@ const SECTIONS = [
     questions: [
       {
         q: "How do I know a vendor is genuine?",
-        a: "Every vendor on ELBOLD has been manually reviewed by our team before being listed. We check business identity, portfolio quality, and service legitimacy. Look for the 'ELBOLD Verified' badge on vendor profiles — click it to learn what the verification level means.",
+        a: "Every vendor on ELBOLD has been manually reviewed by our team before being listed. We check business identity, portfolio quality, and service legitimacy. Look for the 'ELBOLD Verified' badge on vendor profiles. Click it to learn what the verification level means.",
       },
       {
         q: "A vendor asked me to pay outside of ELBOLD. What should I do?",
@@ -164,7 +164,7 @@ const SECTIONS = [
       },
       {
         q: "How are reviews on ELBOLD different from other platforms?",
-        a: "Every review on ELBOLD comes from a real customer who completed a confirmed booking through the platform. We do not accept reviews from unverified users. This means you can trust that ratings reflect real experiences — not friends, family, or incentivised posts.",
+        a: "Every review on ELBOLD comes from a real customer who completed a confirmed booking through the platform. We do not accept reviews from unverified users. This means you can trust that ratings reflect real experiences, not friends, family, or incentivised posts.",
       },
       {
         q: "What happens if a vendor is reported?",
@@ -178,7 +178,7 @@ const RESPONSE_TIMES = [
   { channel: "support@elbold.com", sla: "Within 1 working day", use: "General booking, payment, and account questions" },
   { channel: "disputes@elbold.com", sla: "Within 1 working day", use: "Refund requests and formal disputes" },
   { channel: "safety@elbold.com", sla: "Within 1 working day", use: "Vendor conduct concerns and safety reports" },
-  { channel: "urgent@elbold.com", sla: "Priority — monitored daily", use: "Vendor no-shows and day-of emergencies" },
+  { channel: "urgent@elbold.com", sla: "Priority (monitored daily)", use: "Vendor no-shows and day-of emergencies" },
 ];
 
 export default async function SupportPage() {

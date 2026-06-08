@@ -186,7 +186,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
               {quote.vendor?.rating.toFixed(1)}
             </span>
           </div>
-          {/* Vendor trust signals — only show document-verified badges (level 2+) */}
+          {/* Vendor trust signals: only show document-verified badges (level 2+) */}
           <div className="flex flex-wrap gap-1.5 mt-2">
             {(quote.vendor?.verification_level ?? 0) >= 4 && (
               <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
@@ -348,7 +348,7 @@ export function QuoteDetailView({ quote }: QuoteDetailViewProps) {
             </div>
           )}
 
-          {/* Responded / accepted — show price + details */}
+          {/* Responded / accepted: show price + details */}
           {(quote.status === "responded" || (quote.status === "accepted" && response)) &&
             response && (
               <div className="space-y-4">

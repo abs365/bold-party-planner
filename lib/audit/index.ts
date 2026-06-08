@@ -42,6 +42,7 @@ export type AuditAction =
   | "booking.status.change"
   | "booking.created"
   | "booking.cancelled"
+  | "booking.refund.issued"
   | "quote.status.change"
   | "quote.created"
   | "quote.responded"

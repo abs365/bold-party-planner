@@ -70,7 +70,7 @@ export function ShowcaseGrid({ items }: ShowcaseGridProps) {
         body: JSON.stringify({ vendor_id: vendorId }),
       });
       if (res.status === 401) {
-        // Not logged in — undo optimistic update and redirect
+        // Not logged in: undo optimistic update and redirect
         setSaved(saved);
         toast.error("Sign in to save vendors");
         return;
@@ -179,7 +179,7 @@ function ShowcaseTile({ item, isSaved, onSave, onView }: ShowcaseTileProps) {
       className="break-inside-avoid block mb-4 group rounded-2xl overflow-hidden bg-white border border-gray-100 hover:border-gray-300 hover:shadow-xl transition-all duration-300"
       onClick={() => onView(item.vendor.id)}
     >
-      {/* Media — links to vendor profile */}
+      {/* Media: links to vendor profile */}
       <Link href={`/vendors/${item.vendor.id}`} className="block">
         <div className="relative overflow-hidden bg-gray-100">
           {item.type === "video" ? (
@@ -228,7 +228,7 @@ function ShowcaseTile({ item, isSaved, onSave, onView }: ShowcaseTileProps) {
             </span>
           </div>
 
-          {/* Save button — overlaid, prevents link navigation */}
+          {/* Save button: overlaid, prevents link navigation */}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSave(item.vendor.id, item.vendor.business_name); }}
             aria-label={isSaved ? "Remove from saved" : "Save vendor"}

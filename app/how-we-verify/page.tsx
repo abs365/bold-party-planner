@@ -6,13 +6,15 @@ import { createClient } from "@/lib/supabase/server";
 import {
   CheckCircle2, Shield, BadgeCheck, Eye, Star,
   FileText, Users, TrendingUp, ArrowRight, Lock,
-  Phone, AlertTriangle, Clock, Search,
+  Phone, AlertTriangle, Clock, Search, ChevronDown,
 } from "lucide-react";
+import { CATEGORY_REQUIREMENTS, DOCUMENT_LABELS } from "@/lib/verification-requirements";
+import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 
 export const metadata: Metadata = {
   title: "How ELBOLD Verifies Vendors | Every Professional Individually Reviewed",
   description:
-    "Learn exactly how ELBOLD reviews and verifies every event vendor — identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
+    "Learn exactly how ELBOLD reviews and verifies every event vendor: identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
 };
 
 export const dynamic = "force-dynamic";
@@ -25,8 +27,8 @@ const VERIFICATION_STEPS = [
   },
   {
     icon: Phone,
-    title: "Phone Verification",
-    desc: "A valid UK phone number is required. We verify the number belongs to the applying business — not a disposable or VoIP number.",
+    title: "Contact Verification",
+    desc: "A valid UK contact phone number is required. Contact details are cross-referenced with submitted documents during our manual review.",
   },
   {
     icon: Users,
@@ -52,28 +54,28 @@ const VERIFICATION_STEPS = [
 
 const VERIFICATION_LEVELS = [
   {
-    level: "Reviewed",
+    level: "ELBOLD Reviewed",
     badge: "Manual review by our team",
     color: "#059669",
     bg: "rgba(5,150,105,0.08)",
     border: "rgba(5,150,105,0.2)",
-    desc: "The vendor has been assessed by the ELBOLD team for identity, business legitimacy, and portfolio quality. This is the baseline standard — every vendor on ELBOLD holds this status as a minimum.",
+    desc: "The vendor has been assessed by the ELBOLD team for identity, business legitimacy, and portfolio quality. This is the baseline standard. Every vendor on ELBOLD holds this status as a minimum.",
   },
   {
     level: "ID Verified",
-    badge: "Identity confirmed",
+    badge: "Government ID confirmed",
     color: "#2563eb",
     bg: "rgba(37,99,235,0.08)",
     border: "rgba(37,99,235,0.2)",
     desc: "The vendor has provided government-issued identification. We have confirmed their legal name matches their business identity. Customers have additional assurance of exactly who they are booking.",
   },
   {
-    level: "Trusted Pro",
-    badge: "Established track record",
-    color: "#D4AF37",
-    bg: "rgba(212,175,55,0.08)",
-    border: "rgba(212,175,55,0.2)",
-    desc: "The vendor has maintained a strong performance record on ELBOLD, with verified reviews from real bookings and a consistent completion rate. This badge reflects earned trust, not purchased status.",
+    level: "Business Verified",
+    badge: "Documents reviewed",
+    color: "#7c3aed",
+    bg: "rgba(124,58,237,0.08)",
+    border: "rgba(124,58,237,0.2)",
+    desc: "The vendor has submitted all required business documents for their service category, which may include insurance certificates, professional licences, or trade-specific credentials, and each has been individually reviewed and approved by our team.",
   },
   {
     level: "Premium Partner",
@@ -95,7 +97,7 @@ const TIMELINE = [
 const FRAUD_MEASURES = [
   {
     title: "Review pattern detection",
-    body: "We monitor for unusual spikes in reviews — particularly from accounts with no booking history. Suspicious patterns trigger immediate investigation.",
+    body: "We monitor for unusual spikes in reviews, particularly from accounts with no booking history. Suspicious patterns trigger immediate investigation.",
   },
   {
     title: "Identity cross-referencing",
@@ -120,10 +122,10 @@ const WHAT_TO_EXPECT = [
 ];
 
 const DOES_NOT_GUARANTEE = [
-  "Verification is our assessment at a point in time — it is not a guarantee of future performance.",
-  "We cannot observe every event in person — our monitoring is based on customer reviews and completion data.",
-  "Verified vendors may still make mistakes or fail to meet expectations — verification assesses legitimacy, not perfection.",
-  "Our dispute process aims to be fair to both parties — outcomes depend on the evidence available in each case.",
+  "Verification is our assessment at a point in time. It is not a guarantee of future performance.",
+  "We cannot observe every event in person. Our monitoring is based on customer reviews and completion data.",
+  "Verified vendors may still make mistakes or fail to meet expectations. Verification assesses legitimacy, not perfection.",
+  "Our dispute process aims to be fair to both parties. Outcomes depend on the evidence available in each case.",
 ];
 
 const FAQS = [
@@ -145,7 +147,7 @@ const FAQS = [
   },
   {
     q: "How are reviews protected from manipulation?",
-    a: "Only customers with a confirmed booking can leave a review. We monitor for unusual review patterns and investigate any that appear artificial. Vendors cannot remove negative reviews — they may only post a professional response.",
+    a: "Only customers with a confirmed booking can leave a review. We monitor for unusual review patterns and investigate any that appear artificial. Vendors cannot remove negative reviews. They may only post a professional response.",
   },
   {
     q: "What should I do if I suspect a vendor is misrepresenting themselves?",
@@ -193,7 +195,7 @@ export default async function HowWeVerifyPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-20 space-y-20">
 
-        {/* Section 1 — Why verification matters */}
+        {/* Section 1: Why verification matters */}
         <div
           className="rounded-2xl p-10 text-center"
           style={{ background: "rgba(11,31,77,0.03)", border: "1px solid rgba(11,31,77,0.08)" }}
@@ -211,7 +213,7 @@ export default async function HowWeVerifyPage() {
           </p>
         </div>
 
-        {/* Section 2–5 — Verification steps */}
+        {/* Section 2-5: Verification steps */}
         <div>
           <div className="text-center mb-12">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -244,7 +246,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 6 — Verification timeline */}
+        {/* Section 6: Verification timeline */}
         <div>
           <div className="text-center mb-10">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -284,7 +286,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section — Verification levels */}
+        {/* Section: Verification levels */}
         <div>
           <div className="text-center mb-12">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -326,7 +328,67 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 7 — Fraud prevention */}
+        {/* Trusted Professional earned badge */}
+        <div
+          className="rounded-2xl p-8"
+          style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.15)" }}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Star size={18} style={{ color: "#D4AF37" }} fill="currentColor" />
+            <h2 className="text-lg font-light text-gray-900 tracking-tight">Trusted Professional (earned badge)</h2>
+          </div>
+          <p className="text-sm text-gray-500 font-light leading-relaxed">
+            Separate from the verification tiers above, the <strong className="text-gray-700">Trusted Professional</strong> badge is awarded automatically based on performance, not document submission. It requires 5 or more completed bookings, an overall rating of 4.5 stars or higher, a response rate above 80%, and a cancellation rate below 5%. This badge reflects trust earned through real customer experiences.
+          </p>
+        </div>
+
+        {/* Category-specific document requirements */}
+        <div>
+          <div className="text-center mb-10">
+            <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
+              Document Requirements
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
+              What each service type must provide
+            </h2>
+            <p className="text-gray-400 text-sm font-light max-w-md mx-auto">
+              Business Verified vendors have had every document below individually reviewed and approved by our team.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            {Object.entries(CATEGORY_REQUIREMENTS).map(([cat, docs]) => {
+              const catInfo = VENDOR_CATEGORIES[cat as VendorCategory];
+              return (
+                <details key={cat} className="group border border-gray-100 rounded-2xl overflow-hidden">
+                  <summary className="flex items-center justify-between px-6 py-4 cursor-pointer text-sm font-semibold text-gray-900 select-none list-none">
+                    <span className="flex items-center gap-3">
+                      <span className="text-lg">{catInfo?.icon ?? "🏢"}</span>
+                      {catInfo?.label ?? cat.replace(/_/g, " ")}
+                    </span>
+                    <ChevronDown
+                      size={15}
+                      className="flex-shrink-0 transition-transform duration-200 group-open:rotate-180"
+                      style={{ color: "#C9A84C" }}
+                    />
+                  </summary>
+                  <div className="px-6 pb-5">
+                    <div className="space-y-2">
+                      {(docs ?? []).map((docType) => (
+                        <div key={docType} className="flex items-start gap-2.5">
+                          <CheckCircle2 size={13} style={{ color: "#059669", flexShrink: 0, marginTop: "3px" }} />
+                          <span className="text-sm text-gray-600">{DOCUMENT_LABELS[docType]}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </details>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Section 7: Fraud prevention */}
         <div
           className="rounded-2xl p-10"
           style={{ background: "#0D1B3E" }}
@@ -350,7 +412,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section — Review integrity */}
+        {/* Section: Review integrity */}
         <div className="border border-gray-100 rounded-2xl p-8">
           <div className="flex items-center gap-2 mb-5">
             <Star size={16} style={{ color: "#C9A84C" }} />
@@ -386,7 +448,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 8 — What customers should expect */}
+        {/* Section 8: What customers should expect */}
         <div>
           <div className="text-center mb-10">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -407,7 +469,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 9 — What verification does not guarantee */}
+        {/* Section 9: What verification does not guarantee */}
         <div
           className="rounded-2xl p-8"
           style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.15)" }}
@@ -419,7 +481,7 @@ export default async function HowWeVerifyPage() {
             </h2>
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-            We believe transparency builds more trust than overpromising. Verification is meaningful —
+            We believe transparency builds more trust than overpromising. Verification is meaningful,
             but it has honest limits.
           </p>
           <div className="space-y-3">
@@ -443,9 +505,9 @@ export default async function HowWeVerifyPage() {
           </p>
           <div className="space-y-3">
             {[
-              "Customer reviews — we read every review and flag patterns of concern",
-              "Booking completion rate — vendors who cancel confirmed bookings receive formal warnings",
-              "Response behaviour — vendors with consistently poor response rates receive reduced marketplace visibility",
+              "Customer reviews: we read every review and flag patterns of concern",
+              "Booking completion rate: vendors who cancel confirmed bookings receive formal warnings",
+              "Response behaviour: vendors with consistently poor response rates receive reduced marketplace visibility",
             ].map((point) => (
               <div key={point} className="flex items-start gap-3">
                 <CheckCircle2 size={14} className="text-gray-300 shrink-0 mt-0.5" />

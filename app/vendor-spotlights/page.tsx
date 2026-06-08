@@ -11,7 +11,7 @@ import type { Vendor } from "@/types";
 export const metadata: Metadata = {
   title: "Vendor Spotlights | Real Professionals on ELBOLD Events",
   description:
-    "Meet the verified event professionals behind ELBOLD. Photographers, DJs, decorators, caterers and more — each individually reviewed, each committed to extraordinary events.",
+    "Meet the verified event professionals behind ELBOLD. Photographers, DJs, decorators, caterers and more, each individually reviewed, each committed to extraordinary events.",
   openGraph: {
     title: "Vendor Spotlights | ELBOLD Events",
     description: "The verified professionals who make extraordinary events happen.",
@@ -88,7 +88,7 @@ export default async function VendorSpotlightsPage() {
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
             Every vendor on ELBOLD is individually reviewed before joining the platform.
-            These are some of the professionals who have met our standards — and who have gone further.
+            These are some of the professionals who have met our standards, and who have gone further.
           </p>
         </div>
       </div>
@@ -210,7 +210,7 @@ export default async function VendorSpotlightsPage() {
           </div>
         </section>
       ) : (
-        /* Building phase — coming soon */
+        /* Building phase: coming soon */
         <section className="py-32 px-4 bg-white">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
@@ -227,7 +227,7 @@ export default async function VendorSpotlightsPage() {
               </p>
             </div>
 
-            {/* Preview cards — editorial placeholders */}
+            {/* Preview cards: editorial placeholders */}
             <div className="grid sm:grid-cols-3 gap-5">
               {[
                 { category: "Photographers", city: "London", label: "PH" },
@@ -277,7 +277,7 @@ export default async function VendorSpotlightsPage() {
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Vendor Spotlights feature professionals who have been verified, have built a track record
                 of excellent reviews, and whose work demonstrates the quality standard ELBOLD was built to represent.
-                But every vendor on the platform — not just those featured here — has been individually reviewed
+                But every vendor on the platform, not just those featured here, has been individually reviewed
                 by our team before listing.
               </p>
               <Link
@@ -294,7 +294,7 @@ export default async function VendorSpotlightsPage() {
                 { title: "Individually reviewed before listing", desc: "Every application is assessed by a member of our team against published standards." },
                 { title: "Portfolio verified as genuine work", desc: "We check that portfolio images represent the vendor's actual, current capability." },
                 { title: "Identity confirmed", desc: "The person listing the service is confirmed to be the actual service provider." },
-                { title: "Ongoing accountability", desc: "Vendors who fall below standard after approval face a progressive warning system — up to and including removal." },
+                { title: "Ongoing accountability", desc: "Vendors who fall below standard after approval face a progressive warning system, up to and including removal." },
               ].map(({ title, desc }) => (
                 <div key={title} className="flex gap-3 bg-white rounded-xl p-5 border border-gray-100">
                   <CheckCircle2 size={14} style={{ color: "#0B1F4D", flexShrink: 0, marginTop: 1 }} />

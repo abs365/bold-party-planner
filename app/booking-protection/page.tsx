@@ -19,8 +19,8 @@ export const dynamic = "force-dynamic";
 const PROMISE_POINTS = [
   {
     icon: Lock,
-    title: "Your deposit is held by Stripe",
-    body: "Every deposit paid through ELBOLD is processed and held by Stripe — not transferred directly to the vendor. Vendors receive payment only after your event is completed.",
+    title: "Your payment is secured through Stripe",
+    body: "Every deposit paid through ELBOLD is processed by Stripe. Payments are held by ELBOLD and not released to vendors until after your event is completed.",
   },
   {
     icon: CheckCircle2,
@@ -38,7 +38,7 @@ const REFUND_POLICY = [
   { period: "More than 30 days before the event", outcome: "Full refund of the deposit, minus a 5% processing fee" },
   { period: "15–30 days before the event", outcome: "50% refund of amounts paid" },
   { period: "8–14 days before the event", outcome: "25% refund of amounts paid" },
-  { period: "7 days or fewer before the event", outcome: "No refund — the vendor has reserved this date exclusively for your event" },
+  { period: "7 days or fewer before the event", outcome: "No refund. The vendor has reserved this date exclusively for your event." },
 ];
 
 const CUSTOMER_RESPONSIBILITIES = [
@@ -46,7 +46,7 @@ const CUSTOMER_RESPONSIBILITIES = [
   "Provide accurate event details including date, location, guest numbers, and specific requirements.",
   "Communicate changes to requirements promptly and in writing through the ELBOLD platform.",
   "Raise disputes within 48 hours of the event if the service was not delivered as agreed.",
-  "Do not attempt to circumvent the platform by paying vendors outside of ELBOLD — doing so removes all protections.",
+  "Do not attempt to circumvent the platform by paying vendors outside of ELBOLD, as doing so removes all protections.",
 ];
 
 const VENDOR_RESPONSIBILITIES = [
@@ -60,7 +60,7 @@ const VENDOR_RESPONSIBILITIES = [
 const FAQS = [
   {
     q: "When does the vendor receive my payment?",
-    a: "The vendor receives their share of the booking payment after your event is marked as complete and any dispute window has passed. Deposits are held securely by Stripe throughout the booking period.",
+    a: "The vendor receives their share of the booking payment after your event is marked as complete and any dispute window has passed. Deposits are held by ELBOLD and processed securely through Stripe throughout the booking period.",
   },
   {
     q: "What is the deposit amount?",
@@ -80,7 +80,7 @@ const FAQS = [
   },
   {
     q: "What if I need to cancel close to the event?",
-    a: "Cancellation within 7 days of the event does not entitle you to a refund — the vendor has allocated that date and may have turned down other bookings. We recommend ensuring you have appropriate event insurance for situations beyond your control.",
+    a: "Cancellation within 7 days of the event does not entitle you to a refund, as the vendor has allocated that date and may have turned down other bookings. We recommend ensuring you have appropriate event insurance for situations beyond your control.",
   },
 ];
 
@@ -137,8 +137,7 @@ export default async function BookingProtectionPage() {
             &ldquo;Your payment is never sent directly to a vendor without platform controls.&rdquo;
           </p>
           <p className="text-sm font-light max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.38)" }}>
-            All ELBOLD payments are processed by Stripe and held securely until your event is
-            complete. Vendors receive payment only after delivery — not before.
+            All ELBOLD payments are processed and secured by Stripe. Funds are held by ELBOLD until your event is complete. Vendors receive payment only after delivery.
           </p>
         </div>
 
@@ -187,7 +186,7 @@ export default async function BookingProtectionPage() {
               },
               {
                 title: "Deposit held until completion",
-                body: "Your 30% deposit is held in a protected Stripe account and only released to the vendor after your event is confirmed complete.",
+                body: "Your 30% deposit is held by ELBOLD and processed through Stripe. It is not released to the vendor until your event is confirmed complete.",
               },
               {
                 title: "No direct vendor transfers",

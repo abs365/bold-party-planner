@@ -162,7 +162,7 @@ export function SubmissionsView({ submissions }: SubmissionsViewProps) {
                   </div>
                   <div className="col-span-3 text-sm text-white font-medium truncate">{s.tester_name}</div>
                   <div className="col-span-3 text-xs text-slate-400 truncate">{s.tester_email}</div>
-                  <div className="col-span-1 text-center text-xs text-slate-400">{pass ?? "—"}</div>
+                  <div className="col-span-1 text-center text-xs text-slate-400">{pass ?? "N/A"}</div>
                   <div className={cn("col-span-1 text-center text-sm font-bold",
                     s.rating >= 7 ? "text-green-400" : s.rating >= 4 ? "text-amber-400" : "text-red-400")}>
                     {s.rating}/10

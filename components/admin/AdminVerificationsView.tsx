@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   Shield, CheckCircle2, XCircle, Clock, BadgeCheck, AlertTriangle,
   User, Loader2, Search, Flag, RefreshCcw,
-  ExternalLink, ChevronDown,
+  ExternalLink, ChevronDown, Ban,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -33,13 +33,14 @@ interface Verification {
     verified: boolean;
     verification_level: number;
     suspicious_flag: boolean;
+    status?: string | null;
     profile: { full_name: string | null; email: string } | null;
   } | null;
 }
 
 interface AdminVerificationsViewProps {
   initialVerifications: Verification[];
-  stats: { pending: number; approved: number; flagged: number };
+  stats: { pending: number; approved: number; flagged: number; suspended: number };
 }
 
 const STATUS_STYLE: Record<string, string> = {
@@ -141,10 +142,11 @@ export function AdminVerificationsView({ initialVerifications, stats }: AdminVer
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
           { label: "Pending Review", value: stats.pending, color: "text-amber-400", icon: Clock },
           { label: "Approved", value: stats.approved, color: "text-green-400", icon: CheckCircle2 },
+          { label: "Suspended", value: stats.suspended, color: "text-orange-400", icon: Ban },
           { label: "Flagged Vendors", value: stats.flagged, color: "text-red-400", icon: Flag },
         ].map(({ label, value, color, icon: Icon }) => (
           <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4">
@@ -157,13 +159,13 @@ export function AdminVerificationsView({ initialVerifications, stats }: AdminVer
 
       {/* Filter bar */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex gap-1 bg-white/4 p-1 rounded-xl flex-1">
-          {["pending", "approved", "rejected", "all"].map((s) => (
+        <div className="flex gap-1 bg-white/4 p-1 rounded-xl flex-1 flex-wrap">
+          {["pending", "approved", "rejected", "suspended", "expired", "all"].map((s) => (
             <button
               key={s}
               onClick={() => switchStatus(s)}
               className={cn(
-                "flex-1 py-2 rounded-lg text-sm font-medium capitalize transition-colors",
+                "flex-1 py-2 rounded-lg text-sm font-medium capitalize transition-colors min-w-[5rem]",
                 statusFilter === s ? "bg-white/12 text-white" : "text-slate-500 hover:text-white"
               )}
             >
@@ -191,11 +193,18 @@ export function AdminVerificationsView({ initialVerifications, stats }: AdminVer
         <div className="bg-white/4 border border-white/6 rounded-xl p-16 text-center">
           <CheckCircle2 size={40} className="text-white/15 mx-auto mb-3" />
           <p className="text-white font-medium">
-            {statusFilter === "pending" ? "No pending verifications" : `No ${statusFilter} verifications`}
+            {statusFilter === "pending" ? "No pending verifications" :
+             statusFilter === "expired" ? "Document expiry tracking" :
+             statusFilter === "suspended" ? "No suspended vendors" :
+             `No ${statusFilter} verifications`}
           </p>
           <p className="text-white/40 text-sm mt-1 max-w-sm mx-auto">
             {statusFilter === "pending"
-              ? "Phone, email, business document, and ID checks will appear here when vendors submit for review."
+              ? "Business document and ID checks will appear here when vendors submit for review."
+              : statusFilter === "expired"
+              ? "Document expiry tracking requires an expires_at column on vendor_verifications. Add it via migration to enable this filter."
+              : statusFilter === "suspended"
+              ? "No vendors are currently suspended. Suspended vendor accounts will surface their verification records here."
               : "No verification records match this filter."}
           </p>
         </div>
@@ -233,6 +242,11 @@ export function AdminVerificationsView({ initialVerifications, stats }: AdminVer
                         <span className={cn("text-xs px-2 py-0.5 rounded-full border capitalize", STATUS_STYLE[v.status])}>
                           {v.status}
                         </span>
+                        {v.vendor?.status === "suspended" && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/25 flex items-center gap-1">
+                            <Ban size={9} /> Suspended
+                          </span>
+                        )}
                         {v.vendor?.suspicious_flag && (
                           <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/25 flex items-center gap-1">
                             <Flag size={9} /> Flagged

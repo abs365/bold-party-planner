@@ -114,10 +114,10 @@ export function AdminCustomerTable({ customers, events, bookings, payments, curr
                           </div>
                         )}
                         <div>
-                          <div className="text-sm font-medium text-white">{String(customer.full_name ?? "—")}</div>
+                          <div className="text-sm font-medium text-white">{String(customer.full_name ?? "N/A")}</div>
                           <div className="flex items-center gap-1 text-xs text-slate-500">
                             <Mail size={10} />
-                            {String(customer.email ?? "—")}
+                            {String(customer.email ?? "N/A")}
                           </div>
                         </div>
                       </div>

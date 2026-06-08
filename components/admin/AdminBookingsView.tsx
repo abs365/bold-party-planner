@@ -101,12 +101,12 @@ export function AdminBookingsView({ bookings }: AdminBookingsViewProps) {
                 filtered.map((booking) => (
                   <tr key={booking.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td className="px-4 py-3">
-                      <p className="text-white font-medium">{booking.customer?.full_name ?? "—"}</p>
+                      <p className="text-white font-medium">{booking.customer?.full_name ?? "N/A"}</p>
                       <p className="text-white/40 text-xs">{booking.customer?.email}</p>
                     </td>
-                    <td className="px-4 py-3 text-white/70">{booking.vendor?.business_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/70">{booking.vendor?.business_name ?? "N/A"}</td>
                     <td className="px-4 py-3">
-                      <p className="text-white/70">{booking.event?.title ?? "—"}</p>
+                      <p className="text-white/70">{booking.event?.title ?? "N/A"}</p>
                       {booking.event?.date && <p className="text-white/40 text-xs">{new Date(booking.event.date).toLocaleDateString("en-GB")}</p>}
                     </td>
                     <td className="px-4 py-3">

@@ -61,7 +61,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <Navbar user={profile} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* ── HERO — luxury navy, consistent with all public pages ──────── */}
+      {/* ── HERO: luxury navy, consistent with all public pages ──────── */}
       <div className="pt-16" style={{ background: "#0B1F4D" }}>
         <div className="max-w-3xl mx-auto px-4 py-20 text-center">
           <p className="text-xs tracking-[0.35em] font-semibold mb-5 uppercase" style={{ color: "rgba(212,175,55,0.6)" }}>
@@ -160,7 +160,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                   )}
 
                   <div className="flex items-start gap-4 mb-4">
-                    {/* Initials avatar — no emoji */}
+                    {/* Initials avatar: no emoji */}
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-semibold flex-shrink-0"
                       style={{ background: "rgba(11,31,77,0.07)", color: "#0B1F4D" }}

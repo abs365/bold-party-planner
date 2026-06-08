@@ -30,7 +30,7 @@ function LoginForm() {
   return (
     <div className="min-h-screen flex">
 
-      {/* Left panel — dark navy brand */}
+      {/* Left panel: dark navy brand */}
       <div
         className="hidden lg:flex flex-col items-center justify-center w-[42%] flex-shrink-0 px-12 relative overflow-hidden"
         style={{ background: "#0D1B3E" }}
@@ -90,7 +90,7 @@ function LoginForm() {
         </div>
       </div>
 
-      {/* Right panel — white form */}
+      {/* Right panel: white form */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 bg-white">
 
         {/* Mobile logo only */}
@@ -106,7 +106,7 @@ function LoginForm() {
 
         <div className="w-full max-w-sm">
 
-          {/* Auth callback error — shown when email confirmation link fails */}
+          {/* Auth callback error: shown when email confirmation link fails */}
           {errorParam === "auth_callback_failed" && (
             <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
               <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />

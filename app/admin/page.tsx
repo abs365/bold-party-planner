@@ -23,11 +23,11 @@ export default async function AdminDashboard() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-  // Redirect to homepage — NOT /dashboard — to avoid the loop:
+  // Redirect to homepage (NOT /dashboard) to avoid the loop:
   // /admin (email mismatch) → /dashboard → (profile.role=admin) → /admin → …
   if (ADMIN_EMAILS.length === 0 || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
 
-  // Service-role client bypasses RLS — admin sees all data
+  // Service-role client bypasses RLS; admin sees all data
   const db = await createAdminClient();
 
   const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
@@ -115,12 +115,12 @@ export default async function AdminDashboard() {
   const phoneVerifRate     = totalCustomers > 0 ? Math.round((phoneVerifiedCount / totalCustomers) * 100) : 0;
   const totalEvents        = eventsRes.count ?? 0;
 
-  // Pilot KPIs — sourced from pilot_vendors CRM
+  // Pilot KPIs: sourced from pilot_vendors CRM
   const pilotContacted = pilotVendors.filter((v) => v.status !== "prospect").length;
   const pilotApproved  = pilotVendors.filter((v) => ["approved", "verified", "active"].includes(v.status)).length;
   const pilotActive    = pilotVendors.filter((v) => v.status === "active").length;
 
-  // Recent activity timeline — merge 3 event types, sort by time
+  // Recent activity timeline: merge 3 event types, sort by time
   type ActivityItem = { icon: string; label: string; sub: string; time: string };
   const activity: ActivityItem[] = [
     ...recentCustomers.map((c) => ({
@@ -137,7 +137,7 @@ export default async function AdminDashboard() {
     })),
     ...allBookings.slice(0, 4).map((b) => ({
       icon: "📋",
-      label: `Booking ${b.status} — ${formatCurrency(b.total_amount)}`,
+      label: `Booking ${b.status}: ${formatCurrency(b.total_amount)}`,
       sub: `Platform +${formatCurrency(b.commission_amount ?? 0)}`,
       time: b.created_at,
     })),
@@ -259,7 +259,7 @@ export default async function AdminDashboard() {
               { label: "Active on Platform", value: String(pilotActive),    note: "fully active",                      color: "text-emerald-400", href: "/admin/pilot" },
               { label: "Events Created",     value: String(totalEvents),    note: "customer events",                   color: "text-slate-400",  href: "/admin/bookings" },
               { label: "Feedback Items",     value: "0",                    note: "check pilot report",                color: "text-slate-500",   href: "/admin/pilot/report" },
-              { label: "Bugs Open",          value: "—",                    note: "track externally",                  color: "text-slate-600",   href: "/admin/system" },
+              { label: "Bugs Open",          value: "N/A",                  note: "track externally",                  color: "text-slate-600",   href: "/admin/system" },
               { label: "Launch Readiness",   value: "→",                    note: "view checklist",                    color: "text-gold-400",    href: "/admin/launch" },
             ].map(({ label, value, note, color, href }) => (
               <Link key={label} href={href} className="bg-white/3 border border-white/5 rounded-xl p-3 hover:border-white/10 transition-colors group text-center">

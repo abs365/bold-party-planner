@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// Category discovery cards — shown on the unfiltered discovery view
+// Category discovery cards: shown on the unfiltered discovery view
 const CATEGORY_DISCOVERY = [
   {
     label: "Photographers",
@@ -35,7 +35,7 @@ const CATEGORY_DISCOVERY = [
     label: "DJs & Music",
     sub: "Set the atmosphere",
     category: "dj",
-    photo: "https://images.unsplash.com/photo-1571266028243-8b6f6e85c5ae?auto=format&fit=crop&w=600&q=80",
+    photo: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=600&q=80",
   },
   {
     label: "Decorators",
@@ -50,15 +50,15 @@ const CATEGORY_DISCOVERY = [
     photo: "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=600&q=80",
   },
   {
-    label: "Venue Hire",
+    label: "Marquee & Venue",
     sub: "The perfect setting",
-    category: "venue_hire",
+    category: "marquee_rental",
     photo: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80",
   },
   {
-    label: "Entertainment",
+    label: "Live Music",
     sub: "Create the experience",
-    category: "entertainer",
+    category: "live_band",
     photo: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=600&q=80",
   },
 ];
@@ -163,7 +163,7 @@ export default async function BrowsePage({
         </div>
       </div>
 
-      {/* ── CATEGORY DISCOVERY — shown only on unfiltered landing ─────── */}
+      {/* ── CATEGORY DISCOVERY (shown only on unfiltered landing) ──────── */}
       {isDiscovery && (
         <section style={{ background: "#f8f7f5" }} className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
@@ -200,10 +200,10 @@ export default async function BrowsePage({
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />
                   </div>
-                  {/* Overlay */}
+                  {/* Overlay: bottom-heavy to anchor text, photography visible in top half */}
                   <div
                     className="absolute inset-0"
-                    style={{ background: "linear-gradient(to top, rgba(4,8,20,0.82) 0%, rgba(4,8,20,0.35) 50%, rgba(4,8,20,0.14) 100%)" }}
+                    style={{ background: "linear-gradient(to top, rgba(4,8,20,0.78) 0%, rgba(4,8,20,0.22) 55%, rgba(4,8,20,0.02) 100%)" }}
                   />
                   {/* Content */}
                   <div className="relative z-10 p-4 h-full flex flex-col justify-end" style={{ minHeight: "180px" }}>

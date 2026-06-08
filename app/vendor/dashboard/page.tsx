@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { VendorTrustBadge } from "@/components/ui/TrustBadges";
 import { ProfileStrengthWidget } from "@/components/vendor/ProfileStrengthWidget";
+import { VendorActivationChecklist } from "@/components/vendor/VendorActivationChecklist";
 import { VendorGovernanceWidget } from "@/components/vendor/VendorGovernanceWidget";
 import { FoundingVendorBanner } from "@/components/vendor/FoundingVendorBanner";
 import { computeVendorCompletion } from "@/lib/vendor/completion";
@@ -99,6 +100,8 @@ export default async function VendorDashboardPage() {
 
   const mediaCount   = (vendor as Vendor & { media?: unknown[] }).media?.length ?? 0;
   const packageCount = (vendor as Vendor & { packages?: unknown[] }).packages?.length ?? 0;
+  const hasCoverPhoto = !!(vendor as Vendor & { media?: { is_cover?: boolean }[] }).media?.some((m) => m.is_cover);
+  const phoneVerified = !!(vendor as Vendor & { phone_verified?: boolean }).phone_verified;
 
   const completion = computeVendorCompletion({
     vendor,
@@ -229,6 +232,19 @@ export default async function VendorDashboardPage() {
         {completion.score < 100 && (
           <div className="animate-fade-in-up">
             <ProfileStrengthWidget completion={completion} />
+          </div>
+        )}
+
+        {/* ─── Activation Checklist ────────────────────────────────── */}
+        {(vendor.status === "pending" || completion.score < 80) && (
+          <div className="animate-fade-in-up">
+            <VendorActivationChecklist
+              mediaCount={mediaCount}
+              packageCount={packageCount}
+              verificationLevel={vendor.verification_level ?? 0}
+              hasCoverPhoto={hasCoverPhoto}
+              phoneVerified={phoneVerified}
+            />
           </div>
         )}
 

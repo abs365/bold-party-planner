@@ -106,7 +106,7 @@ export function ProfileStrengthWidget({ completion, compact = false }: Props) {
       {isMarketplaceReady && messages.length === 0 && (
         <div className="flex items-center gap-2 text-xs text-emerald-400 mb-4 px-1">
           <CheckCircle2 size={13} />
-          <span>Profile fully optimised — you rank highly in search</span>
+          <span>Profile fully optimised. You rank highly in search.</span>
         </div>
       )}
 

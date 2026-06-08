@@ -19,7 +19,7 @@ export function InstallPrompt() {
     if (
       localStorage.getItem(DISMISSED_KEY) ||
       window.matchMedia("(display-mode: standalone)").matches ||
-      // @ts-expect-error — navigator.standalone is iOS Safari only
+      // @ts-expect-error navigator.standalone is iOS Safari only
       window.navigator.standalone === true
     ) {
       return;

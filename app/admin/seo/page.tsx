@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 // ── Phase definitions ─────────────────────────────────────────────────────
 const PHASES = [
   {
-    phase: "Phase 1 — Foundation (Months 1–2)",
+    phase: "Phase 1: Foundation (Months 1–2)",
     status: "active",
     goal: "Establish technical SEO correctness and baseline authority signals.",
     tasks: [
@@ -25,11 +25,11 @@ const PHASES = [
       { done: false, label: "Google Search Console verified and sitemap submitted" },
       { done: false, label: "Google Business Profile created (ELBOLD Events UK)" },
       { done: false, label: "Bing Webmaster Tools verified" },
-      { done: false, label: "Core Web Vitals measured — LCP, CLS, FID baselines" },
+      { done: false, label: "Core Web Vitals measured: LCP, CLS, FID baselines" },
     ],
   },
   {
-    phase: "Phase 2 — Local City Content (Months 2–4)",
+    phase: "Phase 2: Local City Content (Months 2–4)",
     status: "next",
     goal: "Rank for '[service] in [city]' queries across Essex, Kent, and London.",
     tasks: [
@@ -46,7 +46,7 @@ const PHASES = [
     ],
   },
   {
-    phase: "Phase 3 — Guide Authority (Months 3–5)",
+    phase: "Phase 3: Guide Authority (Months 3–5)",
     status: "next",
     goal: "Rank for planning query keywords. Build ELBOLD as a trusted planning authority.",
     tasks: [
@@ -54,7 +54,7 @@ const PHASES = [
       { done: false, label: "Guide: 'How much does a photographer cost in the UK?' (high volume)" },
       { done: false, label: "Guide: 'Wedding caterer cost UK 2026'" },
       { done: false, label: "Guide: 'How to plan a corporate event in London'" },
-      { done: false, label: "Guide: 'Event decorator hire UK — what to expect'" },
+      { done: false, label: "Guide: 'Event decorator hire UK: what to expect'" },
       { done: false, label: "Guide: 'How to hire an entertainer for a children's party'" },
       { done: false, label: "Guide: 'Muslim wedding planning guide UK'" },
       { done: false, label: "Guide: 'Hindu wedding vendor guide UK'" },
@@ -64,7 +64,7 @@ const PHASES = [
     ],
   },
   {
-    phase: "Phase 4 — Category Depth (Months 4–6)",
+    phase: "Phase 4: Category Depth (Months 4–6)",
     status: "pending",
     goal: "Rank for '[vendor type] hire near me' and '[vendor type] UK' queries.",
     tasks: [
@@ -77,7 +77,7 @@ const PHASES = [
     ],
   },
   {
-    phase: "Phase 5 — Link Authority (Months 6–12)",
+    phase: "Phase 5: Link Authority (Months 6–12)",
     status: "pending",
     goal: "Build domain authority through genuine external links.",
     tasks: [
@@ -91,13 +91,13 @@ const PHASES = [
     ],
   },
   {
-    phase: "Phase 6 — Review Schema and Trust Signals (Months 8–12)",
+    phase: "Phase 6: Review Schema and Trust Signals (Months 8–12)",
     status: "pending",
     goal: "Generate rich search snippets with star ratings. Build Google-visible trust.",
     tasks: [
-      { done: false, label: "AggregateRating JSON-LD already on vendor profiles — verify in Rich Results Test" },
+      { done: false, label: "AggregateRating JSON-LD already on vendor profiles: verify in Rich Results Test" },
       { done: false, label: "Add Review JSON-LD for top 3 most recent reviews on vendor profiles" },
-      { done: false, label: "Platform-wide review count — add to homepage JSON-LD Organization" },
+      { done: false, label: "Platform-wide review count: add to homepage JSON-LD Organization" },
       { done: false, label: "FAQ schema on /how-it-works, /our-commitments, /trust pages" },
       { done: false, label: "BreadcrumbList on all category pages, guide pages, location pages" },
       { done: false, label: "Test all JSON-LD in Google Rich Results Test tool" },
@@ -155,7 +155,7 @@ const KEYWORD_CLUSTERS = [
   },
   {
     cluster: "Cultural events",
-    priority: "HIGH — underserved",
+    priority: "HIGH (underserved)",
     examples: [
       "Asian wedding DJ UK",
       "Nigerian party catering London",

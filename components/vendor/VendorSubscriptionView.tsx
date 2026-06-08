@@ -47,15 +47,15 @@ const PLAN_COLORS: Record<string, { border: string; icon: string; bg: string; ba
 
 const FEATURE_COMPARISON = [
   { feature: "Portfolio photos", free: "5", pro: "20", premium: "50", elite: "Unlimited" },
-  { feature: "Video portfolio",  free: "—", pro: "✓",  premium: "✓",  elite: "✓" },
+  { feature: "Video portfolio",  free: "-", pro: "✓",  premium: "✓",  elite: "✓" },
   { feature: "Service packages", free: "1", pro: "Unlimited", premium: "Unlimited", elite: "Unlimited" },
   { feature: "Analytics dashboard", free: "Basic", pro: "Full", premium: "Advanced", elite: "Advanced" },
-  { feature: "Search ranking boost", free: "—", pro: "+3", premium: "+6", elite: "+10" },
-  { feature: "Smart lead boosts",   free: "—", pro: "✓", premium: "✓", elite: "✓" },
-  { feature: "Category featured",   free: "—", pro: "—", premium: "✓", elite: "✓" },
-  { feature: "Homepage featured",   free: "—", pro: "—", premium: "✓", elite: "✓" },
-  { feature: "Priority support",    free: "—", pro: "—", premium: "—", elite: "✓" },
-  { feature: "Business insights",   free: "—", pro: "—", premium: "—", elite: "✓" },
+  { feature: "Search ranking boost", free: "-", pro: "+3", premium: "+6", elite: "+10" },
+  { feature: "Smart lead boosts",   free: "-", pro: "✓", premium: "✓", elite: "✓" },
+  { feature: "Category featured",   free: "-", pro: "-", premium: "✓", elite: "✓" },
+  { feature: "Homepage featured",   free: "-", pro: "-", premium: "✓", elite: "✓" },
+  { feature: "Priority support",    free: "-", pro: "-", premium: "-", elite: "✓" },
+  { feature: "Business insights",   free: "-", pro: "-", premium: "-", elite: "✓" },
 ];
 
 export function VendorSubscriptionView() {
@@ -134,7 +134,7 @@ export function VendorSubscriptionView() {
 
   return (
     <div className="space-y-6">
-      {/* Free plan — explain what a subscription gives */}
+      {/* Free plan: explain what a subscription gives */}
       {currentPlan === "free" && !hasPaidPlan && (
         <div className="bg-white/3 border border-white/6 rounded-xl p-4">
           <p className="text-white font-medium text-sm mb-1">You&apos;re on the Free plan</p>
@@ -163,7 +163,7 @@ export function VendorSubscriptionView() {
             )}
             {isPastDue && (
               <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                <AlertTriangle size={12} /> Payment failed — update your payment method
+                <AlertTriangle size={12} /> Payment failed. Update your payment method.
               </p>
             )}
           </div>

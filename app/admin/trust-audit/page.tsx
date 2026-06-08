@@ -63,7 +63,7 @@ const JOURNEYS: JourneyScore[] = [
     improvements: [
       "ELBOLD Verified badge now links to /how-we-verify",
       "BookingPromise component added to sidebar",
-      "Trust signals updated — fabricated response times removed",
+      "Trust signals updated: fabricated response times removed",
       "Login intent preserved through auth flow",
     ],
     lastReviewed: "2026-06-06",
@@ -137,7 +137,7 @@ const JOURNEYS: JourneyScore[] = [
     lastReviewed: "2026-06-06",
   },
   {
-    name: "Verification — How We Verify",
+    name: "Verification: How We Verify",
     path: "/how-we-verify",
     fiveSecond: 5,
     thirtySecond: 5,
@@ -477,7 +477,7 @@ export default async function TrustAuditPage() {
 
         {/* Quick links */}
         <div>
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Trust pages — quick access</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Trust pages: quick access</h2>
           <div className="grid sm:grid-cols-3 gap-3">
             {[
               { label: "How We Verify", href: "/how-we-verify", icon: Shield },

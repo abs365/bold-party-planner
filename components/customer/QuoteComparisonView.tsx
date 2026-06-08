@@ -192,7 +192,7 @@ export function QuoteComparisonView({ quotes, eventTitle, eventId }: QuoteCompar
                   </span>
                 </div>
 
-                {/* Trust badges — level 2+ only; level 1 has no document verification */}
+                {/* Trust badges: level 2+ only; level 1 has no document verification */}
                 <div className="flex flex-wrap gap-1">
                   {(quote.vendor?.verification_level ?? 0) >= 4 && (
                     <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/25 text-blue-300">
@@ -337,7 +337,7 @@ export function QuoteComparisonView({ quotes, eventTitle, eventId }: QuoteCompar
       <div className="bg-white/3 border border-white/6 rounded-xl p-4 text-sm text-white/50 space-y-1">
         <p className="text-white/70 font-medium">Tips for comparing quotes</p>
         <ul className="space-y-1 text-xs list-disc list-inside">
-          <li>Price isn&apos;t everything — check what&apos;s included before choosing.</li>
+          <li>Price isn&apos;t everything. Check what&apos;s included before choosing.</li>
           <li>Business Verified vendors have had their credentials checked by ELBOLD.</li>
           <li>Shortlist your top picks and sleep on it before accepting.</li>
           <li>Once you accept, a booking is created and other requests are closed.</li>

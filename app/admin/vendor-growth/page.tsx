@@ -3,6 +3,7 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import {
   Users, MapPin, Tag, ArrowRight, CheckCircle2, Clock, TrendingUp, Circle,
+  Target, Send, Star, Zap,
 } from "lucide-react";
 import Link from "next/link";
 import type { Profile } from "@/types";
@@ -66,13 +67,13 @@ async function fetchVendorGrowthData() {
     v => v.subscription_plan !== "free" || bookedSet.has(v.id)
   );
 
-  // Category breakdown — approved
+  // Category breakdown: approved
   const byCat: Record<string, number> = {};
   for (const v of approved) {
     byCat[v.category] = (byCat[v.category] ?? 0) + 1;
   }
 
-  // Location breakdown — normalise city names
+  // Location breakdown: normalise city names
   const byLoc: Record<string, number> = { Essex: 0, Kent: 0, London: 0 };
   for (const v of approved) {
     const city = (v.city ?? "").toLowerCase();
@@ -100,6 +101,33 @@ async function fetchVendorGrowthData() {
     { stage: "Booked",     count: bookedVendors.length, color: "text-purple-400",  note: "At least one confirmed booking" },
   ];
 
+  // ── Vendor leads acquisition metrics ──────────────────────────────────────
+
+  const today = new Date().toISOString().split("T")[0];
+  const { data: allLeads } = await db
+    .from("vendor_leads")
+    .select("status, priority, next_follow_up_at, created_at");
+
+  const leads = allLeads ?? [];
+  const leadsNewToday    = leads.filter((l) => l.created_at.startsWith(today)).length;
+  const leadsResearched  = leads.filter((l) => l.status === "researched").length;
+  const leadsContacted   = leads.filter((l) => ["outreach_sent","responded"].includes(l.status)).length;
+  const leadsFollowUpDue = leads.filter((l) => l.status === "follow_up_due" || (l.next_follow_up_at && l.next_follow_up_at < new Date().toISOString())).length;
+  const leadsInterested  = leads.filter((l) => l.status === "interested").length;
+  const leadsRegistered  = leads.filter((l) => l.status === "registered").length;
+  const leadsApproved    = leads.filter((l) => l.status === "approved").length;
+  const totalLeads       = leads.filter((l) => !["rejected","not_suitable"].includes(l.status)).length;
+
+  const ACQUISITION_METRICS = [
+    { label: "New Leads Today",   value: leadsNewToday,    target: 10, color: "#6366f1",  icon: Star },
+    { label: "Researched",        value: leadsResearched,  target: 0,  color: "#3b82f6",  icon: Circle },
+    { label: "Contacted",         value: leadsContacted,   target: 5,  color: "#7c3aed",  icon: Send },
+    { label: "Follow-ups Due",    value: leadsFollowUpDue, target: 2,  color: "#ea580c",  icon: Clock },
+    { label: "Interested",        value: leadsInterested,  target: 0,  color: "#16a34a",  icon: Star },
+    { label: "Registered",        value: leadsRegistered,  target: 0,  color: "#059669",  icon: CheckCircle2 },
+    { label: "Approved",          value: leadsApproved,    target: 2,  color: "#0B1F4D",  icon: Zap },
+  ];
+
   return {
     funnel: FUNNEL,
     byCat,
@@ -109,6 +137,16 @@ async function fetchVendorGrowthData() {
     totals: {
       all: all.length, approved: approved.length, pending: pending.length,
       rejected: rejected.length, active: activeVendors.length, booked: bookedVendors.length,
+    },
+    acquisition: {
+      metrics: ACQUISITION_METRICS,
+      totalLeads,
+      leadsNewToday,
+      leadsContacted,
+      leadsFollowUpDue,
+      leadsInterested,
+      leadsRegistered,
+      leadsApproved,
     },
   };
 }
@@ -157,12 +195,91 @@ export default async function VendorGrowthPage() {
           </div>
         </div>
 
+        {/* ── DAILY ACQUISITION DASHBOARD ───────────────────────────── */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Target size={13} className="text-slate-500" />
+            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Daily Acquisition Metrics</h2>
+            <Link href="/admin/vendor-acquisition" className="ml-auto text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
+              Manage leads <ArrowRight size={10} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-3 mb-4">
+            {data.acquisition.metrics.slice(0, 4).map(({ label, value, target, color, icon: Icon }) => (
+              <div key={label} className="bg-white/4 border border-white/8 rounded-xl p-4 text-center">
+                <Icon size={14} className="mx-auto mb-1.5" style={{ color }} />
+                <div className="text-2xl font-bold tabular-nums" style={{ color }}>{value}</div>
+                <div className="text-xs text-slate-500 font-light mt-0.5 leading-tight">{label}</div>
+                {target > 0 && (
+                  <div className="mt-2 text-xs text-slate-600 font-light">target: {target}/day</div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            {data.acquisition.metrics.slice(4).map(({ label, value, color, icon: Icon }) => (
+              <div key={label} className="bg-white/4 border border-white/8 rounded-xl p-4 text-center">
+                <Icon size={14} className="mx-auto mb-1.5" style={{ color }} />
+                <div className="text-2xl font-bold tabular-nums" style={{ color }}>{value}</div>
+                <div className="text-xs text-slate-500 font-light mt-0.5">{label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Daily targets */}
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div className="bg-white/4 border border-white/8 rounded-xl px-5 py-4">
+              <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Daily Targets</h3>
+              {[
+                { label: "New leads added",      target: 10, actual: data.acquisition.leadsNewToday },
+                { label: "Outreach messages",    target: 5,  actual: data.acquisition.leadsContacted },
+                { label: "Follow-ups actioned",  target: 2,  actual: Math.max(0, data.acquisition.leadsFollowUpDue) },
+              ].map(({ label, target, actual }) => {
+                const pct = Math.min(100, Math.round((actual / target) * 100));
+                return (
+                  <div key={label} className="mb-3">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400 font-light">{label}</span>
+                      <span className="font-semibold text-slate-300">{actual} / {target}</span>
+                    </div>
+                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-blue-400 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="bg-white/4 border border-white/8 rounded-xl px-5 py-4">
+              <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Weekly Targets</h3>
+              {[
+                { label: "Leads in pipeline",    target: 50, actual: data.acquisition.totalLeads },
+                { label: "Outreach sent",        target: 25, actual: data.acquisition.leadsContacted },
+                { label: "Interested vendors",   target: 5,  actual: data.acquisition.leadsInterested },
+                { label: "Approved vendors",     target: 2,  actual: data.acquisition.leadsApproved },
+              ].map(({ label, target, actual }) => {
+                const pct = Math.min(100, Math.round((actual / target) * 100));
+                return (
+                  <div key={label} className="mb-2.5">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-slate-400 font-light">{label}</span>
+                      <span className="font-semibold text-slate-300">{actual} / {target}</span>
+                    </div>
+                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full bg-emerald-400 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         {/* Weekly/monthly acquisition */}
         <div className="grid grid-cols-3 gap-3">
           {[
             { label: "Applied this week",  value: data.appsThisWeek  },
             { label: "Applied this month", value: data.appsThisMonth },
-            { label: "Approval rate",      value: data.totals.all > 0 ? `${Math.round((data.totals.approved / data.totals.all) * 100)}%` : "—" },
+            { label: "Approval rate",      value: data.totals.all > 0 ? `${Math.round((data.totals.approved / data.totals.all) * 100)}%` : "N/A" },
           ].map(({ label, value }) => (
             <div key={label} className="bg-white/4 border border-white/8 rounded-xl p-5">
               <div className="text-xs text-slate-500 mb-1.5 font-light">{label}</div>
@@ -210,7 +327,7 @@ export default async function VendorGrowthPage() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Tag size={13} className="text-slate-500" />
-            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Categories — Approved Vendors</h2>
+            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Categories: Approved Vendors</h2>
           </div>
           <div className="space-y-2.5">
             {Object.entries(CATEGORY_LABELS)
@@ -252,7 +369,7 @@ export default async function VendorGrowthPage() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <MapPin size={13} className="text-slate-500" />
-            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Locations — Approved Vendors</h2>
+            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Locations: Approved Vendors</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
             {Object.entries(LOCATION_LABELS).map(([key, label]) => {

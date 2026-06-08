@@ -24,7 +24,7 @@ const EVENT_MOOD: Record<EventType, { gradient: string; emoji: string; headline:
   charity:        { gradient: "from-emerald-500 via-teal-500 to-cyan-500",  emoji: "❤️", headline: "Make a difference, together",           sub: "Events that inspire and give back",      icon: Heart },
   conference:     { gradient: "from-indigo-600 via-blue-500 to-cyan-500",   emoji: "📋", headline: "Ideas that move the world forward",     sub: "Seamless, professional, impactful",      icon: Briefcase },
   engagement:     { gradient: "from-violet-500 via-purple-500 to-fuchsia-500", emoji: "💎", headline: "Say yes to the perfect party!",    sub: "The first celebration of forever",       icon: Gift },
-  gender_reveal:  { gradient: "from-pink-400 via-purple-400 to-blue-400",   emoji: "🎉", headline: "Pink or blue — let's celebrate you!",  sub: "A surprise moment everyone will love",  icon: PartyPopper },
+  gender_reveal:  { gradient: "from-pink-400 via-purple-400 to-blue-400",   emoji: "🎉", headline: "Pink or blue, let's celebrate you!",  sub: "A surprise moment everyone will love",  icon: PartyPopper },
   other:          { gradient: "from-brand-500 via-purple-500 to-indigo-500", emoji: "✨", headline: "Every event is worth celebrating",     sub: "Let's make it extraordinary",           icon: Music2 },
 };
 
@@ -265,7 +265,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                 vendor_id: v.id,
                 event_id: event.id,
                 status: "pending",
-                message: `Hi, I'm planning a ${EVENT_TYPES[data.event_type]?.label ?? data.event_type} called "${data.title}" for approximately ${data.guest_count} guests on ${data.date} in ${data.city}. My budget is around £${data.budget.toLocaleString()}. I'm looking for a ${catLabel} — could you share your availability and pricing? Thank you!`,
+                message: `Hi, I'm planning a ${EVENT_TYPES[data.event_type]?.label ?? data.event_type} called "${data.title}" for approximately ${data.guest_count} guests on ${data.date} in ${data.city}. My budget is around £${data.budget.toLocaleString()}. I'm looking for a ${catLabel}. Could you share your availability and pricing? Thank you!`,
                 event_date: data.date,
                 event_type: data.event_type,
                 guest_count: data.guest_count,
@@ -282,7 +282,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
               vendor_id: v.id,
               event_id: event.id,
               status: "pending",
-              message: `Hi, I'm planning a ${EVENT_TYPES[data.event_type]?.label ?? data.event_type} called "${data.title}" for approximately ${data.guest_count} guests on ${data.date} in ${data.city}. My budget is around £${data.budget.toLocaleString()}. I'm looking for a ${catLabel} — could you share your availability and pricing? Thank you!`,
+              message: `Hi, I'm planning a ${EVENT_TYPES[data.event_type]?.label ?? data.event_type} called "${data.title}" for approximately ${data.guest_count} guests on ${data.date} in ${data.city}. My budget is around £${data.budget.toLocaleString()}. I'm looking for a ${catLabel}. Could you share your availability and pricing? Thank you!`,
               event_date: data.date,
               event_type: data.event_type,
               guest_count: data.guest_count,
@@ -752,7 +752,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                       </div>
                     )}
 
-                    {/* Vendors needed — premium cards */}
+                    {/* Vendors needed: premium cards */}
                     {aiPlan.vendors_needed?.length > 0 && (
                       <div>
                         <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">

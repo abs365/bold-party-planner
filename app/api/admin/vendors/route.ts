@@ -63,6 +63,7 @@ export async function PATCH(request: Request) {
   const auditAction =
     status === "approved" ? "admin.vendor.approve" :
     status === "rejected" ? "admin.vendor.reject" :
+    status === "suspended" ? "admin.vendor.suspend" :
     "vendor.profile.update";
   void createAuditLog({
     actorUserId: auth.user.id,

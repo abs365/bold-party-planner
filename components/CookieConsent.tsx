@@ -10,7 +10,7 @@ const STORAGE_KEY = "bp_cookie_consent";
 
 // This component is loaded with { ssr: false } in app/layout.tsx.
 // It is never server-rendered, so reading localStorage in the useState
-// initialiser is safe — there is no SSR/client mismatch possible.
+// initialiser is safe. There is no SSR/client mismatch possible.
 export function CookieConsent() {
   const [show, setShow] = useState<boolean>(() => {
     try { return !localStorage.getItem(STORAGE_KEY); } catch { return false; }

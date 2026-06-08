@@ -18,8 +18,8 @@ const BENEFITS = [
   { icon: Search, label: "Get found by customers searching for your category and location" },
   { icon: Calendar, label: "Manage enquiries, bookings and availability in one place" },
   { icon: Star, label: "Build your reputation with verified reviews from real clients" },
-  { icon: CreditCard, label: "Secure Stripe payments — no invoicing, no chasing, no disputes" },
-  { icon: TrendingUp, label: "You keep 90% of every booking — ELBOLD earns 10% only when you earn" },
+  { icon: CreditCard, label: "Secure Stripe payments. No invoicing, no chasing, no disputes." },
+  { icon: TrendingUp, label: "You keep 90% of every booking. ELBOLD earns 10% only when you earn." },
 ];
 
 const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
@@ -106,7 +106,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
       if (!res.ok) {
         const data = await res.json() as { error?: string };
         if (res.status === 409) {
-          // Already applied — redirect to portal
+          // Already applied: redirect to portal
           toast.success("Application already submitted. Taking you to your portal...");
           sessionStorage.removeItem("vendor_apply_draft");
           window.location.assign("/vendor/dashboard");
@@ -154,7 +154,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
               <p className="text-sm font-semibold text-gray-700 mb-3">What happens next</p>
               <div className="space-y-3">
                 {[
-                  { n: "1", text: "Our team reviews your application — usually within 24–48 hours" },
+                  { n: "1", text: "Our team reviews your application, usually within 24–48 hours" },
                   { n: "2", text: "You receive an approval email with a link to complete your profile" },
                   { n: "3", text: "Add your photos, packages and pricing to your vendor profile" },
                   { n: "4", text: "Go live and start receiving enquiries from customers" },
@@ -189,7 +189,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
     <div className="min-h-screen bg-white">
       <Navbar user={profile ?? undefined} />
 
-      {/* Luxury page header — navy */}
+      {/* Luxury page header: navy */}
       <div className="pt-16" style={{ background: "#0D1B3E" }}>
         <div className="max-w-5xl mx-auto px-4 py-20 text-center">
           <p
@@ -218,7 +218,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
 
           <div className="grid lg:grid-cols-5 gap-10">
 
-            {/* Left sidebar — benefits */}
+            {/* Left sidebar: benefits */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6">
                 <h2 className="text-base font-semibold text-gray-900 mb-4">What you get</h2>
@@ -236,9 +236,9 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                 <h2 className="text-base font-semibold text-gray-900 mb-3">What happens next?</h2>
                 <div className="space-y-4">
                   {[
-                    { n: "1", label: "Submit your application", sub: "Takes about 5 minutes — nothing complicated" },
+                    { n: "1", label: "Submit your application", sub: "Takes about 5 minutes. Nothing complicated." },
                     { n: "2", label: "We verify and activate you", sub: "Usually within 24–48 hours" },
-                    { n: "3", label: "Complete your profile", sub: "Photos, packages and pricing — better profiles get more enquiries" },
+                    { n: "3", label: "Complete your profile", sub: "Photos, packages and pricing. Better profiles get more enquiries." },
                     { n: "4", label: "Start receiving enquiries", sub: "Customers searching in your category find and contact you" },
                   ].map(({ n, label, sub }) => (
                     <div key={n} className="flex gap-3">
@@ -265,7 +265,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
               )}
             </div>
 
-            {/* Right — form */}
+            {/* Right: form */}
             <div className="lg:col-span-3">
               {/* Step indicator */}
               <div className="flex items-center gap-2 mb-6">
@@ -293,7 +293,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
 
               <div className="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
 
-                {/* Step 1 — Business basics */}
+                {/* Step 1: Business basics */}
                 {step === 1 && (
                   <div className="space-y-5">
                     <div>
@@ -341,7 +341,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                           <textarea
                             value={formData.custom_category_description}
                             onChange={(e) => update("custom_category_description", e.target.value)}
-                            placeholder="e.g. Drone Light Show — synchronised indoor & outdoor drone displays for weddings and corporate events."
+                            placeholder="e.g. Drone Light Show: synchronised indoor & outdoor drone displays for weddings and corporate events."
                             rows={3}
                             className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 resize-none"
                             maxLength={300}
@@ -372,7 +372,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                   </div>
                 )}
 
-                {/* Step 2 — Location & pricing */}
+                {/* Step 2: Location & pricing */}
                 {step === 2 && (
                   <div className="space-y-5">
                     <div>
@@ -423,7 +423,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                         <Phone size={13} className="inline mr-1 text-gray-400" />Contact Phone *
                       </label>
                       <p className="text-xs text-gray-400 mb-1.5 font-light">
-                        UK number. Admin-only — not shown publicly to customers.
+                        UK number. Admin-only, not shown publicly to customers.
                       </p>
                       <input
                         type="tel"
@@ -454,7 +454,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                   </div>
                 )}
 
-                {/* Step 3 — About & links */}
+                {/* Step 3: About & links */}
                 {step === 3 && (
                   <div className="space-y-5">
                     <div>

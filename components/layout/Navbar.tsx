@@ -71,7 +71,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
   return (
     <header className={headerClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Logo — full wordmark SVG */}
+        {/* Logo: full wordmark SVG */}
         <Link href="/" className="flex items-center flex-shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

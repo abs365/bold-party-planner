@@ -127,7 +127,7 @@ export default async function HowItWorksPage() {
           </div>
         </div>
 
-        {/* Trust signals — navy section */}
+        {/* Trust signals (navy section) */}
         <div
           className="rounded-2xl p-10 mb-16"
           style={{ background: "#0D1B3E" }}
@@ -173,7 +173,7 @@ export default async function HowItWorksPage() {
           </p>
           <div className="space-y-3">
             {[
-              "ELBOLD earns a 10% service fee on the value of completed bookings. This is deducted from the vendor payout automatically — customers pay the listed price.",
+              "ELBOLD earns a 10% service fee on the value of completed bookings. This is deducted from the vendor payout automatically. Customers pay the listed price.",
               "Optional subscription plans are available for vendors who want additional visibility, analytics, or priority placement. These are never required to use the platform.",
               "There are no hidden charges, no sign-up fees, and no fees for browsing or receiving quotes.",
             ].map((point) => (
@@ -293,7 +293,7 @@ export default async function HowItWorksPage() {
               },
               {
                 q: "Does ELBOLD take a commission from vendors?",
-                a: "Yes. ELBOLD earns a 10% service fee on completed bookings, deducted from the vendor payout. Customers pay the listed price — no surcharges. Vendors keep 90% of every booking they accept.",
+                a: "Yes. ELBOLD earns a 10% service fee on completed bookings, deducted from the vendor payout. Customers pay the listed price, no surcharges. Vendors keep 90% of every booking they accept.",
               },
             ].map(({ q, a }) => (
               <details key={q} className="group">

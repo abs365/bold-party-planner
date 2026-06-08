@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "Read ELBOLD's vendor approval requirements, quality expectations, warning system, suspension process, and removal criteria. Published openly so every customer knows what standard to expect.",
   openGraph: {
     title: "ELBOLD Vendor Standards",
-    description: "Approval requirements, quality expectations, and the warning system — published openly.",
+    description: "Approval requirements, quality expectations, and the warning system. Published openly.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
 };
@@ -41,20 +41,20 @@ const ONGOING_STANDARDS = [
 
 const WARNING_LEVELS = [
   {
-    level: "Stage 1 — Guidance",
+    level: "Stage 1: Guidance",
     icon: AlertTriangle,
     color: "#C9A84C",
     bg: "rgba(201,168,76,0.06)",
     border: "rgba(201,168,76,0.15)",
     triggers: [
       "Slow response to customer enquiries (48–72 hours)",
-      "Minor portfolio inaccuracies — quickly corrected",
+      "Minor portfolio inaccuracies, quickly corrected",
       "A single low-rated review with no pattern of complaints",
     ],
     outcome: "We contact you directly with specific guidance. No record on your public profile. Corrective action expected within 7 days.",
   },
   {
-    level: "Stage 2 — Formal Warning",
+    level: "Stage 2: Formal Warning",
     icon: AlertTriangle,
     color: "#E5A52A",
     bg: "rgba(229,165,42,0.06)",
@@ -68,7 +68,7 @@ const WARNING_LEVELS = [
     outcome: "Formal written warning issued. Profile visibility may be reduced. 14-day window to address specific issues. Recorded internally.",
   },
   {
-    level: "Stage 3 — Suspension",
+    level: "Stage 3: Suspension",
     icon: XCircle,
     color: "#E05C3A",
     bg: "rgba(224,92,58,0.06)",
@@ -82,13 +82,13 @@ const WARNING_LEVELS = [
     outcome: "Profile suspended from public listings. Active bookings are not affected. Suspension review within 7 business days. Vendor may submit a response.",
   },
   {
-    level: "Stage 4 — Permanent Removal",
+    level: "Stage 4: Permanent Removal",
     icon: XCircle,
     color: "#C03A2A",
     bg: "rgba(192,58,42,0.05)",
     border: "rgba(192,58,42,0.18)",
     triggers: [
-      "Fraud — falsified portfolio, fake reviews, or misrepresentation",
+      "Fraud: falsified portfolio, fake reviews, or misrepresentation",
       "Confirmed no-show at a customer event with no contact",
       "Discriminatory, abusive, or threatening conduct",
       "Confirmed financial misconduct relating to a customer booking",
@@ -209,7 +209,7 @@ export default async function VendorStandardsPage() {
               The progressive warning system.
             </h2>
             <p className="text-sm text-gray-500 font-light max-w-xl">
-              We do not remove vendors without warning — except in cases of serious misconduct.
+              We do not remove vendors without warning, except in cases of serious misconduct.
               Our four-stage system gives vendors the opportunity to correct issues before consequences escalate.
             </p>
           </div>

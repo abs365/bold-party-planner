@@ -181,7 +181,7 @@ export function AdminPayoutsQueue({ payouts }: Props) {
                         <p className="text-xs text-slate-500 mb-0.5">Event</p>
                         <div className="flex items-center gap-1.5">
                           <Calendar size={11} className="text-slate-500" />
-                          <p className="text-white">{eventData?.title ?? "—"}</p>
+                          <p className="text-white">{eventData?.title ?? "N/A"}</p>
                         </div>
                         {eventDate && (
                           <p className="text-xs text-slate-600">

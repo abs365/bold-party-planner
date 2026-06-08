@@ -9,6 +9,7 @@ import {
   Square, CheckSquare, X, Phone,
 } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
+import { computeVendorReadinessScore } from "@/lib/vendor/completion";
 import { VENDOR_CATEGORIES } from "@/types";
 import { StatusBadge } from "@/components/ui/Badge";
 import toast from "react-hot-toast";
@@ -30,12 +31,12 @@ const STATUS_TABS = [
 ];
 
 const REJECTION_TEMPLATES = [
-  "Incomplete business description — please write a detailed bio of at least 50 characters",
+  "Incomplete business description: please write a detailed bio of at least 50 characters",
   "Missing service category or pricing information",
-  "Insufficient portfolio photos — please upload at least 3 photos of your work",
-  "Contact details not provided — please add a phone number",
+  "Insufficient portfolio photos: please upload at least 3 photos of your work",
+  "Contact details not provided: please add a phone number",
   "Business information could not be verified",
-  "Profile does not meet our current quality standards — please review our guidelines and reapply",
+  "Profile does not meet our current quality standards: please review our guidelines and reapply",
 ];
 
 export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch }: AdminVendorTableProps) {
@@ -46,6 +47,12 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [rejectModal, setRejectModal] = useState<{ ids: string[]; label: string } | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [approvalModal, setApprovalModal] = useState<{
+    vendorId: string;
+    vendorName: string;
+    checks: { label: string; pass: boolean; hint: string }[];
+    allPass: boolean;
+  } | null>(null);
 
   function applyFilters(status?: string, s?: string) {
     const params = new URLSearchParams();
@@ -103,6 +110,45 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
     setRejectModal({ ids, label });
   }
 
+  function openApprovalModal(vendor: Record<string, unknown>) {
+    const mediaArr = vendor.media as Array<Record<string, unknown>> | null;
+    const pkgArr   = vendor.packages as Array<Record<string, unknown>> | null;
+    const bio      = (vendor.bio as string | null | undefined) ?? "";
+    const checks = [
+      {
+        label: "Phone number provided",
+        pass:  !!(vendor.phone as string | null),
+        hint:  "Vendor must add a contact number before approval",
+      },
+      {
+        label: "Phone verified",
+        pass:  !!(vendor.phone_verified as boolean),
+        hint:  "Admin should verify the vendor's phone number",
+      },
+      {
+        label: "At least 1 service package",
+        pass:  (pkgArr?.length ?? 0) >= 1,
+        hint:  "Customers cannot request quotes without a package",
+      },
+      {
+        label: "At least 3 portfolio photos",
+        pass:  (mediaArr?.length ?? 0) >= 3,
+        hint:  "Vendors with 3+ photos receive significantly more enquiries",
+      },
+      {
+        label: "Profile description complete (50+ chars)",
+        pass:  bio.trim().length >= 50,
+        hint:  "A detailed bio helps customers choose this vendor",
+      },
+    ];
+    setApprovalModal({
+      vendorId:   String(vendor.id),
+      vendorName: String(vendor.business_name),
+      checks,
+      allPass: checks.every((c) => c.pass),
+    });
+  }
+
   async function confirmRejection() {
     if (!rejectModal) return;
     if (rejectModal.ids.length === 1) {
@@ -123,10 +169,32 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
     });
   }
 
-  const allSelected = vendors.length > 0 && vendors.every((v) => selectedIds.has(String(v.id)));
+  const [sortByReadiness, setSortByReadiness] = useState(false);
+
+  function vendorReadiness(vendor: Record<string, unknown>) {
+    const media = vendor.media as Array<Record<string, unknown>> | null;
+    const packages = vendor.packages as Array<Record<string, unknown>> | null;
+    const bio = (vendor.bio as string | null | undefined) ?? "";
+    return computeVendorReadinessScore({
+      mediaCount:        media?.length ?? 0,
+      packageCount:      packages?.length ?? 0,
+      verificationLevel: Number(vendor.verification_level ?? 0),
+      bioLength:         bio.trim().length,
+      hasPhone:          !!(vendor.phone as string | null),
+      hasCity:           !!(vendor.city as string | null),
+      hasSocial:         !!(vendor.instagram_url || vendor.website_url),
+      responseRate:      Number(vendor.response_rate ?? 0),
+    });
+  }
+
+  const displayVendors = sortByReadiness
+    ? [...vendors].sort((a, b) => vendorReadiness(b).total - vendorReadiness(a).total)
+    : vendors;
+
+  const allSelected = displayVendors.length > 0 && displayVendors.every((v) => selectedIds.has(String(v.id)));
 
   function toggleSelectAll() {
-    setSelectedIds(allSelected ? new Set() : new Set(vendors.map((v) => String(v.id))));
+    setSelectedIds(allSelected ? new Set() : new Set(displayVendors.map((v) => String(v.id))));
   }
 
   return (
@@ -199,10 +267,23 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
             {selectedIds.size > 0 && (
               <span className="text-xs text-slate-500">{selectedIds.size} selected</span>
             )}
+            <div className="ml-auto">
+              <button
+                onClick={() => setSortByReadiness((v) => !v)}
+                className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors ${
+                  sortByReadiness
+                    ? "bg-brand-500/15 border-brand-500/40 text-brand-300"
+                    : "bg-white/4 border-white/10 text-slate-400 hover:text-white"
+                }`}
+              >
+                <TrendingUp size={11} />
+                {sortByReadiness ? "Sorted: Readiness ↓" : "Sort by Readiness"}
+              </button>
+            </div>
           </div>
 
           <div className="space-y-3">
-            {vendors.map((vendor) => {
+            {displayVendors.map((vendor) => {
               const profile = vendor.profile as Record<string, string> | null;
               const media = vendor.media as Array<Record<string, unknown>> | null;
               const packages = vendor.packages as Array<Record<string, unknown>> | null;
@@ -248,7 +329,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                         <StatusBadge status={status} />
                       </div>
                       <div className="flex items-center gap-3 mt-1 text-xs text-slate-400 flex-wrap">
-                        <span className="flex items-center gap-1"><MapPin size={10} />{String(vendor.city ?? "—")}</span>
+                        <span className="flex items-center gap-1"><MapPin size={10} />{String(vendor.city ?? "N/A")}</span>
                         <span>{vendor.category === "other" && vendor.custom_category_description ? `Other: ${String(vendor.custom_category_description)}` : cat?.label}</span>
                         {Number(vendor.rating) > 0 && (
                           <span className="flex items-center gap-1">
@@ -256,7 +337,10 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                             {Number(vendor.rating).toFixed(1)} ({Number(vendor.total_reviews ?? 0)} reviews)
                           </span>
                         )}
-                        <span className="flex items-center gap-1"><Package size={10} />{packages?.length ?? 0} packages</span>
+                        <span className={`flex items-center gap-1 ${status === "pending" && (packages?.length ?? 0) === 0 ? "text-amber-400" : ""}`}>
+                          <Package size={10} />{packages?.length ?? 0} packages
+                          {status === "pending" && (packages?.length ?? 0) === 0 && <span className="text-amber-400 font-semibold">&nbsp;&#x26A0; no packages</span>}
+                        </span>
                         <span className="flex items-center gap-1"><Users size={10} />{profile?.full_name}</span>
                       </div>
                       <div className="text-xs text-slate-500 mt-0.5">
@@ -276,6 +360,20 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                         );
                       })()}
                       {!!vendor.tagline && <p className="text-xs text-slate-400 mt-1.5 italic truncate">&ldquo;{String(vendor.tagline)}&rdquo;</p>}
+                      {(() => {
+                        const rs = vendorReadiness(vendor);
+                        const color = rs.total >= 75 ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/8"
+                          : rs.total >= 50 ? "text-amber-400 border-amber-500/30 bg-amber-500/8"
+                          : "text-slate-400 border-white/10 bg-white/4";
+                        return (
+                          <div className="flex items-center gap-1.5 mt-1.5">
+                            <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${color}`}>
+                              <TrendingUp size={9} />
+                              Readiness {rs.total}% · {rs.label}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Actions */}
@@ -287,7 +385,7 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       {status === "pending" && (
                         <>
                           <button
-                            onClick={() => updateVendor(vendorId, { status: "approved" }, "Approval")}
+                            onClick={() => openApprovalModal(vendor)}
                             disabled={!!actionLoading}
                             className="btn-primary text-xs py-1.5 px-3 flex items-center gap-1"
                           >
@@ -387,6 +485,68 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
           <button onClick={() => setSelectedIds(new Set())} className="text-slate-500 hover:text-white transition-colors ml-1">
             <X size={16} />
           </button>
+        </div>
+      )}
+
+      {/* Approval standards modal */}
+      {approvalModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-white/6">
+              <div>
+                <h2 className="text-base font-bold text-white">Approval Standards</h2>
+                <p className="text-sm text-slate-400 mt-0.5">{approvalModal.vendorName}</p>
+              </div>
+              <button onClick={() => setApprovalModal(null)} className="text-slate-500 hover:text-white transition-colors">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="p-6 space-y-2">
+              {approvalModal.checks.map((check) => (
+                <div
+                  key={check.label}
+                  className={`flex items-start gap-3 p-3 rounded-xl border ${
+                    check.pass
+                      ? "bg-emerald-500/8 border-emerald-500/20"
+                      : "bg-red-500/8 border-red-500/20"
+                  }`}
+                >
+                  {check.pass
+                    ? <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
+                    : <XCircle size={14} className="text-red-400 flex-shrink-0 mt-0.5" />}
+                  <div className="min-w-0">
+                    <p className={`text-sm font-medium ${check.pass ? "text-white" : "text-red-300"}`}>{check.label}</p>
+                    {!check.pass && <p className="text-xs text-red-400/70 mt-0.5">{check.hint}</p>}
+                  </div>
+                </div>
+              ))}
+              {!approvalModal.allPass && (
+                <p className="text-xs text-amber-400 pt-1">
+                  This vendor does not meet minimum approval standards. You can still approve, but they may receive fewer enquiries.
+                </p>
+              )}
+            </div>
+            <div className="flex gap-3 p-6 pt-0">
+              <button onClick={() => setApprovalModal(null)} className="flex-1 btn-secondary">
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  void updateVendor(approvalModal.vendorId, { status: "approved" }, "Approval");
+                  setApprovalModal(null);
+                }}
+                disabled={!!actionLoading}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium text-sm disabled:opacity-50 transition-colors flex items-center justify-center gap-1 ${
+                  approvalModal.allPass
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
+                    : "bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30"
+                }`}
+              >
+                <CheckCircle2 size={13} />
+                {approvalModal.allPass ? "Approve Vendor" : "Approve Anyway"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

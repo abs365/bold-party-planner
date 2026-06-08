@@ -58,7 +58,7 @@ export default async function AdminQuotesPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white">Quote Pipeline</h1>
-          <p className="text-white/50 mt-1 text-sm">Platform-wide quote visibility — last 200 quotes</p>
+          <p className="text-white/50 mt-1 text-sm">Platform-wide quote visibility: last 200 quotes</p>
         </div>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <AdminQuotesView quotes={allQuotes as any} stats={stats} />

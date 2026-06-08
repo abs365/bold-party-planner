@@ -352,7 +352,7 @@ export function GuestListView({ eventId, initialGuests, initialStats }: GuestLis
                         </div>
                       </td>
                       <td className="px-4 py-4 hidden lg:table-cell">
-                        <span className="text-xs text-slate-500">{guest.meal_preference || "—"}</span>
+                        <span className="text-xs text-slate-500">{guest.meal_preference || "N/A"}</span>
                       </td>
                       <td className="px-5 py-4 text-right">
                         <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

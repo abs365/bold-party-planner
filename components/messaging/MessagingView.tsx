@@ -84,7 +84,7 @@ export function MessagingView({ threads: rawThreads, currentUserId, initialThrea
         </h3>
         <p className="text-slate-400 text-sm mb-6 max-w-xs mx-auto">
           {isVendor
-            ? "Messages from customers about quotes and bookings appear here. Respond quickly — vendors who reply within 2 hours win more bookings."
+            ? "Messages from customers about quotes and bookings appear here. Respond quickly: vendors who reply within 2 hours win more bookings."
             : "Conversations with vendors appear here. Visit a vendor profile and request a quote to start a conversation."}
         </p>
         {!isVendor && (

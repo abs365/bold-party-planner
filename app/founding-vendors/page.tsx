@@ -18,11 +18,11 @@ import {
 export const metadata: Metadata = {
   title: "Join as a Founding Vendor | List Your Services Free | ELBOLD Events",
   description:
-    "Be one of ELBOLD's first verified event professionals. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach clients who are actively searching and ready to book — not just browsing a social media feed.",
+    "Be one of ELBOLD's first verified event professionals in London, Kent and Essex. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
   openGraph: {
     title: "Founding Vendor Programme | ELBOLD Events",
     description:
-      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available.",
+      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available across London, Kent and Essex.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
 };
@@ -60,7 +60,7 @@ const BENEFITS = [
   },
   {
     icon: Award,
-    title: "Founding Vendor status — permanent",
+    title: "Founding Vendor status. Permanent.",
     description:
       "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
   },
@@ -203,14 +203,15 @@ export default async function FoundingVendorsPage() {
             className="text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed"
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            Event hosts use ELBOLD to find and book DJs, photographers, caterers,
-            decorators and more. List your services free, receive verified
-            enquiries, and build your reputation on a marketplace designed for UK
+            ELBOLD connects event hosts with verified DJs, photographers, caterers,
+            decorators and more across London, Kent and Essex. List your services
+            free, receive enquiries from customers actively looking to book, and
+            build your reputation on a platform designed specifically for UK event
             professionals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
-              Apply Free — Takes 5 Minutes
+              Apply Free. Takes 5 Minutes.
             </Link>
             <Link href="/browse" className="btn-luxury-outline">
               See the Marketplace
@@ -270,7 +271,7 @@ export default async function FoundingVendorsPage() {
                 {
                   title: "Before the window closes",
                   items: [
-                    "Founding Vendor badge on your profile — permanent",
+                    "Founding Vendor badge on your profile. Permanent.",
                     "Permanent top placement in your category and city",
                     "First access to every new feature ELBOLD releases",
                     "Input into what gets built next",
@@ -705,10 +706,19 @@ export default async function FoundingVendorsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
-              Apply Now — It&apos;s Free
+              Apply Now. It&apos;s Free.
             </Link>
             <Link href="/vendor-standards" className="btn-luxury-outline">
               Read Our Standards
+            </Link>
+          </div>
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <Link
+              href="/vendor-faq"
+              className="text-xs font-light transition-opacity hover:opacity-70 flex items-center gap-1"
+              style={{ color: "rgba(201,168,76,0.5)" }}
+            >
+              Read the Vendor FAQ <ArrowRight size={10} />
             </Link>
           </div>
           <p

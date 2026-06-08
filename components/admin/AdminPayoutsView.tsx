@@ -99,9 +99,9 @@ export function AdminPayoutsView({ payouts }: AdminPayoutsViewProps) {
               ) : (
                 filtered.map((payout) => (
                   <tr key={payout.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td className="px-4 py-3 text-white font-medium">{payout.vendor?.business_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-white font-medium">{payout.vendor?.business_name ?? "N/A"}</td>
                     <td className="px-4 py-3">
-                      <p className="text-white/70">{payout.event?.title ?? "—"}</p>
+                      <p className="text-white/70">{payout.event?.title ?? "N/A"}</p>
                       {payout.event?.date && <p className="text-white/40 text-xs">{new Date(payout.event.date).toLocaleDateString("en-GB")}</p>}
                     </td>
                     <td className="px-4 py-3 text-right text-white">£{payout.total_amount.toFixed(2)}</td>

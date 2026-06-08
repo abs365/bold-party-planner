@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// ── Occasion showcase — links to filtered browse ──────────────────────────
+// ── Occasion showcase: links to filtered browse ───────────────────────────
 const OCCASIONS = [
   {
     label: "Weddings",
@@ -51,13 +51,13 @@ const OCCASIONS = [
   },
 ];
 
-// ── Planning guides — real slugs from lib/guides.ts ───────────────────────
+// ── Planning guides: real slugs from lib/guides.ts ────────────────────────
 const GUIDES = [
   {
     slug: "wedding-planning-checklist-uk",
     title: "Wedding Planning Checklist UK",
     category: "Weddings",
-    desc: "A complete, month-by-month timeline for planning a UK wedding — from venue booking to final confirmations.",
+    desc: "A complete, month-by-month timeline for planning a UK wedding, from venue booking to final confirmations.",
     accent: "#0B1F4D",
   },
   {
@@ -78,7 +78,7 @@ const GUIDES = [
     slug: "birthday-party-planning-guide",
     title: "Birthday Party Planning Guide",
     category: "Birthdays",
-    desc: "From intimate gatherings to large celebrations — how to plan a birthday party that people remember.",
+    desc: "From intimate gatherings to large celebrations: how to plan a birthday party that people remember.",
     accent: "#2a1010",
   },
   {
@@ -100,7 +100,7 @@ export default async function ShowcasePage() {
     profile = data;
   }
 
-  // Fetch real vendor media — inner join ensures only approved vendors
+  // Fetch real vendor media: inner join ensures only approved vendors
   const { data: rawMedia } = await supabase
     .from("vendor_media")
     .select(`
@@ -171,7 +171,7 @@ export default async function ShowcasePage() {
         </div>
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(160deg, rgba(4,10,28,0.88) 0%, rgba(6,14,36,0.82) 40%, rgba(4,8,22,0.92) 100%)" }}
+          style={{ background: "linear-gradient(160deg, rgba(4,10,28,0.64) 0%, rgba(6,14,36,0.54) 40%, rgba(4,8,22,0.70) 100%)" }}
         />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -224,7 +224,7 @@ export default async function ShowcasePage() {
               What Are You Celebrating?
             </h2>
             <p className="text-sm text-gray-400 font-light mt-3 max-w-md mx-auto">
-              Browse verified professionals curated by event type — from intimate gatherings to grand celebrations.
+              Browse verified professionals curated by event type, from intimate gatherings to grand celebrations.
             </p>
           </div>
 
@@ -254,7 +254,7 @@ export default async function ShowcasePage() {
                 )}
                 <div
                   className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgba(4,8,20,0.88) 0%, rgba(4,8,20,0.48) 40%, rgba(4,8,20,0.18) 100%)" }}
+                  style={{ background: "linear-gradient(to top, rgba(4,8,20,0.72) 0%, rgba(4,8,20,0.35) 40%, rgba(4,8,20,0.10) 100%)" }}
                 />
                 <div className="relative z-10 p-7 h-full flex flex-col justify-end" style={{ minHeight: "220px" }}>
                   <div className="text-xs tracking-[0.4em] font-semibold uppercase mb-2" style={{ color: "rgba(212,175,55,0.65)" }}>
@@ -347,7 +347,7 @@ export default async function ShowcasePage() {
         </div>
       </section>
 
-      {/* ── SECTION 4: THE PORTFOLIO — real vendor media ─────────────── */}
+      {/* ── SECTION 4: THE PORTFOLIO (real vendor media) ────────────── */}
       <section style={{ background: "#06111d" }} className="pt-20 pb-8">
         <div className="max-w-6xl mx-auto px-4 mb-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

@@ -170,19 +170,19 @@ export function CustomerBookingDetail({
           <dl className="space-y-2.5 text-sm">
             <div className="flex justify-between">
               <span className="text-slate-400">Event</span>
-              <span className="text-white font-medium">{event?.title ?? "—"}</span>
+              <span className="text-white font-medium">{event?.title ?? "N/A"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Date</span>
-              <span className="text-white">{event?.date ? formatDate(event.date) : "—"}</span>
+              <span className="text-white">{event?.date ? formatDate(event.date) : "N/A"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Location</span>
-              <span className="text-white">{event?.city ?? "—"}</span>
+              <span className="text-white">{event?.city ?? "N/A"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Guests</span>
-              <span className="text-white">{event?.guest_count ?? "—"}</span>
+              <span className="text-white">{event?.guest_count ?? "N/A"}</span>
             </div>
             {event?.venue_name && (
               <div className="flex justify-between">

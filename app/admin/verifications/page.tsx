@@ -21,7 +21,7 @@ export default async function AdminVerificationsPage() {
       .from("vendor_verifications")
       .select(`
         *,
-        vendor:vendors(id, business_name, category, city, verified, verification_level, suspicious_flag,
+        vendor:vendors(id, business_name, category, city, verified, verification_level, suspicious_flag, status,
           profile:profiles(full_name, email)
         )
       `)
@@ -42,11 +42,16 @@ export default async function AdminVerificationsPage() {
     .select("id", { count: "exact", head: true })
     .eq("suspicious_flag", true)).count ?? 0;
 
+  const suspendedCount = (await db
+    .from("vendors")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "suspended")).count ?? 0;
+
   return (
     <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
       <AdminVerificationsView
         initialVerifications={(pendingRes.data ?? []) as unknown as Parameters<typeof AdminVerificationsView>[0]["initialVerifications"]}
-        stats={{ pending: pendingCount, approved: approvedCount, flagged: flaggedCount }}
+        stats={{ pending: pendingCount, approved: approvedCount, flagged: flaggedCount, suspended: suspendedCount }}
       />
     </DashboardLayout>
   );

@@ -19,7 +19,7 @@ export default async function AdminPayoutsPage() {
 
   const db = await createAdminClient();
 
-  // Payouts from the vendor_payouts ledger — ordered by status so pending come first
+  // Payouts from the vendor_payouts ledger, ordered by status so pending come first
   const { data: payouts } = await db
     .from("vendor_payouts")
     .select(`
