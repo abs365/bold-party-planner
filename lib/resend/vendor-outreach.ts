@@ -73,11 +73,11 @@ export async function sendFoundingVendorWelcome(to: string, name: string, busine
     "You're a Founding Vendor",
     `<p>Hi ${name},</p>
     <div class="badge">Founding Vendor</div>
-    <p><strong>${businessName}</strong> is now live on ELBOLD Events as one of our founding vendors. This is a significant milestone — you're one of the first professionals to join the marketplace.</p>
+    <p><strong>${businessName}</strong> is now live on ELBOLD Events as one of our founding vendors. This is a significant milestone. You're one of the first professionals to join the marketplace.</p>
     <p>As a Founding Vendor, you get:</p>
     <div class="detail-box">
-      <p>🏅 <strong>Founding Vendor badge</strong> — permanently on your profile</p>
-      <p>💰 <strong>Keep 90%</strong> of every booking — we take just 10%</p>
+      <p>🏅 <strong>Founding Vendor badge</strong> (permanently on your profile)</p>
+      <p>💰 <strong>Keep 90%</strong> of every booking. We take just 10%.</p>
       <p>📈 <strong>Priority placement</strong> in search during our launch period</p>
       <p>🤝 <strong>Direct access</strong> to the ELBOLD team for any support</p>
     </div>
@@ -107,12 +107,12 @@ export async function sendVerificationReminder(
   return send(to, "Action needed: Complete your verification on ELBOLD", wrap(
     "Verification Reminder",
     `<p>Hi ${name},</p>
-    <p>Customers on ELBOLD trust verified vendors significantly more than unverified ones — and we want to make sure <strong>${businessName}</strong> is ready to compete.</p>
+    <p>Customers on ELBOLD trust verified vendors significantly more than unverified ones, and we want to make sure <strong>${businessName}</strong> is ready to compete.</p>
     <p>Your profile is still missing the following verifications:</p>
     <div class="detail-box">
       ${missingList}
     </div>
-    <p>Verified vendors earn the <strong>ID Verified</strong> or <strong>Business Verified</strong> badge on their profile and in every search result — this is the single biggest trust signal for customers choosing between vendors.</p>
+    <p>Verified vendors earn the <strong>ID Verified</strong> or <strong>Business Verified</strong> badge on their profile and in every search result. This is the single biggest trust signal for customers choosing between vendors.</p>
     <p>It takes less than 5 minutes to upload your documents. Our team reviews them within 24 hours.</p>
     <a href="${appUrl}/vendor/verification" class="btn">Complete Verification</a>
     <p style="margin-top:24px;font-size:13px;color:#9ca3af">Questions? Reply to this email or contact us at support@elbold.com.</p>`
@@ -124,18 +124,18 @@ export async function sendVerificationReminder(
 
 export async function sendPackageCompletionReminder(to: string, name: string, businessName: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, "Customers can't request quotes yet — add your first package", wrap(
+  return send(to, "Customers can't request quotes yet: add your first package", wrap(
     "Add Your Service Packages",
     `<p>Hi ${name},</p>
-    <p>Good news — <strong>${businessName}</strong> is live on ELBOLD. But there's one thing stopping customers from requesting a quote from you: <strong>you haven't created a service package yet.</strong></p>
+    <p>Good news! <strong>${businessName}</strong> is live on ELBOLD. But there's one thing stopping customers from requesting a quote from you: <strong>you haven't created a service package yet.</strong></p>
     <p>Without at least one package, the "Request a Quote" button on your profile is hidden. You're invisible to customers ready to book.</p>
     <p>Creating your first package takes under 2 minutes:</p>
     <div class="detail-box">
-      <p><strong>Step 1</strong> — Give it a name (e.g. "4-Hour DJ Set" or "Full Day Photography")</p>
-      <p><strong>Step 2</strong> — Set a price (or price range)</p>
-      <p><strong>Step 3</strong> — Write 1–2 sentences about what's included</p>
+      <p><strong>Step 1:</strong> Give it a name (e.g. "4-Hour DJ Set" or "Full Day Photography")</p>
+      <p><strong>Step 2:</strong> Set a price (or price range)</p>
+      <p><strong>Step 3:</strong> Write 1–2 sentences about what's included</p>
     </div>
-    <p>You can update the details any time — the goal is to get your first package live so customers can start enquiring.</p>
+    <p>You can update the details any time. The goal is to get your first package live so customers can start enquiring.</p>
     <a href="${appUrl}/vendor/services" class="btn">Add Your First Package</a>`
   ));
 }
@@ -153,7 +153,7 @@ export async function sendProfileCompletionReminder(
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   const label = score >= 75 ? "Strong" : score >= 50 ? "Building" : score >= 25 ? "Starting" : "Minimal";
-  return send(to, `Your profile is at ${score}% — here's your next step`, wrap(
+  return send(to, `Your profile is at ${score}%: here's your next step`, wrap(
     "Strengthen Your Profile",
     `<p>Hi ${name},</p>
     <p>Your ELBOLD profile for <strong>${businessName}</strong> is currently at <strong>${score}% readiness</strong> (${label}). Vendors with stronger profiles receive significantly more quote requests.</p>

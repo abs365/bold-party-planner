@@ -279,7 +279,7 @@ export default async function VendorActivationPage() {
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle size={14} className="text-amber-400" />
               <h2 className="text-xs font-semibold text-amber-400 uppercase tracking-widest">
-                Needs Attention — {needsAttention.length} vendor{needsAttention.length !== 1 ? "s" : ""} stuck
+                Needs Attention: {needsAttention.length} vendor{needsAttention.length !== 1 ? "s" : ""} stuck
               </h2>
             </div>
             <div className="space-y-3">
@@ -327,7 +327,7 @@ export default async function VendorActivationPage() {
             <div className="flex items-center gap-2 mb-1">
               <Clock size={13} className="text-indigo-400" />
               <h2 className="text-xs font-semibold text-indigo-400 uppercase tracking-widest">
-                Quote-Ready — Waiting for Customers ({waitingForCustomer.length})
+                Quote-Ready: Waiting for Customers ({waitingForCustomer.length})
               </h2>
             </div>
             <p className="text-xs text-slate-600 font-light mb-3">
@@ -375,7 +375,7 @@ export default async function VendorActivationPage() {
           <div className="flex items-center gap-2 mb-3">
             <BadgeCheck size={13} className="text-slate-500" />
             <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
-              Vendor Activation Board — {totalVendors} vendors
+              Vendor Activation Board: {totalVendors} vendors
             </h2>
           </div>
 

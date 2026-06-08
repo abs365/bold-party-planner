@@ -9,7 +9,7 @@ import {
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
-  Scale, Eye, ClipboardList, Lock, Zap,
+  Scale, Eye, ClipboardList, Lock, Zap, GitBranch, Map, Send, Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -99,6 +99,17 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    label: "Vendor Acquisition",
+    items: [
+      { href: "/admin/vendor-growth",      label: "Acquisition Dashboard", icon: Target },
+      { href: "/admin/vendor-acquisition", label: "Lead CRM",              icon: Users },
+      { href: "/admin/vendor-pipeline",    label: "Pipeline Board",        icon: GitBranch },
+      { href: "/admin/vendor-outreach",    label: "Outreach Queue",        icon: Send },
+      { href: "/admin/vendor-coverage",    label: "Coverage Map",          icon: Map },
+      { href: "/admin/vendor-activation",  label: "Vendor Activation",     icon: Zap },
+    ],
+  },
+  {
     label: "Pilot Launch",
     items: [
       { href: "/admin/pilot",          label: "Pilot Ops",        icon: Activity },
@@ -112,7 +123,6 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/concierge",          label: "Concierge Requests",  icon: MessageSquare },
       { href: "/admin/launch",             label: "Launch Readiness",    icon: Rocket },
       { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock },
-      { href: "/admin/vendor-activation", label: "Vendor Activation",   icon: Zap },
       { href: "/admin/pilot-testing",    label: "Pilot Testing Centre", icon: ClipboardList },
     ],
   },
@@ -169,7 +179,7 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
 
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
         {navGroups ? (
-          // Grouped nav — admin command centre
+          // Grouped nav: admin command centre
           navGroups.map((group) => (
             <div key={group.label} className="mb-4">
               <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 mb-1">
@@ -181,7 +191,7 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
             </div>
           ))
         ) : (
-          // Flat nav — customer / vendor
+          // Flat nav: customer / vendor
           <div className="space-y-0.5">
             {nav.map((item) => <NavLink key={item.href} {...item} />)}
           </div>
@@ -219,20 +229,28 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  user: Profile;
+  user?: Profile;
 }
+
+const ADMIN_PLACEHOLDER: Profile = {
+  id: "", email: "", role: "admin", full_name: null,
+  phone: null, phone_verified: false, avatar_url: null,
+  created_at: "",
+};
 
 export function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
+  const resolvedUser = user ?? ADMIN_PLACEHOLDER;
+
   const nav =
-    user.role === "admin" ? ADMIN_NAV :
-    user.role === "vendor" ? VENDOR_NAV : CUSTOMER_NAV;
+    resolvedUser.role === "admin" ? ADMIN_NAV :
+    resolvedUser.role === "vendor" ? VENDOR_NAV : CUSTOMER_NAV;
 
   const roleLabel =
-    user.role === "admin" ? "Admin" :
-    user.role === "vendor" ? "Vendor" : "Customer";
+    resolvedUser.role === "admin" ? "Admin" :
+    resolvedUser.role === "vendor" ? "Vendor" : "Customer";
 
   async function handleSignOut() {
     const { createClient } = await import("@/lib/supabase/client");
@@ -242,8 +260,8 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
   }
 
   const sidebarProps: SidebarContentProps = {
-    user, nav, roleLabel, pathname,
-    navGroups: user.role === "admin" ? ADMIN_NAV_GROUPS : undefined,
+    user: resolvedUser, nav, roleLabel, pathname,
+    navGroups: resolvedUser.role === "admin" ? ADMIN_NAV_GROUPS : undefined,
     onClose: () => setSidebarOpen(false),
     onSignOut: handleSignOut,
   };
@@ -285,11 +303,11 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
           <div className="hidden lg:flex items-center gap-2 text-sm text-slate-500">
             <span>Portal</span>
             <ChevronRight size={13} />
-            <span className="text-slate-300 capitalize">{user.role}</span>
+            <span className="text-slate-300 capitalize">{resolvedUser.role}</span>
           </div>
 
           <div className="flex items-center gap-3">
-            {user.role === "customer" && (
+            {resolvedUser.role === "customer" && (
               <Link href="/dashboard/create-event" className="btn-primary text-xs py-1.5 px-3.5">
                 <Sparkles size={12} />
                 Plan Event
@@ -307,8 +325,8 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
           {children}
         </main>
       </div>
-      {user.role === "customer" && <SmartConcierge />}
-      <MobileBottomNav user={user} />
+      {resolvedUser.role === "customer" && <SmartConcierge />}
+      <MobileBottomNav user={resolvedUser} />
     </div>
   );
 }
