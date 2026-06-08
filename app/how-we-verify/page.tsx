@@ -14,7 +14,7 @@ import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 export const metadata: Metadata = {
   title: "How ELBOLD Verifies Vendors | Every Professional Individually Reviewed",
   description:
-    "Learn exactly how ELBOLD reviews and verifies every event vendor — identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
+    "Learn exactly how ELBOLD reviews and verifies every event vendor: identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
 };
 
 export const dynamic = "force-dynamic";
@@ -59,7 +59,7 @@ const VERIFICATION_LEVELS = [
     color: "#059669",
     bg: "rgba(5,150,105,0.08)",
     border: "rgba(5,150,105,0.2)",
-    desc: "The vendor has been assessed by the ELBOLD team for identity, business legitimacy, and portfolio quality. This is the baseline standard — every vendor on ELBOLD holds this status as a minimum.",
+    desc: "The vendor has been assessed by the ELBOLD team for identity, business legitimacy, and portfolio quality. This is the baseline standard. Every vendor on ELBOLD holds this status as a minimum.",
   },
   {
     level: "ID Verified",
@@ -75,7 +75,7 @@ const VERIFICATION_LEVELS = [
     color: "#7c3aed",
     bg: "rgba(124,58,237,0.08)",
     border: "rgba(124,58,237,0.2)",
-    desc: "The vendor has submitted all required business documents for their service category — which may include insurance certificates, professional licences, or trade-specific credentials — and each has been individually reviewed and approved by our team.",
+    desc: "The vendor has submitted all required business documents for their service category, which may include insurance certificates, professional licences, or trade-specific credentials, and each has been individually reviewed and approved by our team.",
   },
   {
     level: "Premium Partner",
@@ -97,7 +97,7 @@ const TIMELINE = [
 const FRAUD_MEASURES = [
   {
     title: "Review pattern detection",
-    body: "We monitor for unusual spikes in reviews — particularly from accounts with no booking history. Suspicious patterns trigger immediate investigation.",
+    body: "We monitor for unusual spikes in reviews, particularly from accounts with no booking history. Suspicious patterns trigger immediate investigation.",
   },
   {
     title: "Identity cross-referencing",
@@ -122,10 +122,10 @@ const WHAT_TO_EXPECT = [
 ];
 
 const DOES_NOT_GUARANTEE = [
-  "Verification is our assessment at a point in time — it is not a guarantee of future performance.",
-  "We cannot observe every event in person — our monitoring is based on customer reviews and completion data.",
-  "Verified vendors may still make mistakes or fail to meet expectations — verification assesses legitimacy, not perfection.",
-  "Our dispute process aims to be fair to both parties — outcomes depend on the evidence available in each case.",
+  "Verification is our assessment at a point in time. It is not a guarantee of future performance.",
+  "We cannot observe every event in person. Our monitoring is based on customer reviews and completion data.",
+  "Verified vendors may still make mistakes or fail to meet expectations. Verification assesses legitimacy, not perfection.",
+  "Our dispute process aims to be fair to both parties. Outcomes depend on the evidence available in each case.",
 ];
 
 const FAQS = [
@@ -147,7 +147,7 @@ const FAQS = [
   },
   {
     q: "How are reviews protected from manipulation?",
-    a: "Only customers with a confirmed booking can leave a review. We monitor for unusual review patterns and investigate any that appear artificial. Vendors cannot remove negative reviews — they may only post a professional response.",
+    a: "Only customers with a confirmed booking can leave a review. We monitor for unusual review patterns and investigate any that appear artificial. Vendors cannot remove negative reviews. They may only post a professional response.",
   },
   {
     q: "What should I do if I suspect a vendor is misrepresenting themselves?",
@@ -195,7 +195,7 @@ export default async function HowWeVerifyPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-20 space-y-20">
 
-        {/* Section 1 — Why verification matters */}
+        {/* Section 1: Why verification matters */}
         <div
           className="rounded-2xl p-10 text-center"
           style={{ background: "rgba(11,31,77,0.03)", border: "1px solid rgba(11,31,77,0.08)" }}
@@ -213,7 +213,7 @@ export default async function HowWeVerifyPage() {
           </p>
         </div>
 
-        {/* Section 2–5 — Verification steps */}
+        {/* Section 2-5: Verification steps */}
         <div>
           <div className="text-center mb-12">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -246,7 +246,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 6 — Verification timeline */}
+        {/* Section 6: Verification timeline */}
         <div>
           <div className="text-center mb-10">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -286,7 +286,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section — Verification levels */}
+        {/* Section: Verification levels */}
         <div>
           <div className="text-center mb-12">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -335,10 +335,10 @@ export default async function HowWeVerifyPage() {
         >
           <div className="flex items-center gap-2 mb-3">
             <Star size={18} style={{ color: "#D4AF37" }} fill="currentColor" />
-            <h2 className="text-lg font-light text-gray-900 tracking-tight">Trusted Professional — earned badge</h2>
+            <h2 className="text-lg font-light text-gray-900 tracking-tight">Trusted Professional (earned badge)</h2>
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed">
-            Separate from the verification tiers above, the <strong className="text-gray-700">Trusted Professional</strong> badge is awarded automatically based on performance — not document submission. It requires 5 or more completed bookings, an overall rating of 4.5 stars or higher, a response rate above 80%, and a cancellation rate below 5%. This badge reflects trust earned through real customer experiences.
+            Separate from the verification tiers above, the <strong className="text-gray-700">Trusted Professional</strong> badge is awarded automatically based on performance, not document submission. It requires 5 or more completed bookings, an overall rating of 4.5 stars or higher, a response rate above 80%, and a cancellation rate below 5%. This badge reflects trust earned through real customer experiences.
           </p>
         </div>
 
@@ -388,7 +388,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 7 — Fraud prevention */}
+        {/* Section 7: Fraud prevention */}
         <div
           className="rounded-2xl p-10"
           style={{ background: "#0D1B3E" }}
@@ -412,7 +412,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section — Review integrity */}
+        {/* Section: Review integrity */}
         <div className="border border-gray-100 rounded-2xl p-8">
           <div className="flex items-center gap-2 mb-5">
             <Star size={16} style={{ color: "#C9A84C" }} />
@@ -448,7 +448,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 8 — What customers should expect */}
+        {/* Section 8: What customers should expect */}
         <div>
           <div className="text-center mb-10">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
@@ -469,7 +469,7 @@ export default async function HowWeVerifyPage() {
           </div>
         </div>
 
-        {/* Section 9 — What verification does not guarantee */}
+        {/* Section 9: What verification does not guarantee */}
         <div
           className="rounded-2xl p-8"
           style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.15)" }}
@@ -481,7 +481,7 @@ export default async function HowWeVerifyPage() {
             </h2>
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-            We believe transparency builds more trust than overpromising. Verification is meaningful —
+            We believe transparency builds more trust than overpromising. Verification is meaningful,
             but it has honest limits.
           </p>
           <div className="space-y-3">
@@ -505,9 +505,9 @@ export default async function HowWeVerifyPage() {
           </p>
           <div className="space-y-3">
             {[
-              "Customer reviews — we read every review and flag patterns of concern",
-              "Booking completion rate — vendors who cancel confirmed bookings receive formal warnings",
-              "Response behaviour — vendors with consistently poor response rates receive reduced marketplace visibility",
+              "Customer reviews: we read every review and flag patterns of concern",
+              "Booking completion rate: vendors who cancel confirmed bookings receive formal warnings",
+              "Response behaviour: vendors with consistently poor response rates receive reduced marketplace visibility",
             ].map((point) => (
               <div key={point} className="flex items-start gap-3">
                 <CheckCircle2 size={14} className="text-gray-300 shrink-0 mt-0.5" />

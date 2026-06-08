@@ -36,7 +36,7 @@ export function getVendorBadges(vendor: {
   // Level 4 = Premium Partner (invite-only, admin-set)
   // Level 3 = Business Verified (all category-required docs approved)
   // Level 2 = ID Verified (government ID approved)
-  // Level 1 = Profile Complete (auto-granted, no documents checked — no customer badge)
+  // Level 1 = Profile Complete (auto-granted, no documents checked; no customer badge)
   // Level 0 = Unverified (no badge shown to customers)
 
   // Trusted Professional: dynamically computed from track record (requires Level 2+)
@@ -57,7 +57,7 @@ export function getVendorBadges(vendor: {
   else if (level >= 4) badges.push({
     id: "premium_partner",
     label: "Premium Partner",
-    description: "Invite-only elite vendor status — highest tier on ELBOLD",
+    description: "Invite-only elite vendor status, highest tier on ELBOLD",
     icon: Award,
     bgClass: "bg-amber-50",
     borderClass: "border-amber-200",
@@ -81,13 +81,13 @@ export function getVendorBadges(vendor: {
     borderClass: "border-emerald-200",
     textClass: "text-emerald-700",
   });
-  // Level 1 (profile complete) intentionally shows no customer-facing badge —
-  // no documents were checked so no "Verified" claim should appear to customers.
+  // Level 1 (profile complete) intentionally shows no customer-facing badge.
+  // No documents were checked so no "Verified" claim should appear to customers.
 
   if (vendor.is_founding_vendor) badges.push({
     id: "founding_vendor",
     label: "Founding Vendor",
-    description: "One of ELBOLD's original founding vendors — joined in the founding window",
+    description: "One of ELBOLD's original founding vendors, joined in the founding window",
     icon: Award,
     bgClass: "bg-[#0B1F4D]/8",
     borderClass: "border-[#D4AF37]/40",

@@ -120,7 +120,7 @@ export function VendorVerificationView({
       }
       const data = await res.json() as { path: string };
       setUploadedPath(data.path);
-      toast.success("File uploaded — click Submit to save");
+      toast.success("File uploaded. Click Submit to save.");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "File upload failed. Please try again.");
     }
@@ -274,7 +274,7 @@ export function VendorVerificationView({
       {activeTab === "overview" && (
         <div className="space-y-5">
 
-          {/* Level 1 — Verified */}
+          {/* Level 1: Verified */}
           <div className={cn(
             "rounded-2xl border p-5",
             currentLevel >= 1 ? "bg-green-500/8 border-green-500/20" : "bg-white/4 border-white/8"
@@ -282,7 +282,7 @@ export function VendorVerificationView({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <BadgeCheck size={18} className={currentLevel >= 1 ? "text-green-400" : "text-slate-500"} />
-                <span className="font-bold text-white">Level 1 — Verified</span>
+                <span className="font-bold text-white">Level 1: Verified</span>
               </div>
               {currentLevel >= 1 ? (
                 <span className="text-xs text-green-400 bg-green-500/15 px-2.5 py-1 rounded-full font-medium">Complete</span>
@@ -322,7 +322,7 @@ export function VendorVerificationView({
             )}
           </div>
 
-          {/* Level 2 — Business Verified */}
+          {/* Level 2: Business Verified */}
           <div className={cn(
             "rounded-2xl border p-5",
             currentLevel >= 2 ? "bg-blue-500/8 border-blue-500/20" :
@@ -332,7 +332,7 @@ export function VendorVerificationView({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Shield size={18} className={currentLevel >= 2 ? "text-blue-400" : "text-slate-500"} />
-                <span className="font-bold text-white">Level 2 — ID Verified</span>
+                <span className="font-bold text-white">Level 2: ID Verified</span>
                 {currentLevel < 1 && <Lock size={12} className="text-slate-600" />}
               </div>
               {currentLevel >= 2 ? (
@@ -394,11 +394,11 @@ export function VendorVerificationView({
             </div>
           </div>
 
-          {/* Level 3 — Business Verified */}
+          {/* Level 3: Business Verified */}
           <div className="rounded-2xl border bg-white/3 border-white/6 p-5 opacity-70">
             <div className="flex items-center gap-2 mb-3">
               <Star size={18} className="text-brand-400" />
-              <span className="font-bold text-white">Level 3 — Business Verified</span>
+              <span className="font-bold text-white">Level 3: Business Verified</span>
               <span className="text-xs text-slate-500">(After document review)</span>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
@@ -406,11 +406,11 @@ export function VendorVerificationView({
             </p>
           </div>
 
-          {/* Level 4 — Premium Partner */}
+          {/* Level 4: Premium Partner */}
           <div className="rounded-2xl border bg-white/3 border-amber-500/10 p-5 opacity-60">
             <div className="flex items-center gap-2 mb-3">
               <Star size={18} className="text-amber-400" fill="currentColor" />
-              <span className="font-bold text-white">Level 4 — Premium Partner</span>
+              <span className="font-bold text-white">Level 4: Premium Partner</span>
               <span className="text-xs text-amber-600 bg-amber-500/10 px-2 py-0.5 rounded-full">Invite only</span>
             </div>
             <p className="text-sm text-slate-600">

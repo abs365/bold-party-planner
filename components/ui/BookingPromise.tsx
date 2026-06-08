@@ -21,8 +21,8 @@ export function BookingPromise({ vendorName, className, variant = "both" }: Book
           </p>
           <div className="space-y-2.5">
             {[
-              { n: "1", text: "Send your request — free, no payment, no commitment" },
-              { n: "2", text: vendorName ? `${vendorName} reviews and responds — usually within 24 hours` : "Vendor reviews and responds — usually within 24 hours" },
+              { n: "1", text: "Send your request. Free, no payment, no commitment." },
+              { n: "2", text: vendorName ? `${vendorName} reviews and responds, usually within 24 hours` : "Vendor reviews and responds, usually within 24 hours" },
               { n: "3", text: "If you're happy, confirm and pay a 30% deposit to secure your date" },
             ].map(({ n, text }) => (
               <div key={n} className="flex items-start gap-2.5">
@@ -48,7 +48,7 @@ export function BookingPromise({ vendorName, className, variant = "both" }: Book
           </div>
           <div className="space-y-2">
             {[
-              { icon: Lock,         text: "30% deposit held by Stripe — not released until your event" },
+              { icon: Lock,         text: "30% deposit held by Stripe, not released until your event" },
               { icon: CheckCircle2, text: "Full refund if vendor cancels" },
               { icon: MessageCircle, text: "Disputes resolved by ELBOLD within 5 working days" },
             ].map(({ icon: Icon, text }) => (

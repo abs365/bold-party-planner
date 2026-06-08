@@ -8,9 +8,9 @@ import { CheckCircle2, XCircle, ArrowRight, AlertCircle, Shield } from "lucide-r
 export const metadata: Metadata = {
   title: "Our Commitments | What ELBOLD Promises Every Customer",
   description:
-    "A transparent statement of what ELBOLD commits to on every booking, what we do not guarantee, and how to hold us accountable. No vague promises — specific, checkable commitments only.",
+    "A transparent statement of what ELBOLD commits to on every booking, what we do not guarantee, and how to hold us accountable. No vague promises. Specific, checkable commitments only.",
   openGraph: {
-    title: "ELBOLD — Our Commitments",
+    title: "ELBOLD: Our Commitments",
     description: "What we promise. What we do not guarantee. How to hold us accountable.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -22,13 +22,13 @@ const COMMITMENTS = [
   {
     id: "C-01",
     title: "Every vendor is reviewed before appearing on the platform.",
-    detail: "No vendor is listed through automated approval. Every application is assessed by a member of the ELBOLD team against our published Vendor Standards — including portfolio quality, pricing accuracy, and identity confirmation. We reject applicants who do not meet the standard.",
+    detail: "No vendor is listed through automated approval. Every application is assessed by a member of the ELBOLD team against our published Vendor Standards: portfolio quality, pricing accuracy, and identity confirmation. We reject applicants who do not meet the standard.",
     howToVerify: "If you encounter a vendor whose listing appears to misrepresent their work or services, report it to quality@elbold.com. We will review within 2 business days.",
   },
   {
     id: "C-02",
     title: "Your deposit is held by Stripe until after your event.",
-    detail: "The 30% deposit you pay on booking is processed and held by Stripe — not by ELBOLD and not by the vendor. It is not released to the vendor until your event has completed and no dispute has been raised. ELBOLD cannot access or redirect your deposit payment.",
+    detail: "The 30% deposit you pay on booking is processed and held by Stripe, not by ELBOLD and not by the vendor. It is not released to the vendor until your event has completed and no dispute has been raised. ELBOLD cannot access or redirect your deposit payment.",
     howToVerify: "Your Stripe payment confirmation email will confirm the amount charged and the payment processor. If you have questions about payment handling, contact stripe.com directly.",
   },
   {
@@ -46,7 +46,7 @@ const COMMITMENTS = [
   {
     id: "C-05",
     title: "Our Vendor Standards are published and enforced.",
-    detail: "The criteria we use to approve, warn, suspend, and remove vendors are published at /vendor-standards. We apply them consistently. When a vendor is suspended or removed, it is because they failed to meet these criteria — not because of personal or commercial considerations.",
+    detail: "The criteria we use to approve, warn, suspend, and remove vendors are published at /vendor-standards. We apply them consistently. When a vendor is suspended or removed, it is because they failed to meet these criteria, not because of personal or commercial considerations.",
     howToVerify: "Read the Vendor Standards at elbold.com/vendor-standards. If you believe a vendor on the platform should not be listed given those standards, contact quality@elbold.com.",
   },
   {
@@ -60,7 +60,7 @@ const COMMITMENTS = [
 const NON_COMMITMENTS = [
   {
     title: "We cannot guarantee the quality of your event experience.",
-    detail: "We verify vendors before listing. We do not guarantee that your event will go exactly as planned. Event delivery is the vendor's responsibility. Our role is to ensure vendors are genuine, qualified, and accountable — not to supervise them.",
+    detail: "We verify vendors before listing. We do not guarantee that your event will go exactly as planned. Event delivery is the vendor's responsibility. Our role is to ensure vendors are genuine, qualified, and accountable, not to supervise them.",
   },
   {
     title: "We cannot guarantee vendor availability on your date.",
@@ -105,7 +105,7 @@ export default async function OurCommitmentsPage() {
             <span style={{ color: "#D4AF37" }}>And what we do not.</span>
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Most platforms promise everything. We publish exactly what we commit to — and we are honest
+            Most platforms promise everything. We publish exactly what we commit to, and we are honest
             about where our responsibility ends. This is the basis on which customers should decide
             whether to use ELBOLD.
           </p>
@@ -167,7 +167,7 @@ export default async function OurCommitmentsPage() {
             </h2>
             <p className="text-sm text-gray-500 font-light max-w-xl">
               Honest marketplaces publish their limitations. These are the areas where we cannot make
-              the same commitments — and the reasons why.
+              the same commitments, and the reasons why.
             </p>
           </div>
 
