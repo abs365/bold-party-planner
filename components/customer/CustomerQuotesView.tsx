@@ -67,7 +67,7 @@ export function CustomerQuotesView({ quotes }: CustomerQuotesViewProps) {
         <div className="grid sm:grid-cols-3 gap-3">
           {[
             { icon: GitCompare, title: "Free to request",   desc: "No obligation and no payment until you confirm a booking" },
-            { icon: Clock,      title: "24h response",      desc: "Vendors respond quickly — usually within the same day" },
+            { icon: Clock,      title: "24h response",      desc: "Vendors respond quickly, usually within the same day" },
             { icon: CheckCircle, title: "Compare multiple", desc: "Request quotes from several vendors and choose the best fit" },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="p-4 bg-white/3 border border-white/6 rounded-xl">

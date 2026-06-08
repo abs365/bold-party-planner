@@ -99,7 +99,7 @@ export function CustomerEventsView({ events }: CustomerEventsViewProps) {
           </div>
           <h3 className="font-bold text-white mb-2">Start planning your first event</h3>
           <p className="text-slate-400 text-sm mb-6 max-w-sm mx-auto">
-            Our Smart Planner builds a complete event plan — vendors, budget, timeline and checklist — in minutes.
+            Our Smart Planner builds a complete event plan (vendors, budget, timeline and checklist) in minutes.
           </p>
           <Link href="/dashboard/events/new" className="btn-primary">
             <Sparkles size={15} /> Plan My Event
