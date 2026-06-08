@@ -279,7 +279,7 @@ export function PilotCRM({ initialVendors, funnel }: { initialVendors: PilotVend
                         <div className="text-3xl mb-3">🚀</div>
                         <p className="text-white/50 font-medium">No pilot records yet</p>
                         <p className="text-white/30 text-sm mt-1">
-                          Add vendors and testers before launch — click Add Prospect to get started.
+                          Add vendors and testers before launch. Click Add Prospect to get started.
                         </p>
                       </>
                     ) : (
@@ -295,12 +295,12 @@ export function PilotCRM({ initialVendors, funnel }: { initialVendors: PilotVend
                       <p className="text-white font-medium text-xs">{v.business_name}</p>
                       {v.vendor_id && <p className="text-emerald-400 text-xs">On platform</p>}
                     </td>
-                    <td className="px-4 py-3 text-white/50 text-xs capitalize">{v.category?.replace(/_/g," ") ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/50 text-xs capitalize">{v.category?.replace(/_/g," ") ?? "N/A"}</td>
                     <td className="px-4 py-3">
-                      <p className="text-white/70 text-xs">{v.contact_name ?? "—"}</p>
+                      <p className="text-white/70 text-xs">{v.contact_name ?? "N/A"}</p>
                       {v.email && <p className="text-white/30 text-xs">{v.email}</p>}
                     </td>
-                    <td className="px-4 py-3 text-white/40 text-xs capitalize">{v.acquisition_source?.replace(/_/g," ") ?? "—"}</td>
+                    <td className="px-4 py-3 text-white/40 text-xs capitalize">{v.acquisition_source?.replace(/_/g," ") ?? "N/A"}</td>
                     <td className="px-4 py-3">
                       <select
                         value={v.status}

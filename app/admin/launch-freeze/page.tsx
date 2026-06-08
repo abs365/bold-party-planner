@@ -91,7 +91,7 @@ function Gate({
           <ProgressBar value={current} max={target} color="bg-amber-400" />
           <div className={`text-xs mt-1.5 font-light ${unlocked ? "text-emerald-500" : "text-slate-600"}`}>
             {current.toLocaleString()} / {target.toLocaleString()}
-            {unlocked && " — cleared"}
+            {unlocked && " (cleared)"}
           </div>
         </div>
       </div>
@@ -203,8 +203,8 @@ export default async function LaunchFreezePage() {
               : <Lock size={18} className="text-amber-400" />}
             <span className={`text-lg font-bold ${allGatesCleared ? "text-emerald-300" : "text-amber-300"}`}>
               {allGatesCleared
-                ? "Unlock Gate Cleared — Phase 2 Features Permitted"
-                : `Freeze Active — ${gatesCleared} of 4 gates cleared`}
+                ? "Unlock Gate Cleared: Phase 2 Features Permitted"
+                : `Freeze Active: ${gatesCleared} of 4 gates cleared`}
             </span>
           </div>
           <p className={`text-sm font-light ml-9 ${allGatesCleared ? "text-emerald-500" : "text-amber-600"}`}>
@@ -287,11 +287,11 @@ export default async function LaunchFreezePage() {
           </p>
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              "Critical bugs — any broken user journey",
-              "Security fixes — auth, data exposure, injection",
-              "Trust issues — badge integrity, escrow language",
-              "Payment issues — incorrect money movement",
-              "Compliance — legal, FCA-adjacent, GDPR, PCI",
+              "Critical bugs: any broken user journey",
+              "Security fixes: auth, data exposure, injection",
+              "Trust issues: badge integrity, escrow language",
+              "Payment issues: incorrect money movement",
+              "Compliance: legal, FCA-adjacent, GDPR, PCI",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2 text-xs text-slate-400 font-light">
                 <CheckCircle2 size={12} className="text-emerald-500 mt-0.5 flex-shrink-0" />

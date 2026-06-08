@@ -27,7 +27,7 @@ export default async function PilotSubmissionsPage() {
       <div className="max-w-6xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Test Submissions</h1>
-          <p className="text-slate-400 text-sm mt-1">All pilot tester submissions — filter, search, and export.</p>
+          <p className="text-slate-400 text-sm mt-1">All pilot tester submissions: filter, search, and export.</p>
         </div>
         <SubmissionsView submissions={(submissions ?? []) as Parameters<typeof SubmissionsView>[0]["submissions"]} />
       </div>
