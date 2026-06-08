@@ -29,7 +29,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: "Payment Security",
-    elbold: "Stripe holds your deposit until the event is complete",
+    elbold: "Your deposit is processed through Stripe and managed by ELBOLD until the event is complete",
     social: "Bank transfer or cash. Money leaves immediately with no protection.",
   },
   {
@@ -44,7 +44,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: "Booking Terms",
-    elbold: "Booking terms recorded at payment. Payment held by Stripe, not the vendor.",
+    elbold: "Booking terms recorded at payment. Payment processed through Stripe, managed by ELBOLD, not the vendor.",
     social: "Usually verbal, with no written record of what was agreed.",
   },
   {
@@ -65,7 +65,7 @@ const PILLARS = [
   {
     icon: Lock,
     title: "Your money is protected",
-    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is held securely and only released after your event is completed. With social media DM bookings, money typically transfers directly to the vendor, and if something goes wrong, there is no mechanism to recover it.",
+    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is processed securely through Stripe and managed by ELBOLD until after your event is completed. With social media DM bookings, money typically transfers directly to the vendor, and if something goes wrong, there is no mechanism to recover it.",
     link: "/booking-protection",
     linkLabel: "How booking protection works",
   },

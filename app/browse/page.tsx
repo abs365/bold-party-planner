@@ -239,7 +239,7 @@ export default async function BrowsePage({
                 {
                   icon: Shield,
                   title: "Stripe-secured payments",
-                  desc: "Your 30% deposit is held by Stripe and only released after your event has taken place.",
+                  desc: "Your 30% deposit is processed securely through Stripe and managed by ELBOLD until after your event.",
                 },
                 {
                   icon: Star,

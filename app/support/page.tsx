@@ -60,7 +60,7 @@ const SECTIONS = [
       },
       {
         q: "How much deposit do I pay?",
-        a: "A 30% deposit is required to confirm any booking. The deposit is held securely by Stripe and released to the vendor only after your event is completed.",
+        a: "A 30% deposit is required to confirm any booking. The deposit is processed securely through Stripe and managed by ELBOLD. It is released to the vendor only after your event is completed.",
       },
       {
         q: "When is the remaining balance due?",

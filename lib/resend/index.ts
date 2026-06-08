@@ -350,7 +350,7 @@ export async function sendBookingAwaitingPayment(
       ${dateLine}
       <p><span class="detail-label">Deposit due now:</span> <span class="detail-value">£${depositAmount.toLocaleString("en-GB", { minimumFractionDigits: 2 })}</span></p>
     </div>
-    <p>Your deposit is held securely by Stripe and only released to the vendor after your event is completed.</p>
+    <p>Your deposit is processed securely through Stripe and managed by ELBOLD. It is only released to the vendor after your event is completed.</p>
     <a href="${appUrl}/dashboard/bookings/${bookingId}" class="btn">Pay Deposit &amp; Confirm</a>
     <p style="margin-top:16px;font-size:13px;color:#9ca3af">Your date is reserved but not confirmed until the deposit is paid. Pay now to lock it in.</p>`
   ));

@@ -101,7 +101,7 @@ async function BookingConfirmation({ bookingId }: { bookingId: string }) {
             "Booking confirmed with the vendor",
             "Confirmation email sent",
             "Vendor has been notified",
-            "Deposit held securely by Stripe",
+            "Deposit secured through Stripe, managed by ELBOLD",
           ].map((item) => (
             <div key={item} className="flex items-center gap-3 text-sm">
               <CheckCircle2 size={15} className="text-emerald-500 flex-shrink-0" />

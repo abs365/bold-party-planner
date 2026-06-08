@@ -206,7 +206,7 @@ export default async function HowItWorksPage() {
               {
                 icon: Lock,
                 title: "Your money is protected",
-                elbold: "Your deposit is held by Stripe until your event. If the vendor cancels, you get a full refund. Disputes are handled by ELBOLD.",
+                elbold: "Your deposit is processed through Stripe and managed by ELBOLD until your event. If the vendor cancels, you get a full refund. Disputes are handled by ELBOLD.",
                 instagram: "You transfer money to a personal account. No recourse if things go wrong.",
               },
               {

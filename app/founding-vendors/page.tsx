@@ -478,7 +478,7 @@ export default async function FoundingVendorsPage() {
               What you get as a Founding Vendor
             </h2>
             <p className="text-gray-400 max-w-xl mx-auto font-light text-sm">
-              Everything you need to start receiving enquiries from day one, with
+              Everything you need to be visible to early customers when ELBOLD launches, with
               placement advantages that stay with you permanently.
             </p>
           </div>

@@ -131,8 +131,8 @@ export default async function AboutPage() {
             </p>
             <p>
               ELBOLD was founded to change this. Not with a promise of perfection. No marketplace can guarantee that.
-              But with a genuine system of accountability: vendors reviewed before they appear, payments held by Stripe
-              until events complete, reviews tied to confirmed bookings only, and a published set of standards that
+              But with a genuine system of accountability: vendors reviewed before they appear, deposits processed through Stripe
+              and managed by ELBOLD until events complete, reviews tied to confirmed bookings only, and a published set of standards that
               every vendor agrees to before joining the platform.
             </p>
             <p>
@@ -295,7 +295,7 @@ export default async function AboutPage() {
           <div className="grid sm:grid-cols-2 gap-4 text-left mb-10">
             {[
               { title: "Every vendor reviewed before listing", desc: "No vendor appears on ELBOLD without a manual review of their application, portfolio, and identity." },
-              { title: "Deposits held by Stripe until after your event", desc: "Your 30% deposit is not released to the vendor until your event has taken place and you have not raised a dispute." },
+              { title: "Deposits secured until after your event", desc: "Your 30% deposit is processed through Stripe and managed by ELBOLD. It is not released to the vendor until your event has taken place and you have not raised a dispute." },
               { title: "Reviews from real bookings only", desc: "Reviews cannot be left by anyone who has not made a confirmed booking through the platform." },
               { title: "Full refund if vendor cancels", desc: "If a vendor cancels your confirmed booking, you receive your full deposit back. No exceptions. No delays." },
             ].map(({ title, desc }) => (

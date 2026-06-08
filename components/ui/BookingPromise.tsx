@@ -48,7 +48,7 @@ export function BookingPromise({ vendorName, className, variant = "both" }: Book
           </div>
           <div className="space-y-2">
             {[
-              { icon: Lock,         text: "30% deposit held by Stripe, not released until your event" },
+              { icon: Lock,         text: "30% deposit processed through Stripe, managed by ELBOLD until your event" },
               { icon: CheckCircle2, text: "Full refund if vendor cancels" },
               { icon: MessageCircle, text: "Disputes resolved by ELBOLD within 5 working days" },
             ].map(({ icon: Icon, text }) => (

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const supabase = await createClient();
   const { data: vendor } = await supabase
     .from("vendors")
-    .select("business_name, category, city, description, rating, review_count")
+    .select("business_name, category, city, bio, rating, review_count")
     .eq("id", id)
     .eq("status", "approved")
     .single();
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
   const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | ELBOLD Events`;
-  const description = vendor.description?.slice(0, 160) ??
+  const description = (vendor as { bio?: string }).bio?.slice(0, 160) ??
     `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on ELBOLD Events.`;
 
   return {
@@ -125,14 +125,14 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": vendor.business_name,
-    "description": vendor.description ?? undefined,
+    "description": (vendor as { bio?: string }).bio ?? undefined,
     "url": `https://www.elbold.com/vendors/${id}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": vendor.city,
       "addressCountry": "GB",
     },
-    "priceRange": vendor.starting_price ? `From £${vendor.starting_price}` : undefined,
+    "priceRange": vendor.min_price ? `From £${vendor.min_price}` : undefined,
     "telephone": vendor.phone ?? undefined,
     "aggregateRating": avgRating && (vendor.review_count ?? 0) > 0 ? {
       "@type": "AggregateRating",
@@ -141,7 +141,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
       "bestRating": "5",
       "worstRating": "1",
     } : undefined,
-    "sameAs": vendor.website ? [vendor.website] : undefined,
+    "sameAs": vendor.website_url ? [vendor.website_url] : undefined,
     "keywords": `${cat?.label}, event vendor, ${vendor.city}, UK event planning`,
   };
 

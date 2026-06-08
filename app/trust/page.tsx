@@ -58,7 +58,7 @@ const TRUST_PILLARS = [
 const TRUST_LINKS = [
   { icon: Eye,         label: "How We Verify Vendors",     href: "/how-we-verify",      desc: "The full vendor approval process: what we check, what we approve, what we reject." },
   { icon: FileText,   label: "Vendor Standards",           href: "/vendor-standards",   desc: "Minimum requirements for every vendor on the platform, and how we enforce them." },
-  { icon: Lock,       label: "Booking Protection",         href: "/booking-protection", desc: "How Stripe holds your deposit, when it releases, and what happens in a dispute." },
+  { icon: Lock,       label: "Booking Protection",         href: "/booking-protection", desc: "How your deposit is protected, when it is released to vendors, and what happens in a dispute." },
   { icon: CheckCircle2, label: "Our Commitments",          href: "/our-commitments",    desc: "Specific, checkable promises we make to every customer, with honest limitations." },
   { icon: AlertCircle, label: "Dispute Resolution",        href: "mailto:disputes@elbold.com", desc: "How to raise a dispute and what happens at each stage of the resolution process." },
   { icon: Shield,     label: "Privacy Policy",             href: "/privacy",            desc: "What data we collect, how we use it, and how we protect it." },

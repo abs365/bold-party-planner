@@ -296,7 +296,7 @@ export default async function Home() {
               {[
                 { icon: CheckCircle2, label: "Every vendor reviewed by us" },
                 { icon: Star,         label: "Reviews from real bookings only" },
-                { icon: Shield,       label: "Money held safely by Stripe" },
+                { icon: Shield,       label: "Payments secured through Stripe" },
                 { icon: Award,        label: "Full refund if vendor cancels" },
                 { icon: MapPin,       label: "Based in the United Kingdom" },
               ].map(({ icon: Icon, label }) => (
@@ -577,7 +577,7 @@ export default async function Home() {
                 {
                   icon: Shield,
                   title: "Your deposit is held safely until your event",
-                  body: "Your 30% deposit is held by Stripe and only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
+                  body: "Your 30% deposit is processed securely through Stripe and managed by ELBOLD. It is only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
                   link: "/booking-protection",
                   linkLabel: "Full booking protection",
                 },

@@ -93,13 +93,13 @@ export const GUIDES: Guide[] = [
       {
         heading: "Why book through ELBOLD instead of social media?",
         content:
-          "Every DJ on ELBOLD has been manually reviewed by our team before listing. We check portfolio quality, business identity, and professionalism. Your 30% deposit is held securely by Stripe and only released after your event, so you never pay upfront with no protection.",
+          "Every DJ on ELBOLD has been manually reviewed by our team before listing. We check portfolio quality, business identity, and professionalism. Your 30% deposit is processed securely through Stripe and managed by ELBOLD and only released after your event, so you never pay upfront with no protection.",
       },
     ],
     faqs: [
       {
         q: "Do I pay the DJ upfront?",
-        a: "When booking through ELBOLD, you pay a 30% deposit to confirm the booking. The deposit is held securely by Stripe until after your event. Do not pay any vendor in full upfront.",
+        a: "When booking through ELBOLD, you pay a 30% deposit to confirm the booking. The deposit is processed securely through Stripe and managed by ELBOLD until after your event. Do not pay any vendor in full upfront.",
       },
       {
         q: "How far in advance should I book a DJ in Essex?",

@@ -27,9 +27,9 @@ const COMMITMENTS = [
   },
   {
     id: "C-02",
-    title: "Your deposit is held by Stripe until after your event.",
-    detail: "The 30% deposit you pay on booking is processed and held by Stripe, not by ELBOLD and not by the vendor. It is not released to the vendor until your event has completed and no dispute has been raised. ELBOLD cannot access or redirect your deposit payment.",
-    howToVerify: "Your Stripe payment confirmation email will confirm the amount charged and the payment processor. If you have questions about payment handling, contact stripe.com directly.",
+    title: "Your deposit is secured until after your event.",
+    detail: "The 30% deposit you pay on booking is processed securely through Stripe and managed by ELBOLD according to the Booking Protection and Refund Policy. It is not released to the vendor until your event has completed and no dispute has been raised.",
+    howToVerify: "Your Stripe payment confirmation email will confirm the amount charged and the payment processor. If you have questions about payment handling, contact support@elbold.com.",
   },
   {
     id: "C-03",

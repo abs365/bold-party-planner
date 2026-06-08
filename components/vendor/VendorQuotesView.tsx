@@ -362,7 +362,7 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
         </div>
         <div className="grid sm:grid-cols-3 gap-3">
           {[
-            { icon: Camera,      title: "Upload 5+ photos",         desc: "Profiles with more photos receive 3x more enquiries",  href: "/vendor/media" },
+            { icon: Camera,      title: "Upload 5+ photos",         desc: "Profiles with more photos attract significantly more enquiries",  href: "/vendor/media" },
             { icon: ShieldCheck, title: "Complete verification",     desc: "Verified vendors appear higher in search results",      href: "/vendor/verification" },
             { icon: Calendar,    title: "Set your availability",     desc: "Customers check dates before enquiring. Be bookable.", href: "/vendor/availability" },
           ].map(({ icon: Icon, title, desc, href }) => (

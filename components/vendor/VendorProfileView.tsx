@@ -633,7 +633,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   <div className="border-t border-gray-100 mt-4 pt-4 space-y-2.5">
                     {[
                       { icon: MessageCircle, text: "Free to enquire, no obligation" },
-                      { icon: CheckCircle2, text: "Deposit held by Stripe until event" },
+                      { icon: CheckCircle2, text: "Deposit secured through Stripe, managed by ELBOLD" },
                       { icon: ShieldCheck, text: "Full refund if vendor cancels" },
                     ].map(({ icon: Icon, text }) => (
                       <div key={text} className="flex items-center gap-2 text-xs text-gray-500">
