@@ -106,7 +106,7 @@ export function VendorMediaManager({ vendorId, initialMedia }: VendorMediaManage
       "image/*": [".jpg", ".jpeg", ".png", ".webp"],
       "video/*": [".mp4", ".mov", ".webm"],
     },
-    maxSize: 50 * 1024 * 1024, // 50 MB — Vercel payload limit is ~4.5 MB Hobby / higher Pro
+    maxSize: 50 * 1024 * 1024, // 50 MB (Vercel payload limit is ~4.5 MB Hobby / higher Pro)
     disabled: uploading,
     onDropRejected: (rejections) => {
       for (const r of rejections) {

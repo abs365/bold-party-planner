@@ -85,7 +85,7 @@ export function VendorMarketplace({
   const [eventType, setEventType] = useState(initialEventType ?? "");
   const [displayCount, setDisplayCount] = useState(VENDOR_PAGE_SIZE);
 
-  // Reset pagination when filters change — React's "detect changes in render" pattern
+  // Reset pagination when filters change (React's "detect changes in render" pattern)
   // (avoids setState-in-effect; see react.dev/learn/you-might-not-need-an-effect)
   const filtersKey = `${search}|${category}|${city}|${sortBy}|${budgetMin}|${budgetMax}|${minRating}|${verifiedOnly}|${eventType}`;
   const [prevFiltersKey, setPrevFiltersKey] = useState(filtersKey);
@@ -185,7 +185,7 @@ export function VendorMarketplace({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Search header — h2 because the browse page already renders the page h1 */}
+      {/* Search header (h2 because the browse page already renders the page h1) */}
       <div className="pt-8 pb-6 px-4 text-center border-b border-gray-100">
         <div className="max-w-3xl mx-auto">
           <div className="flex gap-3 max-w-xl mx-auto">
@@ -367,7 +367,7 @@ export function VendorMarketplace({
         </div>
       )}
 
-      {/* Category Pills — horizontally scrollable on mobile */}
+      {/* Category Pills: horizontally scrollable on mobile */}
       <div className="py-4 border-b border-gray-100">
         <div className="flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none" style={{ WebkitOverflowScrolling: "touch" }}>
           <button
@@ -474,7 +474,7 @@ export function VendorMarketplace({
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendors match your search</h3>
             <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
-              Try a different category, location, or budget range — or browse all verified professionals.
+              Try a different category, location, or budget range, or browse all verified professionals.
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <button onClick={clearFilters} className="btn-luxury-dark text-sm">Clear Filters</button>

@@ -297,7 +297,7 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
               </div>
             )}
 
-            {/* Quote form — respond */}
+            {/* Quote form: respond */}
             {isActiveForm && formMode === "respond" && (
               <QuoteForm
                 form={form}
@@ -357,14 +357,14 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
           <MessageSquare className="w-12 h-12 text-white/20 mx-auto mb-3" />
           <h3 className="text-white/70 text-lg font-semibold mb-1">No enquiries yet</h3>
           <p className="text-white/40 text-sm max-w-xs mx-auto">
-            When customers request a quote, it appears here. Respond quickly — vendors who reply within 2 hours win more bookings.
+            When customers request a quote, it appears here. Respond quickly: vendors who reply within 2 hours win more bookings.
           </p>
         </div>
         <div className="grid sm:grid-cols-3 gap-3">
           {[
             { icon: Camera,      title: "Upload 5+ photos",         desc: "Profiles with more photos receive 3x more enquiries",  href: "/vendor/media" },
             { icon: ShieldCheck, title: "Complete verification",     desc: "Verified vendors appear higher in search results",      href: "/vendor/verification" },
-            { icon: Calendar,    title: "Set your availability",     desc: "Customers check dates before enquiring — be bookable", href: "/vendor/availability" },
+            { icon: Calendar,    title: "Set your availability",     desc: "Customers check dates before enquiring. Be bookable.", href: "/vendor/availability" },
           ].map(({ icon: Icon, title, desc, href }) => (
             <a key={title} href={href} className="p-4 bg-white/3 border border-white/6 rounded-xl hover:bg-white/5 transition-colors block group">
               <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center mb-3">
@@ -501,7 +501,7 @@ function QuoteForm({
             placeholder="e.g. 1200" />
         </div>
         <div>
-          <label className="label-xs">Deposit Required (£) <span className="text-white/30">— leave blank for 30%</span></label>
+          <label className="label-xs">Deposit Required (£) <span className="text-white/30">(leave blank for 30%)</span></label>
           <input className="input-field text-sm" type="number" min="0" value={form.deposit_amount} onChange={set("deposit_amount")}
             placeholder={form.price ? `Auto: £${Math.round(Number(form.price) * 0.3)}` : "e.g. 360"} />
         </div>
@@ -510,11 +510,11 @@ function QuoteForm({
       <div>
         <label className="label-xs">Description</label>
         <textarea className="input-field text-sm resize-none" rows={3} value={form.description} onChange={set("description")}
-          placeholder="Describe your service in detail — what you bring, how the day works, what makes you different." />
+          placeholder="Describe your service in detail: what you bring, how the day works, what makes you different." />
       </div>
 
       <div>
-        <label className="label-xs">What&apos;s Included <span className="text-white/30">— one item per line</span></label>
+        <label className="label-xs">What&apos;s Included <span className="text-white/30">(one item per line)</span></label>
         <textarea className="input-field text-sm resize-none font-mono" rows={4} value={form.services} onChange={set("services")}
           placeholder={`e.g.\n8 hours of coverage\n500+ edited photos\nOnline gallery\nPrinting rights`} />
       </div>

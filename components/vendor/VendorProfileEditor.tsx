@@ -72,7 +72,7 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Sticky header — always visible while scrolling the form */}
+      {/* Sticky header: always visible while scrolling the form */}
       <div className="sticky top-0 z-10 bg-[#0a0a0f] pt-2 pb-5 -mt-2 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Edit Profile</h1>

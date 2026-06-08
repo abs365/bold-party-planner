@@ -114,7 +114,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
         </div>
       )}
 
-      {/* HERO — cinematic full-width image with vendor identity overlay */}
+      {/* HERO: cinematic full-width image with vendor identity overlay */}
       <div className="relative w-full overflow-hidden" style={{ height: "clamp(320px, 55vw, 520px)" }}>
         {heroMedia ? (
           heroMedia.type === "image" ? (
@@ -134,7 +134,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
           <div className="w-full h-full" style={{ background: "linear-gradient(160deg, #0B1F4D 0%, #091529 100%)" }} />
         )}
 
-        {/* Dark gradient overlay — anchors identity text at bottom, photography visible above */}
+        {/* Dark gradient overlay: anchors identity text at bottom, photography visible above */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to top, rgba(4,8,20,0.88) 0%, rgba(4,8,20,0.42) 40%, rgba(4,8,20,0.06) 100%)" }}
@@ -382,7 +382,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               </div>
             )}
 
-            {/* Social / Highlights — only render when vendor has uploaded media to avoid
+            {/* Social / Highlights: only render when vendor has uploaded media to avoid
                 showing placeholder data ("Sample content") to prospective customers */}
             {mediaList.length > 0 && (
               <div
@@ -632,7 +632,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   {/* Trust signals */}
                   <div className="border-t border-gray-100 mt-4 pt-4 space-y-2.5">
                     {[
-                      { icon: MessageCircle, text: "Free to enquire — no obligation" },
+                      { icon: MessageCircle, text: "Free to enquire, no obligation" },
                       { icon: CheckCircle2, text: "Deposit held by Stripe until event" },
                       { icon: ShieldCheck, text: "Full refund if vendor cancels" },
                     ].map(({ icon: Icon, text }) => (

@@ -57,7 +57,7 @@ export function VendorReviewsView({ reviews, vendorRating, totalReviews }: Vendo
       <div className="bg-white/4 border border-white/6 rounded-xl p-6">
         <div className="flex items-center gap-6">
           <div className="text-center">
-            <div className="text-5xl font-bold text-white">{vendorRating > 0 ? vendorRating.toFixed(1) : "—"}</div>
+            <div className="text-5xl font-bold text-white">{vendorRating > 0 ? vendorRating.toFixed(1) : "N/A"}</div>
             <StarRating rating={vendorRating} size={18} className="mt-2 justify-center" />
             <div className="text-xs text-slate-400 mt-1">{totalReviews} review{totalReviews !== 1 ? "s" : ""}</div>
           </div>

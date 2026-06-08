@@ -196,7 +196,7 @@ export function VendorServicesManager({ vendorId, initialPackages }: VendorServi
               </div>
             </div>
 
-            {/* Price — hidden for Price on Request */}
+            {/* Price: hidden for Price on Request */}
             {form.pricing_type !== "price_on_request" && (
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1.5">

@@ -112,7 +112,7 @@ export function VendorGovernanceWidget({ governance, health, computedWarnings }:
         {!showWarnings && lifecycleState === "optimised" && (
           <div className="flex items-center gap-2 text-xs text-emerald-400">
             <CheckCircle2 size={12} />
-            <span>Top-tier vendor — priority placement active</span>
+            <span>Top-tier vendor, priority placement active</span>
           </div>
         )}
 
@@ -123,7 +123,7 @@ export function VendorGovernanceWidget({ governance, health, computedWarnings }:
           </div>
         )}
 
-        {/* Capability flags — only show what's restricted */}
+        {/* Capability flags: only show what's restricted */}
         {(!capabilities.canReceiveQuotes || !capabilities.canBeFeatured) && (
           <div className="border-t border-white/5 pt-3 space-y-1.5">
             <p className="text-xs font-medium text-slate-500">Current restrictions</p>

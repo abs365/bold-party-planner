@@ -93,13 +93,13 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
           <dl className="space-y-3">
             <div>
               <dt className="text-xs text-slate-500">Event</dt>
-              <dd className="text-sm font-medium text-white">{String(event?.title ?? "—")}</dd>
+              <dd className="text-sm font-medium text-white">{String(event?.title ?? "N/A")}</dd>
             </div>
             <div>
               <dt className="text-xs text-slate-500">Date</dt>
               <dd className="text-sm text-white flex items-center gap-1.5">
                 <Calendar size={12} className="text-brand-400" />
-                {event?.date ? formatDate(String(event.date)) : "—"}
+                {event?.date ? formatDate(String(event.date)) : "N/A"}
                 {event?.start_time && ` at ${event.start_time}`}
               </dd>
             </div>
@@ -107,7 +107,7 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
               <dt className="text-xs text-slate-500">Location</dt>
               <dd className="text-sm text-white flex items-center gap-1.5">
                 <MapPin size={12} className="text-brand-400" />
-                {String(event?.city ?? "—")}
+                {String(event?.city ?? "N/A")}
                 {event?.venue_name && ` · ${event.venue_name}`}
               </dd>
             </div>
@@ -115,7 +115,7 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
               <dt className="text-xs text-slate-500">Guests</dt>
               <dd className="text-sm text-white flex items-center gap-1.5">
                 <Users size={12} className="text-brand-400" />
-                {String(event?.guest_count ?? "—")}
+                {String(event?.guest_count ?? "N/A")}
               </dd>
             </div>
             {event?.theme && (
@@ -144,8 +144,8 @@ export function VendorBookingDetail({ booking }: { booking: Booking }) {
                 {String(customer?.full_name ?? "?")[0]?.toUpperCase()}
               </div>
               <div>
-                <div className="font-semibold text-white">{String(customer?.full_name ?? "—")}</div>
-                <div className="text-xs text-slate-500">{String(customer?.email ?? "—")}</div>
+                <div className="font-semibold text-white">{String(customer?.full_name ?? "N/A")}</div>
+                <div className="text-xs text-slate-500">{String(customer?.email ?? "N/A")}</div>
                 {customer?.phone && <div className="text-xs text-slate-500">{String(customer.phone)}</div>}
               </div>
             </div>

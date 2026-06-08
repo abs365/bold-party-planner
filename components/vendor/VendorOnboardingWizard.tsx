@@ -96,7 +96,7 @@ export function VendorOnboardingWizard() {
     setSaving(true);
     setError("");
     try {
-      // 1 — Update vendor profile
+      // 1. Update vendor profile
       const profileRes = await fetch("/api/vendor/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -122,7 +122,7 @@ export function VendorOnboardingWizard() {
         throw new Error(body.error ?? "Failed to save profile");
       }
 
-      // 2 — Save packages (skip empty rows)
+      // 2. Save packages (skip empty rows)
       const pkgsToSave = packages.filter((p) => p.name && p.price);
       if (pkgsToSave.length > 0) {
         await fetch("/api/vendor/packages", {
@@ -138,7 +138,7 @@ export function VendorOnboardingWizard() {
         });
       }
 
-      // 3 — Mark onboarding submitted
+      // 3. Mark onboarding submitted
       const onboardRes = await fetch("/api/vendor/onboarding", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -228,7 +228,7 @@ export function VendorOnboardingWizard() {
               />
             </div>
 
-            {/* Category — uses the platform's full VENDOR_CATEGORIES (21 categories) */}
+            {/* Category: uses the platform's full VENDOR_CATEGORIES (21 categories) */}
             <div>
               <label className="block text-sm text-white/70 mb-2">Service Category *</label>
               <div className="grid grid-cols-2 gap-2 max-h-72 overflow-y-auto pr-1">
@@ -364,7 +364,7 @@ export function VendorOnboardingWizard() {
                 onChange={(e) => setField("phone", e.target.value)}
                 placeholder="+44 7700 900000"
               />
-              <p className="text-xs text-white/35 mt-1">Admin-only — not shown publicly to customers.</p>
+              <p className="text-xs text-white/35 mt-1">Admin-only, not shown publicly to customers.</p>
             </div>
 
             <div>
@@ -474,8 +474,8 @@ export function VendorOnboardingWizard() {
                 { label: "Business Name", value: form.business_name },
                 { label: "Category",      value: VENDOR_CATEGORIES[form.category as VendorCategory]?.label ?? form.category },
                 { label: "City",          value: form.city },
-                { label: "Bio",           value: form.bio ? `${form.bio.slice(0, 80)}${form.bio.length > 80 ? "…" : ""}` : "—" },
-                { label: "Starting From", value: form.min_price ? `£${Number(form.min_price).toLocaleString("en-GB")}` : "—" },
+                { label: "Bio",           value: form.bio ? `${form.bio.slice(0, 80)}${form.bio.length > 80 ? "…" : ""}` : "N/A" },
+                { label: "Starting From", value: form.min_price ? `£${Number(form.min_price).toLocaleString("en-GB")}` : "N/A" },
                 { label: "Packages",      value: `${packages.filter((p) => p.name && p.price).length} added` },
                 { label: "Event Types",   value: form.event_types.length
                     ? form.event_types.map((et) => EVENT_TYPE_LABELS[et] ?? et).join(", ")
@@ -483,7 +483,7 @@ export function VendorOnboardingWizard() {
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between py-2.5">
                   <span className="text-white/50 text-sm">{label}</span>
-                  <span className="text-white text-sm font-medium max-w-xs text-right truncate">{value || "—"}</span>
+                  <span className="text-white text-sm font-medium max-w-xs text-right truncate">{value || "N/A"}</span>
                 </div>
               ))}
             </div>
