@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// ── Occasion showcase — links to filtered browse ──────────────────────────
+// ── Occasion showcase: links to filtered browse ───────────────────────────
 const OCCASIONS = [
   {
     label: "Weddings",
@@ -51,13 +51,13 @@ const OCCASIONS = [
   },
 ];
 
-// ── Planning guides — real slugs from lib/guides.ts ───────────────────────
+// ── Planning guides: real slugs from lib/guides.ts ────────────────────────
 const GUIDES = [
   {
     slug: "wedding-planning-checklist-uk",
     title: "Wedding Planning Checklist UK",
     category: "Weddings",
-    desc: "A complete, month-by-month timeline for planning a UK wedding — from venue booking to final confirmations.",
+    desc: "A complete, month-by-month timeline for planning a UK wedding, from venue booking to final confirmations.",
     accent: "#0B1F4D",
   },
   {
@@ -78,7 +78,7 @@ const GUIDES = [
     slug: "birthday-party-planning-guide",
     title: "Birthday Party Planning Guide",
     category: "Birthdays",
-    desc: "From intimate gatherings to large celebrations — how to plan a birthday party that people remember.",
+    desc: "From intimate gatherings to large celebrations: how to plan a birthday party that people remember.",
     accent: "#2a1010",
   },
   {
@@ -100,7 +100,7 @@ export default async function ShowcasePage() {
     profile = data;
   }
 
-  // Fetch real vendor media — inner join ensures only approved vendors
+  // Fetch real vendor media: inner join ensures only approved vendors
   const { data: rawMedia } = await supabase
     .from("vendor_media")
     .select(`
@@ -224,7 +224,7 @@ export default async function ShowcasePage() {
               What Are You Celebrating?
             </h2>
             <p className="text-sm text-gray-400 font-light mt-3 max-w-md mx-auto">
-              Browse verified professionals curated by event type — from intimate gatherings to grand celebrations.
+              Browse verified professionals curated by event type, from intimate gatherings to grand celebrations.
             </p>
           </div>
 
@@ -347,7 +347,7 @@ export default async function ShowcasePage() {
         </div>
       </section>
 
-      {/* ── SECTION 4: THE PORTFOLIO — real vendor media ─────────────── */}
+      {/* ── SECTION 4: THE PORTFOLIO (real vendor media) ────────────── */}
       <section style={{ background: "#06111d" }} className="pt-20 pb-8">
         <div className="max-w-6xl mx-auto px-4 mb-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

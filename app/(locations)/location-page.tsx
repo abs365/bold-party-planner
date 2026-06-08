@@ -25,21 +25,21 @@ const LOCATION_DATA: Record<string, {
 }> = {
   essex: {
     title: "Essex",
-    description: "Find trusted event professionals across Essex — from Chelmsford to Brentwood, Colchester to Southend.",
+    description: "Find trusted event professionals across Essex, from Chelmsford to Brentwood, Colchester to Southend.",
     county: "Essex",
     areas: ["Chelmsford", "Brentwood", "Colchester", "Southend-on-Sea", "Basildon", "Romford"],
     popular: ["Wedding Photographers", "DJs", "Decorators", "Caterers"],
   },
   kent: {
     title: "Kent",
-    description: "Book verified event vendors across Kent — Maidstone, Canterbury, Tunbridge Wells and beyond.",
+    description: "Book verified event vendors across Kent: Maidstone, Canterbury, Tunbridge Wells and beyond.",
     county: "Kent",
     areas: ["Maidstone", "Canterbury", "Tunbridge Wells", "Folkestone", "Margate", "Gravesend"],
     popular: ["Wedding Photographers", "Caterers", "Florists", "Entertainment"],
   },
   london: {
     title: "London",
-    description: "Discover premium event professionals across London — from intimate venues to grand celebrations.",
+    description: "Discover premium event professionals across London, from intimate venues to grand celebrations.",
     county: "London",
     areas: ["Central London", "East London", "North London", "South London", "West London", "City of London"],
     popular: ["Photographers", "DJs", "Caterers", "Venues", "Decorators"],

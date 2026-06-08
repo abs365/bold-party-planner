@@ -20,32 +20,32 @@ const COMPARISON_ROWS = [
   {
     feature: "Vendor Verification",
     elbold: "Every vendor manually reviewed by our team before listing",
-    social: "No verification — any account can advertise services",
+    social: "No verification. Any account can advertise services.",
   },
   {
     feature: "Verified Reviews",
     elbold: "Only customers with completed bookings can leave reviews",
-    social: "Anyone can comment or post — no way to confirm they booked",
+    social: "Anyone can comment or post, with no way to confirm they booked.",
   },
   {
     feature: "Payment Security",
     elbold: "Stripe holds your deposit until the event is complete",
-    social: "Bank transfer or cash — money leaves immediately with no protection",
+    social: "Bank transfer or cash. Money leaves immediately with no protection.",
   },
   {
     feature: "Refund if Vendor Cancels",
     elbold: "100% refund processed automatically",
-    social: "No recourse — outcome depends entirely on the vendor",
+    social: "No recourse. Outcome depends entirely on the vendor.",
   },
   {
     feature: "Dispute Resolution",
     elbold: "Dedicated review process, resolved within 5 business days",
-    social: "No dispute process — you are on your own",
+    social: "No dispute process. You are on your own.",
   },
   {
     feature: "Booking Terms",
-    elbold: "Booking terms recorded at payment — payment held by Stripe, not the vendor",
-    social: "Usually verbal — no written record of what was agreed",
+    elbold: "Booking terms recorded at payment. Payment held by Stripe, not the vendor.",
+    social: "Usually verbal, with no written record of what was agreed.",
   },
   {
     feature: "Vendor Discovery",
@@ -58,14 +58,14 @@ const PILLARS = [
   {
     icon: BadgeCheck,
     title: "Only verified professionals",
-    body: "Every vendor on ELBOLD has been manually reviewed by a member of our team before appearing on the marketplace. We check business identity, portfolio quality, and service legitimacy. Social media has no equivalent — anyone with an account can advertise event services.",
+    body: "Every vendor on ELBOLD has been manually reviewed by a member of our team before appearing on the marketplace. We check business identity, portfolio quality, and service legitimacy. Social media has no equivalent. Anyone with an account can advertise event services.",
     link: "/how-we-verify",
     linkLabel: "How we verify vendors",
   },
   {
     icon: Lock,
     title: "Your money is protected",
-    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is held securely and only released after your event is completed. With social media DM bookings, money typically transfers directly to the vendor — and if something goes wrong, there is no mechanism to recover it.",
+    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is held securely and only released after your event is completed. With social media DM bookings, money typically transfers directly to the vendor, and if something goes wrong, there is no mechanism to recover it.",
     link: "/booking-protection",
     linkLabel: "How booking protection works",
   },
@@ -79,7 +79,7 @@ const PILLARS = [
   {
     icon: Shield,
     title: "When things go wrong",
-    body: "ELBOLD has a formal dispute resolution process. If a vendor underdelivers or fails to appear, contact our team with evidence and we will make a fair determination within 5 business days. With social media bookings, there is no intermediary — any dispute is entirely between you and the vendor.",
+    body: "ELBOLD has a formal dispute resolution process. If a vendor underdelivers or fails to appear, contact our team with evidence and we will make a fair determination within 5 business days. With social media bookings, there is no intermediary. Any dispute is entirely between you and the vendor.",
     link: "/booking-protection",
     linkLabel: "Our dispute process",
   },
@@ -88,11 +88,11 @@ const PILLARS = [
 const FAQS = [
   {
     q: "Is it more expensive to book through ELBOLD?",
-    a: "ELBOLD does not charge customers a booking fee. You pay exactly what the vendor quotes. The vendor pays a small platform commission from their earnings — this does not affect your price.",
+    a: "ELBOLD does not charge customers a booking fee. You pay exactly what the vendor quotes. The vendor pays a small platform commission from their earnings. This does not affect your price.",
   },
   {
     q: "What if I already know the vendor personally?",
-    a: "You can still book through ELBOLD even if you have an existing relationship with the vendor. The platform protects both parties — you have payment security and Stripe-held funds, and the vendor has a clear booking record of what was agreed.",
+    a: "You can still book through ELBOLD even if you have an existing relationship with the vendor. The platform protects both parties: you have payment security and Stripe-held funds, and the vendor has a clear booking record of what was agreed.",
   },
   {
     q: "Does ELBOLD guarantee that events will go perfectly?",
@@ -100,11 +100,11 @@ const FAQS = [
   },
   {
     q: "What if the vendor does not show up?",
-    a: "If a vendor fails to appear for a confirmed booking, you are entitled to a full refund of all amounts paid. Contact urgent@elbold.com immediately — we monitor this address and will respond as a priority.",
+    a: "If a vendor fails to appear for a confirmed booking, you are entitled to a full refund of all amounts paid. Contact urgent@elbold.com immediately. We monitor this address and will respond as a priority.",
   },
   {
     q: "Can I negotiate directly with the vendor?",
-    a: "Yes. Once you submit a quote request, you can communicate directly with the vendor to discuss requirements, packages, and event specifics. ELBOLD facilitates the relationship — it does not restrict it.",
+    a: "Yes. Once you submit a quote request, you can communicate directly with the vendor to discuss requirements, packages, and event specifics. ELBOLD facilitates the relationship. It does not restrict it.",
   },
 ];
 
@@ -169,7 +169,7 @@ export default async function WhyElboldPage() {
               ELBOLD vs booking on social media
             </h2>
             <p className="text-gray-400 text-sm font-light mt-3 max-w-md mx-auto">
-              Instagram, Facebook, and WhatsApp are communication tools — not booking platforms.
+              Instagram, Facebook, and WhatsApp are communication tools, not booking platforms.
               This is what that difference means for you.
             </p>
           </div>
@@ -317,10 +317,10 @@ export default async function WhyElboldPage() {
           </p>
           <div className="space-y-3">
             {[
-              "We cannot guarantee that every event will be perfect — we can only ensure every vendor has been reviewed and payments are protected.",
-              "We cannot guarantee vendor availability — you should always confirm dates directly with the vendor after submitting a quote request.",
-              "Verification is our assessment at a point in time — we monitor ongoing performance but cannot observe every event.",
-              "Our dispute process aims to be fair to both parties — outcomes depend on the evidence available and the circumstances of each case.",
+              "We cannot guarantee that every event will be perfect. We can only ensure every vendor has been reviewed and payments are protected.",
+              "We cannot guarantee vendor availability. You should always confirm dates directly with the vendor after submitting a quote request.",
+              "Verification is our assessment at a point in time. We monitor ongoing performance but cannot observe every event.",
+              "Our dispute process aims to be fair to both parties. Outcomes depend on the evidence available and the circumstances of each case.",
             ].map((point) => (
               <div key={point} className="flex items-start gap-3">
                 <CheckCircle2 size={14} className="text-gray-300 shrink-0 mt-0.5" />

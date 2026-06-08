@@ -95,7 +95,7 @@ const QUICK_STARTS = [
 
 const VENDOR_BENEFITS = [
   {
-    title: "Reach customers actively planning events — not scrolling a feed",
+    title: "Reach customers actively planning events, not scrolling a feed",
     desc: "Every visitor on ELBOLD is searching for a vendor for a specific occasion. These are buyers, not browsers.",
   },
   {
@@ -577,7 +577,7 @@ export default async function Home() {
                 {
                   icon: Shield,
                   title: "Your deposit is held safely until your event",
-                  body: "Your 30% deposit is held by Stripe — not released to the vendor until your event has taken place. If the vendor cancels, you receive a full refund.",
+                  body: "Your 30% deposit is held by Stripe and only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
                   link: "/booking-protection",
                   linkLabel: "Full booking protection",
                 },
@@ -652,8 +652,8 @@ export default async function Home() {
                 </h2>
                 <p className="text-gray-400 text-sm font-light leading-relaxed mb-10">
                   Instagram and Facebook are built for browsing. ELBOLD is built for booking.
-                  Customers who visit ELBOLD are actively searching for a vendor for a real event —
-                  and they are ready to commit.
+                  Customers who visit ELBOLD are actively searching for a vendor for a real event.
+                  They are ready to commit.
                 </p>
                 <div className="space-y-7">
                   {VENDOR_BENEFITS.map((b) => (

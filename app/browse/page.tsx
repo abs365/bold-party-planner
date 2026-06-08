@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-// Category discovery cards — shown on the unfiltered discovery view
+// Category discovery cards: shown on the unfiltered discovery view
 const CATEGORY_DISCOVERY = [
   {
     label: "Photographers",
@@ -163,7 +163,7 @@ export default async function BrowsePage({
         </div>
       </div>
 
-      {/* ── CATEGORY DISCOVERY — shown only on unfiltered landing ─────── */}
+      {/* ── CATEGORY DISCOVERY (shown only on unfiltered landing) ──────── */}
       {isDiscovery && (
         <section style={{ background: "#f8f7f5" }} className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
@@ -200,7 +200,7 @@ export default async function BrowsePage({
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />
                   </div>
-                  {/* Overlay — bottom-heavy to anchor text, photography visible in top half */}
+                  {/* Overlay: bottom-heavy to anchor text, photography visible in top half */}
                   <div
                     className="absolute inset-0"
                     style={{ background: "linear-gradient(to top, rgba(4,8,20,0.78) 0%, rgba(4,8,20,0.22) 55%, rgba(4,8,20,0.02) 100%)" }}

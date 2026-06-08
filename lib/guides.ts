@@ -29,7 +29,7 @@ export const GUIDES: Guide[] = [
     slug: "how-much-does-a-dj-cost-in-essex",
     title: "How Much Does a DJ Cost in Essex?",
     description:
-      "A guide to DJ pricing in Essex — covering typical rates, what affects the price, and how to find a reliable DJ for your event.",
+      "A guide to DJ pricing in Essex: covering typical rates, what affects the price, and how to find a reliable DJ for your event.",
     category: "Entertainment",
     publishedDate: "2026-06-01",
     readingMinutes: 6,
@@ -50,12 +50,12 @@ export const GUIDES: Guide[] = [
       {
         heading: "What affects the price?",
         content: [
-          "Experience level — DJs with years of weddings and large events typically charge more than newer DJs",
-          "Event duration — most DJs quote for a standard 4 or 5-hour set; extra hours are charged on top",
-          "Equipment provided — some DJs bring a full PA system and lighting rig; others expect the venue to provide",
-          "Travel distance — most Essex DJs include travel within a 30km radius; longer distances incur a travel supplement",
-          "Time of year — peak wedding season (May–September) and December often attract higher rates",
-          "Additional services — photo booths, LED uplighting, and dance floors are often add-ons",
+          "Experience level: DJs with years of weddings and large events typically charge more than newer DJs",
+          "Event duration: most DJs quote for a standard 4 or 5-hour set; extra hours are charged on top",
+          "Equipment provided: some DJs bring a full PA system and lighting rig; others expect the venue to provide",
+          "Travel distance: most Essex DJs include travel within a 30km radius; longer distances incur a travel supplement",
+          "Time of year: peak wedding season (May–September) and December often attract higher rates",
+          "Additional services: photo booths, LED uplighting, and dance floors are often add-ons",
         ],
       },
       {
@@ -84,7 +84,7 @@ export const GUIDES: Guide[] = [
         heading: "Red flags to watch out for",
         content: [
           "DJs who cannot provide proof of public liability insurance",
-          "No written contract — verbal agreements are difficult to enforce",
+          "No written contract: verbal agreements are difficult to enforce",
           "Very low quotes with no explanation of what is excluded",
           "Requests for full payment upfront before the event",
           "No reviews or only unverified social media comments",
@@ -93,7 +93,7 @@ export const GUIDES: Guide[] = [
       {
         heading: "Why book through ELBOLD instead of social media?",
         content:
-          "Every DJ on ELBOLD has been manually reviewed by our team before listing. We check portfolio quality, business identity, and professionalism. Your 30% deposit is held securely by Stripe and only released after your event — so you never pay upfront with no protection.",
+          "Every DJ on ELBOLD has been manually reviewed by our team before listing. We check portfolio quality, business identity, and professionalism. Your 30% deposit is held securely by Stripe and only released after your event, so you never pay upfront with no protection.",
       },
     ],
     faqs: [
@@ -107,7 +107,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "Do DJs supply their own sound system?",
-        a: "Most mobile DJs bring their own PA system and lighting. Always confirm this in writing before booking — some DJs assume the venue provides a PA.",
+        a: "Most mobile DJs bring their own PA system and lighting. Always confirm this in writing before booking. Some DJs assume the venue provides a PA.",
       },
     ],
     ctaHref: "/essex/djs",
@@ -118,13 +118,13 @@ export const GUIDES: Guide[] = [
     slug: "wedding-planning-checklist-uk",
     title: "Wedding Planning Checklist UK",
     description:
-      "A step-by-step wedding planning checklist for UK couples — from 12 months out to the day before. Know what to book and when.",
+      "A step-by-step wedding planning checklist for UK couples, from 12 months out to the day before. Know what to book and when.",
     category: "Weddings",
     publishedDate: "2026-06-01",
     readingMinutes: 8,
     heroTag: "Wedding Guide",
     intro:
-      "Planning a wedding in the UK involves dozens of moving parts across 12 months or more. This checklist breaks down what to do and when — so nothing gets left until the last minute.",
+      "Planning a wedding in the UK involves dozens of moving parts across 12 months or more. This checklist breaks down what to do and when, so nothing gets left until the last minute.",
     sections: [
       {
         heading: "12 months before",
@@ -134,7 +134,7 @@ export const GUIDES: Guide[] = [
           "Agree your approximate guest list size",
           "Choose your venue and confirm availability",
           "Book your registrar or celebrant (registrars in England and Wales book up early)",
-          "Start researching photographers — they are often the first to go",
+          "Start researching photographers, as they are often the first to go",
           "Book your photographer once you have visited and reviewed portfolios",
         ],
       },
@@ -143,7 +143,7 @@ export const GUIDES: Guide[] = [
         content: [
           "Book your caterer if the venue does not provide in-house catering",
           "Book your DJ or live band",
-          "Start researching wedding dresses or suits — allow time for alterations",
+          "Start researching wedding dresses or suits. Allow time for alterations.",
           "Book hair and make-up artists",
           "Research florists and request quotes",
           "Start a wedding website to share key information with guests",
@@ -165,9 +165,9 @@ export const GUIDES: Guide[] = [
         heading: "3–6 months before",
         content: [
           "Send formal invitations with RSVP deadlines",
-          "Book any additional entertainment — photo booth, magician, caricaturist",
+          "Book any additional entertainment: photo booth, magician, caricaturist",
           "Confirm all vendor bookings and contracts",
-          "Research wedding insurance — it is worth the investment",
+          "Research wedding insurance. It is worth the investment.",
           "Plan the ceremony order of service",
           "Arrange wedding favours",
           "Confirm dietary requirements with your caterer",
@@ -199,7 +199,7 @@ export const GUIDES: Guide[] = [
     faqs: [
       {
         q: "What should I book first for a UK wedding?",
-        a: "Book your venue and registrar first — they fill up earliest, especially for Saturday dates. Your photographer and caterer should follow immediately after.",
+        a: "Book your venue and registrar first, as they fill up earliest, especially for Saturday dates. Your photographer and caterer should follow immediately after.",
       },
       {
         q: "How much does a wedding cost in the UK?",
@@ -218,7 +218,7 @@ export const GUIDES: Guide[] = [
     slug: "how-to-choose-a-photographer",
     title: "How to Choose a Wedding or Event Photographer",
     description:
-      "A practical guide to finding and hiring the right photographer for your wedding, birthday, or event — including what to look for in portfolios, contracts, and prices.",
+      "A practical guide to finding and hiring the right photographer for your wedding, birthday, or event, including what to look for in portfolios, contracts, and prices.",
     category: "Photography",
     publishedDate: "2026-06-01",
     readingMinutes: 7,
@@ -229,21 +229,21 @@ export const GUIDES: Guide[] = [
       {
         heading: "Understand your style preferences before you search",
         content: [
-          "Documentary / reportage — natural, candid, minimal posing. Events captured as they happen.",
-          "Traditional — posed family groups, structured shots, reliable coverage of all key moments.",
-          "Fine art — artistic, often moody, high-end editing. More about mood than documentation.",
-          "Mixed approach — most photographers offer a blend of all three. Ask them to describe their style.",
+          "Documentary / reportage: natural, candid, minimal posing. Events captured as they happen.",
+          "Traditional: posed family groups, structured shots, reliable coverage of all key moments.",
+          "Fine art: artistic, often moody, high-end editing. More about mood than documentation.",
+          "Mixed approach: most photographers offer a blend of all three. Ask them to describe their style.",
         ],
       },
       {
         heading: "What to look for in a portfolio",
         content: [
-          "Full event galleries, not just highlights — highlights are curated to show only the best shots",
+          "Full event galleries, not just highlights (highlights are curated to show only the best shots)",
           "Photos from a similar type of event to yours (wedding, birthday, corporate)",
-          "Consistency across the whole gallery — not just a handful of perfect images",
+          "Consistency across the whole gallery, not just a handful of perfect images",
           "Good low-light photography if your event involves evening coverage",
-          "The ability to capture candid emotion — laughing, crying, interaction",
-          "Final editing style — do the colours and tone match what you want?",
+          "The ability to capture candid emotion: laughing, crying, interaction",
+          "Final editing style: do the colours and tone match what you want?",
         ],
       },
       {
@@ -263,7 +263,7 @@ export const GUIDES: Guide[] = [
           "Half-day coverage (4 hours): £400–£900",
           "Full day coverage (8–10 hours): £900–£2,500 for a wedding",
           "Portrait or birthday shoot (2–3 hours): £200–£500",
-          "Albums and prints: usually charged separately — confirm whether these are included",
+          "Albums and prints: usually charged separately. Confirm whether these are included.",
           "Second photographer: often £150–£350 additional",
         ],
       },
@@ -273,8 +273,8 @@ export const GUIDES: Guide[] = [
           "Date, venue, and hours of coverage clearly stated",
           "Exact number of edited images to be delivered",
           "Delivery timeframe (typically 4–8 weeks for weddings)",
-          "Cancellation terms — what happens if you or they need to cancel",
-          "Who owns the copyright — most photographers retain copyright but license images to you",
+          "Cancellation terms: what happens if you or they need to cancel",
+          "Who owns the copyright: most photographers retain copyright but license images to you",
           "Whether the photographer may use images in their portfolio",
         ],
       },
@@ -286,11 +286,11 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "Do I need a second photographer?",
-        a: "For weddings, a second photographer is highly recommended — they can cover the bride and groom getting ready simultaneously, and capture moments the main photographer misses. For smaller events, one is usually sufficient.",
+        a: "For weddings, a second photographer is highly recommended. They can cover the bride and groom getting ready simultaneously and capture moments the main photographer misses. For smaller events, one is usually sufficient.",
       },
       {
         q: "What if I am not happy with my photos?",
-        a: "Discuss your concerns with the photographer first. If the issue is genuine (poor focus, missing key moments), a formal dispute through your booking platform may result in a partial refund. Artistic differences — where photos are technically good but not to your personal taste — are harder to resolve contractually, which is why reviewing a full gallery before booking is so important.",
+        a: "Discuss your concerns with the photographer first. If the issue is genuine (poor focus, missing key moments), a formal dispute through your booking platform may result in a partial refund. Artistic differences (where photos are technically good but not to your personal taste) are harder to resolve contractually, which is why reviewing a full gallery before booking is so important.",
       },
     ],
     ctaHref: "/browse",
@@ -301,7 +301,7 @@ export const GUIDES: Guide[] = [
     slug: "birthday-party-planning-guide",
     title: "Birthday Party Planning Guide",
     description:
-      "Everything you need to plan a memorable birthday party — from setting the budget to booking vendors and creating the timeline.",
+      "Everything you need to plan a memorable birthday party: from setting the budget to booking vendors and creating the timeline.",
     category: "Parties",
     publishedDate: "2026-06-01",
     readingMinutes: 6,
@@ -312,38 +312,38 @@ export const GUIDES: Guide[] = [
       {
         heading: "Start with three decisions",
         content: [
-          "Budget — set a maximum before you begin. Everything else flows from this.",
-          "Guest list — approximate numbers determine your venue size and catering requirements.",
-          "Date — allow yourself at least 6–8 weeks for planning a medium-sized event.",
+          "Budget: set a maximum before you begin. Everything else flows from this.",
+          "Guest list: approximate numbers determine your venue size and catering requirements.",
+          "Date: allow yourself at least 6–8 weeks for planning a medium-sized event.",
         ],
       },
       {
         heading: "Choosing a venue",
         content: [
-          "Private hire rooms at restaurants or bars (often the simplest option — catering included)",
+          "Private hire rooms at restaurants or bars (often the simplest option, catering included)",
           "Village or community halls (lower cost, full flexibility, you arrange everything)",
           "Garden marquee hire (great for summer, requires more coordination)",
-          "Activity venues — bowling, escape rooms, pottery studios (built-in entertainment)",
+          "Activity venues: bowling, escape rooms, pottery studios (built-in entertainment)",
           "Always ask: what is included in the hire fee? Is there a bar? Is there a noise curfew?",
         ],
       },
       {
         heading: "Entertainment options",
         content: [
-          "DJ — suitable for all ages, most flexible option for large gatherings",
-          "Live band — higher cost but high impact for milestone birthdays",
-          "Magician or close-up magic — works brilliantly during the drinks reception",
-          "Photo booth — excellent for keeping guests engaged and providing a keepsake",
+          "DJ: suitable for all ages, most flexible option for large gatherings",
+          "Live band: higher cost but high impact for milestone birthdays",
+          "Magician or close-up magic: works brilliantly during the drinks reception",
+          "Photo booth: excellent for keeping guests engaged and providing a keepsake",
           "Children's parties: soft play, entertainers, face painters, and themed activities",
         ],
       },
       {
         heading: "Catering choices",
         content: [
-          "Buffet — most flexible, works for mixed dietary requirements",
-          "Bowl food — modern alternative to a sit-down meal, works well for standing parties",
-          "Afternoon tea — elegant option for milestone birthdays",
-          "Street food van — increasingly popular for garden parties and informal events",
+          "Buffet: most flexible, works for mixed dietary requirements",
+          "Bowl food: modern alternative to a sit-down meal, works well for standing parties",
+          "Afternoon tea: elegant option for milestone birthdays",
+          "Street food van: increasingly popular for garden parties and informal events",
           "Always confirm dietary requirements when guests RSVP",
         ],
       },
@@ -385,7 +385,7 @@ export const GUIDES: Guide[] = [
     slug: "corporate-event-planning-checklist",
     title: "Corporate Event Planning Checklist",
     description:
-      "A complete checklist for planning corporate events in the UK — team days, conferences, product launches, and client dinners.",
+      "A complete checklist for planning corporate events in the UK: team days, conferences, product launches, and client dinners.",
     category: "Corporate",
     publishedDate: "2026-06-01",
     readingMinutes: 7,
@@ -396,22 +396,22 @@ export const GUIDES: Guide[] = [
       {
         heading: "Define the objective before anything else",
         content: [
-          "Team building and morale — the event should feel rewarding, not obligatory",
-          "Product or service launch — requires AV, staging, and precise run-of-show",
-          "Client entertainment — focus on quality, exclusivity, and smooth service",
-          "Conference or training — logistics, seating, and AV are critical",
+          "Team building and morale: the event should feel rewarding, not obligatory",
+          "Product or service launch: requires AV, staging, and precise run-of-show",
+          "Client entertainment: focus on quality, exclusivity, and smooth service",
+          "Conference or training: logistics, seating, and AV are critical",
           "Your objective determines your venue type, catering style, and entertainment needs",
         ],
       },
       {
         heading: "Venue selection",
         content: [
-          "Capacity — always book a venue slightly larger than your headcount",
-          "AV capabilities — does the venue have in-house AV, or do you need to hire it?",
+          "Capacity: always book a venue slightly larger than your headcount",
+          "AV capabilities: does the venue have in-house AV, or do you need to hire it?",
           "Parking and transport links",
           "Accessibility for all attendees",
-          "Catering — in-house, exclusive caterer, or bring your own?",
-          "Licences — are they licensed for alcohol, entertainment, and late events?",
+          "Catering: in-house, exclusive caterer, or bring your own?",
+          "Licences: are they licensed for alcohol, entertainment, and late events?",
         ],
       },
       {
@@ -429,9 +429,9 @@ export const GUIDES: Guide[] = [
         heading: "Budget considerations",
         content: [
           "Always build a 10–15% contingency into the budget",
-          "Get itemised quotes from all vendors — avoid package deals that obscure individual costs",
+          "Get itemised quotes from all vendors. Avoid package deals that obscure individual costs.",
           "Clarify what VAT is applicable to and whether it is included in quotes",
-          "Confirm payment terms — many vendors require 50% deposit on booking",
+          "Confirm payment terms: many vendors require 50% deposit on booking",
         ],
       },
       {
@@ -462,7 +462,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "Do we need public liability insurance for a corporate event?",
-        a: "You do not typically need to arrange your own — most venues have their own PLI and most vendors have their own policies. However, always ask for proof of public liability insurance from every vendor before confirming.",
+        a: "You do not typically need to arrange your own. Most venues have their own PLI and most vendors have their own policies. Always ask for proof of public liability insurance from every vendor before confirming.",
       },
     ],
     ctaHref: "/browse",

@@ -23,7 +23,7 @@ const VALUES = [
   {
     icon: Shield,
     title: "Trust is not a feature. It is the product.",
-    body: "Every decision we make — from vendor approval to payment flow to review policy — starts with the same question: does this increase or decrease the trust a customer can place in ELBOLD? If it decreases trust, we do not build it.",
+    body: "Every decision we make, from vendor approval to payment flow to review policy, starts with the same question: does this increase or decrease the trust a customer can place in ELBOLD? If it decreases trust, we do not build it.",
   },
   {
     icon: CheckCircle2,
@@ -33,12 +33,12 @@ const VALUES = [
   {
     icon: Star,
     title: "The vendor relationship is a partnership.",
-    body: "Event professionals are not commodities in a directory. They are skilled, independent people building businesses. We keep 10% of bookings — not because it is market standard, but because it is fair. Vendors who earn well, stay. Vendors who stay, build their reputation. That is good for everyone.",
+    body: "Event professionals are not commodities in a directory. They are skilled, independent people building businesses. We keep 10% of bookings, not because it is market standard, but because it is fair. Vendors who earn well, stay. Vendors who stay, build their reputation. That is good for everyone.",
   },
   {
     icon: Heart,
     title: "Events matter because moments matter.",
-    body: "A wedding is not a transaction. A 50th birthday is not a line item. Cultural celebrations, anniversaries, corporate milestones — these are the occasions that define how people remember their lives. We take that responsibility seriously.",
+    body: "A wedding is not a transaction. A 50th birthday is not a line item. Cultural celebrations, anniversaries, corporate milestones. These are the occasions that define how people remember their lives. We take that responsibility seriously.",
   },
   {
     icon: Users,
@@ -117,7 +117,7 @@ export default async function AboutPage() {
 
           <div className="space-y-6 text-gray-600 font-light leading-[1.85] text-base">
             <p>
-              Planning a significant event in the UK — a wedding, a milestone birthday, a cultural celebration —
+              Planning a significant event in the UK, whether a wedding, a milestone birthday, or a cultural celebration,
               involves trusting a group of people you have likely never met with one of the most important days of your life.
               You are trusting that a DJ you found through Instagram is who they say they are.
               You are trusting that a decorator whose Facebook page looks beautiful will show up prepared.
@@ -130,14 +130,14 @@ export default async function AboutPage() {
               who these professionals are, the same thing happens to someone else the following weekend.
             </p>
             <p>
-              ELBOLD was founded to change this. Not with a promise of perfection — no marketplace can guarantee that.
+              ELBOLD was founded to change this. Not with a promise of perfection. No marketplace can guarantee that.
               But with a genuine system of accountability: vendors reviewed before they appear, payments held by Stripe
               until events complete, reviews tied to confirmed bookings only, and a published set of standards that
               every vendor agrees to before joining the platform.
             </p>
             <p>
               We are a small team. We are growing carefully. We are not trying to be the biggest event marketplace
-              in the UK. We are trying to be the one that event hosts can genuinely trust — and that vendors are proud to be part of.
+              in the UK. We are trying to be the one that event hosts can genuinely trust, and that vendors are proud to be part of.
             </p>
           </div>
         </div>
@@ -150,11 +150,11 @@ export default async function AboutPage() {
             {[
               {
                 label: "Mission",
-                text: "Give every event host in the United Kingdom access to verified, accountable event professionals — and give every professional a platform that rewards quality.",
+                text: "Give every event host in the United Kingdom access to verified, accountable event professionals. Give every professional a platform that rewards quality.",
               },
               {
                 label: "Vision",
-                text: "Become the UK's most trusted name in event services — the platform that customers recommend because it has never let them down.",
+                text: "Become the UK's most trusted name in event services. The platform that customers recommend because it has never let them down.",
               },
               {
                 label: "Method",
@@ -220,15 +220,15 @@ export default async function AboutPage() {
               </h2>
               <p className="text-sm font-light leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.38)" }}>
                 Our Vendor Standards are not aspirational. They are the minimum requirements for joining
-                the platform — and we enforce them actively, not just at onboarding.
+                the platform. We enforce them actively, not just at onboarding.
               </p>
               <div className="space-y-4">
                 {[
-                  "Accurate portfolio — only real, recent, personal work",
-                  "Honest pricing — no undisclosed fees after booking",
-                  "Reliable communication — response within 24 hours",
-                  "Professional conduct — at the event and through the platform",
-                  "Accountability — agree to our dispute resolution process",
+                  "Accurate portfolio: only real, recent, personal work",
+                  "Honest pricing: no undisclosed fees after booking",
+                  "Reliable communication: response within 24 hours",
+                  "Professional conduct: at the event and through the platform",
+                  "Accountability: agree to our dispute resolution process",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckCircle2 size={14} style={{ color: "#D4AF37", flexShrink: 0, marginTop: 2 }} />
@@ -289,7 +289,7 @@ export default async function AboutPage() {
           </h2>
           <p className="text-gray-500 font-light text-sm leading-relaxed mb-10 max-w-xl mx-auto">
             These are not aspirational. They are specific, checkable commitments that we make to every customer
-            who uses ELBOLD — and that we hold ourselves accountable to publicly.
+            who uses ELBOLD, and that we hold ourselves accountable to publicly.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4 text-left mb-10">
