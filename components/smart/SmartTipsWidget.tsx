@@ -6,7 +6,7 @@ import Link from "next/link";
 const TIPS = [
   {
     category: "Budget",
-    tip: "Book your DJ and photographer at least 8 weeks in advance — they're the first to sell out for popular dates.",
+    tip: "Book your DJ and photographer at least 8 weeks in advance. They're the first to sell out for popular dates.",
     cta: "Browse DJs",
     href: "/browse?category=dj",
   },
@@ -18,7 +18,7 @@ const TIPS = [
   },
   {
     category: "Budget",
-    tip: "Request quotes from 3 vendors in each category — you'll often find 20-30% price differences for similar quality.",
+    tip: "Request quotes from 3 vendors in each category. You'll often find 20-30% price differences for similar quality.",
     cta: "Start comparing",
     href: "/browse",
   },
@@ -36,7 +36,7 @@ const TIPS = [
   },
   {
     category: "Timeline",
-    tip: "Build in 30 minutes of buffer time between your ceremony and reception — it always takes longer than expected.",
+    tip: "Build in 30 minutes of buffer time between your ceremony and reception. It always takes longer than expected.",
     cta: "Use Smart Planner",
     href: "/dashboard/create-event",
   },

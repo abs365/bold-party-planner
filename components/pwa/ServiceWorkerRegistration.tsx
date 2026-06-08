@@ -9,7 +9,7 @@ export function ServiceWorkerRegistration() {
     navigator.serviceWorker
       .register("/sw.js", { scope: "/" })
       .catch(() => {
-        // SW registration failed — app works normally without it
+        // SW registration failed; app works normally without it
       });
   }, []);
 

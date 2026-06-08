@@ -14,11 +14,11 @@ export const dynamic = "force-dynamic";
 const CUSTOMER_FAQS = [
   {
     q: "How do I book a vendor?",
-    a: "Browse vendors, visit their profile, and click 'Request a Quote'. You can include your event date, guest count, budget, and any specific requirements. The vendor will respond with a price — you then choose to accept or decline.",
+    a: "Browse vendors, visit their profile, and click 'Request a Quote'. You can include your event date, guest count, budget, and any specific requirements. The vendor will respond with a price, and you then choose to accept or decline.",
   },
   {
     q: "Is my payment secure?",
-    a: "All payments are processed by Stripe, one of the world's most trusted payment processors. ELBOLD holds the payment in trust until your event is completed — protecting both you and the vendor.",
+    a: "All payments are processed by Stripe, one of the world's most trusted payment processors. ELBOLD holds the payment in trust until your event is completed, protecting both you and the vendor.",
   },
   {
     q: "What is Booking Protection?",
