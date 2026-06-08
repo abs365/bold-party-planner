@@ -11,11 +11,12 @@ export default function VendorTerms() {
     <LegalPage
       title="Vendor Terms of Service"
       subtitle="Additional terms and obligations for event professionals listing services on ELBOLD."
-      lastUpdated="May 2026"
+      lastUpdated="June 2026"
       sections={[
         {
           title: "1. Vendor Status",
           content: [
+            "The marketplace is operated by ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales, registered office: [REGISTERED_OFFICE].",
             "By applying as a vendor on ELBOLD, you agree to these Vendor Terms in addition to our general Terms of Service.",
             "Vendor status is granted at our discretion following an application review. We may decline applications without giving reasons.",
             "You are an independent business, not an employee, agent, or contractor of ELBOLD.",

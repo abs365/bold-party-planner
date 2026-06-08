@@ -10,13 +10,14 @@ export default function PrivacyPolicy() {
   return (
     <LegalPage
       title="Privacy Policy"
-      subtitle="How we collect, use, and protect your personal data at ELBOLD Event Planner."
-      lastUpdated="May 2026"
+      subtitle="How we collect, use, and protect your personal data."
+      lastUpdated="June 2026"
       sections={[
         {
           title: "1. Who We Are",
           content: [
-            "ELBOLD Event Planner Ltd ('ELBOLD', 'we', 'us', 'our') operates the event planning marketplace at elbold.com. We are registered in England and Wales.",
+            "ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales (incorporated [INCORPORATION_DATE]), operates the event planning marketplace at elbold.com. Registered office: [REGISTERED_OFFICE].",
+            "In this policy, 'ELBOLD', 'we', 'us', and 'our' refer to ELBOLD Ltd.",
             "We act as a data controller under the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.",
           ],
         },

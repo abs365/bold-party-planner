@@ -11,11 +11,14 @@ export default function TermsOfService() {
     <LegalPage
       title="Terms of Service"
       subtitle="The terms and conditions governing your use of the ELBOLD platform."
-      lastUpdated="May 2026"
+      lastUpdated="June 2026"
       sections={[
         {
           title: "1. Agreement to Terms",
-          content: "By accessing or using ELBOLD Events ('the Platform'), you agree to be bound by these Terms of Service. If you do not agree, you must not use the Platform. These terms apply to all users including customers, vendors, and visitors.",
+          content: [
+            "The Platform is operated by ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales, registered office: [REGISTERED_OFFICE].",
+            "By accessing or using ELBOLD Events ('the Platform'), you agree to be bound by these Terms of Service. If you do not agree, you must not use the Platform. These terms apply to all users including customers, vendors, and visitors.",
+          ],
         },
         {
           title: "2. Description of Service",
