@@ -47,6 +47,7 @@ export default async function FinanceDashboard() {
     latestReconRes,
     ledgerRes,
     finEventsRes,
+    refundFailuresRes,
   ] = await Promise.all([
     db.from("payments").select("id, amount, type, status, created_at, booking_id, stripe_payment_intent_id").order("created_at", { ascending: false }),
     db.from("vendor_subscriptions").select("plan, status, billing_cycle, failed_payment_count, current_period_end"),
@@ -58,6 +59,7 @@ export default async function FinanceDashboard() {
     db.from("reconciliation_runs").select("*").order("created_at", { ascending: false }).limit(1).maybeSingle(),
     db.from("financial_ledger").select("gross_amount, refund_amount, platform_commission_amount, vendor_amount, payment_status, payout_status, created_at"),
     db.from("financial_events").select("event_type, created_at").order("created_at", { ascending: false }).limit(8),
+    db.from("audit_logs").select("entity_id, new_values, created_at").eq("action", "booking.refund.partial_failure").order("created_at", { ascending: false }).limit(10),
   ]);
 
   const allPayments    = paymentsRes.data    ?? [];
@@ -70,6 +72,7 @@ export default async function FinanceDashboard() {
   const latestRecon    = latestReconRes.data   ?? null;
   const ledger         = ledgerRes.data        ?? [];
   const finEvents      = finEventsRes.data     ?? [];
+  const refundFailures = refundFailuresRes.data ?? [];
 
   // ── Stripe balance (live API — non-fatal) ─────────────────────────────────
   let stripeBalance: { available: number; pending: number } | null = null;
@@ -180,7 +183,7 @@ export default async function FinanceDashboard() {
         </div>
 
         {/* ── Alert Bar ─────────────────────────────────────────────────────── */}
-        {(reconStatus !== "healthy" || overduePayouts.length > 0 || pastDueSubs.length > 0 || monthFailed.length > 0) && (
+        {(reconStatus !== "healthy" || overduePayouts.length > 0 || pastDueSubs.length > 0 || monthFailed.length > 0 || refundFailures.length > 0) && (
           <div className="flex flex-wrap gap-2">
             {reconStatus === "critical" && (
               <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-xs">
@@ -205,6 +208,11 @@ export default async function FinanceDashboard() {
             {monthFailed.length > 0 && (
               <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-400 text-xs">
                 <Ban size={13} />{monthFailed.length} failed payment{monthFailed.length > 1 ? "s" : ""} this month
+              </div>
+            )}
+            {refundFailures.length > 0 && (
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs">
+                <RotateCcw size={13} />{refundFailures.length} refund{refundFailures.length > 1 ? "s" : ""} with partial failure &mdash; Stripe paid but secondary step(s) failed
               </div>
             )}
           </div>
@@ -415,6 +423,54 @@ export default async function FinanceDashboard() {
             )}
           </div>
         </div>
+
+        {/* ── Refund Partial Failures ──────────────────────────────────────── */}
+        {refundFailures.length > 0 && (
+          <div className="rounded-xl p-5 border border-orange-500/25 bg-orange-500/6">
+            <h3 className="font-bold text-white text-sm mb-4 flex items-center gap-2">
+              <RotateCcw size={14} className="text-orange-400" />
+              Refund Partial Failures &mdash; Stripe refund issued but secondary step(s) failed
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              The Stripe refund has been issued to the customer in each case below. These entries indicate that the
+              booking payment_status, ledger, audit log, or email confirmation may not have updated correctly.
+              Review each booking and manually reconcile in Stripe Dashboard if needed.
+            </p>
+            <div className="space-y-2">
+              {refundFailures.map((f, i) => {
+                const vals = f.new_values as Record<string, unknown> | null;
+                const failedSteps = (vals?.failed_steps as string[] | undefined) ?? [];
+                const pi = vals?.stripe_payment_intent_id as string | undefined;
+                const amount = vals?.refund_amount as number | undefined;
+                return (
+                  <div key={i} className="flex items-start justify-between p-3 rounded-xl bg-white/4 border border-orange-500/15 gap-4">
+                    <div>
+                      <div className="text-xs text-white font-mono mb-0.5">
+                        Booking: {f.entity_id ?? "unknown"}
+                      </div>
+                      {pi && (
+                        <div className="text-xs text-slate-500 font-mono">PI: {pi}</div>
+                      )}
+                      <div className="flex flex-wrap gap-1.5 mt-1.5">
+                        {failedSteps.map((step) => (
+                          <span key={step} className="px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-300 text-xs font-mono">{step}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      {amount != null && (
+                        <div className="text-sm font-bold text-orange-400 tabular-nums">{fmt(amount)}</div>
+                      )}
+                      <div className="text-xs text-slate-600 mt-0.5">
+                        {new Date(f.created_at as string).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* ── Subscription Breakdown ────────────────────────────────────────── */}
         <div className="grid lg:grid-cols-2 gap-6">

@@ -51,13 +51,22 @@ async function issueRefundForCancellation(
     return;
   }
 
-  // Mark booking as refunded
-  void supabase
+  // Stripe refund succeeded — now execute all secondary actions.
+  // Each is independently try/caught: failure logs and records a partial_failure audit
+  // entry but never rolls back the Stripe refund already issued.
+  const failures: string[] = [];
+
+  // 1. Booking payment_status
+  const { error: bookingUpdateErr } = await supabase
     .from("bookings")
     .update({ payment_status: "refunded" })
     .eq("id", booking.id);
+  if (bookingUpdateErr) {
+    console.error("[refund] booking payment_status update failed", booking.id, bookingUpdateErr.message);
+    failures.push("booking_status");
+  }
 
-  // Ledger — errors are internally swallowed by ledger helpers
+  // 2. Ledger — helpers have internal try/catch
   const { updateLedgerPaymentStatus, appendLedgerEvent } = await import("@/lib/finance/ledger");
   const ledgerId = await updateLedgerPaymentStatus(
     supabase,
@@ -65,7 +74,7 @@ async function issueRefundForCancellation(
     "refunded",
     { refundAmount }
   );
-  void appendLedgerEvent(
+  await appendLedgerEvent(
     supabase,
     "REFUND_COMPLETED",
     {
@@ -77,7 +86,8 @@ async function issueRefundForCancellation(
     ledgerId
   );
 
-  void createAuditLog({
+  // 3. Audit log — has internal try/catch
+  await createAuditLog({
     actorUserId,
     actorRole,
     action: "booking.refund.issued",
@@ -87,21 +97,43 @@ async function issueRefundForCancellation(
     ipAddress,
   });
 
+  // 4. Customer and admin emails — best effort
   const { sendRefundProcessed, sendAdminRefundAlert } = await import("@/lib/resend");
-  void sendRefundProcessed(customerEmail, customerName, refundAmount, eventTitle);
+  try {
+    await sendRefundProcessed(customerEmail, customerName, refundAmount, eventTitle);
+  } catch (err) {
+    console.error("[refund] Customer refund email failed", booking.id, err);
+    failures.push("customer_email");
+  }
 
   const adminEmails = (process.env.ADMIN_EMAILS ?? "")
     .split(",")
     .map((e) => e.trim())
     .filter(Boolean);
-  void sendAdminRefundAlert(
-    adminEmails,
-    booking.id,
-    refundAmount,
-    eventTitle,
-    customerEmail,
-    actorRole
-  );
+  try {
+    await sendAdminRefundAlert(adminEmails, booking.id, refundAmount, eventTitle, customerEmail, actorRole);
+  } catch (err) {
+    console.error("[refund] Admin refund alert email failed", booking.id, err);
+    failures.push("admin_email");
+  }
+
+  // If any secondary step failed, write a partial_failure audit entry so
+  // the admin finance dashboard can surface it.
+  if (failures.length > 0) {
+    await createAuditLog({
+      actorUserId,
+      actorRole: "system",
+      action: "booking.refund.partial_failure",
+      entityType: "booking",
+      entityId: booking.id,
+      after: {
+        stripe_payment_intent_id: payment.stripe_payment_intent_id,
+        refund_amount: refundAmount,
+        failed_steps: failures,
+      },
+      ipAddress,
+    });
+  }
 }
 
 export async function PATCH(
