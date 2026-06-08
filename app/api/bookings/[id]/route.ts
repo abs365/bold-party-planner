@@ -178,7 +178,7 @@ export async function PATCH(
 
       // Automatic refund when vendor cancels a paid booking
       if (status === "cancelled") {
-        void issueRefundForCancellation(
+        await issueRefundForCancellation(
           supabase as unknown as SupabaseClient,
           booking as unknown as RefundableBooking,
           user.id,
@@ -248,7 +248,7 @@ export async function PATCH(
 
       // Automatic refund when customer cancels a paid booking
       const eventData = booking.event as Record<string, string>;
-      void issueRefundForCancellation(
+      await issueRefundForCancellation(
         supabase as unknown as SupabaseClient,
         booking as unknown as RefundableBooking,
         user.id,

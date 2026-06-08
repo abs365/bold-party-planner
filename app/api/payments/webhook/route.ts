@@ -83,11 +83,13 @@ export async function POST(request: Request) {
 
     const newPaymentStatus = paymentType === "deposit" ? "deposit_paid" : "fully_paid";
     const newBookingStatus = (booking.status === "accepted" || booking.status === "pending_payment") ? "confirmed" : booking.status;
+    const now = new Date().toISOString();
 
     // Update booking
     await supabase.from("bookings").update({
       payment_status: newPaymentStatus,
       status: newBookingStatus,
+      ...(newBookingStatus === "confirmed" ? { confirmed_at: now } : {}),
     }).eq("id", bookingId);
 
     // Create payment record
