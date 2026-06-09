@@ -56,17 +56,17 @@ async function issueRefundForCancellation(
   // entry but never rolls back the Stripe refund already issued.
   const failures: string[] = [];
 
-  // 1. Booking payment_status
+  // 1. Booking payment_status + refund_amount
   const { error: bookingUpdateErr } = await supabase
     .from("bookings")
-    .update({ payment_status: "refunded" })
+    .update({ payment_status: "refunded", refund_amount: refundAmount })
     .eq("id", booking.id);
   if (bookingUpdateErr) {
     console.error("[refund] booking payment_status update failed", booking.id, bookingUpdateErr.message);
     failures.push("booking_status");
   }
 
-  // 2. Ledger — helpers have internal try/catch
+  // 2. Ledger — helpers have internal try/catch; track null return as failure
   const { updateLedgerPaymentStatus, appendLedgerEvent } = await import("@/lib/finance/ledger");
   const ledgerId = await updateLedgerPaymentStatus(
     supabase,
@@ -74,6 +74,10 @@ async function issueRefundForCancellation(
     "refunded",
     { refundAmount }
   );
+  if (ledgerId === null) {
+    console.error("[refund] ledger payment_status update returned null for booking", booking.id);
+    failures.push("ledger_update");
+  }
   await appendLedgerEvent(
     supabase,
     "REFUND_COMPLETED",
