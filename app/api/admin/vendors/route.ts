@@ -29,13 +29,14 @@ export async function PATCH(request: Request) {
   const auth = await requireAdmin();
   if (!auth) return forbidden();
 
-  const { vendor_id, status, featured, verified, phone_verified, rejection_reason } = await request.json() as {
+  const { vendor_id, status, featured, verified, phone_verified, rejection_reason, lifecycle_state } = await request.json() as {
     vendor_id: string;
     status?: string;
     featured?: boolean;
     verified?: boolean;
     phone_verified?: boolean;
     rejection_reason?: string;
+    lifecycle_state?: string;
   };
 
   const updates: Record<string, unknown> = {};
@@ -43,6 +44,9 @@ export async function PATCH(request: Request) {
   if (typeof featured === "boolean") updates.featured = featured;
   if (typeof verified === "boolean") updates.verified = verified;
   if (typeof phone_verified === "boolean") updates.phone_verified = phone_verified;
+  // Allow admin to advance lifecycle within the approved state
+  // (profile_setup, verified, live). DB trigger handles status-correlated transitions.
+  if (lifecycle_state) updates.lifecycle_state = lifecycle_state;
 
   const { data: vendorBefore } = await auth.db
     .from("vendors")

@@ -38,17 +38,18 @@ export async function POST(request: Request) {
     bio?: string;
     location?: string;
     city: string;
-    phone?: string | null;
+    phone: string;
     travel_radius_km?: number;
     min_price?: number | null;
     max_price?: number | null;
     years_experience?: number | null;
     instagram_url?: string | null;
     website_url?: string | null;
+    portfolio_links?: Array<{ type: string; url: string }>;
   };
 
-  if (!body.business_name || !body.category || !body.city) {
-    return NextResponse.json({ error: "business_name, category, and city are required" }, { status: 400 });
+  if (!body.business_name || !body.category || !body.city || !body.phone) {
+    return NextResponse.json({ error: "business_name, category, city, and phone are required" }, { status: 400 });
   }
 
   logger.info("vendor.apply.submit", { userId: user.id, category: body.category, city: body.city });
@@ -74,13 +75,14 @@ export async function POST(request: Request) {
       bio: body.bio || null,
       location: body.location || "",
       city: body.city,
-      phone: body.phone || null,
+      phone: body.phone,
       travel_radius_km: body.travel_radius_km ?? 30,
       min_price: body.min_price ?? null,
       max_price: body.max_price ?? null,
       years_experience: body.years_experience ?? null,
       instagram_url: body.instagram_url || null,
       website_url: body.website_url || null,
+      portfolio_links: body.portfolio_links ?? [],
       status: "pending",
     })
     .select()

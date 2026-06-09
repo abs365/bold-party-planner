@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2, Phone, Search, Calendar, Star, CreditCard, TrendingUp, Mail } from "lucide-react";
+import { Loader2, MapPin, FileText, ArrowRight, CheckCircle2, Phone, Search, Calendar, Star, CreditCard, TrendingUp, Mail, Plus, Trash2, Link2 } from "lucide-react";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
@@ -24,6 +24,49 @@ const BENEFITS = [
 
 const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
 
+export type PortfolioLinkType =
+  | "website"
+  | "instagram"
+  | "facebook"
+  | "tiktok"
+  | "linkedin"
+  | "google_business"
+  | "behance"
+  | "etsy"
+  | "youtube"
+  | "other";
+
+export const PORTFOLIO_LINK_LABELS: Record<PortfolioLinkType, string> = {
+  website:         "Website",
+  instagram:       "Instagram",
+  facebook:        "Facebook",
+  tiktok:          "TikTok",
+  linkedin:        "LinkedIn",
+  google_business: "Google Business Profile",
+  behance:         "Behance",
+  etsy:            "Etsy",
+  youtube:         "YouTube",
+  other:           "Portfolio Link",
+};
+
+const PORTFOLIO_LINK_PLACEHOLDERS: Record<PortfolioLinkType, string> = {
+  website:         "https://yourbusiness.com",
+  instagram:       "https://instagram.com/yourbusiness",
+  facebook:        "https://facebook.com/yourbusiness",
+  tiktok:          "https://tiktok.com/@yourbusiness",
+  linkedin:        "https://linkedin.com/in/yourname",
+  google_business: "https://g.page/yourbusiness",
+  behance:         "https://behance.net/yourbusiness",
+  etsy:            "https://etsy.com/shop/yourshop",
+  youtube:         "https://youtube.com/@yourchannel",
+  other:           "https://",
+};
+
+export interface PortfolioLink {
+  type: PortfolioLinkType;
+  url: string;
+}
+
 const FORM_DEFAULTS = {
   business_name: "",
   category: "" as VendorCategory | "",
@@ -35,8 +78,6 @@ const FORM_DEFAULTS = {
   min_price: "",
   max_price: "",
   years_experience: "",
-  instagram_url: "",
-  website_url: "",
 };
 
 function readDraft() {
@@ -53,6 +94,8 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
     return draft ? { ...FORM_DEFAULTS, ...draft } : FORM_DEFAULTS;
   });
 
+  const [portfolioLinks, setPortfolioLinks] = useState<PortfolioLink[]>([]);
+
   const [step, setStep] = useState<number>(() => {
     const draft = readDraft();
     if (!draft) return 1;
@@ -64,6 +107,20 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
+  function addPortfolioLink() {
+    setPortfolioLinks((prev) => [...prev, { type: "website" as PortfolioLinkType, url: "" }]);
+  }
+
+  function updatePortfolioLink(index: number, field: "type" | "url", value: string) {
+    setPortfolioLinks((prev) =>
+      prev.map((link, i) => i === index ? { ...link, [field]: value } : link)
+    );
+  }
+
+  function removePortfolioLink(index: number) {
+    setPortfolioLinks((prev) => prev.filter((_, i) => i !== index));
+  }
+
   function update(key: string, value: string | number) {
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
@@ -71,6 +128,18 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
   async function handleSubmit() {
     if (!formData.business_name || !formData.category || !formData.city) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+    if (!formData.phone.trim()) {
+      toast.error("Phone number is required");
+      return;
+    }
+    if (!UK_PHONE_RE.test(formData.phone.replace(/\s/g, ""))) {
+      toast.error("Please enter a valid UK phone number");
+      return;
+    }
+    if (formData.bio.trim().length < 30) {
+      toast.error("Please write at least 30 characters about your business");
       return;
     }
     setSubmitting(true);
@@ -83,6 +152,27 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
         window.location.assign("/signup?role=vendor");
         return;
       }
+
+      // Validate: at least 1 portfolio link required
+      const filledLinks = portfolioLinks.filter((l) => l.url.trim() !== "");
+      if (filledLinks.length === 0) {
+        toast.error("Please add at least one portfolio or social media link");
+        setSubmitting(false);
+        return;
+      }
+
+      // Validate: all portfolio link URLs must be valid https:// URLs
+      const URL_RE = /^https?:\/\/.+\..+/;
+      const invalidLink = filledLinks.find((l) => !URL_RE.test(l.url.trim()));
+      if (invalidLink) {
+        toast.error("Portfolio links must be valid URLs starting with https://");
+        setSubmitting(false);
+        return;
+      }
+
+      // Derive legacy fields from portfolio_links for backwards compatibility
+      const instagramLink = filledLinks.find((l) => l.type === "instagram");
+      const websiteLink   = filledLinks.find((l) => l.type === "website");
 
       const res = await fetch("/api/vendor/apply", {
         method: "POST",
@@ -98,8 +188,9 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
           min_price: formData.min_price ? Number(formData.min_price) : null,
           max_price: formData.max_price ? Number(formData.max_price) : null,
           years_experience: formData.years_experience ? Number(formData.years_experience) : null,
-          instagram_url: formData.instagram_url || null,
-          website_url: formData.website_url || null,
+          instagram_url: instagramLink?.url || null,
+          website_url: websiteLink?.url || null,
+          portfolio_links: filledLinks,
         }),
       });
 
@@ -440,7 +531,11 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                       <button
                         onClick={() => {
                           if (!formData.city) { toast.error("Please enter your city"); return; }
-                          if (formData.phone && !UK_PHONE_RE.test(formData.phone.replace(/\s/g, ""))) {
+                          if (!formData.phone.trim()) {
+                            toast.error("Phone number is required");
+                            return;
+                          }
+                          if (!UK_PHONE_RE.test(formData.phone.replace(/\s/g, ""))) {
                             toast.error("Please enter a valid UK phone number");
                             return;
                           }
@@ -460,9 +555,10 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
                         <FileText size={13} className="inline mr-1 text-gray-400" />About Your Business
+                        <span className="ml-1 text-red-500">*</span>
                       </label>
                       <p className="text-xs text-gray-400 mb-1.5 font-light">
-                        Tell customers what makes your service worth booking.
+                        Tell customers what makes your service worth booking. Minimum 30 characters.
                       </p>
                       <textarea
                         value={formData.bio}
@@ -471,16 +567,70 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                         rows={5}
                         className="input-light resize-none"
                       />
+                      <div className="flex justify-between mt-1">
+                        {formData.bio.trim().length > 0 && formData.bio.trim().length < 30 && (
+                          <p className="text-xs text-amber-600">{30 - formData.bio.trim().length} more characters needed</p>
+                        )}
+                        <p className="text-xs text-gray-400 ml-auto">{formData.bio.length} chars</p>
+                      </div>
                     </div>
 
+                    {/* Portfolio and Business Links */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Instagram URL</label>
-                      <input type="url" value={formData.instagram_url} onChange={(e) => update("instagram_url", e.target.value)} placeholder="https://instagram.com/yourbusiness" className="input-light" />
-                    </div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        <Link2 size={13} className="inline mr-1 text-gray-400" />
+                        Portfolio and Business Links
+                        <span className="ml-1 text-red-500">*</span>
+                      </label>
+                      <p className="text-xs text-gray-400 mb-3 font-light">
+                        Add at least one link so we can verify your work. Website, Instagram, Google Business, or any professional profile.
+                      </p>
 
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Website URL</label>
-                      <input type="url" value={formData.website_url} onChange={(e) => update("website_url", e.target.value)} placeholder="https://yourbusiness.com" className="input-light" />
+                      <div className="space-y-2 mb-3">
+                        {portfolioLinks.map((link, i) => (
+                          <div key={i} className="flex gap-2">
+                            <select
+                              value={link.type}
+                              onChange={(e) => updatePortfolioLink(i, "type", e.target.value)}
+                              className="input-light w-40 flex-shrink-0 text-sm"
+                            >
+                              {(Object.keys(PORTFOLIO_LINK_LABELS) as PortfolioLinkType[]).map((t) => (
+                                <option key={t} value={t}>{PORTFOLIO_LINK_LABELS[t]}</option>
+                              ))}
+                            </select>
+                            <input
+                              type="url"
+                              value={link.url}
+                              onChange={(e) => updatePortfolioLink(i, "url", e.target.value)}
+                              placeholder={PORTFOLIO_LINK_PLACEHOLDERS[link.type]}
+                              className="input-light flex-1"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removePortfolioLink(i)}
+                              className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                              title="Remove link"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={addPortfolioLink}
+                        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors border border-dashed border-gray-300 hover:border-gray-400 px-3 py-2 rounded-lg w-full justify-center"
+                      >
+                        <Plus size={13} />
+                        Add Link
+                      </button>
+
+                      {portfolioLinks.length === 0 && (
+                        <p className="text-xs text-amber-600 mt-2">
+                          At least 1 link is required to submit your application.
+                        </p>
+                      )}
                     </div>
 
                     <div

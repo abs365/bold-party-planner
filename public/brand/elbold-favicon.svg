@@ -1,6 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="6" fill="#0D1B3E"/>
-  <polygon points="16,4 25,16 16,28 7,16" fill="#C9A84C"/>
-  <polygon points="16,9 22,16 16,23 10,16" fill="#0D1B3E"/>
-  <text x="16" y="20" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="10" fill="#C9A84C">E</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!--
+    Elbold favicon — single lettermark
+    Navy square, white "E" — clean at 16px, 32px, 48px
+  -->
+  <rect width="64" height="64" rx="10" fill="#0B1F4D"/>
+  <text
+    x="32"
+    y="47"
+    text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="700"
+    font-size="40"
+    fill="rgba(255,255,255,0.93)"
+  >E</text>
 </svg>

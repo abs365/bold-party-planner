@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   Search, CheckCircle2, XCircle, Star, MapPin, Package,
   Eye, Shield, Sparkles, Users, Building2, TrendingUp,
-  Square, CheckSquare, X, Phone,
+  Square, CheckSquare, X, Phone, Zap, BadgeCheck,
 } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { computeVendorReadinessScore } from "@/lib/vendor/completion";
@@ -204,13 +204,15 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
         <p className="text-slate-400 text-sm mt-1">Approve, reject, and manage all platform vendors</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Stats — must always reconcile: Total = Approved + Pending + Rejected + Suspended */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
-          { icon: <Building2 size={18} className="text-brand-400" />, label: "Total Vendors", value: String(stats?.total_vendors ?? stats?.approved_vendors ?? 0) },
-          { icon: <CheckCircle2 size={18} className="text-green-400" />, label: "Approved", value: String(stats?.approved_vendors ?? 0) },
-          { icon: <Shield size={18} className="text-amber-400" />, label: "Pending Review", value: String(stats?.pending_vendors ?? 0) },
-          { icon: <TrendingUp size={18} className="text-blue-400" />, label: "Platform Revenue", value: formatCurrency(Number(stats?.total_revenue ?? 0)) },
+          { icon: <Building2 size={16} className="text-brand-400" />, label: "Total", value: String(stats?.total_vendors ?? 0), note: null },
+          { icon: <CheckCircle2 size={16} className="text-green-400" />, label: "Approved", value: String(stats?.approved_vendors ?? 0), note: null },
+          { icon: <Shield size={16} className="text-amber-400" />, label: "Pending", value: String(stats?.pending_vendors ?? 0), note: null },
+          { icon: <XCircle size={16} className="text-red-400" />, label: "Rejected", value: String(stats?.rejected_vendors ?? 0), note: null },
+          { icon: <X size={16} className="text-orange-400" />, label: "Suspended", value: String(stats?.suspended_vendors ?? 0), note: null },
+          { icon: <TrendingUp size={16} className="text-blue-400" />, label: "Revenue", value: formatCurrency(Number(stats?.total_revenue ?? 0)), note: null },
         ].map((stat) => (
           <div key={stat.label} className="bg-white/4 border border-white/6 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-1">{stat.icon}<span className="text-xs text-slate-400">{stat.label}</span></div>
@@ -218,6 +220,27 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
           </div>
         ))}
       </div>
+      {/* Integrity check: surface reconciliation gap if Total != sum of statuses */}
+      {(() => {
+        const total     = Number(stats?.total_vendors ?? 0);
+        const approved  = Number(stats?.approved_vendors ?? 0);
+        const pending   = Number(stats?.pending_vendors ?? 0);
+        const rejected  = Number(stats?.rejected_vendors ?? 0);
+        const suspended = Number(stats?.suspended_vendors ?? 0);
+        const sum = approved + pending + rejected + suspended;
+        if (total !== sum && total > 0) {
+          return (
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/25 text-sm">
+              <XCircle size={14} className="text-red-400 flex-shrink-0 mt-0.5" />
+              <span className="text-red-300">
+                Integrity gap: Total ({total}) does not equal Approved + Pending + Rejected + Suspended ({sum}).
+                {" "}{total - sum} vendor(s) unaccounted for. Check docs/Vendor_Data_Integrity_Audit.md.
+              </span>
+            </div>
+          );
+        }
+        return null;
+      })()}
 
       {/* Filters */}
       <div className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col sm:flex-row gap-3">
@@ -402,13 +425,58 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       )}
 
                       {status === "approved" && (
-                        <button
-                          onClick={() => updateVendor(vendorId, { status: "suspended" }, "Suspension")}
-                          disabled={!!actionLoading}
-                          className="text-xs py-1.5 px-3 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500/30 transition-colors"
-                        >
-                          Suspend
-                        </button>
+                        <>
+                          {/* Lifecycle advancement for approved vendors */}
+                          {(() => {
+                            const lc = String(vendor.lifecycle_state ?? "approved");
+                            return (
+                              <div className="flex flex-col gap-1">
+                                {lc === "approved" && (
+                                  <button
+                                    onClick={() => updateVendor(vendorId, { lifecycle_state: "profile_setup" }, "Profile Setup")}
+                                    disabled={!!actionLoading}
+                                    title="Mark profile as set up"
+                                    className="text-xs py-1 px-2 rounded-lg bg-blue-500/15 text-blue-400 border border-blue-500/25 hover:bg-blue-500/25 transition-colors flex items-center gap-1"
+                                  >
+                                    <Package size={10} />Profile Setup
+                                  </button>
+                                )}
+                                {lc === "profile_setup" && (
+                                  <button
+                                    onClick={() => updateVendor(vendorId, { lifecycle_state: "verified" }, "Verified")}
+                                    disabled={!!actionLoading}
+                                    title="Mark as document verified"
+                                    className="text-xs py-1 px-2 rounded-lg bg-purple-500/15 text-purple-400 border border-purple-500/25 hover:bg-purple-500/25 transition-colors flex items-center gap-1"
+                                  >
+                                    <BadgeCheck size={10} />Verify Docs
+                                  </button>
+                                )}
+                                {lc === "verified" && (
+                                  <button
+                                    onClick={() => updateVendor(vendorId, { lifecycle_state: "live" }, "Go Live")}
+                                    disabled={!!actionLoading}
+                                    title="Publish vendor to marketplace"
+                                    className="text-xs py-1 px-2 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors flex items-center gap-1"
+                                  >
+                                    <Zap size={10} />Go Live
+                                  </button>
+                                )}
+                                {lc === "live" && (
+                                  <span className="text-xs text-emerald-400 flex items-center gap-1">
+                                    <Zap size={10} />Live
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
+                          <button
+                            onClick={() => updateVendor(vendorId, { status: "suspended" }, "Suspension")}
+                            disabled={!!actionLoading}
+                            className="text-xs py-1.5 px-3 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30 hover:bg-orange-500/30 transition-colors"
+                          >
+                            Suspend
+                          </button>
+                        </>
                       )}
 
                       {(status === "rejected" || status === "suspended") && (

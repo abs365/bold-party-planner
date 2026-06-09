@@ -59,10 +59,19 @@ export async function GET(request: Request) {
       } else if (role === "vendor") {
         const { data: vendor } = await supabase
           .from("vendors")
-          .select("id")
+          .select("id, status")
           .eq("user_id", data.user.id)
           .maybeSingle();
-        dest = vendor ? "/vendor/dashboard" : "/vendor/apply";
+
+        if (!vendor) {
+          // No application yet: send to apply form
+          dest = "/vendor/apply";
+        } else if (vendor.status === "pending" && type === "signup") {
+          // Just confirmed email for a pending application: show clear success page
+          dest = "/confirmed";
+        } else {
+          dest = "/vendor/dashboard";
+        }
       } else {
         dest = next;
       }

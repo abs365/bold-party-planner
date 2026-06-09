@@ -37,8 +37,18 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).maybeSingle();
+  const { data: vendor } = await supabase.from("vendors").select("id, status").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
+
+  // Lifecycle governance: only approved vendors may create packages.
+  // Pending (applied/under_review) vendors cannot build marketplace offerings
+  // until their application is approved.
+  if (vendor.status !== "approved") {
+    return NextResponse.json(
+      { error: "Packages can only be created once your application is approved" },
+      { status: 403 }
+    );
+  }
 
   const body = await req.json();
   const parsed = bodySchema.safeParse(body);

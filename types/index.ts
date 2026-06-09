@@ -58,6 +58,16 @@ export type PaymentStatus =
 
 export type VendorStatus = "pending" | "approved" | "rejected" | "suspended";
 
+export type VendorLifecycleStateFull =
+  | "applied"
+  | "under_review"
+  | "approved"
+  | "profile_setup"
+  | "verified"
+  | "live"
+  | "rejected"
+  | "suspended";
+
 export type VendorLifecycleState =
   | "no_account"
   | "pending"
@@ -105,6 +115,8 @@ export interface Vendor {
   years_experience: number | null;
   instagram_url: string | null;
   website_url: string | null;
+  portfolio_links: Array<{ type: string; url: string }>;
+  lifecycle_state?: VendorLifecycleStateFull;
   custom_category_description?: string | null;
   event_types: string[] | null;
   subscription_plan: "free" | "pro" | "featured" | "premium" | "elite";
