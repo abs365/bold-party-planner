@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
@@ -7,11 +7,11 @@ import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, CheckCircle2, Shield, Star, Heart, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About ELBOLD | Why We Exist, Who We Are, What We Stand For",
+  title: "About Elbold | Why We Exist, Who We Are, What We Stand For",
   description:
-    "ELBOLD was founded because finding a trustworthy event vendor in the UK was harder than it should be. Read our story, our mission, and the values that guide every decision we make.",
+    "Elbold was founded because finding a trustworthy event vendor in the UK was harder than it should be. Read our story, our mission, and the values that guide every decision we make.",
   openGraph: {
-    title: "About ELBOLD Events",
+    title: "About Elbold",
     description: "Founded to solve a real problem: helping UK event hosts find professionals they can genuinely trust.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -23,7 +23,7 @@ const VALUES = [
   {
     icon: Shield,
     title: "Trust is not a feature. It is the product.",
-    body: "Every decision we make, from vendor approval to payment flow to review policy, starts with the same question: does this increase or decrease the trust a customer can place in ELBOLD? If it decreases trust, we do not build it.",
+    body: "Every decision we make, from vendor approval to payment flow to review policy, starts with the same question: does this increase or decrease the trust a customer can place in Elbold? If it decreases trust, we do not build it.",
   },
   {
     icon: CheckCircle2,
@@ -85,7 +85,7 @@ export default async function AboutPage() {
           <div className="flex items-center justify-center gap-4 mb-10">
             <div className="h-px w-10" style={{ background: "rgba(212,175,55,0.22)" }} />
             <span className="text-xs tracking-[0.45em] font-light" style={{ color: "rgba(212,175,55,0.45)" }}>
-              ABOUT ELBOLD EVENTS
+              ABOUT ELBOLD
             </span>
             <div className="h-px w-10" style={{ background: "rgba(212,175,55,0.22)" }} />
           </div>
@@ -97,7 +97,7 @@ export default async function AboutPage() {
             <span style={{ color: "#D4AF37" }}>broken. We are fixing it.</span>
           </h1>
           <p className="text-base font-light leading-relaxed max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.4)" }}>
-            ELBOLD was founded in the United Kingdom to solve a specific, documented problem:
+            Elbold was founded in the United Kingdom to solve a specific, documented problem:
             event hosts could not tell which vendors were genuine professionals and which were not.
           </p>
         </div>
@@ -108,7 +108,7 @@ export default async function AboutPage() {
         <div className="max-w-3xl mx-auto">
           <div className="mb-12">
             <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
-              Why ELBOLD Exists
+              Why Elbold Exists
             </p>
             <h2 className="text-3xl sm:text-4xl font-light text-gray-900 tracking-tight mb-8">
               The problem we set out to solve.
@@ -130,9 +130,9 @@ export default async function AboutPage() {
               who these professionals are, the same thing happens to someone else the following weekend.
             </p>
             <p>
-              ELBOLD was founded to change this. Not with a promise of perfection. No marketplace can guarantee that.
+              Elbold was founded to change this. Not with a promise of perfection. No marketplace can guarantee that.
               But with a genuine system of accountability: vendors reviewed before they appear, deposits processed through Stripe
-              and managed by ELBOLD until events complete, reviews tied to confirmed bookings only, and a published set of standards that
+              and managed by Elbold until events complete, reviews tied to confirmed bookings only, and a published set of standards that
               every vendor agrees to before joining the platform.
             </p>
             <p>
@@ -207,13 +207,13 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ── THE ELBOLD STANDARD ──────────────────────────────────────── */}
+      {/* ── THE Elbold STANDARD ──────────────────────────────────────── */}
       <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-xs tracking-[0.35em] font-semibold mb-5 uppercase" style={{ color: "rgba(212,175,55,0.5)" }}>
-                The ELBOLD Standard
+                The Elbold Standard
               </p>
               <h2 className="text-3xl font-light tracking-tight mb-6" style={{ color: "rgba(255,255,255,0.92)" }}>
                 What every vendor agrees to before joining.
@@ -289,13 +289,13 @@ export default async function AboutPage() {
           </h2>
           <p className="text-gray-500 font-light text-sm leading-relaxed mb-10 max-w-xl mx-auto">
             These are not aspirational. They are specific, checkable commitments that we make to every customer
-            who uses ELBOLD, and that we hold ourselves accountable to publicly.
+            who uses Elbold, and that we hold ourselves accountable to publicly.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4 text-left mb-10">
             {[
-              { title: "Every vendor reviewed before listing", desc: "No vendor appears on ELBOLD without a manual review of their application, portfolio, and identity." },
-              { title: "Deposits secured until after your event", desc: "Your 30% deposit is processed through Stripe and managed by ELBOLD. It is not released to the vendor until your event has taken place and you have not raised a dispute." },
+              { title: "Every vendor reviewed before listing", desc: "No vendor appears on Elbold without a manual review of their application, portfolio, and identity." },
+              { title: "Deposits secured until after your event", desc: "Your 30% deposit is processed through Stripe and managed by Elbold. It is not released to the vendor until your event has taken place and you have not raised a dispute." },
               { title: "Reviews from real bookings only", desc: "Reviews cannot be left by anyone who has not made a confirmed booking through the platform." },
               { title: "Full refund if vendor cancels", desc: "If a vendor cancels your confirmed booking, you receive your full deposit back. No exceptions. No delays." },
             ].map(({ title, desc }) => (
@@ -324,7 +324,7 @@ export default async function AboutPage() {
               { label: "How We Verify Vendors", href: "/how-we-verify", desc: "Our review process, verification levels, and quality standards." },
               { label: "Vendor Standards", href: "/vendor-standards", desc: "What we expect from every vendor, and what happens when standards fall." },
               { label: "Our Commitments", href: "/our-commitments", desc: "Specific, checkable promises we make to every customer." },
-              { label: "Trust Hub", href: "/trust", desc: "The complete ELBOLD trust system in one place." },
+              { label: "Trust Hub", href: "/trust", desc: "The complete Elbold trust system in one place." },
             ].map(({ label, href, desc }) => (
               <Link
                 key={label}

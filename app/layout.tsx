@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { CookieConsentClient } from "@/components/CookieConsentClient";
@@ -20,23 +20,23 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "ELBOLD Events | Find Trusted Event Professionals Across the UK",
-    template: "%s | ELBOLD Events",
+    default: "Elbold | Trusted Professionals Across the UK",
+    template: "%s | Elbold",
   },
   description:
-    "Find trusted event professionals for life's most important celebrations. Verified DJs, photographers, caterers, decorators and more for weddings, birthdays, corporate events and cultural celebrations across the UK.",
+    "The UK marketplace for trusted, verified professionals. Every professional individually reviewed before joining. Every booking protected. Every review from a real, confirmed booking.",
   keywords: [
-    "event professionals UK", "wedding vendors UK", "find event vendors", "DJ hire UK",
-    "wedding photographer UK", "event caterer UK", "party decorator UK", "ELBOLD Events",
-    "verified event professionals", "book event vendors UK",
+    "trusted professionals UK", "verified professionals UK", "find professionals UK", "DJ hire UK",
+    "wedding photographer UK", "event caterer UK", "party decorator UK", "Elbold",
+    "verified event professionals", "book professionals UK",
   ],
-  authors: [{ name: "ELBOLD Events", url: APP_URL }],
-  creator: "ELBOLD Events",
-  publisher: "ELBOLD Events",
+  authors: [{ name: "Elbold", url: APP_URL }],
+  creator: "Elbold",
+  publisher: "Elbold",
   openGraph: {
-    siteName: "ELBOLD Events",
-    title: "ELBOLD Events | Find Trusted Event Professionals Across the UK",
-    description: "Find trusted event professionals for life's most important celebrations. Every vendor individually reviewed.",
+    siteName: "Elbold",
+    title: "Elbold | Trusted Professionals Across the UK",
+    description: "Find trusted, verified professionals for every occasion. Every professional individually reviewed before joining.",
     type: "website",
     url: APP_URL,
     locale: "en_GB",
@@ -45,20 +45,20 @@ export const metadata: Metadata = {
         url: "/icons/icon-512.png",
         width: 512,
         height: 512,
-        alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
+        alt: "Elbold – Trusted Professionals Across the UK",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ELBOLD Events | Trusted Vendors for Extraordinary Celebrations",
-    description: "Book verified event vendors across the UK.",
+    title: "Elbold | Trusted Professionals Across the UK",
+    description: "Find and book verified professionals across the UK. Every professional individually reviewed.",
     creator: "@elbold",
     images: [
       {
         url: "/icons/icon-512.png",
-        alt: "ELBOLD Events – Find Premium Event Vendors Across the UK",
+        alt: "Elbold – Trusted Professionals Across the UK",
       },
     ],
   },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "ELBOLD",
+    title: "Elbold",
   },
   icons: {
     apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],

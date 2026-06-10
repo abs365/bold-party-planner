@@ -20,7 +20,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
 
   const navLinks = [
     { href: "/browse", label: "Find Vendors" },
-    { href: "/inspire", label: "Event Ideas" },
+    { href: "/inspire", label: "Inspiration" },
     { href: "/how-it-works", label: "How It Works" },
   ];
 
@@ -78,7 +78,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
             src={lightBg ? "/brand/elbold-logo-final.svg" : "/brand/elbold-logo-white.svg"}
             width="140"
             height="28"
-            alt="ELBOLD"
+            alt="Elbold"
             className="h-7 w-auto"
             fetchPriority="high"
           />

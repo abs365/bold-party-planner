@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
@@ -12,20 +12,20 @@ import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
-  title: "ELBOLD Events | Trusted Event Professionals Across the UK",
+  title: "Elbold | Trusted Professionals Across the UK",
   description:
-    "The UK's home for verified event professionals. Book trusted DJs, photographers, caterers, decorators and more for weddings, birthdays, corporate events and cultural celebrations.",
+    "The UK marketplace for trusted, verified professionals. Every professional individually reviewed before joining. Every booking protected. Every review from a real, confirmed booking.",
   openGraph: {
-    title: "ELBOLD Events | Trusted Event Professionals Across the UK",
+    title: "Elbold | Trusted Professionals Across the UK",
     description:
-      "Every vendor individually reviewed. Every payment protected. Every review from a real, confirmed booking.",
+      "Every professional individually reviewed. Every payment protected. Every review from a real, confirmed booking.",
     type: "website",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ELBOLD Events | Trusted Event Professionals Across the UK",
-    description: "Verified DJs, photographers, caterers, decorators and more. Every vendor individually reviewed.",
+    title: "Elbold | Trusted Professionals Across the UK",
+    description: "Verified professionals across the UK. Every professional individually reviewed before joining.",
     images: ["/icons/icon-512.png"],
   },
 };
@@ -96,7 +96,7 @@ const QUICK_STARTS = [
 const VENDOR_BENEFITS = [
   {
     title: "Reach customers actively planning events, not scrolling a feed",
-    desc: "Every visitor on ELBOLD is searching for a vendor for a specific occasion. These are buyers, not browsers.",
+    desc: "Every visitor on Elbold is searching for a vendor for a specific occasion. These are buyers, not browsers.",
   },
   {
     title: "Keep 90% of every booking you receive",
@@ -119,10 +119,10 @@ const JSONLD_ORGANIZATION = {
     {
       "@type": "Organization",
       "@id": "https://www.elbold.com/#organization",
-      name: "ELBOLD Events",
+      name: "Elbold",
       url: "https://www.elbold.com",
       logo: { "@type": "ImageObject", url: "https://www.elbold.com/brand/elbold-logo-final.svg" },
-      description: "The United Kingdom's trusted home for verified event professionals.",
+      description: "The United Kingdom's trusted marketplace for verified professionals.",
       address: { "@type": "PostalAddress", addressCountry: "GB" },
       areaServed: { "@type": "Country", name: "United Kingdom" },
       sameAs: [],
@@ -131,7 +131,7 @@ const JSONLD_ORGANIZATION = {
       "@type": "WebSite",
       "@id": "https://www.elbold.com/#website",
       url: "https://www.elbold.com",
-      name: "ELBOLD Events",
+      name: "Elbold",
       publisher: { "@id": "https://www.elbold.com/#organization" },
       potentialAction: {
         "@type": "SearchAction",
@@ -218,20 +218,16 @@ export default async function Home() {
                 className="text-xs tracking-[0.45em] font-light"
                 style={{ color: "rgba(212,175,55,0.45)" }}
               >
-                ELBOLD EVENTS &middot; UNITED KINGDOM
+                TRUSTED PROFESSIONALS &middot; UNITED KINGDOM
               </span>
               <div className="h-px w-14" style={{ background: "rgba(212,175,55,0.2)" }} />
             </div>
 
-            {/* Headline — brand statement, not a search prompt */}
+            {/* Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.06] text-white mb-6 sm:mb-10">
-              Every Celebration
+              Find Trusted Professionals
               <br />
-              Deserves
-              <br />
-              <span style={{ color: "#D4AF37" }}>Extraordinary</span>
-              <br />
-              <span style={{ color: "#D4AF37" }}>Professionals.</span>
+              <span style={{ color: "#D4AF37" }}>For Every Occasion.</span>
             </h1>
 
             {/* Subheadline */}
@@ -239,8 +235,8 @@ export default async function Home() {
               className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-12"
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
-              Individually reviewed DJs, photographers, decorators, caterers and more.
-              Every vendor vetted before they join. Every booking protected.
+              Every professional on Elbold is reviewed, verified, and assessed before joining.
+              Compare trusted providers, request quotes, and book with confidence.
             </p>
 
             {/* Primary CTAs */}
@@ -407,7 +403,7 @@ export default async function Home() {
                     Featured Professionals
                   </p>
                   <h2 className="text-3xl font-light text-gray-900 tracking-tight">
-                    Trusted by ELBOLD
+                    Trusted by Elbold
                   </h2>
                 </div>
                 <Link
@@ -446,7 +442,7 @@ export default async function Home() {
                             className="w-full h-full flex items-center justify-center"
                             style={{ background: "linear-gradient(135deg, #0B1F4D, #162447)" }}
                           >
-                            <span className="text-xs tracking-widest font-semibold" style={{ color: "rgba(212,175,55,0.4)" }}>ELBOLD</span>
+                            <span className="text-xs tracking-widest font-semibold" style={{ color: "rgba(212,175,55,0.4)" }}>Elbold</span>
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
@@ -521,7 +517,7 @@ export default async function Home() {
                   Not sure where to start?<br />Tell us about your event.
                 </h2>
                 <p className="text-sm text-gray-500 font-light leading-relaxed mb-6">
-                  If you would rather not browse on your own, submit your event details and a member of the ELBOLD team will personally recommend the right vendors for you. We respond within 24 hours and there is no obligation to book.
+                  If you would rather not browse on your own, submit your event details and a member of the Elbold team will personally recommend the right vendors for you. We respond within 24 hours and there is no obligation to book.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
@@ -550,12 +546,12 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 5: THE ELBOLD PROMISE ───────────────────────────────── */}
+        {/* ── SECTION 5: THE Elbold PROMISE ───────────────────────────────── */}
         <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "rgba(212,175,55,0.5)" }}>
-                The ELBOLD Promise
+                The Elbold Promise
               </p>
               <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
                 Not policies. Real commitments.
@@ -570,14 +566,14 @@ export default async function Home() {
                 {
                   icon: CheckCircle2,
                   title: "Every vendor is reviewed by a real person",
-                  body: "Before any vendor appears on ELBOLD, a member of our team reviews their application, portfolio, and business identity. No automated approvals.",
+                  body: "Before any vendor appears on Elbold, a member of our team reviews their application, portfolio, and business identity. No automated approvals.",
                   link: "/how-we-verify",
                   linkLabel: "How we verify vendors",
                 },
                 {
                   icon: Shield,
                   title: "Your deposit is held safely until your event",
-                  body: "Your 30% deposit is processed securely through Stripe and managed by ELBOLD. It is only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
+                  body: "Your 30% deposit is processed securely through Stripe and managed by Elbold. It is only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
                   link: "/booking-protection",
                   linkLabel: "Full booking protection",
                 },
@@ -648,11 +644,11 @@ export default async function Home() {
                   For Event Professionals
                 </p>
                 <h2 className="text-3xl sm:text-4xl font-light text-gray-900 tracking-tight mb-5">
-                  Why Join ELBOLD Instead of Relying on Social Media?
+                  Why Join Elbold Instead of Relying on Social Media?
                 </h2>
                 <p className="text-gray-400 text-sm font-light leading-relaxed mb-10">
-                  Instagram and Facebook are built for browsing. ELBOLD is built for booking.
-                  Customers who visit ELBOLD are actively searching for a vendor for a real event.
+                  Instagram and Facebook are built for browsing. Elbold is built for booking.
+                  Customers who visit Elbold are actively searching for a vendor for a real event.
                   They are ready to commit.
                 </p>
                 <div className="space-y-7">
@@ -678,7 +674,7 @@ export default async function Home() {
                   Founding Vendor Programme
                 </p>
                 <h3 className="text-2xl font-light mb-5 tracking-tight" style={{ color: "rgba(255,255,255,0.92)" }}>
-                  Be part of ELBOLD from the beginning.
+                  Be part of Elbold from the beginning.
                 </h3>
                 <p className="text-sm font-light leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.38)" }}>
                   Founding vendors receive a verified profile, priority placement, and a founding badge
@@ -712,7 +708,7 @@ export default async function Home() {
           <div className="relative z-10 max-w-2xl mx-auto text-center">
             <div className="w-px h-12 mx-auto mb-8" style={{ background: "rgba(212,175,55,0.15)" }} />
             <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
-              Would You Trust ELBOLD With One of the Most Important Events of Your Life?
+              Would You Trust Elbold With One of the Most Important Events of Your Life?
             </h2>
             <p className="text-sm font-light mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
               That is the question we ask ourselves before approving every vendor.
