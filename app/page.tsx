@@ -43,7 +43,7 @@ const OCCASIONS = [
   {
     label: "Weddings",
     href: "/browse?event=wedding",
-    photo: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
+    photo: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80",
     gradient: "linear-gradient(160deg, #1a0610 0%, #3d1030 60%, #200a1e 100%)",
     overlay: "rgba(8,3,12,0.38)",
   },
@@ -156,9 +156,9 @@ export default async function Home() {
       .from("vendors")
       .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, verification_level, media:vendor_media(url, type, is_cover)")
       .eq("status", "approved")
-      .in("subscription_plan", ["featured", "pro"])
       .order("subscription_plan", { ascending: false })
       .order("rating", { ascending: false })
+      .order("created_at", { ascending: true })
       .limit(6),
     supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
   ]);
@@ -400,7 +400,7 @@ export default async function Home() {
               <div className="flex items-end justify-between mb-12">
                 <div>
                   <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
-                    Featured Professionals
+                    Approved Professionals
                   </p>
                   <h2 className="text-3xl font-light text-gray-900 tracking-tight">
                     Trusted by Elbold
@@ -619,8 +619,8 @@ export default async function Home() {
               style={{ borderTop: "1px solid rgba(212,175,55,0.07)" }}
             >
               {[
-                ...(vendorCount > 0 ? [{ value: `${vendorCount}+`, label: "Verified Vendors" }] : []),
-                { value: "20+",  label: "Event Categories" },
+                ...(vendorCount > 0 ? [{ value: `${vendorCount}+`, label: "Approved Vendors" }] : []),
+                { value: "UK",   label: "Essex · Kent · London" },
                 { value: "100%", label: "Individually Reviewed" },
                 { value: "90%",  label: "Kept by Every Vendor" },
               ].map(({ value, label }) => (

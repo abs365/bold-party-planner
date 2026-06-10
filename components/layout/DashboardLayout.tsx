@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,7 @@ import {
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
-  Scale, Eye, ClipboardList, Lock, Zap, GitBranch, Map, Send, Target,
+  Scale, Eye, ClipboardList, Lock, Zap, GitBranch, Map, Send, Target, HeartPulse,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -64,7 +64,9 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
   {
     label: "Marketplace",
     items: [
-      { href: "/admin",           label: "Overview",       icon: LayoutDashboard },
+      { href: "/admin",              label: "Overview",            icon: LayoutDashboard },
+      { href: "/admin/scoreboard",   label: "Weekly Scoreboard",   icon: Target },
+      { href: "/admin/health",       label: "Marketplace Health",  icon: HeartPulse },
       { href: "/admin/vendors",   label: "Vendors",        icon: Store },
       { href: "/admin/customers", label: "Customers",      icon: Users },
       { href: "/admin/bookings",  label: "Bookings",       icon: ShoppingBag },
@@ -162,7 +164,7 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
     <div className="flex flex-col h-full">
       <Link href="/" className="flex items-center px-5 py-4 border-b border-white/6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/elbold-logo-white.svg" width="110" height="24" alt="ELBOLD" className="h-6 w-auto" />
+        <img src="/brand/elbold-logo-white.svg" width="110" height="24" alt="Elbold" className="h-6 w-auto" />
       </Link>
 
       <div className="px-4 py-4 border-b border-white/6">
