@@ -40,9 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!vendor) return { title: "Vendor Not Found" };
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
-  const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | ELBOLD Events`;
+  const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | Elbold`;
   const description = (vendor as { bio?: string }).bio?.slice(0, 160) ??
-    `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on ELBOLD Events.`;
+    `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on Elbold.`;
 
   return {
     title,
@@ -64,11 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function VendorProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  // Session client: used only for auth.getUser() and the logged-in visitor's own profile.
   const supabase = await createClient();
-  // Admin client: bypasses RLS for public read-only data (vendor info, review author names).
-  // Required so anonymous visitors see reviewer full_name/avatar_url after migration 027
-  // restricts profiles_public_read to approved vendors only.
   const adminDb = await createAdminClient();
 
   const [vendorRes, authRes, reviewsRes] = await Promise.all([
@@ -94,7 +90,6 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
 
   if (!vendorRes.data) notFound();
 
-  // Merge reviews into vendor object (VendorProfileView expects vendor.reviews)
   const vendorWithReviews = { ...vendorRes.data, reviews: reviewsRes.data ?? [] };
 
   const { data: similarVendors } = await adminDb
@@ -115,7 +110,6 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     profile = data;
   }
 
-  // JSON-LD structured data for SEO
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
   const avgRating = (vendor.reviews as { rating: number }[] ?? []).length > 0
     ? (vendor.reviews as { rating: number }[]).reduce((s: number, r: { rating: number }) => s + r.rating, 0) / (vendor.reviews as { rating: number }[]).length
