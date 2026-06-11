@@ -71,17 +71,13 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
   return (
     <header className={headerClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Logo: full wordmark SVG */}
-        <Link href="/" className="flex items-center flex-shrink-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={lightBg ? "/brand/elbold-logo-final.svg" : "/brand/elbold-logo-white.svg"}
-            width="160"
-            height="32"
-            alt="Elbold"
-            className="h-8 w-auto"
-            fetchPriority="high"
-          />
+        <Link href="/" className="flex-shrink-0">
+          <span
+            className="font-extrabold tracking-tight"
+            style={{ fontSize: "1.75rem", color: lightBg ? "#0B1F4D" : "rgba(255,255,255,0.95)" }}
+          >
+            Elbold
+          </span>
         </Link>
 
         {/* Desktop Nav */}

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { VENDOR_CATEGORIES } from "@/types";
 import { Star, MapPin, ArrowRight, CheckCircle2, Shield, ShieldCheck, BadgeCheck } from "lucide-react";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     .select("id, business_name, city, rating, review_count, starting_price, description, verified, subscription_plan, verification_level")
     .eq("status", "approved")
     .eq("category", category)
+    .not("id", "in", TEST_VENDOR_EXCLUSION)
     .order("subscription_plan", { ascending: false })
     .order("rating", { ascending: false })
     .limit(12);

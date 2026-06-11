@@ -80,8 +80,9 @@ export default function SignupPage() {
       <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "#0D1B3E" }}>
         <div className="w-full max-w-sm text-center">
           <div className="flex justify-center mb-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="64" height="64" alt="Elbold" />
+            <span className="text-3xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>
+              Elbold
+            </span>
           </div>
           <div className="bg-white rounded-2xl p-10">
             <div
@@ -144,17 +145,11 @@ export default function SignupPage() {
         />
 
         <div className="relative z-10 text-center max-w-xs">
-          <div className="flex justify-center mb-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="Elbold" />
-          </div>
-          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>Elbold</p>
-          <p
-            className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
-            style={{ color: "rgba(201,168,76,0.45)" }}
-          >
-            Events
-          </p>
+          <Link href="/" className="inline-block mb-10">
+            <span className="text-3xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>
+              Elbold
+            </span>
+          </Link>
           <h2 className="text-2xl font-light leading-snug mb-4" style={{ color: "rgba(255,255,255,0.85)" }}>
             {role === "vendor"
               ? "Grow your bookings with trusted clients."
@@ -173,10 +168,8 @@ export default function SignupPage() {
 
         {/* Mobile logo */}
         <div className="lg:hidden mb-8 text-center">
-          <Link href="/" className="inline-flex flex-col items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="Elbold" />
-            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>Elbold</span>
+          <Link href="/">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "#0B1F4D" }}>Elbold</span>
           </Link>
         </div>
 

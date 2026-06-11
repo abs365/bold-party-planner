@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, Star, MapPin, Shield, CheckCircle2, Award } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const metadata: Metadata = {
   title: "Vendor Spotlights | Real Professionals on Elbold",
@@ -53,6 +54,7 @@ export default async function VendorSpotlightsPage() {
     .from("vendors")
     .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, is_founding_vendor, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION)
     .in("subscription_plan", ["featured", "pro"])
     .gte("verification_level", 2)
     .order("rating", { ascending: false })
@@ -63,6 +65,7 @@ export default async function VendorSpotlightsPage() {
     .from("vendors")
     .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, is_founding_vendor, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION)
     .order("rating", { ascending: false })
     .limit(9);
 

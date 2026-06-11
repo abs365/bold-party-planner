@@ -57,8 +57,9 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="block mb-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/elbold-logo-white.svg" width="120" height="24" alt="Elbold" />
+              <span className="text-xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.92)" }}>
+                Elbold
+              </span>
             </Link>
             <p
               className="text-sm leading-relaxed mb-5 font-light"

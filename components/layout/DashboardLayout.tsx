@@ -163,8 +163,9 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
   return (
     <div className="flex flex-col h-full">
       <Link href="/" className="flex items-center px-5 py-4 border-b border-white/6">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/elbold-logo-white.svg" width="110" height="24" alt="Elbold" className="h-6 w-auto" />
+        <span className="text-lg font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.92)" }}>
+          Elbold
+        </span>
       </Link>
 
       <div className="px-4 py-4 border-b border-white/6">

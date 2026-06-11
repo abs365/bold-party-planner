@@ -42,34 +42,23 @@ function LoginForm() {
         />
 
         <div className="relative z-10 text-center max-w-xs">
-          {/* Mark */}
-          <div className="flex justify-center mb-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="Elbold" />
-          </div>
-
-          {/* Brand */}
-          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>
-            Elbold
-          </p>
-          <p
-            className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
-            style={{ color: "rgba(201,168,76,0.45)" }}
-          >
-            Events
-          </p>
+          <Link href="/" className="inline-block mb-10">
+            <span className="text-3xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>
+              Elbold
+            </span>
+          </Link>
 
           <h2
             className="text-2xl font-light leading-snug mb-4"
             style={{ color: "rgba(255,255,255,0.85)" }}
           >
-            Extraordinary celebrations start here.
+            Trusted professionals for extraordinary events.
           </h2>
           <p
             className="text-sm font-light leading-relaxed"
             style={{ color: "rgba(255,255,255,0.35)" }}
           >
-            The UK&apos;s premium marketplace for trusted event vendors.
+            The UK marketplace for verified event professionals.
           </p>
 
           {/* Trust pills */}
@@ -95,10 +84,8 @@ function LoginForm() {
 
         {/* Mobile logo only */}
         <div className="lg:hidden mb-8 text-center">
-          <Link href="/" className="inline-flex flex-col items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="Elbold" />
-            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>
+          <Link href="/">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "#0B1F4D" }}>
               Elbold
             </span>
           </Link>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const metadata: Metadata = {
   title: "Elbold | Trusted Professionals Across the UK",
@@ -182,11 +183,12 @@ export default async function Home() {
       .from("vendors")
       .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, verification_level, is_founding_vendor, media:vendor_media(url, type, is_cover)")
       .eq("status", "approved")
+      .not("id", "in", TEST_VENDOR_EXCLUSION)
       .order("subscription_plan", { ascending: false })
       .order("rating", { ascending: false })
       .order("created_at", { ascending: true })
       .limit(6),
-    supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
+    supabase.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved").not("id", "in", TEST_VENDOR_EXCLUSION),
   ]);
 
   const vendors = (featuredRes.data ?? []) as FeaturedVendor[];

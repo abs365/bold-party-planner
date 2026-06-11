@@ -33,8 +33,9 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16" style={{ background: "#0D1B3E" }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/elbold-mark.svg" width="56" height="56" alt="Elbold" className="mx-auto mb-4" />
+          <div className="mb-4">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>Elbold</span>
+          </div>
           <h1 className="text-2xl font-light text-white mb-2">Welcome to Elbold</h1>
           <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
             How are you using Elbold?

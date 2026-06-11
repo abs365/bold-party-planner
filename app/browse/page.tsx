@@ -8,6 +8,7 @@ import { VendorMarketplace } from "@/components/vendor/VendorMarketplace";
 import { TrendingVendors } from "@/components/ui/TrendingVendors";
 import { ArrowRight, CheckCircle2, Shield, Star } from "lucide-react";
 import type { Vendor } from "@/types";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const metadata: Metadata = {
   title: "Discover Verified Event Professionals | Elbold",
@@ -93,6 +94,7 @@ export default async function BrowsePage({
     .from("vendors")
     .select("*, media:vendor_media(url, type, is_cover), packages:vendor_packages(price)")
     .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION)
     .order("featured", { ascending: false })
     .order("rating", { ascending: false });
 
@@ -277,19 +279,53 @@ export default async function BrowsePage({
         </div>
       )}
 
+      {/* ── FOUNDING VENDOR EMPTY STATE ──────────────────────────────────── */}
+      {(vendors ?? []).length === 0 && isDiscovery && (
+        <section className="py-24 px-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <div
+              className="w-16 h-16 rounded-2xl mx-auto mb-8 flex items-center justify-center"
+              style={{ background: "rgba(11,31,77,0.06)" }}
+            >
+              <Shield size={26} style={{ color: "#0B1F4D" }} />
+            </div>
+            <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
+              Now Open
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-4">
+              Founding Vendor Applications Now Open
+            </h2>
+            <p className="text-sm text-gray-500 font-light leading-relaxed max-w-lg mx-auto mb-10">
+              Elbold is actively onboarding and verifying event professionals across the United Kingdom.
+              Be one of the first verified professionals on the platform and build your reputation from day one.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/founding-vendors" className="btn-luxury text-sm px-10">
+                Join the Founding Vendor Programme <ArrowRight size={14} />
+              </Link>
+              <Link href="/how-it-works" className="btn-secondary-light text-sm px-10">
+                How It Works
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── MARKETPLACE ──────────────────────────────────────────────────── */}
-      <VendorMarketplace
-        vendors={(vendors ?? []) as Vendor[]}
-        initialCategory={params.category}
-        initialCity={params.city}
-        initialSearch={params.search}
-        initialBudgetMin={params.budget_min ? parseFloat(params.budget_min) : undefined}
-        initialBudgetMax={params.budget_max ? parseFloat(params.budget_max) : undefined}
-        initialMinRating={params.min_rating ? parseFloat(params.min_rating) : undefined}
-        initialVerifiedOnly={params.verified_only === "true"}
-        initialEventType={params.event_type ?? params.event}
-        initialTheme={params.theme}
-      />
+      {((vendors ?? []).length > 0 || !isDiscovery) && (
+        <VendorMarketplace
+          vendors={(vendors ?? []) as Vendor[]}
+          initialCategory={params.category}
+          initialCity={params.city}
+          initialSearch={params.search}
+          initialBudgetMin={params.budget_min ? parseFloat(params.budget_min) : undefined}
+          initialBudgetMax={params.budget_max ? parseFloat(params.budget_max) : undefined}
+          initialMinRating={params.min_rating ? parseFloat(params.min_rating) : undefined}
+          initialVerifiedOnly={params.verified_only === "true"}
+          initialEventType={params.event_type ?? params.event}
+          initialTheme={params.theme}
+        />
+      )}
 
       <Footer />
     </div>

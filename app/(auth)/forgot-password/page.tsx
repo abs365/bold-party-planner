@@ -13,8 +13,7 @@ export default function ForgotPasswordPage() {
       <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ background: "#0D1B3E" }}>
         <div className="w-full max-w-sm">
           <div className="flex justify-center mb-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="56" height="56" alt="Elbold" />
+            <span className="text-3xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>Elbold</span>
           </div>
           <div className="bg-white rounded-2xl p-10 text-center">
             <div
@@ -48,12 +47,9 @@ export default function ForgotPasswordPage() {
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.04) 0%, transparent 70%)" }}
         />
         <div className="relative z-10 text-center max-w-xs">
-          <div className="flex justify-center mb-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="Elbold" />
-          </div>
-          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>Elbold</p>
-          <p className="text-xs tracking-[0.18em] mb-10 font-light uppercase" style={{ color: "rgba(201,168,76,0.45)" }}>Events</p>
+          <Link href="/" className="inline-block mb-10">
+            <span className="text-3xl font-bold tracking-tight" style={{ color: "rgba(255,255,255,0.95)" }}>Elbold</span>
+          </Link>
           <h2 className="text-2xl font-light leading-snug mb-4" style={{ color: "rgba(255,255,255,0.85)" }}>
             Regain access to your account.
           </h2>
@@ -66,10 +62,8 @@ export default function ForgotPasswordPage() {
       {/* Right form panel */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 bg-white">
         <div className="lg:hidden mb-8 text-center">
-          <Link href="/" className="inline-flex flex-col items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="Elbold" />
-            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>Elbold</span>
+          <Link href="/">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "#0B1F4D" }}>Elbold</span>
           </Link>
         </div>
 
