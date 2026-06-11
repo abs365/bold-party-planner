@@ -16,9 +16,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params;
   const guide = getGuide(slug);
-  if (!guide) return { title: "Guide Not Found | ELBOLD" };
+  if (!guide) return { title: "Guide Not Found | Elbold" };
   return {
-    title: `${guide.title} | ELBOLD Guides`,
+    title: `${guide.title} | Elbold Guides`,
     description: guide.description,
     openGraph: {
       title: guide.title,
@@ -52,10 +52,10 @@ export default async function GuidePage(
     headline: guide.title,
     description: guide.description,
     datePublished: guide.publishedDate,
-    author: { "@type": "Organization", name: "ELBOLD" },
+    author: { "@type": "Organization", name: "Elbold" },
     publisher: {
       "@type": "Organization",
-      name: "ELBOLD",
+      name: "Elbold",
       url: "https://elbold.co.uk",
     },
   };
@@ -207,7 +207,7 @@ export default async function GuidePage(
             Ready to find a verified vendor?
           </h3>
           <p className="text-sm font-light mb-6" style={{ color: "rgba(255,255,255,0.4)" }}>
-            Every vendor on ELBOLD is individually reviewed before listing.
+            Every vendor on Elbold is individually reviewed before listing.
           </p>
           <Link
             href={guide.ctaHref}

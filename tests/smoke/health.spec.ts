@@ -24,7 +24,7 @@ test.describe("Smoke - Health & Infrastructure", () => {
 
   test("homepage loads", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle(/ELBOLD Events/i);
+    await expect(page).toHaveTitle(/Elbold/i);
   });
 
   test("browse page loads without login", async ({ page }) => {
@@ -149,7 +149,7 @@ test.describe("Smoke - Push Notifications Infrastructure", () => {
     expect(res.status()).toBe(200);
     expect(res.headers()["content-type"]).toMatch(/manifest\+json/);
     const body = await res.json() as { name: string; display: string };
-    expect(body.name).toBe("ELBOLD Events");
+    expect(body.name).toBe("Elbold");
     expect(body.display).toBe("standalone");
   });
 

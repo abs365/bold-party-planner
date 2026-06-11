@@ -227,12 +227,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <section className="py-16 px-4 border-t border-gray-100" style={{ background: "#fafaf9" }}>
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-light text-gray-900 text-center mb-8 tracking-tight">
-            Why Book a {cat.label} on ELBOLD?
+            Why Book a {cat.label} on Elbold?
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               { title: "Individually reviewed", desc: `Every ${cat.label.toLowerCase()} is manually vetted by our team before appearing on the platform.` },
-              { title: "Real portfolios and reviews", desc: "View genuine photos, videos, and reviews from real customers who booked through ELBOLD." },
+              { title: "Real portfolios and reviews", desc: "View genuine photos, videos, and reviews from real customers who booked through Elbold." },
               { title: "Stripe-secured payments", desc: "Pay your 30% deposit safely via Stripe. Your money is protected until your event completes." },
               { title: "Free to browse", desc: `No account needed to browse ${cat.label.toLowerCase()}s and compare packages. Only sign up when ready to book.` },
             ].map((item) => (
