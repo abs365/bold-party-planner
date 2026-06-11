@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -75,7 +75,7 @@ const RISK_REGISTER: RiskItem[] = [
     area: "Review Volume",
     finding: "Zero reviews on the platform at pilot launch. Vendor profiles show no trust signal from review history",
     risk: "medium",
-    mitigation: "Pilot vendors should be briefed that reviews will start appearing after their first completed events. Trust programme (Why ELBOLD, Verification badges) compensates for this in the interim.",
+    mitigation: "Pilot vendors should be briefed that reviews will start appearing after their first completed events. Trust programme (Why Elbold, Verification badges) compensates for this in the interim.",
   },
   {
     area: "Email Deliverability",
@@ -220,7 +220,7 @@ export default async function PilotReadinessPage() {
             </div>
           </div>
           <p className="text-slate-300 text-sm leading-relaxed max-w-2xl">
-            ELBOLD is operationally ready for a controlled 20-vendor pilot. All payment, booking, trust,
+            Elbold is operationally ready for a controlled 20-vendor pilot. All payment, booking, trust,
             email, and SEO infrastructure is functional. Two high-priority items — email domain
             deliverability verification (DKIM/SPF/DMARC) and a privacy policy — must be resolved before
             inviting the first external user. All other risks are manageable at pilot scale.

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { FeedbackForm } from "@/components/pwa/FeedbackForm";
@@ -20,7 +20,7 @@ export default async function VendorFeedbackPage() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-white">Share Your Feedback</h1>
           <p className="text-white/50 mt-1 text-sm">
-            You are one of ELBOLD&apos;s founding vendors. Your experience directly shapes the platform.
+            You are one of Elbold&apos;s founding vendors. Your experience directly shapes the platform.
             This takes under 2 minutes.
           </p>
         </div>

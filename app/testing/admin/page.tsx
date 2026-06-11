@@ -1,8 +1,8 @@
-import { AdminTestForm } from "@/components/pilot/AdminTestForm";
+﻿import { AdminTestForm } from "@/components/pilot/AdminTestForm";
 
 export const metadata = {
-  title: "Admin Testing | ELBOLD Pilot",
-  description: "Submit your admin journey test results for the ELBOLD pilot programme.",
+  title: "Admin Testing | Elbold Pilot",
+  description: "Submit your admin journey test results for the Elbold pilot programme.",
 };
 
 export default function AdminTestingPage() {

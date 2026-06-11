@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 
 const SEED_SECRET = process.env.SEED_SECRET ?? "ELBOLD_SEED_2026";

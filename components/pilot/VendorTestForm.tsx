@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
@@ -103,7 +103,7 @@ export function VendorTestForm() {
           <CheckCircle2 size={64} className="text-green-500 mb-6" />
           <h1 className="text-3xl font-bold text-gray-900 mb-3">Thank You!</h1>
           <p className="text-gray-500 text-lg text-center max-w-md">
-            Your vendor test results have been submitted. Your feedback shapes the ELBOLD platform.
+            Your vendor test results have been submitted. Your feedback shapes the Elbold platform.
           </p>
         </div>
         <Footer />

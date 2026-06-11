@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
@@ -121,7 +121,7 @@ export function CustomerTestForm() {
           <CheckCircle2 size={64} className="text-green-500 mb-6" />
           <h1 className="text-3xl font-bold text-gray-900 mb-3">Thank You!</h1>
           <p className="text-gray-500 text-lg text-center max-w-md">
-            Your customer test results have been submitted. Your feedback directly shapes the ELBOLD launch.
+            Your customer test results have been submitted. Your feedback directly shapes the Elbold launch.
           </p>
         </div>
         <Footer />
@@ -140,7 +140,7 @@ export function CustomerTestForm() {
           </p>
           <h1 className="text-3xl font-light text-white mb-3">Customer Journey Test</h1>
           <p className="text-white/50 text-sm max-w-md mx-auto">
-            Test the full customer experience and report what you find. Your results go directly to the ELBOLD launch team.
+            Test the full customer experience and report what you find. Your results go directly to the Elbold launch team.
           </p>
         </div>
       </div>

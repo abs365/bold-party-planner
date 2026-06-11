@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { requireAdmin, forbidden } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
@@ -103,7 +103,7 @@ export async function GET(request: Request) {
       route: "POST /api/vendor/apply",
       function: "sendVendorApplicationReceived(email, name, businessName)",
       status: "WIRED ✓",
-      note: "Fixed in ELBOLD rebrand — was missing before",
+      note: "Fixed in Elbold rebrand — was missing before",
     },
     {
       trigger: "Admin approves vendor in /admin/vendors",
@@ -150,7 +150,7 @@ export async function GET(request: Request) {
     timestamp: new Date().toISOString(),
     configuration: {
       resend_api_key_set: !!apiKey,
-      from_address: "ELBOLD <noreply@elbold.com>",
+      from_address: "Elbold <noreply@elbold.com>",
       app_url: appUrl,
     },
     domain_verification: domainStatus,

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -9,12 +9,12 @@ export const dynamic = "force-dynamic";
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 const EMAIL = {
-  subject: "Join ELBOLD Events — Free listing, keep 90% of every booking",
+  subject: "Join Elbold — Free listing, keep 90% of every booking",
   body: `Hi [Name],
 
 I came across [Business Name] and wanted to reach out personally.
 
-I'm building ELBOLD Events — a new UK marketplace connecting event hosts with trusted vendors for weddings, birthdays, and corporate events across the UK.
+I'm building Elbold — a new UK marketplace connecting event hosts with trusted vendors for weddings, birthdays, and corporate events across the UK.
 
 I'm currently inviting a small group of founding vendors to join before we open to the public. As a founding vendor, you would:
 
@@ -34,13 +34,13 @@ Any questions, reply here or WhatsApp me directly.
 
 Best,
 [Your Name]
-ELBOLD Events
+Elbold
 hello@elbold.com`,
 };
 
-const WHATSAPP = `Hi [Name], I'm [Your Name] from ELBOLD Events — a new UK marketplace for event vendors. I came across your work and I think you'd be a great fit for our founding vendor programme. Free to list, keep 90% of bookings, and you'd get a Founding Vendor badge. Takes 5 minutes to apply: elbold.com/vendor/apply — happy to answer any questions here!`;
+const WHATSAPP = `Hi [Name], I'm [Your Name] from Elbold — a new UK marketplace for event vendors. I came across your work and I think you'd be a great fit for our founding vendor programme. Free to list, keep 90% of bookings, and you'd get a Founding Vendor badge. Takes 5 minutes to apply: elbold.com/vendor/apply — happy to answer any questions here!`;
 
-const INSTAGRAM_DM = `Hi [Name] 👋 Love your work! I run ELBOLD Events — a new UK marketplace connecting event hosts with vendors like you. We're onboarding our founding vendors right now and I think [Business Name] would be a perfect fit.
+const INSTAGRAM_DM = `Hi [Name] 👋 Love your work! I run Elbold — a new UK marketplace connecting event hosts with vendors like you. We're onboarding our founding vendors right now and I think [Business Name] would be a perfect fit.
 
 Free to list, you keep 90% of every booking, and you get a Founding Vendor badge. No monthly fees during our launch.
 
@@ -48,7 +48,7 @@ Interested? Takes 5 mins: elbold.com/vendor/apply ✨`;
 
 const FOLLOW_UP_EMAIL = `Hi [Name],
 
-Just following up on my message from [X days] ago about ELBOLD Events.
+Just following up on my message from [X days] ago about Elbold.
 
 We're now live with our first vendors and receiving real quote requests from event hosts in [City/Region].
 

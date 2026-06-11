@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -309,7 +309,7 @@ export function PilotDashboard({
             {[
               { label: "Accepted Quote Value",    value: fmt(revenue.confirmedBookingValue), sub: "confirmed + completed bookings" },
               { label: "Completed Revenue",       value: fmt(revenue.completedRevenue),      sub: "completed bookings only" },
-              { label: "Platform Earnings (10%)", value: fmt(revenue.platformRevenue),       sub: "ELBOLD commission on completed" },
+              { label: "Platform Earnings (10%)", value: fmt(revenue.platformRevenue),       sub: "Elbold commission on completed" },
               { label: "Subscription MRR",        value: fmt(revenue.subscriptionRevenue),   sub: "active paid subscriptions" },
               { label: "Total Marketplace Value", value: fmt(revenue.totalMarketplaceRevenue), sub: "commission + subscriptions" },
             ].map(({ label, value, sub }) => (

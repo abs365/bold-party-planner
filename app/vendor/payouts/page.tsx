@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import {
@@ -154,7 +154,7 @@ export default async function VendorPayoutsPage() {
             <ShieldCheck size={18} className="text-emerald-400 mt-0.5 flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <h2 className="text-sm font-bold text-white mb-1">Commission Structure</h2>
-              <p className="text-xs text-slate-400 mb-4">ELBOLD operates on a transparent 90/10 split. Here is the exact breakdown across your confirmed bookings.</p>
+              <p className="text-xs text-slate-400 mb-4">Elbold operates on a transparent 90/10 split. Here is the exact breakdown across your confirmed bookings.</p>
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center p-3 rounded-xl bg-white/4 border border-white/6">
                   <div className="text-base font-bold text-white tabular-nums">{fmt(totalGross)}</div>
@@ -163,7 +163,7 @@ export default async function VendorPayoutsPage() {
                 </div>
                 <div className="text-center p-3 rounded-xl bg-red-500/6 border border-red-500/15">
                   <div className="text-base font-bold text-red-400 tabular-nums">{fmt(totalCommission)}</div>
-                  <div className="text-xs text-slate-500 mt-0.5">ELBOLD fee (10%)</div>
+                  <div className="text-xs text-slate-500 mt-0.5">Elbold fee (10%)</div>
                   <div className="text-xs text-slate-600 mt-0.5">Platform commission</div>
                 </div>
                 <div className="text-center p-3 rounded-xl bg-emerald-500/6 border border-emerald-500/15">
@@ -179,7 +179,7 @@ export default async function VendorPayoutsPage() {
         {/* ── Per-Booking Commission Breakdown ─────────────────────────────── */}
         <div className="bg-white/4 border border-white/6 rounded-xl p-5">
           <h2 className="font-bold text-white mb-1">Booking Revenue Breakdown</h2>
-          <p className="text-xs text-slate-500 mb-4">Every row shows exactly what the customer paid, ELBOLD&apos;s 10% fee, and your 90% share.</p>
+          <p className="text-xs text-slate-500 mb-4">Every row shows exactly what the customer paid, Elbold&apos;s 10% fee, and your 90% share.</p>
 
           {enriched.length === 0 ? (
             <div className="text-center py-8">
@@ -332,7 +332,7 @@ export default async function VendorPayoutsPage() {
           <div className="space-y-2.5 text-sm text-slate-400">
             <div className="flex items-start gap-2">
               <CreditCard size={13} className="text-slate-500 mt-0.5 flex-shrink-0" />
-              <p>ELBOLD retains a <span className="text-white font-medium">10% platform fee</span> on each confirmed booking. You receive 90% of the booking value.</p>
+              <p>Elbold retains a <span className="text-white font-medium">10% platform fee</span> on each confirmed booking. You receive 90% of the booking value.</p>
             </div>
             <div className="flex items-start gap-2">
               <Clock size={13} className="text-slate-500 mt-0.5 flex-shrink-0" />

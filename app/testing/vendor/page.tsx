@@ -1,8 +1,8 @@
-import { VendorTestForm } from "@/components/pilot/VendorTestForm";
+﻿import { VendorTestForm } from "@/components/pilot/VendorTestForm";
 
 export const metadata = {
-  title: "Vendor Testing | ELBOLD Pilot",
-  description: "Submit your vendor journey test results for the ELBOLD pilot programme.",
+  title: "Vendor Testing | Elbold Pilot",
+  description: "Submit your vendor journey test results for the Elbold pilot programme.",
 };
 
 export default function VendorTestingPage() {
