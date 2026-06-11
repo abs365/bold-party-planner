@@ -111,6 +111,7 @@ export interface Vendor {
   max_price: number | null;
   starting_price: number;
   verified: boolean;
+  is_founding_vendor: boolean;
   featured: boolean;
   years_experience: number | null;
   instagram_url: string | null;

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowRight, Star, MapPin, Shield, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Star, MapPin, Shield, CheckCircle2, Award } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
@@ -24,7 +24,8 @@ export const dynamic = "force-dynamic";
 type SpotlightVendor = Pick<
   Vendor,
   "id" | "business_name" | "category" | "city" | "description" |
-  "rating" | "review_count" | "verified" | "verification_level" | "subscription_plan"
+  "rating" | "review_count" | "verified" | "verification_level" | "subscription_plan" |
+  "is_founding_vendor"
 > & { media?: Array<{ url: string; type: string; is_cover: boolean }> };
 
 const CATEGORY_FEATURE_PHRASES: Record<string, string> = {
@@ -50,7 +51,7 @@ export default async function VendorSpotlightsPage() {
   // Fetch featured and pro vendors with media for spotlights
   const { data: featuredVendors } = await supabase
     .from("vendors")
-    .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, media:vendor_media(url, type, is_cover)")
+    .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, is_founding_vendor, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
     .in("subscription_plan", ["featured", "pro"])
     .gte("verification_level", 2)
@@ -60,7 +61,7 @@ export default async function VendorSpotlightsPage() {
   // Fallback: any approved vendors with media
   const { data: allVendors } = await supabase
     .from("vendors")
-    .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, media:vendor_media(url, type, is_cover)")
+    .select("id, business_name, category, city, description, rating, review_count, verified, verification_level, subscription_plan, is_founding_vendor, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
     .order("rating", { ascending: false })
     .limit(9);
@@ -157,9 +158,16 @@ export default async function VendorSpotlightsPage() {
                       <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-1">
                         {vendor.business_name}
                       </h2>
-                      <div className="flex items-center gap-1.5 text-sm text-gray-400 font-light mb-5">
-                        <MapPin size={12} />
-                        {vendor.city}
+                      <div className="flex items-center gap-2.5 flex-wrap mb-5">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-400 font-light">
+                          <MapPin size={12} />
+                          {vendor.city}
+                        </div>
+                        {vendor.is_founding_vendor && (
+                          <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium" style={{ border: "1px solid #0B1F4D", color: "#0B1F4D" }}>
+                            <Award size={10} /> Founding Vendor
+                          </span>
+                        )}
                       </div>
 
                       {/* Feature phrase */}

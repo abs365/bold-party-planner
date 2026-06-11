@@ -7,7 +7,7 @@ import Link from "next/link";
 import {
   MapPin, Star, CheckCircle2, Play, Calendar, Clock,
   Share2, Heart, ChevronLeft, ChevronRight, MessageCircle,
-  Package, X, ShieldCheck, BadgeCheck, ArrowRight,
+  Package, X, ShieldCheck, BadgeCheck, ArrowRight, Award,
 } from "lucide-react";
 import { BookingPromise } from "@/components/ui/BookingPromise";
 import { cn, formatCurrency, formatPackagePrice, formatDate } from "@/lib/utils";
@@ -315,6 +315,11 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               {vendor.subscription_plan === "pro" && !vendor.featured && (
                 <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-slate-50 text-[#0B1F4D] border border-slate-200 font-medium">
                   <CheckCircle2 size={11} /> Pro Vendor
+                </span>
+              )}
+              {vendor.is_founding_vendor && (
+                <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium" style={{ border: "1px solid #0B1F4D", color: "#0B1F4D" }}>
+                  <Award size={11} /> Founding Vendor
                 </span>
               )}
               {vendor.years_experience && (

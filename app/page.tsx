@@ -35,7 +35,8 @@ export const dynamic = "force-dynamic";
 type FeaturedVendor = Pick<
   Vendor,
   "id" | "business_name" | "category" | "city" | "rating" | "review_count" |
-  "starting_price" | "subscription_plan" | "verified" | "min_price" | "verification_level"
+  "starting_price" | "subscription_plan" | "verified" | "min_price" | "verification_level" |
+  "is_founding_vendor"
 > & { media?: Array<{ url: string; type: string; is_cover: boolean }> };
 
 // ── Occasion data — editorial cards ──────────────────────────────────────────
@@ -154,7 +155,7 @@ export default async function Home() {
   const [featuredRes, vendorCountRes] = await Promise.all([
     supabase
       .from("vendors")
-      .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, verification_level, media:vendor_media(url, type, is_cover)")
+      .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, verification_level, is_founding_vendor, media:vendor_media(url, type, is_cover)")
       .eq("status", "approved")
       .order("subscription_plan", { ascending: false })
       .order("rating", { ascending: false })
@@ -184,8 +185,8 @@ export default async function Home() {
         >
           <div className="absolute inset-0">
             <Image
-              src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80"
-              alt="Elegant event celebration"
+              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1920&q=80"
+              alt="Professional photographer at work at an event"
               fill
               priority
               quality={85}
@@ -473,7 +474,14 @@ export default async function Home() {
 
                       <div className="p-5">
                         <h3 className="font-semibold text-gray-900 text-sm truncate">{v.business_name}</h3>
-                        <p className="text-xs text-gray-400 mt-0.5 capitalize font-light">{cat?.label ?? v.category}</p>
+                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                          <p className="text-xs text-gray-400 capitalize font-light">{cat?.label ?? v.category}</p>
+                          {v.is_founding_vendor && (
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium" style={{ borderColor: "#0B1F4D", color: "#0B1F4D" }}>
+                              <Award size={9} /> Founding Vendor
+                            </span>
+                          )}
+                        </div>
                         <div className="flex items-center justify-between mt-3">
                           <div className="flex items-center gap-1 text-xs text-gray-400 font-light">
                             <MapPin size={10} /> {v.city}
@@ -619,7 +627,7 @@ export default async function Home() {
               style={{ borderTop: "1px solid rgba(212,175,55,0.07)" }}
             >
               {[
-                ...(vendorCount > 0 ? [{ value: `${vendorCount}+`, label: "Approved Vendors" }] : []),
+                ...(vendorCount > 0 ? [{ value: `${vendorCount}`, label: "Approved Vendors" }] : []),
                 { value: "UK",   label: "Essex · Kent · London" },
                 { value: "100%", label: "Individually Reviewed" },
                 { value: "90%",  label: "Kept by Every Vendor" },

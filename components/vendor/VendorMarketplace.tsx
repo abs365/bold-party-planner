@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Search, MapPin, Star, CheckCircle2, Play, X, Clock,
-  BadgeCheck, TrendingUp, Filter, Heart, Zap, Quote, ChevronDown, ChevronUp,
+  BadgeCheck, TrendingUp, Filter, Heart, Zap, Quote, ChevronDown, ChevronUp, Award,
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Vendor, type VendorCategory } from "@/types";
@@ -663,9 +663,16 @@ function VendorCard({ vendor, priority = false }: { vendor: Vendor; priority?: b
             <div className="flex items-start justify-between mb-1.5">
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-gray-900 text-sm truncate">{vendor.business_name}</h3>
-                <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
-                  <span>{cat?.icon}</span> {cat?.label}
-                </p>
+                <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                  <p className="text-xs text-gray-400 flex items-center gap-1">
+                    <span>{cat?.icon}</span> {cat?.label}
+                  </p>
+                  {vendor.is_founding_vendor && (
+                    <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium" style={{ borderColor: "#0B1F4D", color: "#0B1F4D" }}>
+                      <Award size={9} /> Founding Vendor
+                    </span>
+                  )}
+                </div>
               </div>
               {vendor.rating > 0 && (
                 <div className="flex items-center gap-1 flex-shrink-0 ml-2">

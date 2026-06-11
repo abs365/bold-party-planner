@@ -72,8 +72,8 @@ export default async function AboutPage() {
       >
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80"
-            alt="Elegant wedding celebration"
+            src="https://images.unsplash.com/photo-1571266028243-d220c6ceebff?auto=format&fit=crop&w=1920&q=80"
+            alt="DJ performing at a professional event"
             fill priority quality={75}
             className="object-cover object-center"
             sizes="100vw"
@@ -249,7 +249,7 @@ export default async function AboutPage() {
                   className="rounded-2xl p-8 text-center"
                   style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,175,55,0.07)" }}
                 >
-                  <div className="text-4xl font-light mb-2" style={{ color: "#D4AF37" }}>{vendorCount}+</div>
+                  <div className="text-4xl font-light mb-2" style={{ color: "#D4AF37" }}>{vendorCount}</div>
                   <div className="text-sm font-light" style={{ color: "rgba(255,255,255,0.35)" }}>
                     Vendors individually reviewed and approved
                   </div>
