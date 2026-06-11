@@ -49,7 +49,7 @@ export function VendorOnboardingProgress({ completion, vendorName }: Props) {
               )}
               {isMarketplaceReady
                 ? `You're marketplace ready, ${vendorName.split(" ")[0]}!`
-                : `Welcome to ELBOLD Events, ${vendorName.split(" ")[0]}!`}
+                : `Welcome to Elbold, ${vendorName.split(" ")[0]}!`}
             </h2>
             <p className="text-slate-400 text-sm mt-1">
               {isMarketplaceReady

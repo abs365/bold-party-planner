@@ -2,24 +2,24 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Vendor Terms | ELBOLD",
-  description: "Terms and conditions for vendors listing services on the ELBOLD marketplace.",
+  title: "Vendor Terms | Elbold",
+  description: "Terms and conditions for vendors listing services on the Elbold marketplace.",
 };
 
 export default function VendorTerms() {
   return (
     <LegalPage
       title="Vendor Terms of Service"
-      subtitle="Additional terms and obligations for event professionals listing services on ELBOLD."
+      subtitle="Additional terms and obligations for event professionals listing services on Elbold."
       lastUpdated="June 2026"
       sections={[
         {
           title: "1. Vendor Status",
           content: [
-            "The marketplace is operated by ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales, registered office: [REGISTERED_OFFICE].",
-            "By applying as a vendor on ELBOLD, you agree to these Vendor Terms in addition to our general Terms of Service.",
+            "The marketplace is operated by ELBOLD Ltd (trading as Elbold), registered in England and Wales.",
+            "By applying as a vendor on Elbold, you agree to these Vendor Terms in addition to our general Terms of Service.",
             "Vendor status is granted at our discretion following an application review. We may decline applications without giving reasons.",
-            "You are an independent business, not an employee, agent, or contractor of ELBOLD.",
+            "You are an independent business, not an employee, agent, or contractor of Elbold.",
           ],
         },
         {
@@ -34,7 +34,7 @@ export default function VendorTerms() {
         {
           title: "3. Commission and Payments",
           content: [
-            "ELBOLD charges a 10% commission on the total booking value. This is deducted from your payout before funds are transferred.",
+            "Elbold charges a 10% commission on the total booking value. This is deducted from your payout before funds are transferred.",
             "Example: A £500 booking results in a £450 payout to you (90%).",
             "Payouts are processed within 7 working days of the event completion date via bank transfer. You receive 90% of the agreed booking value.",
             "Payouts are made by bank transfer to the account details you provide. You are responsible for providing accurate bank details.",
@@ -53,17 +53,17 @@ export default function VendorTerms() {
         {
           title: "5. Standards of Conduct",
           content: [
-            "You must behave professionally at all times when representing services booked through ELBOLD.",
+            "You must behave professionally at all times when representing services booked through Elbold.",
             "You must arrive on time for events. If a delay is unavoidable, contact the customer immediately.",
             "You must treat customers and their guests with respect. Rude, discriminatory, or threatening behaviour will result in immediate account suspension.",
-            "You must not engage in any activity that could bring ELBOLD's reputation into disrepute.",
+            "You must not engage in any activity that could bring Elbold's reputation into disrepute.",
           ],
         },
         {
           title: "6. Content and Intellectual Property",
           content: [
             "You retain ownership of photos, videos, and content you upload to your profile.",
-            "By uploading content, you grant ELBOLD a non-exclusive licence to display that content on the platform and in marketing materials.",
+            "By uploading content, you grant Elbold a non-exclusive licence to display that content on the platform and in marketing materials.",
             "You confirm you own or have the right to use all uploaded content.",
           ],
         },

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ShieldCheck, MessageCircle, CheckCircle2, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -48,9 +48,9 @@ export function BookingPromise({ vendorName, className, variant = "both" }: Book
           </div>
           <div className="space-y-2">
             {[
-              { icon: Lock,         text: "30% deposit processed through Stripe, managed by ELBOLD until your event" },
+              { icon: Lock,         text: "30% deposit processed through Stripe, managed by Elbold until your event" },
               { icon: CheckCircle2, text: "Full refund if vendor cancels" },
-              { icon: MessageCircle, text: "Disputes resolved by ELBOLD within 5 working days" },
+              { icon: MessageCircle, text: "Disputes resolved by Elbold within 5 working days" },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-start gap-2">
                 <Icon size={11} className="text-emerald-600 flex-shrink-0 mt-0.5" />

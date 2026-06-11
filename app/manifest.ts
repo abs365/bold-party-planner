@@ -1,9 +1,9 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ELBOLD Events",
-    short_name: "ELBOLD",
+    name: "Elbold",
+    short_name: "Elbold",
     description: "The UK's premium event vendor marketplace. Book verified DJs, decorators, caterers, photographers and more.",
     start_url: "/",
     scope: "/",
@@ -53,7 +53,7 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: "390x844",
         type: "image/png",
         form_factor: "narrow",
-        label: "ELBOLD Events Home",
+        label: "Elbold Home",
       },
     ],
   };

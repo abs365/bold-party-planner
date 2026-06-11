@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -61,7 +61,7 @@ const JOURNEYS: JourneyScore[] = [
     sixtySecond: 4,
     flags: [],
     improvements: [
-      "ELBOLD Verified badge now links to /how-we-verify",
+      "Elbold Verified badge now links to /how-we-verify",
       "BookingPromise component added to sidebar",
       "Trust signals updated: fabricated response times removed",
       "Login intent preserved through auth flow",
@@ -169,7 +169,7 @@ const JOURNEYS: JourneyScore[] = [
     lastReviewed: "2026-06-06",
   },
   {
-    name: "Why ELBOLD",
+    name: "Why Elbold",
     path: "/why-elbold",
     fiveSecond: 5,
     thirtySecond: 5,
@@ -283,7 +283,7 @@ export default async function TrustAuditPage() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               { label: "5-second test", desc: "Does the visitor know what this page is for?" },
-              { label: "30-second test", desc: "Do they understand why ELBOLD is trustworthy?" },
+              { label: "30-second test", desc: "Do they understand why Elbold is trustworthy?" },
               { label: "60-second test", desc: "Is the action they should take clear?" },
             ].map(({ label, desc }) => (
               <div key={label}>
@@ -482,7 +482,7 @@ export default async function TrustAuditPage() {
             {[
               { label: "How We Verify", href: "/how-we-verify", icon: Shield },
               { label: "Booking Protection", href: "/booking-protection", icon: CheckCircle2 },
-              { label: "Why ELBOLD", href: "/why-elbold", icon: Star },
+              { label: "Why Elbold", href: "/why-elbold", icon: Star },
               { label: "Refund Policy", href: "/refunds", icon: CreditCard },
               { label: "How It Works", href: "/how-it-works", icon: Eye },
               { label: "Guides", href: "/guides", icon: TrendingUp },

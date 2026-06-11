@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -6,11 +6,11 @@ import { Footer } from "@/components/layout/Footer";
 import { CheckCircle2, XCircle, ArrowRight, AlertCircle, Shield } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Our Commitments | What ELBOLD Promises Every Customer",
+  title: "Our Commitments | What Elbold Promises Every Customer",
   description:
-    "A transparent statement of what ELBOLD commits to on every booking, what we do not guarantee, and how to hold us accountable. No vague promises. Specific, checkable commitments only.",
+    "A transparent statement of what Elbold commits to on every booking, what we do not guarantee, and how to hold us accountable. No vague promises. Specific, checkable commitments only.",
   openGraph: {
-    title: "ELBOLD: Our Commitments",
+    title: "Elbold: Our Commitments",
     description: "What we promise. What we do not guarantee. How to hold us accountable.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -22,25 +22,25 @@ const COMMITMENTS = [
   {
     id: "C-01",
     title: "Every vendor is reviewed before appearing on the platform.",
-    detail: "No vendor is listed through automated approval. Every application is assessed by a member of the ELBOLD team against our published Vendor Standards: portfolio quality, pricing accuracy, and identity confirmation. We reject applicants who do not meet the standard.",
+    detail: "No vendor is listed through automated approval. Every application is assessed by a member of the Elbold team against our published Vendor Standards: portfolio quality, pricing accuracy, and identity confirmation. We reject applicants who do not meet the standard.",
     howToVerify: "If you encounter a vendor whose listing appears to misrepresent their work or services, report it to quality@elbold.com. We will review within 2 business days.",
   },
   {
     id: "C-02",
     title: "Your deposit is secured until after your event.",
-    detail: "The 30% deposit you pay on booking is processed securely through Stripe and managed by ELBOLD according to the Booking Protection and Refund Policy. It is not released to the vendor until your event has completed and no dispute has been raised.",
+    detail: "The 30% deposit you pay on booking is processed securely through Stripe and managed by Elbold according to the Booking Protection and Refund Policy. It is not released to the vendor until your event has completed and no dispute has been raised.",
     howToVerify: "Your Stripe payment confirmation email will confirm the amount charged and the payment processor. If you have questions about payment handling, contact support@elbold.com.",
   },
   {
     id: "C-03",
     title: "If a vendor cancels your confirmed booking, you receive a full refund.",
-    detail: "A confirmed booking is one where a deposit has been paid through ELBOLD. If the vendor cancels after this point, the deposit is returned in full. There is no deduction for platform fees in the event of a vendor cancellation.",
+    detail: "A confirmed booking is one where a deposit has been paid through Elbold. If the vendor cancels after this point, the deposit is returned in full. There is no deduction for platform fees in the event of a vendor cancellation.",
     howToVerify: "If a vendor has cancelled a confirmed booking and your refund has not been processed within 5 business days, contact disputes@elbold.com.",
   },
   {
     id: "C-04",
     title: "Every review is from a customer who booked through the platform.",
-    detail: "Reviews can only be submitted by users who have a completed booking record on ELBOLD for the relevant vendor. Anonymous reviews are not possible. Reviews submitted outside the booking system are not accepted. We do not allow vendors to solicit or incentivise reviews.",
+    detail: "Reviews can only be submitted by users who have a completed booking record on Elbold for the relevant vendor. Anonymous reviews are not possible. Reviews submitted outside the booking system are not accepted. We do not allow vendors to solicit or incentivise reviews.",
     howToVerify: "If you believe a review is fabricated, contact quality@elbold.com with the review URL and your reason for concern.",
   },
   {
@@ -64,7 +64,7 @@ const NON_COMMITMENTS = [
   },
   {
     title: "We cannot guarantee vendor availability on your date.",
-    detail: "Vendor availability is managed by the vendor, not by ELBOLD. Enquiring through the platform does not reserve the vendor. A date is only held once a booking is confirmed and a deposit is paid.",
+    detail: "Vendor availability is managed by the vendor, not by Elbold. Enquiring through the platform does not reserve the vendor. A date is only held once a booking is confirmed and a deposit is paid.",
   },
   {
     title: "We cannot guarantee the accuracy of all vendor pricing at all times.",
@@ -72,7 +72,7 @@ const NON_COMMITMENTS = [
   },
   {
     title: "We do not guarantee outcomes in disputed bookings.",
-    detail: "If a dispute is raised, ELBOLD will mediate and apply our dispute resolution policy. We cannot guarantee the outcome in every case. Where disputes involve matters of law, we may direct both parties to seek independent advice.",
+    detail: "If a dispute is raised, Elbold will mediate and apply our dispute resolution policy. We cannot guarantee the outcome in every case. Where disputes involve matters of law, we may direct both parties to seek independent advice.",
   },
   {
     title: "We do not represent that approved vendors are licensed or insured.",
@@ -107,7 +107,7 @@ export default async function OurCommitmentsPage() {
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
             Most platforms promise everything. We publish exactly what we commit to, and we are honest
             about where our responsibility ends. This is the basis on which customers should decide
-            whether to use ELBOLD.
+            whether to use Elbold.
           </p>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default async function OurCommitmentsPage() {
               Part 1
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
-              What ELBOLD commits to.
+              What Elbold commits to.
             </h2>
             <p className="text-sm text-gray-500 font-light max-w-xl">
               These are specific, checkable commitments. Each one includes how to verify it and how to hold us accountable if we fall short.
@@ -163,7 +163,7 @@ export default async function OurCommitmentsPage() {
               Part 2
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
-              What ELBOLD does not guarantee.
+              What Elbold does not guarantee.
             </h2>
             <p className="text-sm text-gray-500 font-light max-w-xl">
               Honest marketplaces publish their limitations. These are the areas where we cannot make
@@ -198,7 +198,7 @@ export default async function OurCommitmentsPage() {
               </h2>
               <div className="space-y-4 text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
                 <p>
-                  If you believe ELBOLD has failed to honour a specific commitment listed on this page,
+                  If you believe Elbold has failed to honour a specific commitment listed on this page,
                   contact us at{" "}
                   <a href="mailto:commitments@elbold.com" className="font-semibold" style={{ color: "#D4AF37" }}>
                     commitments@elbold.com
@@ -244,7 +244,7 @@ export default async function OurCommitmentsPage() {
           <div className="flex items-start gap-2">
             <AlertCircle size={13} className="text-gray-300 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-gray-400 font-light leading-relaxed max-w-xl">
-              These commitments were last reviewed in June 2026. ELBOLD will notify registered users
+              These commitments were last reviewed in June 2026. Elbold will notify registered users
               of any material changes to this document with a minimum of 30 days notice.
               Reading these commitments does not constitute a legal contract.
             </p>

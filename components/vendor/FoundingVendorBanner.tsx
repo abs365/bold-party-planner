@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Award, X } from "lucide-react";
@@ -26,7 +26,7 @@ export function FoundingVendorBanner() {
             <span className="text-xs px-2 py-0.5 rounded-full font-semibold text-[#0d1b3e]" style={{ background: "#C9A84C" }}>ACTIVE</span>
           </div>
           <p className="text-white/70 text-sm leading-relaxed">
-            You&apos;re one of ELBOLD&apos;s first vendors. You receive priority placement, the Founding Vendor badge, and early access to all new features.
+            You&apos;re one of Elbold&apos;s first vendors. You receive priority placement, the Founding Vendor badge, and early access to all new features.
           </p>
           <Link
             href="/founding-vendors"

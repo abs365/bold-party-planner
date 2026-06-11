@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Central environment variable validation.
  * Call validateEnv() in server-side startup paths to catch missing config early.
  * All getters throw clearly if the variable is missing so errors surface at the
@@ -117,11 +117,11 @@ export function validateEnv() {
   }
 
   if (warnings.length > 0) {
-    console.warn(`[ELBOLD] Optional env vars not set:\n${warnings.join("\n")}`);
+    console.warn(`[Elbold] Optional env vars not set:\n${warnings.join("\n")}`);
   }
 
   if (missing.length > 0) {
-    const msg = `[ELBOLD] Missing required environment variables:\n${missing.join("\n")}\n\nSee DEPLOYMENT_GUIDE.md for setup instructions.`;
+    const msg = `[Elbold] Missing required environment variables:\n${missing.join("\n")}\n\nSee DEPLOYMENT_GUIDE.md for setup instructions.`;
     if (process.env.NODE_ENV === "production") {
       // In production, crash loudly so the issue is impossible to miss
       throw new Error(msg);
@@ -137,7 +137,7 @@ function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value || value.trim() === "") {
     throw new Error(
-      `[ELBOLD] Environment variable ${name} is required but not set. ` +
+      `[Elbold] Environment variable ${name} is required but not set. ` +
       `See DEPLOYMENT_GUIDE.md for setup instructions.`
     );
   }

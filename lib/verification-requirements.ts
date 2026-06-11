@@ -1,4 +1,4 @@
-import type { VendorCategory } from "@/types";
+﻿import type { VendorCategory } from "@/types";
 
 export type DocumentType =
   | "government_id"
@@ -90,7 +90,7 @@ export const VERIFICATION_LEVELS = [
     bg: "bg-blue-500/15",
     border: "border-blue-500/25",
     icon: "✓✓",
-    description: "Government ID verified by ELBOLD",
+    description: "Government ID verified by Elbold",
   },
   {
     level: 3,

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -140,7 +140,7 @@ export default function ConciergePage() {
                 className="text-base font-light max-w-xl mx-auto leading-relaxed"
                 style={{ color: "rgba(255,255,255,0.45)" }}
               >
-                Not sure where to start? Fill in the form below and a member of the ELBOLD team will personally match you with verified professionals who are right for your event.
+                Not sure where to start? Fill in the form below and a member of the Elbold team will personally match you with verified professionals who are right for your event.
               </p>
             </div>
           </section>

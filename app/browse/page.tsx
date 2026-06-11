@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -10,11 +10,11 @@ import { ArrowRight, CheckCircle2, Shield, Star } from "lucide-react";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Discover Verified Event Professionals | ELBOLD Events",
+  title: "Discover Verified Event Professionals | Elbold",
   description:
     "Discover and book verified DJs, photographers, caterers, decorators and entertainers for your celebration. Every vendor individually reviewed. Compare packages, read real reviews and book with Stripe-secured payments.",
   openGraph: {
-    title: "Discover Verified Event Professionals | ELBOLD Events",
+    title: "Discover Verified Event Professionals | Elbold",
     description:
       "Every vendor individually reviewed before joining the platform. Browse, compare, and book with complete confidence.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
@@ -239,12 +239,12 @@ export default async function BrowsePage({
                 {
                   icon: Shield,
                   title: "Stripe-secured payments",
-                  desc: "Your 30% deposit is processed securely through Stripe and managed by ELBOLD until after your event.",
+                  desc: "Your 30% deposit is processed securely through Stripe and managed by Elbold until after your event.",
                 },
                 {
                   icon: Star,
                   title: "Verified reviews only",
-                  desc: "Reviews can only be left by customers who have made a confirmed booking through ELBOLD.",
+                  desc: "Reviews can only be left by customers who have made a confirmed booking through Elbold.",
                 },
               ].map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="flex gap-3 items-start">

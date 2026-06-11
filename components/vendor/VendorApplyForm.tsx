@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ const BENEFITS = [
   { icon: Calendar, label: "Manage enquiries, bookings and availability in one place" },
   { icon: Star, label: "Build your reputation with verified reviews from real clients" },
   { icon: CreditCard, label: "Secure Stripe payments. No invoicing, no chasing, no disputes." },
-  { icon: TrendingUp, label: "You keep 90% of every booking. ELBOLD earns 10% only when you earn." },
+  { icon: TrendingUp, label: "You keep 90% of every booking. Elbold earns 10% only when you earn." },
 ];
 
 const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
@@ -229,7 +229,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-3">Application Submitted</h1>
             <p className="text-gray-500 mb-2">
-              Thank you for applying to list on ELBOLD.
+              Thank you for applying to list on Elbold.
             </p>
             <div
               className="flex items-center justify-center gap-2 text-sm mb-6"

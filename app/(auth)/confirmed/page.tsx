@@ -1,8 +1,8 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { CheckCircle2, Clock, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Email Confirmed | ELBOLD",
+  title: "Email Confirmed | Elbold",
 };
 
 export default function ConfirmedPage({
@@ -56,7 +56,7 @@ export default function ConfirmedPage({
               },
               {
                 label: "Profile published",
-                detail: "Once approved, your profile is visible to customers on ELBOLD.",
+                detail: "Once approved, your profile is visible to customers on Elbold.",
                 done: false,
                 active: false,
               },

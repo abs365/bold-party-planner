@@ -2,8 +2,8 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | ELBOLD",
-  description: "How ELBOLD collects, uses, and protects your personal data.",
+  title: "Privacy Policy | Elbold",
+  description: "How Elbold collects, uses, and protects your personal data.",
 };
 
 export default function PrivacyPolicy() {
@@ -16,8 +16,8 @@ export default function PrivacyPolicy() {
         {
           title: "1. Who We Are",
           content: [
-            "ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales (incorporated [INCORPORATION_DATE]), operates the event planning marketplace at elbold.com. Registered office: [REGISTERED_OFFICE].",
-            "In this policy, 'ELBOLD', 'we', 'us', and 'our' refer to ELBOLD Ltd.",
+            "ELBOLD Ltd (trading as Elbold), registered in England and Wales, operates the event planning marketplace at elbold.com.",
+            "In this policy, 'Elbold', 'we', 'us', and 'our' refer to ELBOLD Ltd.",
             "We act as a data controller under the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.",
           ],
         },

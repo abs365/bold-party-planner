@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -197,7 +197,7 @@ export default async function FounderDashboardPage() {
             <div className="p-6 bg-emerald-500/8 border-t border-emerald-500/20 text-center">
               <CheckCircle2 size={20} className="text-emerald-400 mx-auto mb-2" />
               <p className="text-sm font-semibold text-emerald-400">First booking completed!</p>
-              <p className="text-xs text-slate-400 mt-0.5">ELBOLD has processed its first real transaction. Scale the model.</p>
+              <p className="text-xs text-slate-400 mt-0.5">Elbold has processed its first real transaction. Scale the model.</p>
             </div>
           )}
         </div>

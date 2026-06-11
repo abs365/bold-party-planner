@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -6,11 +6,11 @@ import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, BookOpen, CheckSquare, Calculator, Calendar, MapPin, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Planning Resources | Guides, Checklists and Tools | ELBOLD",
+  title: "Event Planning Resources | Guides, Checklists and Tools | Elbold",
   description:
-    "Free event planning guides, checklists, budget templates and tools from ELBOLD. Plan your wedding, birthday, corporate event or celebration with expert resources.",
+    "Free event planning guides, checklists, budget templates and tools from Elbold. Plan your wedding, birthday, corporate event or celebration with expert resources.",
   openGraph: {
-    title: "Event Planning Resources | ELBOLD Events",
+    title: "Event Planning Resources | Elbold",
     description: "Free guides, checklists, and planning tools for UK event hosts.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },

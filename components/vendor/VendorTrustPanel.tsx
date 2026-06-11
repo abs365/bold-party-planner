@@ -1,4 +1,4 @@
-import { BadgeCheck, Calendar, Star, MessageSquare, Clock, Shield, TrendingUp, Phone, CheckCircle2, Award, Zap } from "lucide-react";
+﻿import { BadgeCheck, Calendar, Star, MessageSquare, Clock, Shield, TrendingUp, Phone, CheckCircle2, Award, Zap } from "lucide-react";
 import type { Vendor } from "@/types";
 
 interface Props {
@@ -22,15 +22,15 @@ function verificationLabel(level: number): string {
   if (level >= 4) return "Premium Partner";
   if (level >= 3) return "Trusted Pro";
   if (level >= 2) return "ID Verified";
-  if (level >= 1) return "ELBOLD Approved";
+  if (level >= 1) return "Elbold Approved";
   return "Pending Review";
 }
 
 function verificationDescription(level: number): string {
   if (level >= 4) return "Invite-only status. Highest trust tier with full business verification.";
   if (level >= 3) return "5+ completed events, 4.5+ rating, and 80%+ response rate verified.";
-  if (level >= 2) return "Government ID reviewed and verified by the ELBOLD team.";
-  if (level >= 1) return "Email confirmed and vendor application reviewed by ELBOLD.";
+  if (level >= 2) return "Government ID reviewed and verified by the Elbold team.";
+  if (level >= 1) return "Email confirmed and vendor application reviewed by Elbold.";
   return "This vendor is under review.";
 }
 
@@ -71,7 +71,7 @@ export function VendorTrustPanel({ vendor }: Props) {
     {
       show: isVerified,
       icon: CheckCircle2,
-      label: "ELBOLD Approved",
+      label: "Elbold Approved",
       sublabel: "Application reviewed by our team",
       active: true,
     },
@@ -242,7 +242,7 @@ export function VendorTrustPanel({ vendor }: Props) {
       >
         <Shield size={14} style={{ color: "#0B1F4D", flexShrink: 0, marginTop: 1 }} />
         <p className="text-xs font-light leading-relaxed text-gray-600">
-          Every vendor on ELBOLD is manually reviewed. Verified badges require
+          Every vendor on Elbold is manually reviewed. Verified badges require
           identity or business documentation submitted to and approved by our team.
           All payments are secured by Stripe.
         </p>

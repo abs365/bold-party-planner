@@ -2,22 +2,22 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | ELBOLD",
-  description: "ELBOLD's cancellation, refund, and dispute resolution policy.",
+  title: "Refund Policy | Elbold",
+  description: "Elbold's cancellation, refund, and dispute resolution policy.",
 };
 
 export default function RefundPolicy() {
   return (
     <LegalPage
       title="Refund Policy"
-      subtitle="Our cancellation, refund, and dispute resolution process for bookings made through ELBOLD."
+      subtitle="Our cancellation, refund, and dispute resolution process for bookings made through Elbold."
       lastUpdated="June 2026"
       sections={[
         {
           title: "1. Overview",
           content: [
-            "This Refund Policy is issued by ELBOLD Ltd (trading as ELBOLD Events), company number [COMPANY_NUMBER], registered in England and Wales, registered office: [REGISTERED_OFFICE].",
-            "All bookings made through ELBOLD are covered by this Refund Policy. We aim to be fair to both customers and vendors while maintaining a trustworthy marketplace.",
+            "This Refund Policy is issued by ELBOLD Ltd (trading as Elbold), registered in England and Wales.",
+            "All bookings made through Elbold are covered by this Refund Policy. We aim to be fair to both customers and vendors while maintaining a trustworthy marketplace.",
           ],
         },
         {
@@ -42,7 +42,7 @@ export default function RefundPolicy() {
           title: "4. Deposits",
           content: [
             "A 30% deposit is required to confirm your booking. This deposit is non-refundable if you cancel within 7 days of the event.",
-            "Deposits are held securely by ELBOLD until the event is completed or a refund is issued.",
+            "Deposits are held securely by Elbold until the event is completed or a refund is issued.",
           ],
         },
         {

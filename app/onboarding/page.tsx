@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,10 +34,10 @@ export default function OnboardingPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/elbold-mark.svg" width="56" height="56" alt="ELBOLD" className="mx-auto mb-4" />
-          <h1 className="text-2xl font-light text-white mb-2">Welcome to ELBOLD</h1>
+          <img src="/brand/elbold-mark.svg" width="56" height="56" alt="Elbold" className="mx-auto mb-4" />
+          <h1 className="text-2xl font-light text-white mb-2">Welcome to Elbold</h1>
           <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.45)" }}>
-            How are you using ELBOLD?
+            How are you using Elbold?
           </p>
         </div>
 

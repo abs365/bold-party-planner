@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -12,9 +12,9 @@ import { CATEGORY_REQUIREMENTS, DOCUMENT_LABELS } from "@/lib/verification-requi
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 
 export const metadata: Metadata = {
-  title: "How ELBOLD Verifies Vendors | Every Professional Individually Reviewed",
+  title: "How Elbold Verifies Vendors | Every Professional Individually Reviewed",
   description:
-    "Learn exactly how ELBOLD reviews and verifies every event vendor: identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
+    "Learn exactly how Elbold reviews and verifies every event vendor: identity, phone, documents, portfolio, fraud prevention, and ongoing monitoring. Real people reviewing real businesses.",
 };
 
 export const dynamic = "force-dynamic";
@@ -54,12 +54,12 @@ const VERIFICATION_STEPS = [
 
 const VERIFICATION_LEVELS = [
   {
-    level: "ELBOLD Reviewed",
+    level: "Elbold Reviewed",
     badge: "Manual review by our team",
     color: "#059669",
     bg: "rgba(5,150,105,0.08)",
     border: "rgba(5,150,105,0.2)",
-    desc: "The vendor has been assessed by the ELBOLD team for identity, business legitimacy, and portfolio quality. This is the baseline standard. Every vendor on ELBOLD holds this status as a minimum.",
+    desc: "The vendor has been assessed by the Elbold team for identity, business legitimacy, and portfolio quality. This is the baseline standard. Every vendor on Elbold holds this status as a minimum.",
   },
   {
     level: "ID Verified",
@@ -83,7 +83,7 @@ const VERIFICATION_LEVELS = [
     color: "#D4AF37",
     bg: "rgba(212,175,55,0.12)",
     border: "rgba(212,175,55,0.3)",
-    desc: "Reserved for vendors with an exceptional track record, multiple verified five-star reviews, full identity confirmation, and consistent performance across numerous events. The highest trust tier on ELBOLD.",
+    desc: "Reserved for vendors with an exceptional track record, multiple verified five-star reviews, full identity confirmation, and consistent performance across numerous events. The highest trust tier on Elbold.",
   },
 ];
 
@@ -116,7 +116,7 @@ const FRAUD_MEASURES = [
 const WHAT_TO_EXPECT = [
   "The vendor profile shows accurate information about their services, experience, and location.",
   "Any verified badge displayed on a profile is genuine and was awarded by our team, not self-assigned.",
-  "Reviews on the profile come from real customers who completed bookings through ELBOLD.",
+  "Reviews on the profile come from real customers who completed bookings through Elbold.",
   "If the vendor's standards change or they underperform, our monitoring systems will flag it.",
   "You can contact our team at any time if you have concerns about a vendor's behaviour or legitimacy.",
 ];
@@ -187,7 +187,7 @@ export default async function HowWeVerifyPage() {
             <span style={{ color: "#D4AF37" }}>by a real person.</span>
           </h1>
           <p className="text-base font-light leading-relaxed max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Not an algorithm. Not an automated check. A member of the ELBOLD team
+            Not an algorithm. Not an automated check. A member of the Elbold team
             personally reviews every vendor application before they appear on our marketplace.
           </p>
         </div>
@@ -208,7 +208,7 @@ export default async function HowWeVerifyPage() {
             When you trust a vendor with your wedding, birthday, or corporate event,
             you need to know they are who they say they are and that their work is as
             good as they claim. Without a verification process, any marketplace is only
-            as trustworthy as its least reliable listing. ELBOLD&rsquo;s verification exists
+            as trustworthy as its least reliable listing. Elbold&rsquo;s verification exists
             to protect customers and to create a professional community that genuine vendors want to be part of.
           </p>
         </div>
@@ -296,7 +296,7 @@ export default async function HowWeVerifyPage() {
               What each badge means
             </h2>
             <p className="text-gray-400 text-sm font-light max-w-md mx-auto">
-              Every vendor on ELBOLD meets our minimum standard.
+              Every vendor on Elbold meets our minimum standard.
               Additional badges indicate a higher level of verified trust.
             </p>
           </div>
@@ -422,7 +422,7 @@ export default async function HowWeVerifyPage() {
             {[
               {
                 title: "Booking-gated reviews",
-                body: "Only customers who completed a real booking through ELBOLD can leave a review. If you did not book through the platform, you cannot review.",
+                body: "Only customers who completed a real booking through Elbold can leave a review. If you did not book through the platform, you cannot review.",
               },
               {
                 title: "No anonymous reviews",
@@ -430,7 +430,7 @@ export default async function HowWeVerifyPage() {
               },
               {
                 title: "No review removal for vendors",
-                body: "Vendors cannot ask ELBOLD to remove negative reviews. They may post a professional response. Reviews remain on the profile permanently.",
+                body: "Vendors cannot ask Elbold to remove negative reviews. They may post a professional response. Reviews remain on the profile permanently.",
               },
               {
                 title: "No purchased reviews",

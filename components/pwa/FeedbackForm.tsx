@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -45,15 +45,15 @@ const VENDOR_QUESTIONS: { key: string; label: string }[] = [
   { key: "q_onboarding",   label: "How easy was the onboarding process?" },
   { key: "q_verification", label: "How easy was the document verification?" },
   { key: "q_quoting",      label: "How easy is it to respond to quote requests?" },
-  { key: "q_recommend",    label: "How likely are you to recommend ELBOLD to other vendors?" },
+  { key: "q_recommend",    label: "How likely are you to recommend Elbold to other vendors?" },
 ];
 
 const CUSTOMER_QUESTIONS: { key: string; label: string }[] = [
   { key: "q_finding_vendors", label: "How easy was it to find the right vendors?" },
   { key: "q_requesting",      label: "How easy was it to request quotes?" },
   { key: "q_comparing",       label: "How easy was it to compare vendor quotes?" },
-  { key: "q_trust",           label: "How much do you trust the vendor profiles on ELBOLD?" },
-  { key: "q_use_again",       label: "How likely are you to use ELBOLD again?" },
+  { key: "q_trust",           label: "How much do you trust the vendor profiles on Elbold?" },
+  { key: "q_use_again",       label: "How likely are you to use Elbold again?" },
 ];
 
 export function FeedbackForm({ type }: Props) {
@@ -102,7 +102,7 @@ export function FeedbackForm({ type }: Props) {
         <CheckCircle2 size={36} className="text-emerald-400 mx-auto" />
         <h2 className="text-white font-bold text-lg">Thank you!</h2>
         <p className="text-white/50 text-sm max-w-xs mx-auto leading-relaxed">
-          Your feedback has been submitted. It will be reviewed by the ELBOLD team and used to improve the platform.
+          Your feedback has been submitted. It will be reviewed by the Elbold team and used to improve the platform.
         </p>
         <button
           onClick={() => router.push(type === "vendor" ? "/vendor/dashboard" : "/dashboard")}
@@ -167,7 +167,7 @@ export function FeedbackForm({ type }: Props) {
       </button>
 
       <p className="text-white/20 text-xs text-center">
-        Your responses are anonymous to other users and used only to improve ELBOLD.
+        Your responses are anonymous to other users and used only to improve Elbold.
       </p>
     </form>
   );

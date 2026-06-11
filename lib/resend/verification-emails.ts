@@ -1,11 +1,11 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY missing");
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM = "ELBOLD <noreply@elbold.com>";
+const FROM = "Elbold <noreply@elbold.com>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
 const year = new Date().getFullYear();
 
@@ -48,8 +48,7 @@ function wrap(headerTitle: string, headerSub: string, body: string): string {
   </style></head><body>
   <div class="container">
     <div class="header">
-      <div class="logo">ELBOLD</div>
-      <div class="logo-sub">Events</div>
+      <div class="logo">Elbold</div>
       <p class="header-sub">${headerSub}</p>
     </div>
     <div class="body">
@@ -62,7 +61,7 @@ function wrap(headerTitle: string, headerSub: string, body: string): string {
         <a href="${APP_URL}/terms">Terms</a>
         <a href="${APP_URL}/vendor/verification">Verification Centre</a>
       </div>
-      <p>© ${year} ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER]. All rights reserved.<br>This email was sent regarding your ELBOLD Events vendor account.</p>
+      <p>© ${year} ELBOLD Ltd. All rights reserved.<br>This email was sent regarding your Elbold vendor account.</p>
     </div>
   </div></body></html>`;
 }
@@ -83,7 +82,7 @@ export async function sendVerificationApproved(
       <p class="status-label">✅ Document Approved</p>
       <p>Your <strong>${docLabel}</strong> has been reviewed and approved by our team.</p>
     </div>
-    <p>This brings you one step closer to becoming a Business Verified vendor on ELBOLD Events, which helps you:</p>
+    <p>This brings you one step closer to becoming a Business Verified vendor on Elbold, which helps you:</p>
     <ul style="color:#4b5563;font-size:14px;line-height:1.8;padding-left:20px;margin:0 0 16px">
       <li>Rank higher in search results</li>
       <li>Display your trust badge on your profile</li>
@@ -92,7 +91,7 @@ export async function sendVerificationApproved(
     <a href="${APP_URL}/vendor/verification" class="btn">View Verification Status</a>
     <p style="margin-top:16px;font-size:13px;color:#9ca3af">If you have remaining documents to submit, head to your Verification Centre to complete the process.</p>`
   );
-  return send(to, `Document approved — ${docLabel} | ELBOLD Events`, html);
+  return send(to, `Document approved — ${docLabel} | Elbold`, html);
 }
 
 export async function sendVerificationRejected(
@@ -125,8 +124,8 @@ export async function sendVerificationRejected(
     }`
   );
   const subject = canResubmit
-    ? `Action required: Resubmit your ${docLabel} | ELBOLD Events`
-    : `Document not accepted: ${docLabel} | ELBOLD Events`;
+    ? `Action required: Resubmit your ${docLabel} | Elbold`
+    : `Document not accepted: ${docLabel} | Elbold`;
   return send(to, subject, html);
 }
 
@@ -154,7 +153,7 @@ export async function sendResubmissionRequested(
     </ul>
     <a href="${APP_URL}/vendor/verification" class="btn">Upload New Document</a>`
   );
-  return send(to, `Resubmission requested: ${docLabel} | ELBOLD Events`, html);
+  return send(to, `Resubmission requested: ${docLabel} | Elbold`, html);
 }
 
 export async function sendLevelUpgraded(
@@ -180,14 +179,14 @@ export async function sendLevelUpgraded(
       <p class="status-label" style="font-size:18px;color:${levelColor}">${levelName}</p>
       <p style="margin:0;font-size:13px;color:#6b7280">Verification Level ${newLevel} achieved</p>
     </div>
-    <p>Congratulations! Your ELBOLD Events vendor profile is now <strong style="color:${levelColor}">${levelName}</strong>.</p>
+    <p>Congratulations! Your Elbold vendor profile is now <strong style="color:${levelColor}">${levelName}</strong>.</p>
     ${newLevel === 2 ? `<p>Your verified business status will now appear on your public profile, helping customers trust and book you with confidence.</p>` : ""}
     ${newLevel === 3 ? `<p>Your Trusted Pro badge recognises your excellent track record, response rate, and customer satisfaction. This will significantly boost your bookings.</p>` : ""}
-    ${newLevel === 4 ? `<p>As a Premium Partner, you receive priority placement, featured listings, and dedicated support from the ELBOLD team.</p>` : ""}
+    ${newLevel === 4 ? `<p>As a Premium Partner, you receive priority placement, featured listings, and dedicated support from the Elbold team.</p>` : ""}
     <a href="${APP_URL}/vendor/dashboard" class="btn">View Your Dashboard</a>
     <p style="font-size:13px;color:#9ca3af;margin-top:12px">Your trust badge is now live on your public profile at <a href="${APP_URL}/vendor/profile" style="color:#0d1b3e">elbold.com</a></p>`
   );
-  return send(to, `You've reached ${levelName} status on ELBOLD Events!`, html);
+  return send(to, `You've reached ${levelName} status on Elbold!`, html);
 }
 
 export async function sendPremiumPartnerInvite(
@@ -202,11 +201,11 @@ export async function sendPremiumPartnerInvite(
       <p style="font-size:32px;margin:0 0 8px">⭐</p>
       <p class="status-label" style="font-size:18px;color:#C9A84C">Premium Partner Invitation</p>
     </div>
-    <p>Based on your exceptional performance and reputation on ELBOLD Events, our team is inviting you to join the <strong>Premium Partner</strong> programme.</p>
+    <p>Based on your exceptional performance and reputation on Elbold, our team is inviting you to join the <strong>Premium Partner</strong> programme.</p>
     <p>As a Premium Partner, you'll receive:</p>
     <ul style="color:#4b5563;font-size:14px;line-height:1.8;padding-left:20px;margin:0 0 16px">
       <li>Priority placement at the top of all search results</li>
-      <li>Featured on the ELBOLD Events homepage</li>
+      <li>Featured on the Elbold homepage</li>
       <li>Premium Partner badge on your profile</li>
       <li>Dedicated account manager</li>
       <li>Early access to new platform features</li>
@@ -214,7 +213,7 @@ export async function sendPremiumPartnerInvite(
     <a href="${APP_URL}/vendor/verification" class="btn">Accept Invitation</a>
     <p style="font-size:13px;color:#9ca3af;margin-top:12px">This invitation is exclusive and not offered to all vendors. We look forward to welcoming you.</p>`
   );
-  return send(to, "You've been invited to Premium Partner status | ELBOLD Events", html);
+  return send(to, "You've been invited to Premium Partner status | Elbold", html);
 }
 
 export async function sendVerificationExpiryReminder(
@@ -237,5 +236,5 @@ export async function sendVerificationExpiryReminder(
     <a href="${APP_URL}/vendor/verification" class="btn">Update Document</a>
     <p style="font-size:13px;color:#9ca3af;margin-top:12px">Keeping your documents current ensures customers can always trust your profile.</p>`
   );
-  return send(to, `Action required: Your ${docLabel} expires in ${daysUntilExpiry} days | ELBOLD Events`, html);
+  return send(to, `Action required: Your ${docLabel} expires in ${daysUntilExpiry} days | Elbold`, html);
 }

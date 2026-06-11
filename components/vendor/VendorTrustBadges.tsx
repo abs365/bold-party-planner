@@ -1,4 +1,4 @@
-import { BadgeCheck, Shield, Star, Zap, Clock, Briefcase, ShieldCheck, Heart, Award, CheckCircle2, ThumbsUp, Sparkles } from "lucide-react";
+﻿import { BadgeCheck, Shield, Star, Zap, Clock, Briefcase, ShieldCheck, Heart, Award, CheckCircle2, ThumbsUp, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VERIFICATION_LEVELS } from "@/lib/verification-requirements";
 
@@ -57,7 +57,7 @@ export function getVendorBadges(vendor: {
   else if (level >= 4) badges.push({
     id: "premium_partner",
     label: "Premium Partner",
-    description: "Invite-only elite vendor status, highest tier on ELBOLD",
+    description: "Invite-only elite vendor status, highest tier on Elbold",
     icon: Award,
     bgClass: "bg-amber-50",
     borderClass: "border-amber-200",
@@ -66,7 +66,7 @@ export function getVendorBadges(vendor: {
   else if (level >= 3) badges.push({
     id: "business_verified",
     label: "Business Verified",
-    description: "All required business documents verified by ELBOLD",
+    description: "All required business documents verified by Elbold",
     icon: ShieldCheck,
     bgClass: "bg-blue-50",
     borderClass: "border-blue-200",
@@ -75,7 +75,7 @@ export function getVendorBadges(vendor: {
   else if (level >= 2) badges.push({
     id: "id_verified",
     label: "ID Verified",
-    description: "Government ID verified by ELBOLD",
+    description: "Government ID verified by Elbold",
     icon: BadgeCheck,
     bgClass: "bg-emerald-50",
     borderClass: "border-emerald-200",
@@ -87,7 +87,7 @@ export function getVendorBadges(vendor: {
   if (vendor.is_founding_vendor) badges.push({
     id: "founding_vendor",
     label: "Founding Vendor",
-    description: "One of ELBOLD's original founding vendors, joined in the founding window",
+    description: "One of Elbold's original founding vendors, joined in the founding window",
     icon: Award,
     bgClass: "bg-[#0B1F4D]/8",
     borderClass: "border-[#D4AF37]/40",
@@ -97,7 +97,7 @@ export function getVendorBadges(vendor: {
   if (vendor.featured) badges.push({
     id: "featured",
     label: "Featured",
-    description: "Handpicked by the ELBOLD team",
+    description: "Handpicked by the Elbold team",
     icon: Sparkles,
     bgClass: "bg-amber-50",
     borderClass: "border-amber-200",

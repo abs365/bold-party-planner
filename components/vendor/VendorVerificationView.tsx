@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -402,7 +402,7 @@ export function VendorVerificationView({
               <span className="text-xs text-slate-500">(After document review)</span>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Achieved automatically when all your required documents are approved by the ELBOLD team. Submit your full document set in Level 2 above to progress.
+              Achieved automatically when all your required documents are approved by the Elbold team. Submit your full document set in Level 2 above to progress.
             </p>
           </div>
 
@@ -607,7 +607,7 @@ export function VendorVerificationView({
                     <p className="text-xs text-slate-400 mt-0.5 italic">&ldquo;{entry.notes}&rdquo;</p>
                   )}
                   <p className="text-xs text-slate-600 mt-0.5">
-                    {entry.actor_type === "admin" ? "ELBOLD Events team" : "You"}{" - "}
+                    {entry.actor_type === "admin" ? "Elbold team" : "You"}{" - "}
                     {formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}
                   </p>
                 </div>

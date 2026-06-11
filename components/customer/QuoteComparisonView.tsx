@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -338,7 +338,7 @@ export function QuoteComparisonView({ quotes, eventTitle, eventId }: QuoteCompar
         <p className="text-white/70 font-medium">Tips for comparing quotes</p>
         <ul className="space-y-1 text-xs list-disc list-inside">
           <li>Price isn&apos;t everything. Check what&apos;s included before choosing.</li>
-          <li>Business Verified vendors have had their credentials checked by ELBOLD.</li>
+          <li>Business Verified vendors have had their credentials checked by Elbold.</li>
           <li>Shortlist your top picks and sleep on it before accepting.</li>
           <li>Once you accept, a booking is created and other requests are closed.</li>
         </ul>

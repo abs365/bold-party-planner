@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+﻿import { Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { CheckCircle2, Calendar, ArrowRight, Building2 } from "lucide-react";
@@ -101,7 +101,7 @@ async function BookingConfirmation({ bookingId }: { bookingId: string }) {
             "Booking confirmed with the vendor",
             "Confirmation email sent",
             "Vendor has been notified",
-            "Deposit secured through Stripe, managed by ELBOLD",
+            "Deposit secured through Stripe, managed by Elbold",
           ].map((item) => (
             <div key={item} className="flex items-center gap-3 text-sm">
               <CheckCircle2 size={15} className="text-emerald-500 flex-shrink-0" />

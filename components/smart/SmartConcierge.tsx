@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { Sparkles, X, Send, Minimize2, Maximize2, ChevronDown } from "lucide-react";
@@ -226,7 +226,7 @@ export function SmartConcierge({ eventId, eventTitle }: SmartConciergeProps) {
                     <Send className="w-4 h-4 text-white" />
                   </button>
                 </div>
-                <p className="text-white/20 text-xs text-center mt-2">Smart Event Concierge &middot; ELBOLD Events</p>
+                <p className="text-white/20 text-xs text-center mt-2">Smart Event Concierge &middot; Elbold</p>
               </div>
             </>
           )}

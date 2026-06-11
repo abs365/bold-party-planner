@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -56,7 +56,7 @@ export default function SignupPage() {
       if (!res.ok) throw new Error(json.error ?? "Signup failed");
 
       if (json.hasSession) {
-        toast.success("Account created! Welcome to ELBOLD Events.");
+        toast.success("Account created! Welcome to Elbold.");
         const redirectTo = getRedirectTo();
         window.location.href = redirectTo ?? (role === "vendor" ? "/vendor/apply" : "/dashboard");
         return;
@@ -81,7 +81,7 @@ export default function SignupPage() {
         <div className="w-full max-w-sm text-center">
           <div className="flex justify-center mb-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="64" height="64" alt="ELBOLD" />
+            <img src="/brand/elbold-mark.svg" width="64" height="64" alt="Elbold" />
           </div>
           <div className="bg-white rounded-2xl p-10">
             <div
@@ -95,7 +95,7 @@ export default function SignupPage() {
             <p className="font-semibold text-gray-900 mb-6 text-sm">{email}</p>
             <div className="space-y-3 text-left mb-6">
               {[
-                "Open the email from ELBOLD",
+                "Open the email from Elbold",
                 "Click the confirmation link",
                 "You will be automatically signed in",
               ].map((step, i) => (
@@ -146,9 +146,9 @@ export default function SignupPage() {
         <div className="relative z-10 text-center max-w-xs">
           <div className="flex justify-center mb-8">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="ELBOLD" />
+            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="Elbold" />
           </div>
-          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>ELBOLD</p>
+          <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>Elbold</p>
           <p
             className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
             style={{ color: "rgba(201,168,76,0.45)" }}
@@ -162,7 +162,7 @@ export default function SignupPage() {
           </h2>
           <p className="text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
             {role === "vendor"
-              ? "List free. Receive verified enquiries. Build your reputation on ELBOLD."
+              ? "List free. Receive verified enquiries. Build your reputation on Elbold."
               : "Verified DJs, photographers, caterers, decorators and 15 more categories across the UK."}
           </p>
         </div>
@@ -175,8 +175,8 @@ export default function SignupPage() {
         <div className="lg:hidden mb-8 text-center">
           <Link href="/" className="inline-flex flex-col items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="ELBOLD" />
-            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>ELBOLD</span>
+            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="Elbold" />
+            <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>Elbold</span>
           </Link>
         </div>
 

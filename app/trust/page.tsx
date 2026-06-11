@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "The ELBOLD Trust System | How We Keep Events Safe",
+  title: "The Elbold Trust System | How We Keep Events Safe",
   description:
-    "Every vendor reviewed. Every payment protected. Every review from a real booking. Read how ELBOLD's trust system works, from vendor approval to dispute resolution.",
+    "Every vendor reviewed. Every payment protected. Every review from a real booking. Read how Elbold's trust system works, from vendor approval to dispute resolution.",
   openGraph: {
-    title: "The ELBOLD Trust System",
+    title: "The Elbold Trust System",
     description: "Vendor verification, payment protection, review integrity, and platform accountability. All explained.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -25,7 +25,7 @@ const TRUST_PILLARS = [
     icon: BadgeCheck,
     label: "Vendor Verification",
     title: "Every vendor is reviewed before they appear.",
-    body: "No vendor joins ELBOLD automatically. Every application is reviewed by a member of our team: portfolio, business identity, pricing, and communication quality. Vendors who do not meet our standards are not approved.",
+    body: "No vendor joins Elbold automatically. Every application is reviewed by a member of our team: portfolio, business identity, pricing, and communication quality. Vendors who do not meet our standards are not approved.",
     link: { label: "How we verify vendors", href: "/how-we-verify" },
     stats: [{ value: "100%", label: "reviewed by a real person" }, { value: "24–48h", label: "typical review time" }],
   },
@@ -41,7 +41,7 @@ const TRUST_PILLARS = [
     icon: Star,
     label: "Review Integrity",
     title: "Every review comes from a confirmed booking.",
-    body: "You cannot leave a review on ELBOLD unless you have made a confirmed booking through the platform. No anonymous reviews. No testimonials solicited outside bookings. No review removal unless it violates our moderation policy.",
+    body: "You cannot leave a review on Elbold unless you have made a confirmed booking through the platform. No anonymous reviews. No testimonials solicited outside bookings. No review removal unless it violates our moderation policy.",
     link: { label: "Our review policy", href: "/how-we-verify#reviews" },
     stats: [{ value: "0", label: "anonymous reviews permitted" }, { value: "100%", label: "booking-confirmed only" }],
   },
@@ -84,7 +84,7 @@ export default async function TrustPage() {
             <Shield size={24} style={{ color: "#D4AF37" }} />
           </div>
           <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "rgba(212,175,55,0.6)" }}>
-            The ELBOLD Trust System
+            The Elbold Trust System
           </p>
           <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-5" style={{ color: "rgba(255,255,255,0.95)" }}>
             Trust is not assumed here.
@@ -93,7 +93,7 @@ export default async function TrustPage() {
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
             Vendor verification, payment protection, review integrity, and platform accountability
-            work together to make ELBOLD the most trustworthy event marketplace in the UK.
+            work together to make Elbold the most trustworthy event marketplace in the UK.
           </p>
         </div>
       </div>
@@ -202,7 +202,7 @@ export default async function TrustPage() {
           <div className="flex items-center justify-center gap-2 mt-8">
             <Users size={12} style={{ color: "rgba(255,255,255,0.18)" }} />
             <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.18)" }}>
-              All reports reviewed by the ELBOLD team within 2 business days
+              All reports reviewed by the Elbold team within 2 business days
             </span>
           </div>
         </div>

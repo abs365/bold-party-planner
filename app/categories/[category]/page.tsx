@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const cat = VENDOR_CATEGORIES[category as keyof typeof VENDOR_CATEGORIES];
   if (!cat) return { title: "Category Not Found" };
 
-  const title = `${cat.label}s for Hire in the UK | ELBOLD Events`;
-  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews and book securely on ELBOLD Events, the UK's trusted event marketplace.`;
+  const title = `${cat.label}s for Hire in the UK | Elbold`;
+  const description = `Book verified ${cat.label.toLowerCase()}s for your event. Compare prices, view real portfolios, read reviews and book securely on Elbold, the UK's trusted event marketplace.`;
 
   return {
     title,
@@ -52,8 +52,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `${cat.label}s for Hire in the UK`,
-    description: `Find and book verified ${cat.label.toLowerCase()}s for events across the UK on ELBOLD Events.`,
-    url: `https://elbold.com/categories/${category}`,
+    description: `Find and book verified ${cat.label.toLowerCase()}s for events across the UK on Elbold.`,
+    url: `https://elbold.co.uk/categories/${category}`,
   };
 
   return (

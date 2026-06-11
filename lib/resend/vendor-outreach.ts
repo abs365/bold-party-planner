@@ -1,11 +1,11 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 
 function getResend() {
   if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY missing");
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM = "ELBOLD <noreply@elbold.com>";
+const FROM = "Elbold <noreply@elbold.com>";
 
 interface EmailResult { success: boolean; error?: string }
 
@@ -47,8 +47,7 @@ function wrap(title: string, body: string) {
   </style></head><body>
   <div class="container">
     <div class="header">
-      <div class="logo">ELBOLD</div>
-      <div class="logo-sub">Events</div>
+      <div class="logo">Elbold</div>
       <p class="header-sub">${title}</p>
     </div>
     <div class="body">${body}</div>
@@ -58,7 +57,7 @@ function wrap(title: string, body: string) {
         <a href="${appUrl}/vendor/dashboard">Your Dashboard</a>
         <a href="mailto:support@elbold.com">Support</a>
       </div>
-      <p>© ${year} ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER] · Registered in England and Wales<br>
+      <p>© ${year} ELBOLD Ltd. All rights reserved.<br>
       <a href="${appUrl}/vendor/dashboard" style="color:#9ca3af;font-size:11px">Manage notifications</a></p>
     </div>
   </div></body></html>`;
@@ -69,17 +68,17 @@ function wrap(title: string, body: string) {
 
 export async function sendFoundingVendorWelcome(to: string, name: string, businessName: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  return send(to, "Welcome to the ELBOLD Founding Vendor Programme 🎉", wrap(
+  return send(to, "Welcome to the Elbold Founding Vendor Programme 🎉", wrap(
     "You're a Founding Vendor",
     `<p>Hi ${name},</p>
     <div class="badge">Founding Vendor</div>
-    <p><strong>${businessName}</strong> is now live on ELBOLD Events as one of our founding vendors. This is a significant milestone. You're one of the first professionals to join the marketplace.</p>
+    <p><strong>${businessName}</strong> is now live on Elbold as one of our founding vendors. This is a significant milestone. You're one of the first professionals to join the marketplace.</p>
     <p>As a Founding Vendor, you get:</p>
     <div class="detail-box">
       <p>🏅 <strong>Founding Vendor badge</strong> (permanently on your profile)</p>
       <p>💰 <strong>Keep 90%</strong> of every booking. We take just 10%.</p>
       <p>📈 <strong>Priority placement</strong> in search during our launch period</p>
-      <p>🤝 <strong>Direct access</strong> to the ELBOLD team for any support</p>
+      <p>🤝 <strong>Direct access</strong> to the Elbold team for any support</p>
     </div>
     <p>Your next steps to maximise your first enquiries:</p>
     <div class="detail-box">
@@ -89,7 +88,7 @@ export async function sendFoundingVendorWelcome(to: string, name: string, busine
       <p>🔒 Complete ID verification to earn your verified badge</p>
     </div>
     <a href="${appUrl}/vendor/dashboard" class="btn">Go to Your Dashboard</a>
-    <p style="margin-top:24px">Thank you for being part of ELBOLD from the very beginning. Let's build something great together.</p>`
+    <p style="margin-top:24px">Thank you for being part of Elbold from the very beginning. Let's build something great together.</p>`
   ));
 }
 
@@ -104,10 +103,10 @@ export async function sendVerificationReminder(
 ) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   const missingList = missing.map((m) => `<p>⚠️ ${m}</p>`).join("");
-  return send(to, "Action needed: Complete your verification on ELBOLD", wrap(
+  return send(to, "Action needed: Complete your verification on Elbold", wrap(
     "Verification Reminder",
     `<p>Hi ${name},</p>
-    <p>Customers on ELBOLD trust verified vendors significantly more than unverified ones, and we want to make sure <strong>${businessName}</strong> is ready to compete.</p>
+    <p>Customers on Elbold trust verified vendors significantly more than unverified ones, and we want to make sure <strong>${businessName}</strong> is ready to compete.</p>
     <p>Your profile is still missing the following verifications:</p>
     <div class="detail-box">
       ${missingList}
@@ -127,7 +126,7 @@ export async function sendPackageCompletionReminder(to: string, name: string, bu
   return send(to, "Customers can't request quotes yet: add your first package", wrap(
     "Add Your Service Packages",
     `<p>Hi ${name},</p>
-    <p>Good news! <strong>${businessName}</strong> is live on ELBOLD. But there's one thing stopping customers from requesting a quote from you: <strong>you haven't created a service package yet.</strong></p>
+    <p>Good news! <strong>${businessName}</strong> is live on Elbold. But there's one thing stopping customers from requesting a quote from you: <strong>you haven't created a service package yet.</strong></p>
     <p>Without at least one package, the "Request a Quote" button on your profile is hidden. You're invisible to customers ready to book.</p>
     <p>Creating your first package takes under 2 minutes:</p>
     <div class="detail-box">
@@ -156,7 +155,7 @@ export async function sendProfileCompletionReminder(
   return send(to, `Your profile is at ${score}%: here's your next step`, wrap(
     "Strengthen Your Profile",
     `<p>Hi ${name},</p>
-    <p>Your ELBOLD profile for <strong>${businessName}</strong> is currently at <strong>${score}% readiness</strong> (${label}). Vendors with stronger profiles receive significantly more quote requests.</p>
+    <p>Your Elbold profile for <strong>${businessName}</strong> is currently at <strong>${score}% readiness</strong> (${label}). Vendors with stronger profiles receive significantly more quote requests.</p>
     <p>Your single most impactful next step:</p>
     <div class="detail-box">
       <p style="font-size:15px;color:#111827;font-weight:600">${nextAction}</p>

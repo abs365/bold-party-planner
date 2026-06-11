@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
@@ -66,19 +66,19 @@ const CATEGORY_DATA: Record<string, { label: string; description: string; keywor
 
 export function buildLocationMetadata(location: string, category?: string): Metadata {
   const loc = LOCATION_DATA[location];
-  if (!loc) return { title: "Event Vendors | ELBOLD Events" };
+  if (!loc) return { title: "Event Vendors | Elbold" };
 
   if (category) {
     const cat = CATEGORY_DATA[category];
-    if (!cat) return { title: `Event Vendors in ${loc.title} | ELBOLD Events` };
+    if (!cat) return { title: `Event Vendors in ${loc.title} | Elbold` };
     return {
-      title: `${cat.label} in ${loc.title} | Verified Event Professionals | ELBOLD Events`,
-      description: `Book trusted, verified ${cat.label.toLowerCase()} in ${loc.title}. ${cat.description} Every professional reviewed by ELBOLD.`,
+      title: `${cat.label} in ${loc.title} | Verified Event Professionals | Elbold`,
+      description: `Book trusted, verified ${cat.label.toLowerCase()} in ${loc.title}. ${cat.description} Every professional reviewed by Elbold.`,
     };
   }
 
   return {
-    title: `Event Vendors in ${loc.title} | Weddings, Birthdays & Corporate Events | ELBOLD Events`,
+    title: `Event Vendors in ${loc.title} | Weddings, Birthdays & Corporate Events | Elbold`,
     description: `${loc.description} Book verified DJs, photographers, caterers, decorators and more. Every vendor individually reviewed.`,
   };
 }
@@ -121,7 +121,7 @@ export async function LocationPage({
     : `Event Vendors in ${loc?.title}`;
 
   const pageDesc = cat
-    ? `Book trusted, verified ${cat.label.toLowerCase()} in ${loc?.title}. Every professional individually reviewed by ELBOLD.`
+    ? `Book trusted, verified ${cat.label.toLowerCase()} in ${loc?.title}. Every professional individually reviewed by Elbold.`
     : `${loc?.description ?? ""} Every vendor individually reviewed.`;
 
   const subCategories = cat ? null : [
@@ -208,7 +208,7 @@ export async function LocationPage({
                   {allVendors.length} Verified{cat ? ` ${cat.label}` : " Vendors"} in {loc?.title}
                 </h2>
                 <p className="text-sm text-gray-400 font-light mt-1">
-                  Individually reviewed before listing on ELBOLD
+                  Individually reviewed before listing on Elbold
                 </p>
               </div>
               <Link href="/browse" className="text-sm text-gray-400 hover:text-gray-700 flex items-center gap-1 transition-colors font-light">

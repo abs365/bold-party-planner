@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { Resend } from "resend";
 
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
   try {
     await getResend().emails.send({
-      from: "ELBOLD Events <noreply@elbold.com>",
+      from: "Elbold <noreply@elbold.com>",
       to: email,
       subject: "We have received your event planning request",
       html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
         .f p{color:#9ca3af;font-size:11px;margin:0}
       </style></head><body>
       <div class="c">
-        <div class="h"><div class="logo">ELBOLD</div><div class="logo-sub">Events</div></div>
+        <div class="h"><div class="logo">Elbold</div></div>
         <div class="b">
           <p>Hi ${name},</p>
           <p>Thank you for reaching out. We have received your request and will personally match you with suitable vendors within <strong>24 hours</strong>.</p>
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
           <a href="${appUrl}/browse" class="btn">Browse Vendors</a>
           <p style="margin-top:24px;font-size:13px;color:#9ca3af">Questions? Reply to this email or contact us at support@elbold.com.</p>
         </div>
-        <div class="f"><p>ELBOLD Ltd (trading as ELBOLD Events) · Company No. [COMPANY_NUMBER] · Registered in England and Wales</p></div>
+        <div class="f"><p>© ELBOLD Ltd. All rights reserved.</p></div>
       </div></body></html>`,
     });
   } catch (err) {
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
   if (ADMIN_EMAILS.length > 0) {
     try {
       await getResend().emails.send({
-        from: "ELBOLD Events <noreply@elbold.com>",
+        from: "Elbold <noreply@elbold.com>",
         to: ADMIN_EMAILS,
         subject: `New concierge request: ${event_type} from ${name}`,
         html: `<!DOCTYPE html><html><head><meta charset="utf-8"><style>

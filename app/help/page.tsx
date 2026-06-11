@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Help Centre | ELBOLD Events",
-  description: "Find answers to common questions about booking vendors, managing events, payments, and getting verified on ELBOLD Events.",
+  title: "Help Centre | Elbold",
+  description: "Find answers to common questions about booking vendors, managing events, payments, and getting verified on Elbold.",
 };
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ const CUSTOMER_FAQS = [
   },
   {
     q: "Is my payment secure?",
-    a: "All payments are processed by Stripe, one of the world's most trusted payment processors. ELBOLD holds the payment in trust until your event is completed, protecting both you and the vendor.",
+    a: "All payments are processed by Stripe, one of the world's most trusted payment processors. Elbold holds the payment in trust until your event is completed, protecting both you and the vendor.",
   },
   {
     q: "What is Booking Protection?",
@@ -34,22 +34,22 @@ const CUSTOMER_FAQS = [
   },
   {
     q: "What does 'ID Verified' mean?",
-    a: "ID Verified vendors have submitted a government-issued ID that has been checked by the ELBOLD team. This means we know who they are. Higher levels (Address Verified, Business Verified) require additional document checks.",
+    a: "ID Verified vendors have submitted a government-issued ID that has been checked by the Elbold team. This means we know who they are. Higher levels (Address Verified, Business Verified) require additional document checks.",
   },
 ];
 
 const VENDOR_FAQS = [
   {
-    q: "How do I join ELBOLD?",
+    q: "How do I join Elbold?",
     a: "Click 'Join as a Vendor' and complete the short application. Our team reviews every application within 24–48 hours. Once approved, your profile goes live and you can start receiving enquiries.",
   },
   {
     q: "Is there a cost to join?",
-    a: "No. Listing your services on ELBOLD is free. We take a 10% platform fee only when a booking is completed. Optional subscription plans (Pro, Featured) provide enhanced visibility for a monthly fee.",
+    a: "No. Listing your services on Elbold is free. We take a 10% platform fee only when a booking is completed. Optional subscription plans (Pro, Featured) provide enhanced visibility for a monthly fee.",
   },
   {
     q: "How do I get paid?",
-    a: "Add your UK bank account details on your Revenue & Payouts page. ELBOLD processes payouts manually within 7 working days of a booking being marked complete. You receive 90% of the agreed booking value.",
+    a: "Add your UK bank account details on your Revenue & Payouts page. Elbold processes payouts manually within 7 working days of a booking being marked complete. You receive 90% of the agreed booking value.",
   },
   {
     q: "How does verification improve my ranking?",
@@ -61,7 +61,7 @@ const VENDOR_FAQS = [
   },
   {
     q: "Can I set my own prices?",
-    a: "Absolutely. ELBOLD never sets or influences your pricing. You submit your own quote for each request. Customers see your price and decide. We do not share quotes between competing vendors.",
+    a: "Absolutely. Elbold never sets or influences your pricing. You submit your own quote for each request. Customers see your price and decide. We do not share quotes between competing vendors.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default async function HelpPage() {
             How can we help?
           </h1>
           <p className="text-base font-light leading-relaxed max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Common questions about bookings, payments, verification, and getting the most from ELBOLD.
+            Common questions about bookings, payments, verification, and getting the most from Elbold.
           </p>
         </div>
       </div>

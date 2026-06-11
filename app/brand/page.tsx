@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 
-export const metadata: Metadata = { title: "Brand Concepts | ELBOLD" };
+export const metadata: Metadata = { title: "Brand Concepts | Elbold" };
 
 const CONCEPTS = [
   {
@@ -10,7 +10,7 @@ const CONCEPTS = [
     name: "Refined Luxury",
     file: "/brand/elbold-concept-a.svg",
     fileWhite: "/brand/elbold-concept-a.svg",
-    philosophy: "The existing EB emblem, refined to its purest form. The navy badge is removed. The mark stands alone as an open ring with precision crown rays and a generous serif monogram. Cleaner proportions, slimmer line weights, more deliberate spacing. This concept positions ELBOLD alongside Cartier and Rolex: a brand that does not need to shout.",
+    philosophy: "The existing EB emblem, refined to its purest form. The navy badge is removed. The mark stands alone as an open ring with precision crown rays and a generous serif monogram. Cleaner proportions, slimmer line weights, more deliberate spacing. This concept positions Elbold alongside Cartier and Rolex: a brand that does not need to shout.",
     bestFor: "Formal stationery, embossed wedding invitations, premium sponsor materials, watermarks on vendor media.",
     mood: ["Timeless", "Restrained", "Authoritative", "Classic"],
   },
@@ -18,7 +18,7 @@ const CONCEPTS = [
     id: "B",
     name: "Celebration Luxury",
     file: "/brand/elbold-concept-b.svg",
-    philosophy: "The mark becomes a celebration starburst: 16 rays of light emanating from the EB centre, evoking fireworks, champagne, and the electric moment of a great event. The navy disc grounds the energy. This concept positions ELBOLD alongside Moet & Chandon and Veuve Clicquot: unmistakably celebratory, yet refined.",
+    philosophy: "The mark becomes a celebration starburst: 16 rays of light emanating from the EB centre, evoking fireworks, champagne, and the electric moment of a great event. The navy disc grounds the energy. This concept positions Elbold alongside Moet & Chandon and Veuve Clicquot: unmistakably celebratory, yet refined.",
     bestFor: "Homepage hero, social media, event photography overlays, app icons, launch materials.",
     mood: ["Celebratory", "Dynamic", "Premium", "Memorable"],
   },
@@ -26,7 +26,7 @@ const CONCEPTS = [
     id: "C",
     name: "Premium Wordmark + Monogram",
     file: "/brand/elbold-concept-c.svg",
-    philosophy: "Confidence through restraint. A rotated diamond monogram (compact, geometric, timeless) paired with a commanding ELBOLD wordmark at maximum tracking. A thin rule and EVENTS caption ground the composition. No badge. No ornament. This concept positions ELBOLD alongside Bang & Olufsen and Four Seasons: luxury through absence.",
+    philosophy: "Confidence through restraint. A rotated diamond monogram (compact, geometric, timeless) paired with a commanding Elbold wordmark at maximum tracking. A thin rule and EVENTS caption ground the composition. No badge. No ornament. This concept positions Elbold alongside Bang & Olufsen and Four Seasons: luxury through absence.",
     bestFor: "Website navigation, email headers, professional credentials, vendor certificates, printed collateral.",
     mood: ["Minimal", "Commanding", "Modern Luxury", "Sophisticated"],
   },
@@ -71,7 +71,7 @@ export default async function BrandConceptsPage() {
               Logo Concepts
             </h1>
             <p className="text-sm font-light max-w-xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.38)" }}>
-              Three directions for the ELBOLD visual identity. Each concept maintains the
+              Three directions for the Elbold visual identity. Each concept maintains the
               deep navy and rich gold brand palette while expressing a distinct personality.
             </p>
           </div>
@@ -123,14 +123,14 @@ export default async function BrandConceptsPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={concept.file}
-                      alt={`ELBOLD Logo Concept ${concept.id}`}
+                      alt={`Elbold Logo Concept ${concept.id}`}
                       style={{ height: "60px", width: "auto" }}
                     />
                     {/* Scaled down usage */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={concept.file}
-                      alt={`ELBOLD Logo Concept ${concept.id} small`}
+                      alt={`Elbold Logo Concept ${concept.id} small`}
                       style={{ height: "32px", width: "auto", opacity: 0.8 }}
                     />
                   </div>
@@ -146,13 +146,13 @@ export default async function BrandConceptsPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={concept.file}
-                      alt={`ELBOLD Logo Concept ${concept.id} dark`}
+                      alt={`Elbold Logo Concept ${concept.id} dark`}
                       style={{ height: "60px", width: "auto", filter: "brightness(1.05)" }}
                     />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={concept.file}
-                      alt={`ELBOLD Logo Concept ${concept.id} dark small`}
+                      alt={`Elbold Logo Concept ${concept.id} dark small`}
                       style={{ height: "32px", width: "auto", opacity: 0.75, filter: "brightness(1.05)" }}
                     />
                   </div>
@@ -213,8 +213,8 @@ export default async function BrandConceptsPage() {
                 </p>
                 <div className="space-y-3 text-sm font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
                   <p>
-                    The starburst is not decoration &mdash; it is the product. ELBOLD sells celebrations, and the mark
-                    literally radiates celebratory energy. Every competitor uses a neutral wordmark. ELBOLD should
+                    The starburst is not decoration &mdash; it is the product. Elbold sells celebrations, and the mark
+                    literally radiates celebratory energy. Every competitor uses a neutral wordmark. Elbold should
                     own the moment of festivity.
                   </p>
                   <p>
@@ -268,7 +268,7 @@ export default async function BrandConceptsPage() {
                 },
                 {
                   rule: "Clear space",
-                  detail: "Maintain clear space equal to the height of the 'E' in ELBOLD on all four sides.",
+                  detail: "Maintain clear space equal to the height of the 'E' in Elbold on all four sides.",
                 },
                 {
                   rule: "Colour usage",

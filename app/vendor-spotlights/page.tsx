@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
@@ -9,11 +9,11 @@ import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Vendor Spotlights | Real Professionals on ELBOLD Events",
+  title: "Vendor Spotlights | Real Professionals on Elbold",
   description:
-    "Meet the verified event professionals behind ELBOLD. Photographers, DJs, decorators, caterers and more, each individually reviewed, each committed to extraordinary events.",
+    "Meet the verified event professionals behind Elbold. Photographers, DJs, decorators, caterers and more, each individually reviewed, each committed to extraordinary events.",
   openGraph: {
-    title: "Vendor Spotlights | ELBOLD Events",
+    title: "Vendor Spotlights | Elbold",
     description: "The verified professionals who make extraordinary events happen.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -87,7 +87,7 @@ export default async function VendorSpotlightsPage() {
             extraordinary events.
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Every vendor on ELBOLD is individually reviewed before joining the platform.
+            Every vendor on Elbold is individually reviewed before joining the platform.
             These are some of the professionals who have met our standards, and who have gone further.
           </p>
         </div>
@@ -128,7 +128,7 @@ export default async function VendorSpotlightsPage() {
                           className="w-full h-full flex items-center justify-center text-sm font-semibold tracking-widest"
                           style={{ background: "linear-gradient(160deg, #0B1F4D, #162447)", color: "rgba(212,175,55,0.3)" }}
                         >
-                          ELBOLD
+                          Elbold
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -189,7 +189,7 @@ export default async function VendorSpotlightsPage() {
                         <div className="text-center">
                           <div className="text-lg font-light text-gray-900 flex items-center gap-1">
                             <CheckCircle2 size={12} style={{ color: "#0B1F4D" }} />
-                            ELBOLD
+                            Elbold
                           </div>
                           <div className="text-xs text-gray-400 font-light">Verified</div>
                         </div>
@@ -221,7 +221,7 @@ export default async function VendorSpotlightsPage() {
                 Spotlights are building.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed max-w-lg mx-auto">
-                ELBOLD is actively onboarding and verifying event professionals across the United Kingdom.
+                Elbold is actively onboarding and verifying event professionals across the United Kingdom.
                 As our verified vendor community grows, we will feature profiles here from professionals
                 who represent the standard we stand for.
               </p>
@@ -276,7 +276,7 @@ export default async function VendorSpotlightsPage() {
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Vendor Spotlights feature professionals who have been verified, have built a track record
-                of excellent reviews, and whose work demonstrates the quality standard ELBOLD was built to represent.
+                of excellent reviews, and whose work demonstrates the quality standard Elbold was built to represent.
                 But every vendor on the platform, not just those featured here, has been individually reviewed
                 by our team before listing.
               </p>
@@ -320,7 +320,7 @@ export default async function VendorSpotlightsPage() {
           </h2>
           <p className="text-sm font-light leading-relaxed mb-8 max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.38)" }}>
             Apply for a free vendor profile. Pass our review process. Build your reputation through
-            real bookings and verified reviews. Vendor Spotlights are reserved for ELBOLD professionals
+            real bookings and verified reviews. Vendor Spotlights are reserved for Elbold professionals
             who meet the standard.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

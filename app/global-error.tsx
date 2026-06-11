@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
@@ -33,7 +33,7 @@ export default function GlobalError({
       >
         <div style={{ textAlign: "center", maxWidth: "400px" }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "0.75rem" }}>
-            ELBOLD Events
+            Elbold
           </h1>
           <p style={{ color: "#94a3b8", marginBottom: "1.5rem", lineHeight: 1.6 }}>
             A critical error occurred. Please refresh the page.

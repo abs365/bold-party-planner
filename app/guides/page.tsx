@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,7 +7,7 @@ import { GUIDES } from "@/lib/guides";
 import { ArrowRight, Clock, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Planning Guides | ELBOLD",
+  title: "Event Planning Guides | Elbold",
   description:
     "Free event planning guides for UK couples, families, and businesses. DJ costs, wedding checklists, how to choose a photographer, party planning — written by event professionals.",
 };
@@ -108,7 +108,7 @@ export default async function GuidesPage() {
         >
           <h2 className="text-xl font-light text-gray-900 mb-3">Ready to find your vendor?</h2>
           <p className="text-sm text-gray-500 font-light mb-6 max-w-md mx-auto">
-            Every vendor on ELBOLD is individually reviewed before listing. Browse verified professionals across the UK.
+            Every vendor on Elbold is individually reviewed before listing. Browse verified professionals across the UK.
           </p>
           <Link href="/browse" className="btn-luxury-dark text-sm py-3.5 px-8 inline-flex">
             Browse Verified Vendors

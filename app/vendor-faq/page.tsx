@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -6,9 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 import { ChevronDown, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Vendor FAQ | How Bookings, Payments and Verification Work | ELBOLD Events",
+  title: "Vendor FAQ | How Bookings, Payments and Verification Work | Elbold",
   description:
-    "Everything you need to know about how ELBOLD works for event professionals. How bookings are handled, how and when you get paid, what verification involves, and what happens if a customer cancels.",
+    "Everything you need to know about how Elbold works for event professionals. How bookings are handled, how and when you get paid, what verification involves, and what happens if a customer cancels.",
 };
 
 const SECTIONS = [
@@ -22,7 +22,7 @@ const SECTIONS = [
       },
       {
         q: "What information do I get when a quote comes in?",
-        a: "You receive a notification by email and on your dashboard. The quote request includes the customer name, event type, event date, location, approximate guest count, their budget range, and any specific requirements they have noted. You have 7 days to respond before the quote expires.",
+        a: "You receive a notification by email and on your dashboard. The quote request includes the customer name, event type, event date, location, approximate guest count, their budget range, and any specific requirements they have noted. We recommend responding as soon as possible so the customer can continue planning their event.",
       },
       {
         q: "What does a confirmed booking mean?",
@@ -48,11 +48,11 @@ const SECTIONS = [
     questions: [
       {
         q: "How much do I keep from each booking?",
-        a: "You keep 90% of every booking. ELBOLD earns a 10% platform fee on completed bookings. There are no listing fees, no monthly subscriptions required to receive enquiries, and no additional charges for verified badge status.",
+        a: "You keep 90% of every booking. Elbold earns a 10% platform fee on completed bookings. There are no listing fees, no monthly subscriptions required to receive enquiries, and no additional charges for verified badge status.",
       },
       {
         q: "How does the customer pay?",
-        a: "All payments are handled through Stripe, one of the world's most trusted payment platforms. The customer pays a deposit (typically 30% of the total) when they confirm a booking. The remaining balance is collected closer to or after the event. ELBOLD holds the payment until the booking is marked as completed, then releases your 90% share directly to your account.",
+        a: "All payments are handled through Stripe, one of the world's most trusted payment platforms. The customer pays a deposit (typically 30% of the total) when they confirm a booking. The remaining balance is collected closer to or after the event. Elbold holds the payment until the booking is marked as completed, then releases your 90% share directly to your account.",
       },
       {
         q: "When do I actually receive the money?",
@@ -60,11 +60,11 @@ const SECTIONS = [
       },
       {
         q: "Do I need to send the customer an invoice?",
-        a: "No. ELBOLD generates the payment record and confirms the transaction on both sides. You do not need to raise invoices or chase payment. All of that is handled by the platform.",
+        a: "No. Elbold generates the payment record and confirms the transaction on both sides. You do not need to raise invoices or chase payment. All of that is handled by the platform.",
       },
       {
         q: "What if the customer does not pay the remaining balance?",
-        a: "If the customer does not pay the final balance on time, ELBOLD will follow up on your behalf. If the balance is not settled, the dispute resolution process is initiated. You will not lose money that is owed to you without us being involved.",
+        a: "If the customer does not pay the final balance on time, Elbold will follow up on your behalf. If the balance is not settled, the dispute resolution process is initiated. You will not lose money that is owed to you without us being involved.",
       },
       {
         q: "Are there any other fees?",
@@ -77,8 +77,8 @@ const SECTIONS = [
     title: "How verification works",
     questions: [
       {
-        q: "Why does ELBOLD require verification?",
-        a: "Customers booking event professionals are often planning some of the most important days of their lives. Verification is how we prove to them that the vendors on ELBOLD are real, legitimate, and who they say they are. A verified vendor profile performs better in search and receives higher conversion from enquiries.",
+        q: "Why does Elbold require verification?",
+        a: "Customers booking event professionals are often planning some of the most important days of their lives. Verification is how we prove to them that the vendors on Elbold are real, legitimate, and who they say they are. A verified vendor profile performs better in search and receives higher conversion from enquiries.",
       },
       {
         q: "What are the verification levels?",
@@ -116,7 +116,7 @@ const SECTIONS = [
       },
       {
         q: "Do I keep the deposit if a customer cancels?",
-        a: "In most cases, yes. If the customer cancels and the cancellation is not due to fault on your part, the deposit is not returned to them. The exact outcome depends on the notice period and any special circumstances. ELBOLD will review the situation before any funds are moved.",
+        a: "In most cases, yes. If the customer cancels and the cancellation is not due to fault on your part, the deposit is not returned to them. The exact outcome depends on the notice period and any special circumstances. Elbold will review the situation before any funds are moved.",
       },
       {
         q: "What if the customer cancels with very little notice?",
@@ -128,11 +128,11 @@ const SECTIONS = [
       },
       {
         q: "What if there is a disagreement about the quality of service delivered?",
-        a: "If a customer raises a complaint about the service you delivered, ELBOLD will initiate a dispute process. Both sides provide their account of events, and we make a decision based on the evidence. We aim to be fair to both parties. Vendors who consistently deliver on what they promise have nothing to worry about.",
+        a: "If a customer raises a complaint about the service you delivered, Elbold will initiate a dispute process. Both sides provide their account of events, and we make a decision based on the evidence. We aim to be fair to both parties. Vendors who consistently deliver on what they promise have nothing to worry about.",
       },
       {
         q: "Is there anything I can do to protect myself from unfair cancellations?",
-        a: "Yes. Be specific in your packages about exactly what is included and what is not. Respond to all communications through the ELBOLD platform so there is a written record. Confirm details with the customer in advance. The more clearly expectations are set, the less room there is for disputes.",
+        a: "Yes. Be specific in your packages about exactly what is included and what is not. Respond to all communications through the Elbold platform so there is a written record. Confirm details with the customer in advance. The more clearly expectations are set, the less room there is for disputes.",
       },
     ],
   },
@@ -164,7 +164,7 @@ export default async function VendorFAQPage() {
             Vendor FAQ
           </p>
           <h1 className="text-4xl font-light tracking-tight mb-5" style={{ color: "rgba(255,255,255,0.92)" }}>
-            How ELBOLD works for event professionals.
+            How Elbold works for event professionals.
           </h1>
           <p className="font-light leading-relaxed text-base max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.42)" }}>
             Straight answers to the questions we get asked most. If something is not covered here, contact us at support@elbold.com.

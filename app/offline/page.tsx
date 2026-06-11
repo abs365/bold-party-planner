@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { WifiOff } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -33,7 +33,7 @@ export default function OfflinePage() {
         </div>
 
         <p className="text-xs text-slate-600 mt-8">
-          ELBOLD Events works offline for cached pages. Connect to continue.
+          Elbold works offline for cached pages. Connect to continue.
         </p>
       </div>
     </main>

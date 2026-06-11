@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Why Book Through ELBOLD? | Safer Than Social Media Booking",
+  title: "Why Book Through Elbold? | Safer Than Social Media Booking",
   description:
-    "Discover why booking event vendors through ELBOLD is safer than Instagram DMs or WhatsApp. Verified vendors, Stripe-secured payments, full dispute protection.",
+    "Discover why booking event vendors through Elbold is safer than Instagram DMs or WhatsApp. Verified vendors, Stripe-secured payments, full dispute protection.",
 };
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: "Payment Security",
-    elbold: "Your deposit is processed through Stripe and managed by ELBOLD until the event is complete",
+    elbold: "Your deposit is processed through Stripe and managed by Elbold until the event is complete",
     social: "Bank transfer or cash. Money leaves immediately with no protection.",
   },
   {
@@ -44,7 +44,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: "Booking Terms",
-    elbold: "Booking terms recorded at payment. Payment processed through Stripe, managed by ELBOLD, not the vendor.",
+    elbold: "Booking terms recorded at payment. Payment processed through Stripe, managed by Elbold, not the vendor.",
     social: "Usually verbal, with no written record of what was agreed.",
   },
   {
@@ -58,28 +58,28 @@ const PILLARS = [
   {
     icon: BadgeCheck,
     title: "Only verified professionals",
-    body: "Every vendor on ELBOLD has been manually reviewed by a member of our team before appearing on the marketplace. We check business identity, portfolio quality, and service legitimacy. Social media has no equivalent. Anyone with an account can advertise event services.",
+    body: "Every vendor on Elbold has been manually reviewed by a member of our team before appearing on the marketplace. We check business identity, portfolio quality, and service legitimacy. Social media has no equivalent. Anyone with an account can advertise event services.",
     link: "/how-we-verify",
     linkLabel: "How we verify vendors",
   },
   {
     icon: Lock,
     title: "Your money is protected",
-    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is processed securely through Stripe and managed by ELBOLD until after your event is completed. With social media DM bookings, money typically transfers directly to the vendor, and if something goes wrong, there is no mechanism to recover it.",
+    body: "All payments go through Stripe, one of the world's most trusted payment processors. Your deposit is processed securely through Stripe and managed by Elbold until after your event is completed. With social media DM bookings, money typically transfers directly to the vendor, and if something goes wrong, there is no mechanism to recover it.",
     link: "/booking-protection",
     linkLabel: "How booking protection works",
   },
   {
     icon: Star,
     title: "Reviews you can trust",
-    body: "Every review on ELBOLD comes from a verified customer who completed a real booking through the platform. Reviews from unverified customers are not accepted. On social media, reviews can be fabricated, incentivised, or selectively removed by the business owner.",
+    body: "Every review on Elbold comes from a verified customer who completed a real booking through the platform. Reviews from unverified customers are not accepted. On social media, reviews can be fabricated, incentivised, or selectively removed by the business owner.",
     link: "/how-we-verify",
     linkLabel: "Our review integrity standards",
   },
   {
     icon: Shield,
     title: "When things go wrong",
-    body: "ELBOLD has a formal dispute resolution process. If a vendor underdelivers or fails to appear, contact our team with evidence and we will make a fair determination within 5 business days. With social media bookings, there is no intermediary. Any dispute is entirely between you and the vendor.",
+    body: "Elbold has a formal dispute resolution process. If a vendor underdelivers or fails to appear, contact our team with evidence and we will make a fair determination within 5 business days. With social media bookings, there is no intermediary. Any dispute is entirely between you and the vendor.",
     link: "/booking-protection",
     linkLabel: "Our dispute process",
   },
@@ -87,15 +87,15 @@ const PILLARS = [
 
 const FAQS = [
   {
-    q: "Is it more expensive to book through ELBOLD?",
-    a: "ELBOLD does not charge customers a booking fee. You pay exactly what the vendor quotes. The vendor pays a small platform commission from their earnings. This does not affect your price.",
+    q: "Is it more expensive to book through Elbold?",
+    a: "Elbold does not charge customers a booking fee. You pay exactly what the vendor quotes. The vendor pays a small platform commission from their earnings. This does not affect your price.",
   },
   {
     q: "What if I already know the vendor personally?",
-    a: "You can still book through ELBOLD even if you have an existing relationship with the vendor. The platform protects both parties: you have payment security and Stripe-held funds, and the vendor has a clear booking record of what was agreed.",
+    a: "You can still book through Elbold even if you have an existing relationship with the vendor. The platform protects both parties: you have payment security and Stripe-held funds, and the vendor has a clear booking record of what was agreed.",
   },
   {
-    q: "Does ELBOLD guarantee that events will go perfectly?",
+    q: "Does Elbold guarantee that events will go perfectly?",
     a: "No platform can guarantee that. What we can say: every vendor is verified before listing, your payment is protected throughout, and if something goes wrong, we have a structured process to resolve it fairly.",
   },
   {
@@ -104,7 +104,7 @@ const FAQS = [
   },
   {
     q: "Can I negotiate directly with the vendor?",
-    a: "Yes. Once you submit a quote request, you can communicate directly with the vendor to discuss requirements, packages, and event specifics. ELBOLD facilitates the relationship. It does not restrict it.",
+    a: "Yes. Once you submit a quote request, you can communicate directly with the vendor to discuss requirements, packages, and event specifics. Elbold facilitates the relationship. It does not restrict it.",
   },
 ];
 
@@ -129,7 +129,7 @@ export default async function WhyElboldPage() {
             style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.25)", color: "rgba(212,175,55,0.85)" }}
           >
             <Shield size={12} />
-            Why ELBOLD
+            Why Elbold
           </div>
           <h1
             className="text-4xl md:text-5xl font-light tracking-tight mb-5"
@@ -140,7 +140,7 @@ export default async function WhyElboldPage() {
             <span style={{ color: "#D4AF37" }}>leaves you unprotected.</span>
           </h1>
           <p className="text-base font-light leading-relaxed max-w-xl mx-auto mb-8" style={{ color: "rgba(255,255,255,0.45)" }}>
-            ELBOLD exists because too many people have lost money, missed events, or dealt with
+            Elbold exists because too many people have lost money, missed events, or dealt with
             unreliable vendors found through Instagram DMs or WhatsApp recommendations.
             We built a safer way to find and book verified event professionals.
           </p>
@@ -151,7 +151,7 @@ export default async function WhyElboldPage() {
             <AlertTriangle size={16} style={{ color: "#D4AF37", flexShrink: 0, marginTop: "2px" }} />
             <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.65)" }}>
               When something goes wrong with a social media booking,
-              there is no-one to call. With ELBOLD, there is.
+              there is no-one to call. With Elbold, there is.
             </p>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default async function WhyElboldPage() {
               Side by Side
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight">
-              ELBOLD vs booking on social media
+              Elbold vs booking on social media
             </h2>
             <p className="text-gray-400 text-sm font-light mt-3 max-w-md mx-auto">
               Instagram, Facebook, and WhatsApp are communication tools, not booking platforms.
@@ -183,7 +183,7 @@ export default async function WhyElboldPage() {
                     What you need
                   </th>
                   <th className="px-6 py-4 text-sm font-semibold text-center" style={{ color: "#D4AF37", width: "35%" }}>
-                    ELBOLD
+                    Elbold
                   </th>
                   <th className="px-6 py-4 text-sm font-medium text-center" style={{ color: "rgba(255,255,255,0.4)", width: "35%" }}>
                     Social media DM
@@ -230,7 +230,7 @@ export default async function WhyElboldPage() {
                   <div className="flex items-start gap-2">
                     <CheckCircle2 size={14} className="flex-shrink-0 mt-0.5" style={{ color: "#059669" }} />
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wider mb-0.5" style={{ color: "#C9A84C" }}>ELBOLD</div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wider mb-0.5" style={{ color: "#C9A84C" }}>Elbold</div>
                       <p className="text-sm text-gray-700">{row.elbold}</p>
                     </div>
                   </div>
@@ -254,7 +254,7 @@ export default async function WhyElboldPage() {
               The Difference
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight">
-              What ELBOLD provides that social media cannot
+              What Elbold provides that social media cannot
             </h2>
           </div>
 
@@ -299,7 +299,7 @@ export default async function WhyElboldPage() {
             &ldquo;Your payment is never sent directly to a vendor without platform controls.&rdquo;
           </p>
           <p className="text-sm font-light mt-4 max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.38)" }}>
-            Every penny transacted through ELBOLD is processed by Stripe and held in a
+            Every penny transacted through Elbold is processed by Stripe and held in a
             protected account until your event is confirmed complete. Vendors do not
             receive payment until you have received the service.
           </p>
@@ -313,7 +313,7 @@ export default async function WhyElboldPage() {
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
             We believe honest platforms build more trust than ones that overpromise.
-            Here is what ELBOLD does not guarantee:
+            Here is what Elbold does not guarantee:
           </p>
           <div className="space-y-3">
             {[

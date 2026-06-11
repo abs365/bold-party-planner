@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { CheckCircle2, AlertCircle, Lock } from "lucide-react";
@@ -51,7 +51,7 @@ export function BankDetailsForm({ initial }: BankDetailsFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {saved && (
         <div className="flex items-center gap-2 text-emerald-400 text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2.5">
-          <CheckCircle2 size={15} /> Bank details saved. The ELBOLD team will use these for your next payout.
+          <CheckCircle2 size={15} /> Bank details saved. The Elbold team will use these for your next payout.
         </div>
       )}
       {error && (
@@ -108,7 +108,7 @@ export function BankDetailsForm({ initial }: BankDetailsFormProps) {
 
       <div className="flex items-center gap-2 text-xs text-slate-500 bg-white/3 border border-white/6 rounded-lg px-3 py-2.5">
         <Lock size={12} className="flex-shrink-0" />
-        Bank details are stored securely and are only visible to the ELBOLD payouts team. Never shared with customers.
+        Bank details are stored securely and are only visible to the Elbold payouts team. Never shared with customers.
       </div>
 
       <button

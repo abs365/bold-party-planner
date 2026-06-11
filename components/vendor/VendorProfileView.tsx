@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -183,7 +183,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
           <button
             onClick={() => {
               if (navigator.share) {
-                navigator.share({ title: vendor.business_name, text: `Book ${vendor.business_name} on ELBOLD Events`, url: window.location.href });
+                navigator.share({ title: vendor.business_name, text: `Book ${vendor.business_name} on Elbold`, url: window.location.href });
               } else {
                 navigator.clipboard.writeText(window.location.href);
                 toast.success("Link copied!");
@@ -210,12 +210,12 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
             {vendor.verified && (
               <Link
                 href="/how-we-verify"
-                title="Learn how ELBOLD verifies vendors"
+                title="Learn how Elbold verifies vendors"
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity"
                 style={{ background: "rgba(5,150,105,0.25)", border: "1px solid rgba(5,150,105,0.4)", color: "#34d399" }}
               >
                 <CheckCircle2 size={11} />
-                ELBOLD Verified
+                Elbold Verified
               </Link>
             )}
           </div>
@@ -446,13 +446,13 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               </div>
             )}
 
-            {/* Why book through ELBOLD */}
+            {/* Why book through Elbold */}
             <div
               className="rounded-2xl p-6"
               style={{ background: "linear-gradient(135deg, #0B1F4D 0%, #162447 100%)", border: "1px solid rgba(212,175,55,0.12)" }}
             >
               <h3 className="text-base font-bold mb-5" style={{ color: "rgba(255,255,255,0.92)" }}>
-                Why Book Through ELBOLD
+                Why Book Through Elbold
               </h3>
               <div className="grid sm:grid-cols-3 gap-5">
                 {[
@@ -633,7 +633,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   <div className="border-t border-gray-100 mt-4 pt-4 space-y-2.5">
                     {[
                       { icon: MessageCircle, text: "Free to enquire, no obligation" },
-                      { icon: CheckCircle2, text: "Deposit secured through Stripe, managed by ELBOLD" },
+                      { icon: CheckCircle2, text: "Deposit secured through Stripe, managed by Elbold" },
                       { icon: ShieldCheck, text: "Full refund if vendor cancels" },
                     ].map(({ icon: Icon, text }) => (
                       <div key={text} className="flex items-center gap-2 text-xs text-gray-500">

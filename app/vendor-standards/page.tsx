@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -9,11 +9,11 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Vendor Standards | What We Expect From Every ELBOLD Professional",
+  title: "Vendor Standards | What We Expect From Every Elbold Professional",
   description:
-    "Read ELBOLD's vendor approval requirements, quality expectations, warning system, suspension process, and removal criteria. Published openly so every customer knows what standard to expect.",
+    "Read Elbold's vendor approval requirements, quality expectations, warning system, suspension process, and removal criteria. Published openly so every customer knows what standard to expect.",
   openGraph: {
-    title: "ELBOLD Vendor Standards",
+    title: "Elbold Vendor Standards",
     description: "Approval requirements, quality expectations, and the warning system. Published openly.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
@@ -34,7 +34,7 @@ const ONGOING_STANDARDS = [
   { title: "Portfolio accuracy", desc: "Your portfolio must represent your current capability and personal work at all times. Do not add work that is not yours. Do not remove work to conceal your actual standard." },
   { title: "Pricing honesty", desc: "Prices displayed on your profile must be accurate. Customers who receive quotes significantly higher than your displayed pricing without clear justification may trigger a review." },
   { title: "Response commitment", desc: "Respond to all customer enquiries within 24 hours. Repeated unresponsiveness after customer enquiries will result in a formal warning." },
-  { title: "Event reliability", desc: "Show up. Deliver what you committed to. If you cannot attend a confirmed booking, notify the customer and ELBOLD immediately. Unexplained no-shows result in immediate suspension." },
+  { title: "Event reliability", desc: "Show up. Deliver what you committed to. If you cannot attend a confirmed booking, notify the customer and Elbold immediately. Unexplained no-shows result in immediate suspension." },
   { title: "Professional conduct", desc: "Treat all customers with professionalism, both through the platform and at events. Discriminatory behaviour, harassment, or aggressive communication are grounds for immediate removal." },
   { title: "Honest reviews", desc: "You may respond to reviews through your profile. You may not solicit fake reviews, incentivise positive reviews, or attempt to suppress negative ones. Doing so results in removal." },
 ];
@@ -115,7 +115,7 @@ export default async function VendorStandardsPage() {
       <div className="pt-16" style={{ background: "#0B1F4D" }}>
         <div className="max-w-4xl mx-auto px-4 py-20 text-center">
           <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "rgba(212,175,55,0.6)" }}>
-            ELBOLD Vendor Standards
+            Elbold Vendor Standards
           </p>
           <h1 className="text-4xl md:text-5xl font-light tracking-tight mb-5" style={{ color: "rgba(255,255,255,0.95)" }}>
             What we expect from every
@@ -124,12 +124,12 @@ export default async function VendorStandardsPage() {
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed mb-10" style={{ color: "rgba(255,255,255,0.45)" }}>
             These standards are not aspirational guidelines. They are the minimum requirements for listing
-            on ELBOLD and the criteria we use when issuing warnings, suspensions, and removals.
+            on Elbold and the criteria we use when issuing warnings, suspensions, and removals.
             Customers can read them. Vendors should know them.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury text-sm">
-              Apply to Join ELBOLD <ArrowRight size={14} />
+              Apply to Join Elbold <ArrowRight size={14} />
             </Link>
             <Link href="/trust" className="btn-luxury-outline text-sm">
               Our Trust System
@@ -149,7 +149,7 @@ export default async function VendorStandardsPage() {
               What we assess during approval.
             </h2>
             <p className="text-sm text-gray-500 font-light max-w-xl">
-              Every vendor application is reviewed against these criteria by a member of the ELBOLD team.
+              Every vendor application is reviewed against these criteria by a member of the Elbold team.
               Applications that do not meet the standard are declined. No exceptions.
             </p>
           </div>
@@ -267,7 +267,7 @@ export default async function VendorStandardsPage() {
               with a clear explanation of the vendor&apos;s position and any supporting evidence.
             </p>
             <p>
-              ELBOLD will review appeals within 7 business days and provide a written response.
+              Elbold will review appeals within 7 business days and provide a written response.
               The appeal decision is final. Vendors who are permanently removed following an appeal
               may not re-apply to the platform.
             </p>
@@ -281,7 +281,7 @@ export default async function VendorStandardsPage() {
               Submit an Appeal
             </a>
             <Link href="/vendor/apply" className="btn-secondary-light text-sm">
-              Apply to Join ELBOLD
+              Apply to Join Elbold
             </Link>
           </div>
         </div>
@@ -292,7 +292,7 @@ export default async function VendorStandardsPage() {
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-gray-400 font-light">
             These standards were last reviewed and updated in June 2026.
-            ELBOLD reserves the right to update these standards with 30 days notice to active vendors.
+            Elbold reserves the right to update these standards with 30 days notice to active vendors.
           </p>
           <div className="flex gap-4 text-xs">
             <Link href="/trust" className="text-gray-400 hover:text-gray-700 transition-colors font-light">Trust Hub</Link>

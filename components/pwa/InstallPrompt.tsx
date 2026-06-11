@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
@@ -57,7 +57,7 @@ export function InstallPrompt() {
     <div
       className="fixed bottom-20 left-4 right-4 z-50 lg:bottom-6 lg:left-auto lg:right-6 lg:w-80 animate-fade-in-up"
       role="dialog"
-      aria-label="Install ELBOLD app"
+      aria-label="Install Elbold app"
     >
       <div
         className="rounded-2xl border border-white/10 p-4 flex items-center gap-3 shadow-xl shadow-black/40"
@@ -69,7 +69,7 @@ export function InstallPrompt() {
 
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-white leading-tight">
-            Install ELBOLD Events
+            Install Elbold
           </p>
           <p className="text-xs text-slate-400 mt-0.5">
             Add to your home screen for the best experience

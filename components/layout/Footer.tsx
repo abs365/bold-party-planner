@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 const PLATFORM_LINKS = [
   { label: "Browse Vendors", href: "/browse" },
@@ -9,7 +9,7 @@ const PLATFORM_LINKS = [
 ];
 
 const TRUST_LINKS = [
-  { label: "The ELBOLD Trust System", href: "/trust" },
+  { label: "The Elbold Trust System", href: "/trust" },
   { label: "How We Verify Vendors", href: "/how-we-verify" },
   { label: "Vendor Standards", href: "/vendor-standards" },
   { label: "Our Commitments", href: "/our-commitments" },
@@ -58,7 +58,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="block mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/elbold-logo-white.svg" width="120" height="24" alt="ELBOLD Events" />
+              <img src="/brand/elbold-logo-white.svg" width="120" height="24" alt="Elbold" />
             </Link>
             <p
               className="text-sm leading-relaxed mb-5 font-light"
@@ -129,7 +129,7 @@ export function Footer() {
             className="text-xs font-light"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            &copy; {new Date().getFullYear()} ELBOLD Ltd (trading as ELBOLD Events). Company No. [COMPANY_NUMBER]. Registered in England and Wales.
+            &copy; {new Date().getFullYear()} ELBOLD Ltd (trading as Elbold). Registered in England and Wales.
           </p>
           <div
             className="flex items-center gap-5 text-xs font-light"

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { Phone, CheckCircle2, Loader2, ShieldCheck } from "lucide-react";
@@ -102,7 +102,7 @@ export function PhoneEditForm({ currentPhone, phoneVerified: initialPhoneVerifie
       </form>
       {error && <p className="text-xs text-red-400 mt-1.5 ml-5">{error}</p>}
       {success && <p className="text-xs text-emerald-400 mt-1.5 ml-5">Phone number saved. Click Verify to confirm your number.</p>}
-      <p className="text-xs text-slate-600 mt-1.5 ml-5">UK numbers only. Visible to ELBOLD admin - not shown on your public profile.</p>
+      <p className="text-xs text-slate-600 mt-1.5 ml-5">UK numbers only. Visible to Elbold admin - not shown on your public profile.</p>
     </div>
   );
 }

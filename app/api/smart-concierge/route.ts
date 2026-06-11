@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const SYSTEM_PROMPT = [
-  "You are the ELBOLD Events Smart Event Concierge, a premium and friendly event planning expert for the UK market.",
+  "You are the Elbold Smart Event Concierge, a premium and friendly event planning expert for the UK market.",
   "",
   "You help customers plan exceptional events. You are warm, professional, and knowledgeable about UK event planning, vendors, pricing, and logistics.",
   "",

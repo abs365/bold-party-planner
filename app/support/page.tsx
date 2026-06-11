@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Support Centre | ELBOLD Events",
+  title: "Support Centre | Elbold",
   description:
-    "Get help with bookings, payments, refunds, vendor issues, and account questions. ELBOLD support responds within 1 working day.",
+    "Get help with bookings, payments, refunds, vendor issues, and account questions. Elbold support responds within 1 working day.",
 };
 
 export const dynamic = "force-dynamic";
@@ -56,11 +56,11 @@ const SECTIONS = [
     questions: [
       {
         q: "Is my payment secure?",
-        a: "All payments are processed by Stripe, one of the world's most trusted payment processors. Your card details are never stored by ELBOLD. Stripe is PCI-DSS Level 1 certified, the highest security standard available.",
+        a: "All payments are processed by Stripe, one of the world's most trusted payment processors. Your card details are never stored by Elbold. Stripe is PCI-DSS Level 1 certified, the highest security standard available.",
       },
       {
         q: "How much deposit do I pay?",
-        a: "A 30% deposit is required to confirm any booking. The deposit is processed securely through Stripe and managed by ELBOLD. It is released to the vendor only after your event is completed.",
+        a: "A 30% deposit is required to confirm any booking. The deposit is processed securely through Stripe and managed by Elbold. It is released to the vendor only after your event is completed.",
       },
       {
         q: "When is the remaining balance due?",
@@ -142,7 +142,7 @@ const SECTIONS = [
         a: "Email support@elbold.com with a description of the issue, what you were trying to do, and which browser or device you're using. Screenshots are helpful. We'll investigate and respond within 1 working day.",
       },
       {
-        q: "I'm not receiving emails from ELBOLD.",
+        q: "I'm not receiving emails from Elbold.",
         a: "Check your spam/junk folder and add noreply@elbold.com to your safe senders list. If you use Gmail, check the Promotions or Updates tabs. If emails are still not arriving, contact support@elbold.com.",
       },
     ],
@@ -156,15 +156,15 @@ const SECTIONS = [
     questions: [
       {
         q: "How do I know a vendor is genuine?",
-        a: "Every vendor on ELBOLD has been manually reviewed by our team before being listed. We check business identity, portfolio quality, and service legitimacy. Look for the 'ELBOLD Verified' badge on vendor profiles. Click it to learn what the verification level means.",
+        a: "Every vendor on Elbold has been manually reviewed by our team before being listed. We check business identity, portfolio quality, and service legitimacy. Look for the 'Elbold Verified' badge on vendor profiles. Click it to learn what the verification level means.",
       },
       {
-        q: "A vendor asked me to pay outside of ELBOLD. What should I do?",
-        a: "Do not pay outside the platform. ELBOLD's payment protection only covers payments made through the platform. If a vendor asks you to pay by bank transfer, PayPal, or cash, report it to safety@elbold.com. This is a breach of vendor terms.",
+        q: "A vendor asked me to pay outside of Elbold. What should I do?",
+        a: "Do not pay outside the platform. Elbold's payment protection only covers payments made through the platform. If a vendor asks you to pay by bank transfer, PayPal, or cash, report it to safety@elbold.com. This is a breach of vendor terms.",
       },
       {
-        q: "How are reviews on ELBOLD different from other platforms?",
-        a: "Every review on ELBOLD comes from a real customer who completed a confirmed booking through the platform. We do not accept reviews from unverified users. This means you can trust that ratings reflect real experiences, not friends, family, or incentivised posts.",
+        q: "How are reviews on Elbold different from other platforms?",
+        a: "Every review on Elbold comes from a real customer who completed a confirmed booking through the platform. We do not accept reviews from unverified users. This means you can trust that ratings reflect real experiences, not friends, family, or incentivised posts.",
       },
       {
         q: "What happens if a vendor is reported?",

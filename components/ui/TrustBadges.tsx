@@ -117,7 +117,7 @@ export function PlatformGuaranteeBanner({ className }: { className?: string }) {
       <div className="flex items-start gap-3">
         <ShieldCheck size={20} className="text-emerald-400 flex-shrink-0 mt-0.5" />
         <div>
-          <h4 className="font-semibold text-white text-sm mb-1">ELBOLD Events Protection</h4>
+          <h4 className="font-semibold text-white text-sm mb-1">Elbold Protection</h4>
           <p className="text-xs text-slate-400 leading-relaxed">
             All bookings are protected. Your deposit is held securely until service delivery.
             Full refund available if vendor cancels. Dispute resolution within 48 hours.
@@ -175,7 +175,7 @@ export function BookingProtectionCard({ className, depositAmount, vendorName }: 
         </div>
         <div>
           <h4 className="font-semibold text-gray-900 text-sm">Booking Protection</h4>
-          <p className="text-emerald-700 text-xs">ELBOLD Events Guarantee</p>
+          <p className="text-emerald-700 text-xs">Elbold Guarantee</p>
         </div>
         <Sparkles size={13} className="text-emerald-500 ml-auto" />
       </div>
@@ -196,7 +196,7 @@ export function BookingProtectionCard({ className, depositAmount, vendorName }: 
 
       <div className="px-5 py-3 bg-gray-50 border-t border-gray-100">
         <p className="text-xs text-gray-400 text-center">
-          {vendorName ? `Booking with ${vendorName} is fully protected` : "All bookings on ELBOLD Events are protected"}
+          {vendorName ? `Booking with ${vendorName} is fully protected` : "All bookings on Elbold are protected"}
         </p>
       </div>
     </div>
@@ -275,7 +275,7 @@ export function VendorPaymentTrust({
       </div>
       <div className="space-y-2">
         {[
-          { icon: CreditCard,  text: `ELBOLD retains ${commissionRate}% platform commission on every booking`,  color: "text-slate-400" },
+          { icon: CreditCard,  text: `Elbold retains ${commissionRate}% platform commission on every booking`,  color: "text-slate-400" },
           { icon: Wallet,      text: "Your 90% payout is processed after full payment is received",              color: "text-slate-400" },
           { icon: FileText,    text: "Full booking and payment history available in your dashboard",              color: "text-slate-400" },
           { icon: RotateCcw,   text: "Refunds and dispute resolutions are handled transparently",                color: "text-slate-400" },
@@ -320,7 +320,7 @@ export function RefundPolicyCard({ className, depositAmount }: RefundPolicyCardP
       {depositAmount != null && (
         <div className="mt-3 p-2.5 rounded-lg bg-blue-500/8 border border-blue-500/15">
           <p className="text-xs text-blue-300 text-center">
-            Your deposit of £{depositAmount.toFixed(2)} is held securely by ELBOLD
+            Your deposit of £{depositAmount.toFixed(2)} is held securely by Elbold
           </p>
         </div>
       )}

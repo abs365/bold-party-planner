@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
@@ -152,7 +152,7 @@ export default async function AdminDashboard() {
         {/* ── Header ─────────────────────────────────────────────────────────── */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">ELBOLD Command Centre</h1>
+            <h1 className="text-2xl font-bold text-white">Elbold Command Centre</h1>
             <p className="text-slate-400 text-sm mt-1">
               Marketplace Operations ·{" "}
               {new Date().toLocaleDateString("en-GB", {

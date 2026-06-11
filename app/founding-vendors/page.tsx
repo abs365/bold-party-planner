@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -16,11 +16,11 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Join as a Founding Vendor | List Your Services Free | ELBOLD Events",
+  title: "Join as a Founding Vendor | List Your Services Free | Elbold",
   description:
-    "Be one of ELBOLD's first verified event professionals in London, Kent and Essex. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
+    "Be one of Elbold's first verified event professionals in London, Kent and Essex. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
   openGraph: {
-    title: "Founding Vendor Programme | ELBOLD Events",
+    title: "Founding Vendor Programme | Elbold",
     description:
       "Free profile. Verified badge. Permanent top placement. 20 founding spaces available across London, Kent and Essex.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
@@ -32,13 +32,13 @@ const BENEFITS = [
     icon: CheckCircle2,
     title: "Free to list your services.",
     description:
-      "Creating your profile and receiving enquiries costs nothing. ELBOLD earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
+      "Creating your profile and receiving enquiries costs nothing. Elbold earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
   },
   {
     icon: Star,
     title: "Founding Vendor badge on your profile",
     description:
-      "Customers browsing ELBOLD see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
+      "Customers browsing Elbold see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
   },
   {
     icon: TrendingUp,
@@ -50,13 +50,13 @@ const BENEFITS = [
     icon: Zap,
     title: "First access to new features",
     description:
-      "Founding Vendors are first to access new tools as ELBOLD grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
+      "Founding Vendors are first to access new tools as Elbold grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
   },
   {
     icon: Shield,
     title: "Stripe-secured payments on every booking",
     description:
-      "Every booking on ELBOLD goes through Stripe. Your payment is protected, released to you after completion, and covered by our dispute resolution process. You never chase invoices.",
+      "Every booking on Elbold goes through Stripe. Your payment is protected, released to you after completion, and covered by our dispute resolution process. You never chase invoices.",
   },
   {
     icon: Award,
@@ -89,7 +89,7 @@ const STEPS = [
   },
 ];
 
-// Comparison table: ELBOLD vs social media vs other directories
+// Comparison table: Elbold vs social media vs other directories
 const COMPARISON_ROWS = [
   {
     feature: "Free to list",
@@ -203,7 +203,7 @@ export default async function FoundingVendorsPage() {
             className="text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed"
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            ELBOLD connects event hosts with verified DJs, photographers, caterers,
+            Elbold connects event hosts with verified DJs, photographers, caterers,
             decorators and more across London, Kent and Essex. List your services
             free, receive enquiries from customers actively looking to book, and
             build your reputation on a platform designed specifically for UK event
@@ -244,7 +244,7 @@ export default async function FoundingVendorsPage() {
                 Once it closes, it closes.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-                The 20 Founding Vendor places exist because ELBOLD is building
+                The 20 Founding Vendor places exist because Elbold is building
                 something that requires trust from both sides — customers and
                 professionals. The vendors who join now help establish the
                 platform standard, and in return receive permanent advantages
@@ -273,7 +273,7 @@ export default async function FoundingVendorsPage() {
                   items: [
                     "Founding Vendor badge on your profile. Permanent.",
                     "Permanent top placement in your category and city",
-                    "First access to every new feature ELBOLD releases",
+                    "First access to every new feature Elbold releases",
                     "Input into what gets built next",
                     "A profile that predates every vendor who joins after",
                   ],
@@ -342,7 +342,7 @@ export default async function FoundingVendorsPage() {
               Platform Comparison
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
-              Why ELBOLD, not Instagram or a directory?
+              Why Elbold, not Instagram or a directory?
             </h2>
             <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
               Most event professionals use social media and maybe one or two
@@ -367,7 +367,7 @@ export default async function FoundingVendorsPage() {
                         className="text-xs font-bold tracking-widest"
                         style={{ color: "#D4AF37" }}
                       >
-                        ELBOLD
+                        Elbold
                       </span>
                       <span
                         className="text-xs font-light"
@@ -403,7 +403,7 @@ export default async function FoundingVendorsPage() {
                     >
                       <td className="py-4 pr-6 text-xs text-gray-600 font-light">{feature}</td>
 
-                      {/* ELBOLD */}
+                      {/* Elbold */}
                       <td className="py-4 px-4 text-center">
                         {elbold ? (
                           <div className="flex justify-center">
@@ -478,7 +478,7 @@ export default async function FoundingVendorsPage() {
               What you get as a Founding Vendor
             </h2>
             <p className="text-gray-400 max-w-xl mx-auto font-light text-sm">
-              Everything you need to be visible to early customers when ELBOLD launches, with
+              Everything you need to be visible to early customers when Elbold launches, with
               placement advantages that stay with you permanently.
             </p>
           </div>
@@ -504,7 +504,7 @@ export default async function FoundingVendorsPage() {
         </div>
       </section>
 
-      {/* ── WHAT ELBOLD EXPECTS FROM YOU ──────────────────────────────────── */}
+      {/* ── WHAT Elbold EXPECTS FROM YOU ──────────────────────────────────── */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -521,7 +521,7 @@ export default async function FoundingVendorsPage() {
                 We expect you to as well.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-                ELBOLD is a curated platform. We review every application, and we
+                Elbold is a curated platform. We review every application, and we
                 maintain standards after approval. That is what makes the
                 verification badge meaningful — and what protects the platform
                 for every vendor on it.
@@ -556,7 +556,7 @@ export default async function FoundingVendorsPage() {
                 },
                 {
                   title: "Honour confirmed bookings",
-                  desc: "Cancelling a confirmed booking has serious consequences for the customer. ELBOLD's dispute process will investigate any cancellation.",
+                  desc: "Cancelling a confirmed booking has serious consequences for the customer. Elbold's dispute process will investigate any cancellation.",
                 },
                 {
                   title: "Treat every customer as a reference",
@@ -673,7 +673,7 @@ export default async function FoundingVendorsPage() {
               </h3>
               <p className="text-xs text-gray-400 font-light leading-relaxed">
                 Your profile is free. There is no contract and no minimum term.
-                If ELBOLD does not work for your business, you can leave at any
+                If Elbold does not work for your business, you can leave at any
                 time.
               </p>
             </div>
@@ -725,7 +725,7 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-6"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; ELBOLD earns
+            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; Elbold earns
             only when you do &nbsp;·&nbsp; Cancel anytime
           </p>
         </div>

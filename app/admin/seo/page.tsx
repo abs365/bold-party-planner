@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { CheckCircle2, Clock, Circle, ArrowRight, MapPin, FileText, Star } from "lucide-react";
 
-export const metadata: Metadata = { title: "Local SEO Authority Roadmap | ELBOLD Admin" };
+export const metadata: Metadata = { title: "Local SEO Authority Roadmap | Elbold Admin" };
 export const dynamic = "force-dynamic";
 
 // ── Phase definitions ─────────────────────────────────────────────────────
@@ -23,7 +23,7 @@ const PHASES = [
       { done: true,  label: "JSON-LD: CollectionPage on category pages" },
       { done: true,  label: "Canonical metadata on every page" },
       { done: false, label: "Google Search Console verified and sitemap submitted" },
-      { done: false, label: "Google Business Profile created (ELBOLD Events UK)" },
+      { done: false, label: "Google Business Profile created (Elbold UK)" },
       { done: false, label: "Bing Webmaster Tools verified" },
       { done: false, label: "Core Web Vitals measured: LCP, CLS, FID baselines" },
     ],
@@ -48,7 +48,7 @@ const PHASES = [
   {
     phase: "Phase 3: Guide Authority (Months 3–5)",
     status: "next",
-    goal: "Rank for planning query keywords. Build ELBOLD as a trusted planning authority.",
+    goal: "Rank for planning query keywords. Build Elbold as a trusted planning authority.",
     tasks: [
       { done: true,  label: "5 published guides with Article + FAQPage JSON-LD" },
       { done: false, label: "Guide: 'How much does a photographer cost in the UK?' (high volume)" },
@@ -87,7 +87,7 @@ const PHASES = [
       { done: false, label: "PR: pitch 'vendor verification' angle to UK wedding press" },
       { done: false, label: "Vendor profiles: encourage vendors to link from their own websites" },
       { done: false, label: "Guides: outreach for editorial backlinks (journalists, wedding forums)" },
-      { done: false, label: "ELBOLD Google Business reviews: encourage vendor and customer reviews" },
+      { done: false, label: "Elbold Google Business reviews: encourage vendor and customer reviews" },
     ],
   },
   {
@@ -169,9 +169,9 @@ const KEYWORD_CLUSTERS = [
     cluster: "Brand authority",
     priority: "LONG TERM",
     examples: [
-      "ELBOLD events",
-      "ELBOLD vendor reviews",
-      "ELBOLD vs [competitor]",
+      "Elbold events",
+      "Elbold vendor reviews",
+      "Elbold vs [competitor]",
     ],
     targetPages: "/about, /trust, homepage",
   },
@@ -222,7 +222,7 @@ export default async function SeoRoadmapPage() {
           </div>
           <h1 className="text-2xl font-semibold text-gray-900 mb-1">Local SEO Authority Roadmap</h1>
           <p className="text-sm text-gray-500 font-light">
-            ELBOLD&apos;s strategy to build local search authority across the UK event marketplace.
+            Elbold&apos;s strategy to build local search authority across the UK event marketplace.
           </p>
         </div>
 

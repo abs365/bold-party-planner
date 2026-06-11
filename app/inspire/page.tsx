@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
@@ -10,9 +10,9 @@ import { ArrowRight, BookOpen, Camera, Shield } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Inspiration & Guides | ELBOLD Events",
+  title: "Inspiration & Guides | Elbold",
   description:
-    "Discover event ideas, browse real work from verified UK professionals, and read expert planning guides. Every photographer, decorator, DJ and caterer on ELBOLD is individually reviewed.",
+    "Discover event ideas, browse real work from verified UK professionals, and read expert planning guides. Every photographer, decorator, DJ and caterer on Elbold is individually reviewed.",
 };
 
 export const dynamic = "force-dynamic";
@@ -359,7 +359,7 @@ export default async function ShowcasePage() {
                 Real Work from Verified Professionals
               </h2>
               <p className="text-sm font-light mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>
-                Every photo and video is uploaded by a vendor who has been individually reviewed by ELBOLD.
+                Every photo and video is uploaded by a vendor who has been individually reviewed by Elbold.
               </p>
             </div>
             {items.length > 0 && (

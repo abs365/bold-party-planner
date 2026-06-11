@@ -367,7 +367,7 @@ export function PublicInvitationPage({ invitation, token }: Props) {
         )}
 
         <p className="text-center text-xs text-slate-700 pb-4">
-          Powered by ELBOLD Events
+          Powered by Elbold
         </p>
       </div>
     </div>

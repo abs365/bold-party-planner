@@ -1,4 +1,4 @@
-import { getOpenAI } from "@/lib/openai";
+﻿import { getOpenAI } from "@/lib/openai";
 
 export interface LeadOutreachInput {
   business_name: string;
@@ -39,9 +39,9 @@ export async function generateOutreachMessages(lead: LeadOutreachInput): Promise
   const categoryLabel = CATEGORY_LABELS[lead.category] ?? lead.category;
   const location = [lead.city, lead.region].filter(Boolean).join(", ") || "your area";
 
-  const prompt = `You are writing vendor acquisition outreach for ELBOLD Events, a carefully curated event marketplace covering London, Kent and Essex.
+  const prompt = `You are writing vendor acquisition outreach for Elbold, a carefully curated event marketplace covering London, Kent and Essex.
 
-ELBOLD is founder-led, not a big corporate platform. We are in early stage and building a carefully selected network of quality event professionals.
+Elbold is founder-led, not a big corporate platform. We are in early stage and building a carefully selected network of quality event professionals.
 
 POSITIONING RULES (you must follow these exactly):
 - Do NOT say "UK's leading marketplace"
@@ -65,11 +65,11 @@ Vendor details:
 
 Generate 5 outreach messages and return ONLY valid JSON:
 {
-  "first_contact_email": "Full professional email (subject line first on its own line starting with 'Subject: ', then a blank line, then the body). 150-200 words. Personal, founder-led, explains ELBOLD, invites them to learn more. End with a clear but low-pressure call to action.",
-  "instagram_dm": "Short Instagram DM under 80 words. Casual but professional. Mention their work. Invite them to email or visit ELBOLD. No links in first DM — just a warm introduction.",
+  "first_contact_email": "Full professional email (subject line first on its own line starting with 'Subject: ', then a blank line, then the body). 150-200 words. Personal, founder-led, explains Elbold, invites them to learn more. End with a clear but low-pressure call to action.",
+  "instagram_dm": "Short Instagram DM under 80 words. Casual but professional. Mention their work. Invite them to email or visit Elbold. No links in first DM — just a warm introduction.",
   "facebook_message": "Short Facebook message under 100 words. Slightly warmer than Instagram DM. Mention their business by name. Invite them to find out more.",
   "follow_up_email": "Follow-up email for a lead that did not respond to first contact. 80-120 words. Gentle, not pushy. Acknowledge they may be busy. Short and respectful of their time.",
-  "phone_script": "Phone call script with natural spoken language. Include: greeting, brief ELBOLD introduction (10 seconds), the proposition, handling 'what is ELBOLD?', and a close that asks for their email to send more details. Keep it under 150 words."
+  "phone_script": "Phone call script with natural spoken language. Include: greeting, brief Elbold introduction (10 seconds), the proposition, handling 'what is Elbold?', and a close that asks for their email to send more details. Keep it under 150 words."
 }`;
 
   const response = await openai.chat.completions.create({

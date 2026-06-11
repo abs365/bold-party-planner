@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -490,7 +490,7 @@ export function VendorOnboardingWizard() {
 
             <div className="bg-amber-500/10 border border-amber-500/25 rounded-xl p-4 text-sm text-amber-300 mt-2">
               <strong className="text-amber-200">What happens next:</strong>{" "}
-              Our team reviews profiles within 24–48 hours. You&apos;ll receive an email once approved and your profile goes live on the ELBOLD marketplace.
+              Our team reviews profiles within 24–48 hours. You&apos;ll receive an email once approved and your profile goes live on the Elbold marketplace.
             </div>
 
             {error && (

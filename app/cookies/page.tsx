@@ -2,15 +2,15 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | ELBOLD",
-  description: "How ELBOLD uses cookies and similar technologies.",
+  title: "Cookie Policy | Elbold",
+  description: "How Elbold uses cookies and similar technologies.",
 };
 
 export default function CookiePolicy() {
   return (
     <LegalPage
       title="Cookie Policy"
-      subtitle="How we use cookies and similar technologies on the ELBOLD platform."
+      subtitle="How we use cookies and similar technologies on the Elbold platform."
       lastUpdated="May 2026"
       sections={[
         {
@@ -40,7 +40,7 @@ export default function CookiePolicy() {
         {
           title: "4. Your Cookie Choices",
           content: [
-            "When you first visit ELBOLD, you will be shown a cookie consent notice. You may accept all cookies or restrict to necessary cookies only.",
+            "When you first visit Elbold, you will be shown a cookie consent notice. You may accept all cookies or restrict to necessary cookies only.",
             "You can change your cookie preferences at any time by clicking 'Cookie Settings' in the footer of any page.",
             "You can also control cookies through your browser settings. Most browsers allow you to refuse, delete, or get notified when cookies are set. Note that blocking essential cookies will prevent you from using certain features.",
           ],

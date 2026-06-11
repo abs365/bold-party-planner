@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useActionState, Suspense } from "react";
 import Link from "next/link";
@@ -45,12 +45,12 @@ function LoginForm() {
           {/* Mark */}
           <div className="flex justify-center mb-8">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="ELBOLD" />
+            <img src="/brand/elbold-mark.svg" width="80" height="80" alt="Elbold" />
           </div>
 
           {/* Brand */}
           <p className="font-bold tracking-[0.3em] text-sm mb-2" style={{ color: "#C9A84C" }}>
-            ELBOLD
+            Elbold
           </p>
           <p
             className="text-xs tracking-[0.18em] mb-10 font-light uppercase"
@@ -97,9 +97,9 @@ function LoginForm() {
         <div className="lg:hidden mb-8 text-center">
           <Link href="/" className="inline-flex flex-col items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="ELBOLD" />
+            <img src="/brand/elbold-mark.svg" width="52" height="52" alt="Elbold" />
             <span className="font-bold tracking-[0.2em] text-sm" style={{ color: "#0D1B3E" }}>
-              ELBOLD
+              Elbold
             </span>
           </Link>
         </div>

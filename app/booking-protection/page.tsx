@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Booking Protection | How ELBOLD Keeps Your Money Safe",
+  title: "Booking Protection | How Elbold Keeps Your Money Safe",
   description:
-    "Every booking made through ELBOLD is protected. Stripe-secured deposits, full refunds if vendors cancel, formal dispute resolution. Here is exactly how it works.",
+    "Every booking made through Elbold is protected. Stripe-secured deposits, full refunds if vendors cancel, formal dispute resolution. Here is exactly how it works.",
 };
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,7 @@ const PROMISE_POINTS = [
   {
     icon: Lock,
     title: "Your payment is secured through Stripe",
-    body: "Every deposit paid through ELBOLD is processed by Stripe. Payments are held by ELBOLD and not released to vendors until after your event is completed.",
+    body: "Every deposit paid through Elbold is processed by Stripe. Payments are held by Elbold and not released to vendors until after your event is completed.",
   },
   {
     icon: CheckCircle2,
@@ -44,9 +44,9 @@ const REFUND_POLICY = [
 const CUSTOMER_RESPONSIBILITIES = [
   "Read the vendor's profile, package description, and contract carefully before confirming a booking.",
   "Provide accurate event details including date, location, guest numbers, and specific requirements.",
-  "Communicate changes to requirements promptly and in writing through the ELBOLD platform.",
+  "Communicate changes to requirements promptly and in writing through the Elbold platform.",
   "Raise disputes within 48 hours of the event if the service was not delivered as agreed.",
-  "Do not attempt to circumvent the platform by paying vendors outside of ELBOLD, as doing so removes all protections.",
+  "Do not attempt to circumvent the platform by paying vendors outside of Elbold, as doing so removes all protections.",
 ];
 
 const VENDOR_RESPONSIBILITIES = [
@@ -60,7 +60,7 @@ const VENDOR_RESPONSIBILITIES = [
 const FAQS = [
   {
     q: "When does the vendor receive my payment?",
-    a: "The vendor receives their share of the booking payment after your event is marked as complete and any dispute window has passed. Deposits are held by ELBOLD and processed securely through Stripe throughout the booking period.",
+    a: "The vendor receives their share of the booking payment after your event is marked as complete and any dispute window has passed. Deposits are held by Elbold and processed securely through Stripe throughout the booking period.",
   },
   {
     q: "What is the deposit amount?",
@@ -75,8 +75,8 @@ const FAQS = [
     a: "Email disputes@elbold.com within 48 hours of the event with your evidence. Our team will contact both parties, review the evidence, and make a fair determination within 5 business days.",
   },
   {
-    q: "Am I protected if I pay outside of ELBOLD?",
-    a: "No. Our protection only applies to payments processed through the ELBOLD platform. Paying a vendor directly by bank transfer or cash removes all protections described on this page.",
+    q: "Am I protected if I pay outside of Elbold?",
+    a: "No. Our protection only applies to payments processed through the Elbold platform. Paying a vendor directly by bank transfer or cash removes all protections described on this page.",
   },
   {
     q: "What if I need to cancel close to the event?",
@@ -113,10 +113,10 @@ export default async function BookingProtectionPage() {
           >
             Your money is never
             <br />
-            <span style={{ color: "#D4AF37" }}>at risk on ELBOLD.</span>
+            <span style={{ color: "#D4AF37" }}>at risk on Elbold.</span>
           </h1>
           <p className="text-base font-light leading-relaxed max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Every booking made through ELBOLD is protected. Here is exactly what that means,
+            Every booking made through Elbold is protected. Here is exactly what that means,
             and what you are entitled to if something goes wrong.
           </p>
         </div>
@@ -137,7 +137,7 @@ export default async function BookingProtectionPage() {
             &ldquo;Your payment is never sent directly to a vendor without platform controls.&rdquo;
           </p>
           <p className="text-sm font-light max-w-md mx-auto" style={{ color: "rgba(255,255,255,0.38)" }}>
-            All ELBOLD payments are processed and secured by Stripe. Funds are held by ELBOLD until your event is complete. Vendors receive payment only after delivery.
+            All Elbold payments are processed and secured by Stripe. Funds are held by Elbold until your event is complete. Vendors receive payment only after delivery.
           </p>
         </div>
 
@@ -145,7 +145,7 @@ export default async function BookingProtectionPage() {
         <div>
           <div className="text-center mb-12">
             <p className="text-xs tracking-[0.3em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
-              The ELBOLD Promise
+              The Elbold Promise
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight">
               What every booking includes
@@ -182,15 +182,15 @@ export default async function BookingProtectionPage() {
             {[
               {
                 title: "PCI-DSS Level 1 compliance",
-                body: "Stripe is the highest level of payment security certification available. Your card details are never stored on ELBOLD servers.",
+                body: "Stripe is the highest level of payment security certification available. Your card details are never stored on Elbold servers.",
               },
               {
                 title: "Deposit held until completion",
-                body: "Your 30% deposit is held by ELBOLD and processed through Stripe. It is not released to the vendor until your event is confirmed complete.",
+                body: "Your 30% deposit is held by Elbold and processed through Stripe. It is not released to the vendor until your event is confirmed complete.",
               },
               {
                 title: "No direct vendor transfers",
-                body: "You are never asked to pay a vendor by bank transfer, PayPal, or cash. All funds flow through ELBOLD's protected payment system.",
+                body: "You are never asked to pay a vendor by bank transfer, PayPal, or cash. All funds flow through Elbold's protected payment system.",
               },
               {
                 title: "Refunds processed directly to your card",
@@ -344,7 +344,7 @@ export default async function BookingProtectionPage() {
             <h2 className="text-lg font-light text-gray-900 tracking-tight">Vendor responsibilities</h2>
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-            Vendors on ELBOLD agree to uphold these standards as a condition of their listing:
+            Vendors on Elbold agree to uphold these standards as a condition of their listing:
           </p>
           <div className="space-y-3">
             {VENDOR_RESPONSIBILITIES.map((point) => (
@@ -391,7 +391,7 @@ export default async function BookingProtectionPage() {
           </div>
           <div className="space-y-2">
             {[
-              "Payments made outside of the ELBOLD platform",
+              "Payments made outside of the Elbold platform",
               "Disputes raised more than 48 hours after the event",
               "Disagreements about artistic style or personal taste where the agreed service was delivered",
               "Force majeure events where neither party is at fault (we will work with both parties on rescheduling or refunds)",
@@ -442,7 +442,7 @@ export default async function BookingProtectionPage() {
               Full Refund Policy
             </Link>
             <Link href="/why-elbold" className="btn-secondary-light text-sm py-3.5 px-8 inline-flex">
-              Why Book Through ELBOLD
+              Why Book Through Elbold
             </Link>
           </div>
         </div>

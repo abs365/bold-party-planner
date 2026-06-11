@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import {
@@ -92,7 +92,7 @@ async function fetchVendorGrowthData() {
   const appsThisMonth = all.filter(v => v.created_at >= month).length;
 
   const FUNNEL = [
-    { stage: "Prospects",  count: "∞",              color: "text-slate-500",   note: "Vendors ELBOLD has not yet contacted" },
+    { stage: "Prospects",  count: "∞",              color: "text-slate-500",   note: "Vendors Elbold has not yet contacted" },
     { stage: "Contacted",  count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker" },
     { stage: "Interested", count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker" },
     { stage: "Applied",    count: all.length,        color: "text-blue-400",    note: `${appsThisMonth} in last 30 days` },
