@@ -38,6 +38,18 @@ export async function requireVendor(): Promise<VendorContext | null> {
   return { ...ctx, vendorId: vendor.id };
 }
 
+export async function requireApprovedVendor(): Promise<VendorContext | null> {
+  const ctx = await requireAuth();
+  if (!ctx) return null;
+  const { data: vendor } = await ctx.supabase
+    .from("vendors")
+    .select("id, status")
+    .eq("user_id", ctx.user.id)
+    .single();
+  if (!vendor || vendor.status !== "approved") return null;
+  return { ...ctx, vendorId: vendor.id };
+}
+
 export const unauthorized = () =>
   NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

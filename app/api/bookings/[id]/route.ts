@@ -165,11 +165,18 @@ export async function PATCH(
     if (profile?.role === "vendor") {
       const { data: vendor } = await supabase
         .from("vendors")
-        .select("id")
+        .select("id, business_name, status")
         .eq("user_id", user.id)
         .maybeSingle();
 
       if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
+
+      if (vendor.status !== "approved") {
+        const msg = vendor.status === "suspended"
+          ? "Your account has been suspended"
+          : "Your vendor account is not currently active";
+        return NextResponse.json({ error: msg }, { status: 403 });
+      }
 
       const updates: Record<string, unknown> = {};
       if (status) updates.status = status;
@@ -227,12 +234,13 @@ export async function PATCH(
       }
 
       // Email notification
+      const vendorDisplayName = vendor.business_name ?? "Your vendor";
       if (status === "accepted" && customer?.email) {
         const { sendBookingAccepted } = await import("@/lib/resend");
         void sendBookingAccepted(
           customer.email,
           customer.full_name ?? "Customer",
-          vendor.id,
+          vendorDisplayName,
           event?.title ?? "your event",
           id
         );
@@ -241,8 +249,16 @@ export async function PATCH(
         void sendBookingRejected(
           customer.email,
           customer.full_name ?? "Customer",
-          vendor.id,
+          vendorDisplayName,
           event?.title ?? "your event"
+        );
+      } else if (status === "completed" && customer?.email) {
+        const { sendReviewRequest } = await import("@/lib/resend");
+        void sendReviewRequest(
+          customer.email,
+          customer.full_name ?? "Customer",
+          vendorDisplayName,
+          id
         );
       }
 

@@ -41,9 +41,16 @@ export async function GET(req: Request) {
     bookedVendorIds = new Set((existingBookings ?? []).map((b) => b.vendor_id));
   }
 
-  // Scoring algorithm
+  // Scoring algorithm — only include vendors with minimum readiness:
+  // business_name, bio, and at least one package are required for a customer to engage.
   const scored = (vendors ?? [])
     .filter((v) => !bookedVendorIds.has(v.id))
+    .filter((v) =>
+      v.business_name &&
+      v.bio &&
+      v.city &&
+      Array.isArray(v.packages) && v.packages.length > 0
+    )
     .map((vendor) => {
       let score = 0;
 

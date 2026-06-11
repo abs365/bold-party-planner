@@ -49,13 +49,16 @@ export async function PATCH(req: Request, { params }: Params) {
   const { data: quote } = await supabase.from("quotes").select("*").eq("id", id).maybeSingle();
   if (!quote) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { data: vendorRow } = await supabase.from("vendors").select("id, user_id").eq("user_id", user.id).maybeSingle();
+  const { data: vendorRow } = await supabase.from("vendors").select("id, user_id, status").eq("user_id", user.id).maybeSingle();
   const isCustomer = quote.customer_id === user.id;
   const isVendor   = vendorRow != null && quote.vendor_id === vendorRow.id;
   const db         = await createAdminClient();
 
   // ── VENDOR: respond (submit quote) ──────────────────────────────────────────
   if (action === "respond" && isVendor) {
+    if (vendorRow.status !== "approved") {
+      return NextResponse.json({ error: "Your vendor account is not currently active" }, { status: 403 });
+    }
     const price = Number(body.price);
     if (!price || price <= 0) {
       return NextResponse.json({ error: "A valid price is required" }, { status: 400 });

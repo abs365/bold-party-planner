@@ -9,6 +9,21 @@ export async function PATCH(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const { data: vendorCheck } = await supabase
+    .from("vendors")
+    .select("status")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (!vendorCheck) return NextResponse.json({ error: "Vendor profile not found" }, { status: 404 });
+
+  if (vendorCheck.status !== "approved") {
+    const msg = vendorCheck.status === "suspended"
+      ? "Your account has been suspended"
+      : "Profile updates are only available once your application is approved";
+    return NextResponse.json({ error: msg }, { status: 403 });
+  }
+
   const body = await req.json();
 
   const allowed = [

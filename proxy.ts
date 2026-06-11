@@ -100,6 +100,28 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // 4. Non-approved vendor → operational vendor routes: redirect to onboarding.
+  // Apply and onboarding are always accessible so vendors can see their status.
+  const VENDOR_OPEN_PREFIXES = ["/vendor/apply", "/vendor/onboarding"];
+  const isVendorOperationalRoute =
+    pathname.startsWith("/vendor/") &&
+    !VENDOR_OPEN_PREFIXES.some((p) => pathname.startsWith(p));
+
+  if (isVendorOperationalRoute && user) {
+    const metaRole = user.user_metadata?.role as string | undefined;
+    if (metaRole === "vendor") {
+      const { data: vendorRow } = await supabase
+        .from("vendors")
+        .select("status")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (vendorRow && vendorRow.status !== "approved") {
+        return NextResponse.redirect(new URL("/vendor/onboarding", request.url));
+      }
+    }
+  }
+
   return response;
 }
 
