@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import {
   ArrowRight, Star, CheckCircle2, MapPin, Shield, Award,
+  Camera, Music, Sparkles, UtensilsCrossed, Building2, Mic2,
 } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
@@ -39,7 +40,6 @@ type FeaturedVendor = Pick<
   "is_founding_vendor"
 > & { media?: Array<{ url: string; type: string; is_cover: boolean }> };
 
-// ── Occasion data — editorial cards ──────────────────────────────────────────
 const OCCASIONS = [
   {
     label: "Weddings",
@@ -86,12 +86,38 @@ const OCCASIONS = [
 ];
 
 const QUICK_STARTS = [
-  { label: "Weddings", href: "/browse?event=wedding" },
-  { label: "Birthdays", href: "/browse?event=birthday" },
-  { label: "Corporate", href: "/browse?event=corporate" },
-  { label: "Anniversaries", href: "/browse?event=anniversary" },
+  { label: "Weddings",        href: "/browse?event=wedding" },
+  { label: "Birthdays",       href: "/browse?event=birthday" },
+  { label: "Corporate",       href: "/browse?event=corporate" },
   { label: "Cultural Events", href: "/browse?event=cultural" },
-  { label: "Baby Showers", href: "/browse?event=baby_shower" },
+  { label: "Baby Showers",    href: "/browse?event=baby_shower" },
+];
+
+const CATEGORIES = [
+  { label: "Photographers", icon: Camera,         href: "/browse?category=photographer" },
+  { label: "DJs & Music",   icon: Music,           href: "/browse?category=dj" },
+  { label: "Decorators",    icon: Sparkles,        href: "/browse?category=decorator" },
+  { label: "Catering",      icon: UtensilsCrossed, href: "/browse?category=caterer" },
+  { label: "Live Music",    icon: Mic2,            href: "/browse?category=live_band" },
+  { label: "Venues",        icon: Building2,       href: "/browse?category=venue_hire" },
+];
+
+const HOW_IT_WORKS = [
+  {
+    n: "01",
+    title: "Browse verified professionals",
+    desc: "Filter by category, location, and budget. Every vendor is reviewed by our team before they appear.",
+  },
+  {
+    n: "02",
+    title: "Request a free quote",
+    desc: "Send your event details directly to the vendors you like. No obligation. Vendors respond within 48 hours.",
+  },
+  {
+    n: "03",
+    title: "Book and pay securely",
+    desc: "Accept the quote that suits you. Pay a 30% deposit through Stripe. The rest is due after your event.",
+  },
 ];
 
 const VENDOR_BENEFITS = [
@@ -113,7 +139,6 @@ const VENDOR_BENEFITS = [
   },
 ];
 
-// ── JSON-LD ───────────────────────────────────────────────────────────────────
 const JSONLD_ORGANIZATION = {
   "@context": "https://schema.org",
   "@graph": [
@@ -175,99 +200,80 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD_ORGANIZATION) }}
       />
 
-      <div className="min-h-screen">
-        <Navbar user={profile} />
+      <div className="min-h-screen bg-white">
+        <Navbar user={profile} lightBg />
 
-        {/* ── SECTION 1: CINEMATIC HERO ──────────────────────────────────── */}
-        <section
-          className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-          style={{ background: "linear-gradient(160deg, #0B1F4D 0%, #091529 45%, #050e20 100%)" }}
-        >
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1920&q=80"
-              alt="Professional photographer at work at an event"
-              fill
-              priority
-              quality={85}
-              className="object-cover object-center"
-              sizes="100vw"
-            />
-          </div>
-
-          {/* Cinematic overlay — reduced to let photography breathe */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(160deg, rgba(6,14,36,0.34) 0%, rgba(8,18,42,0.24) 35%, rgba(5,10,24,0.54) 100%)",
-            }}
-          />
-          {/* Gold bloom */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "radial-gradient(ellipse 70% 40% at 50% 0%, rgba(212,175,55,0.07) 0%, transparent 60%)",
-            }}
-          />
-
-          <div className="relative z-10 text-center max-w-5xl mx-auto px-6 pt-24 pb-16 sm:pt-36 sm:pb-24">
+        {/* ── SECTION 1: TYPOGRAPHIC HERO ──────────────────────────────────── */}
+        <section className="pt-32 pb-20 px-4" style={{ background: "#ffffff" }}>
+          <div className="max-w-4xl mx-auto text-center">
 
             {/* Brand line */}
-            <div className="flex items-center justify-center gap-4 mb-10 sm:mb-16">
-              <div className="h-px w-14" style={{ background: "rgba(212,175,55,0.2)" }} />
+            <div className="inline-flex items-center gap-3 mb-8">
+              <div className="h-px w-10" style={{ background: "rgba(11,31,77,0.15)" }} />
               <span
-                className="text-xs tracking-[0.45em] font-light"
-                style={{ color: "rgba(212,175,55,0.45)" }}
+                className="text-xs tracking-[0.45em] font-medium uppercase"
+                style={{ color: "rgba(11,31,77,0.45)" }}
               >
-                TRUSTED PROFESSIONALS &middot; UNITED KINGDOM
+                Trusted Professionals &middot; United Kingdom
               </span>
-              <div className="h-px w-14" style={{ background: "rgba(212,175,55,0.2)" }} />
+              <div className="h-px w-10" style={{ background: "rgba(11,31,77,0.15)" }} />
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.06] text-white mb-6 sm:mb-10">
+            <h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.06] mb-6"
+              style={{ color: "#0B1F4D" }}
+            >
               Find Trusted Professionals
               <br />
-              <span style={{ color: "#D4AF37" }}>For Every Occasion.</span>
+              <span style={{ color: "#D4AF37" }}>For Every Occasion</span>
             </h1>
 
             {/* Subheadline */}
             <p
-              className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-12"
-              style={{ color: "rgba(255,255,255,0.72)" }}
+              className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-10"
+              style={{ color: "#6b7280" }}
             >
-              Every professional on Elbold is reviewed, verified, and assessed before joining.
-              Compare trusted providers, request quotes, and book with confidence.
+              Every professional on Elbold is reviewed before joining.
+              Compare trusted providers, request quotes and book with confidence.
             </p>
 
-            {/* Primary CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-              <Link href="/browse" className="btn-luxury text-base px-10 py-4">
-                Begin Planning <ArrowRight size={16} />
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Link
+                href="/browse"
+                className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
+                style={{ background: "#0B1F4D", color: "#ffffff", border: "2px solid #0B1F4D" }}
+              >
+                Find Professionals <ArrowRight size={16} />
               </Link>
-              <Link href="/founding-vendors" className="btn-luxury-outline text-base px-10 py-4">
-                Join As a Vendor
+              <Link
+                href="/founding-vendors"
+                className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-80"
+                style={{ border: "2px solid #0B1F4D", color: "#0B1F4D", background: "transparent" }}
+              >
+                Join as a Vendor
               </Link>
             </div>
 
-            {/* Guided event type enquiry — occasion quick-start */}
+            {/* Occasion chips */}
             <div className="flex flex-col items-center gap-3">
               <span
-                className="text-xs tracking-[0.3em] font-light"
-                style={{ color: "rgba(255,255,255,0.42)" }}
+                className="text-xs tracking-[0.3em] font-medium uppercase"
+                style={{ color: "rgba(11,31,77,0.35)" }}
               >
-                WHAT ARE YOU PLANNING?
+                What are you planning?
               </span>
               <div className="flex flex-wrap items-center justify-center gap-2.5">
                 {QUICK_STARTS.map(({ label, href }) => (
                   <Link
                     key={label}
                     href={href}
-                    className="text-xs px-4 py-2 rounded-full border transition-all duration-200 hover:bg-white/10"
+                    className="text-xs px-4 py-2 rounded-full border font-medium transition-all hover:bg-[#0B1F4D] hover:text-white"
                     style={{
-                      borderColor: "rgba(212,175,55,0.35)",
-                      color: "rgba(255,255,255,0.62)",
-                      letterSpacing: "0.06em",
+                      borderColor: "rgba(11,31,77,0.2)",
+                      color: "#0B1F4D",
+                      letterSpacing: "0.04em",
                     }}
                   >
                     {label}
@@ -276,18 +282,39 @@ export default async function Home() {
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Scroll indicator */}
-          <div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
-            aria-hidden="true"
-          >
-            <div className="w-px h-10 animate-bounce" style={{ background: "rgba(212,175,55,0.18)" }} />
+        {/* ── SECTION 2: CATEGORY GRID ─────────────────────────────────────── */}
+        <section className="pb-20 px-4" style={{ background: "#ffffff" }}>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+              {CATEGORIES.map(({ label, icon: Icon, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="group flex flex-col items-center gap-3 p-5 rounded-xl border transition-all hover:border-[#0B1F4D] hover:shadow-sm"
+                  style={{ borderColor: "rgba(11,31,77,0.1)", background: "#ffffff" }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors group-hover:bg-[#0B1F4D]"
+                    style={{ background: "rgba(11,31,77,0.06)" }}
+                  >
+                    <Icon size={18} style={{ color: "#0B1F4D" }} className="group-hover:text-white transition-colors" />
+                  </div>
+                  <span
+                    className="text-xs font-medium text-center leading-tight"
+                    style={{ color: "#0B1F4D" }}
+                  >
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* ── SECTION 2: TRUST BAR ────────────────────────────────────────── */}
-        <section style={{ background: "#06111d", borderTop: "1px solid rgba(212,175,55,0.08)", borderBottom: "1px solid rgba(212,175,55,0.06)" }}>
+        {/* ── SECTION 3: TRUST BAR ─────────────────────────────────────────── */}
+        <section style={{ background: "#f8f7f5", borderTop: "1px solid rgba(11,31,77,0.06)", borderBottom: "1px solid rgba(11,31,77,0.06)" }}>
           <div className="max-w-5xl mx-auto px-4 py-5">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {[
@@ -298,8 +325,8 @@ export default async function Home() {
                 { icon: MapPin,       label: "Based in the United Kingdom" },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center justify-center gap-2.5 py-1">
-                  <Icon size={15} style={{ color: "rgba(212,175,55,0.80)", flexShrink: 0 }} />
-                  <span className="text-xs font-light" style={{ color: "rgba(255,255,255,0.62)" }}>
+                  <Icon size={14} style={{ color: "#0B1F4D", opacity: 0.7, flexShrink: 0 }} />
+                  <span className="text-xs font-light" style={{ color: "#374151" }}>
                     {label}
                   </span>
                 </div>
@@ -308,7 +335,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 3: OCCASION SHOWCASE — editorial photography cards ─── */}
+        {/* ── SECTION 4: OCCASION SHOWCASE — editorial photography cards ───── */}
         <section style={{ background: "#f8f7f5" }} className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -332,31 +359,24 @@ export default async function Home() {
                     border: "1px solid rgba(255,255,255,0.04)",
                   }}
                 >
-                  {/* Photography */}
-                  {occasion.photo && (
-                    <div className="absolute inset-0">
-                      <Image
-                        src={occasion.photo}
-                        alt={occasion.label}
-                        fill
-                        quality={75}
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    </div>
-                  )}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={occasion.photo}
+                      alt={occasion.label}
+                      fill
+                      quality={75}
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
 
-                  {/* Cinematic overlay — bottom-heavy so text is legible, reduced to show photography */}
                   <div
                     className="absolute inset-0"
                     style={{
-                      background: occasion.photo
-                        ? `linear-gradient(to top, rgba(4,8,20,0.70) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`
-                        : occasion.gradient,
+                      background: `linear-gradient(to top, rgba(4,8,20,0.70) 0%, ${occasion.overlay} 45%, rgba(4,8,20,0.04) 100%)`,
                     }}
                   />
 
-                  {/* Gold corner bloom */}
                   <div
                     className="absolute top-0 right-0 w-20 h-20 pointer-events-none"
                     style={{
@@ -364,7 +384,6 @@ export default async function Home() {
                     }}
                   />
 
-                  {/* Content — bottom-aligned, editorial */}
                   <div className="relative z-10 p-8 h-full flex flex-col justify-end" style={{ minHeight: "320px" }}>
                     <div
                       className="text-xs tracking-[0.4em] font-semibold uppercase mb-3"
@@ -394,7 +413,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 4: FEATURED VENDORS ─────────────────────────────────── */}
+        {/* ── SECTION 5: FEATURED VENDORS ──────────────────────────────────── */}
         {vendors.length > 0 && (
           <section className="py-20 px-4 bg-white">
             <div className="max-w-6xl mx-auto">
@@ -513,7 +532,7 @@ export default async function Home() {
           </section>
         )}
 
-        {/* ── CONCIERGE BAND ───────────────────────────────────────────────── */}
+        {/* ── SECTION 6: CONCIERGE BAND ────────────────────────────────────── */}
         <section className="py-16 px-4" style={{ background: "#f8f7f5" }}>
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-10 items-center">
@@ -554,74 +573,145 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 5: THE Elbold PROMISE ───────────────────────────────── */}
-        <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
+        {/* ── SECTION 7: HOW IT WORKS ──────────────────────────────────────── */}
+        <section className="py-24 px-4" style={{ background: "#ffffff" }}>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "rgba(212,175,55,0.5)" }}>
-                The Elbold Promise
+              <p
+                className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase"
+                style={{ color: "#D4AF37" }}
+              >
+                How It Works
               </p>
-              <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
-                Not policies. Real commitments.
+              <h2
+                className="text-3xl font-light tracking-tight"
+                style={{ color: "#0B1F4D" }}
+              >
+                From browsing to booked in three steps.
               </h2>
-              <p className="text-sm font-light leading-relaxed max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.32)" }}>
-                Checkable, specific, and kept for every customer on every booking.
-              </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 mb-16">
-              {[
-                {
-                  icon: CheckCircle2,
-                  title: "Every vendor is reviewed by a real person",
-                  body: "Before any vendor appears on Elbold, a member of our team reviews their application, portfolio, and business identity. No automated approvals.",
-                  link: "/how-we-verify",
-                  linkLabel: "How we verify vendors",
-                },
-                {
-                  icon: Shield,
-                  title: "Your deposit is held safely until your event",
-                  body: "Your 30% deposit is processed securely through Stripe and managed by Elbold. It is only released to the vendor after your event has taken place. If the vendor cancels, you receive a full refund.",
-                  link: "/booking-protection",
-                  linkLabel: "Full booking protection",
-                },
-                {
-                  icon: Star,
-                  title: "Every review comes from a confirmed booking",
-                  body: "Reviews can only be left by customers who booked through the platform. Anonymous reviews and unverified ratings are not permitted.",
-                  link: "/how-we-verify#reviews",
-                  linkLabel: "How reviews work",
-                },
-              ].map(({ icon: Icon, title, body, link, linkLabel }) => (
-                <div
-                  key={title}
-                  className="rounded-2xl p-8 flex flex-col"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,175,55,0.07)" }}
-                >
+            <div className="grid md:grid-cols-3 gap-8">
+              {HOW_IT_WORKS.map(({ n, title, desc }) => (
+                <div key={n} className="relative">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-6 flex-shrink-0"
-                    style={{ background: "rgba(212,175,55,0.1)" }}
+                    className="text-5xl font-light mb-5 leading-none"
+                    style={{ color: "rgba(11,31,77,0.08)" }}
                   >
-                    <Icon size={18} style={{ color: "#D4AF37" }} />
+                    {n}
                   </div>
-                  <h3 className="text-base font-semibold mb-3 leading-snug" style={{ color: "rgba(255,255,255,0.88)" }}>
+                  <h3
+                    className="text-base font-semibold mb-2"
+                    style={{ color: "#0B1F4D" }}
+                  >
                     {title}
                   </h3>
-                  <p className="text-sm font-light leading-relaxed flex-1 mb-5" style={{ color: "rgba(255,255,255,0.38)" }}>
-                    {body}
+                  <p className="text-sm font-light leading-relaxed" style={{ color: "#6b7280" }}>
+                    {desc}
                   </p>
-                  <a
-                    href={link}
-                    className="text-xs font-semibold flex items-center gap-1.5 transition-opacity hover:opacity-70"
-                    style={{ color: "rgba(212,175,55,0.65)" }}
-                  >
-                    {linkLabel} <ArrowRight size={11} />
-                  </a>
                 </div>
               ))}
             </div>
 
-            {/* Real stats only */}
+            <div className="mt-12 text-center">
+              <Link
+                href="/how-it-works"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold hover:opacity-70 transition-opacity"
+                style={{ color: "#0B1F4D" }}
+              >
+                Read how it works in full <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── SECTION 8: THE ELBOLD PROMISE ────────────────────────────────── */}
+        <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14">
+              <p
+                className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase"
+                style={{ color: "rgba(212,175,55,0.5)" }}
+              >
+                The Elbold Promise
+              </p>
+              <h2
+                className="text-3xl font-light tracking-tight mb-4"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                A marketplace built on one principle.
+                <br />
+                <span style={{ color: "#D4AF37" }}>You should be able to trust it.</span>
+              </h2>
+              <p
+                className="text-sm font-light max-w-xl mx-auto leading-relaxed"
+                style={{ color: "rgba(255,255,255,0.42)" }}
+              >
+                No vendor joins Elbold automatically. No review is unverified. No payment is unprotected.
+                These are not aspirations. They are the rules the platform operates by.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+              {[
+                {
+                  icon: CheckCircle2,
+                  title: "Every vendor reviewed by a human",
+                  body: "Every application is assessed by our team against published standards before a profile goes live. No automation. No auto-approval.",
+                },
+                {
+                  icon: Shield,
+                  title: "Your deposit is protected by Stripe",
+                  body: "A 30% deposit secures your booking. All payments are processed by Stripe. Funds are held until your event is complete.",
+                },
+                {
+                  icon: Star,
+                  title: "Reviews only from confirmed bookings",
+                  body: "You cannot leave a review on Elbold unless you have completed a booking through the platform. No anonymous reviews.",
+                },
+                {
+                  icon: Award,
+                  title: "Full refund if your vendor cancels",
+                  body: "If your vendor cancels a confirmed booking, you receive a full refund of everything you have paid, with no dispute required.",
+                },
+                {
+                  icon: MapPin,
+                  title: "United Kingdom professionals only",
+                  body: "Every vendor on Elbold operates in the UK. We verify that the person listing the service is the actual service provider.",
+                },
+                {
+                  icon: ArrowRight,
+                  title: "Our standards are published and enforced",
+                  body: "Vendor approval criteria, warning procedures, and removal policies are all publicly documented. We hold ourselves to the same standard.",
+                  link: "/vendor-standards",
+                },
+              ].map(({ icon: Icon, title, body, link }) => (
+                <div
+                  key={title}
+                  className="rounded-xl p-6"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,175,55,0.08)" }}
+                >
+                  <Icon size={18} style={{ color: "#D4AF37", marginBottom: "14px" }} />
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: "rgba(255,255,255,0.9)" }}>
+                    {title}
+                  </h3>
+                  <p className="text-xs font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.38)" }}>
+                    {body}
+                  </p>
+                  {link && (
+                    <Link
+                      href={link}
+                      className="inline-flex items-center gap-1 text-xs mt-4 font-medium hover:opacity-80 transition-opacity"
+                      style={{ color: "#D4AF37" }}
+                    >
+                      Read more <ArrowRight size={11} />
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Stats — dynamic vendor count only when ≥ 30 real vendors */}
             <div
               className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-12"
               style={{ borderTop: "1px solid rgba(212,175,55,0.07)" }}
@@ -643,15 +733,15 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 6: FOR EVENT PROFESSIONALS ──────────────────────────── */}
-        <section className="py-24 px-4 bg-white">
+        {/* ── SECTION 9: FOR EVENT PROFESSIONALS ───────────────────────────── */}
+        <section className="py-24 px-4" style={{ background: "#f8f7f5" }}>
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-16 items-start">
               <div>
                 <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
                   For Event Professionals
                 </p>
-                <h2 className="text-3xl sm:text-4xl font-light text-gray-900 tracking-tight mb-5">
+                <h2 className="text-3xl sm:text-4xl font-light tracking-tight mb-5" style={{ color: "#0B1F4D" }}>
                   Why Join Elbold Instead of Relying on Social Media?
                 </h2>
                 <p className="text-gray-400 text-sm font-light leading-relaxed mb-10">
@@ -704,33 +794,37 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
-        <section
-          className="relative py-24 px-4 overflow-hidden"
-          style={{ background: "linear-gradient(160deg, #07122a 0%, #0B1F4D 50%, #07152e 100%)" }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)" }}
-          />
-          <div className="relative z-10 max-w-2xl mx-auto text-center">
-            <div className="w-px h-12 mx-auto mb-8" style={{ background: "rgba(212,175,55,0.15)" }} />
-            <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4" style={{ color: "rgba(255,255,255,0.92)" }}>
-              Would You Trust Elbold With One of the Most Important Events of Your Life?
+        {/* ── SECTION 10: FINAL CTA ─────────────────────────────────────────── */}
+        <section className="py-24 px-4" style={{ background: "#ffffff" }}>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2
+              className="text-3xl font-light tracking-tight mb-5"
+              style={{ color: "#0B1F4D" }}
+            >
+              Every event deserves professionals
+              <br />
+              you can trust completely.
             </h2>
-            <p className="text-sm font-light mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
-              That is the question we ask ourselves before approving every vendor.
-              Every professional on this platform has been reviewed. Every payment is protected.
+            <p className="text-base font-light mb-10" style={{ color: "#6b7280" }}>
+              Elbold reviews every professional before they join.
+              You compare, request quotes, and book with confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/browse" className="btn-luxury text-base px-10">
-                Find Professionals <ArrowRight size={15} />
+              <Link
+                href="/browse"
+                className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
+                style={{ background: "#0B1F4D", color: "#ffffff" }}
+              >
+                Find Professionals <ArrowRight size={16} />
               </Link>
-              <Link href="/founding-vendors" className="btn-luxury-outline text-base px-10">
-                Join As a Vendor
+              <Link
+                href="/how-it-works"
+                className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-80"
+                style={{ border: "2px solid rgba(11,31,77,0.2)", color: "#0B1F4D" }}
+              >
+                How It Works
               </Link>
             </div>
-            <div className="w-px h-12 mx-auto mt-10" style={{ background: "rgba(212,175,55,0.08)" }} />
           </div>
         </section>
 

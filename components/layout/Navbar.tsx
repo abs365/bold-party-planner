@@ -266,8 +266,8 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
               </>
             ) : (
               <>
-                <Link href="/browse" className="btn-luxury text-sm" onClick={() => setMobileOpen(false)}>
-                  Begin Planning
+                <Link href="/browse" className="btn-primary text-sm" onClick={() => setMobileOpen(false)}>
+                  Find Professionals
                 </Link>
                 <Link href="/login" className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Sign In
