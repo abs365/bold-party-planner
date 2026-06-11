@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { z } from "zod";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -82,6 +82,7 @@ export async function POST(req: Request) {
     .eq(booking_id ? "booking_id" : "customer_id", booking_id ?? user.id)
     .maybeSingle();
 
+  const isNewThread = !existing?.id;
   let threadId = existing?.id;
 
   if (!threadId) {
@@ -94,6 +95,17 @@ export async function POST(req: Request) {
     threadId = thread.id;
   }
 
+  // Dedup: for existing threads, only email vendor if they have no unread messages
+  let shouldEmailVendor = isNewThread;
+  if (!isNewThread) {
+    const { count: priorUnread } = await supabase
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .eq("thread_id", threadId)
+      .eq("read_by_vendor", false);
+    shouldEmailVendor = (priorUnread ?? 0) === 0;
+  }
+
   const { data: message, error: msgErr } = await supabase
     .from("messages")
     .insert({ thread_id: threadId, sender_id: user.id, content: first_message, read_by_customer: true })
@@ -103,6 +115,31 @@ export async function POST(req: Request) {
   if (msgErr) return NextResponse.json({ error: msgErr.message }, { status: 500 });
 
   await supabase.from("message_threads").update({ last_message_at: new Date().toISOString() }).eq("id", threadId);
+
+  if (shouldEmailVendor) {
+    const db = await createAdminClient();
+    void (async () => {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+      const { data: vendorData } = await db.from("vendors")
+        .select("user_id, business_name")
+        .eq("id", vendor_id)
+        .maybeSingle();
+      if (!vendorData) return;
+      const [{ data: vendorProfile }, { data: customerProfile }] = await Promise.all([
+        db.from("profiles").select("email, full_name").eq("id", vendorData.user_id).maybeSingle(),
+        db.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+      ]);
+      if (!vendorProfile?.email) return;
+      const { sendNewMessageToVendor } = await import("@/lib/resend");
+      await sendNewMessageToVendor(
+        vendorProfile.email,
+        vendorProfile.full_name ?? vendorData.business_name,
+        customerProfile?.full_name ?? "A customer",
+        first_message,
+        `${appUrl}/vendor/messages?thread=${threadId}`
+      );
+    })();
+  }
 
   return NextResponse.json({ thread_id: threadId, message }, {
     headers: {

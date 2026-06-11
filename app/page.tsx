@@ -627,7 +627,7 @@ export default async function Home() {
               style={{ borderTop: "1px solid rgba(212,175,55,0.07)" }}
             >
               {[
-                ...(vendorCount > 0 ? [{ value: `${vendorCount}`, label: "Approved Vendors" }] : []),
+                ...(vendorCount >= 30 ? [{ value: `${vendorCount}+`, label: "Approved Vendors" }] : []),
                 { value: "UK",   label: "Essex · Kent · London" },
                 { value: "100%", label: "Individually Reviewed" },
                 { value: "90%",  label: "Kept by Every Vendor" },

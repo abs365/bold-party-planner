@@ -10,9 +10,10 @@ import type { Profile } from "@/types";
 interface NavbarProps {
   user?: Profile | null;
   lightBg?: boolean;
+  notificationCount?: number;
 }
 
-export function Navbar({ user, lightBg = false }: NavbarProps) {
+export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const pathname = usePathname();
@@ -20,7 +21,6 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
 
   const navLinks = [
     { href: "/browse", label: "Find Vendors" },
-    { href: "/inspire", label: "Inspiration" },
     { href: "/how-it-works", label: "How It Works" },
   ];
 
@@ -76,10 +76,10 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={lightBg ? "/brand/elbold-logo-final.svg" : "/brand/elbold-logo-white.svg"}
-            width="140"
-            height="28"
+            width="160"
+            height="32"
             alt="Elbold"
-            className="h-7 w-auto"
+            className="h-8 w-auto"
             fetchPriority="high"
           />
         </Link>
@@ -120,7 +120,9 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                 )}
               >
                 <Bell size={18} className={lightBg ? "text-gray-500" : "text-slate-400"} />
-                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full" />
+                {notificationCount > 0 && (
+                  <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#D4AF37] rounded-full" />
+                )}
               </Link>
 
               <div className="relative" ref={profileRef}>
@@ -216,7 +218,7 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
                     Sign In
                   </Link>
                   <Link href="/browse" className="btn-luxury text-sm py-2 px-4">
-                    Get Quotes
+                    Begin Planning
                   </Link>
                 </>
               )}
@@ -264,21 +266,21 @@ export function Navbar({ user, lightBg = false }: NavbarProps) {
               </>
             ) : (
               <>
-                <Link
-                  href="/vendor/apply"
-                  className={cn(
-                    "block text-sm py-2 border-b mb-1",
-                    lightBg ? "text-gray-600 border-gray-100" : "text-slate-300 border-white/8"
-                  )}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Join as a Vendor
+                <Link href="/browse" className="btn-luxury text-sm" onClick={() => setMobileOpen(false)}>
+                  Begin Planning
                 </Link>
                 <Link href="/login" className={lightBg ? "btn-secondary-light text-sm" : "btn-secondary text-sm"} onClick={() => setMobileOpen(false)}>
                   Sign In
                 </Link>
-                <Link href="/browse" className="btn-luxury text-sm" onClick={() => setMobileOpen(false)}>
-                  Get Quotes
+                <Link
+                  href="/vendor/apply"
+                  className={cn(
+                    "block text-sm py-2 text-center",
+                    lightBg ? "text-gray-500" : "text-slate-400"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Join as a Vendor
                 </Link>
               </>
             )}

@@ -514,6 +514,49 @@ export async function sendPhoneOtpCode(
   ));
 }
 
+// ── Messaging notification emails ─────────────────────────────────────────────
+
+export async function sendNewMessageToVendor(
+  to: string,
+  vendorName: string,
+  customerName: string,
+  messagePreview: string,
+  threadUrl: string
+) {
+  const preview = messagePreview.length > 120 ? messagePreview.slice(0, 120) + "…" : messagePreview;
+  return send(to, `New message from ${customerName} | Elbold`, wrap(
+    "New Message",
+    `<p>Hi ${vendorName},</p>
+    <p><span class="highlight">${customerName}</span> has sent you a message on Elbold.</p>
+    <div class="detail-box">
+      <p style="font-style:italic;color:#374151">&ldquo;${preview}&rdquo;</p>
+    </div>
+    <p>Reply directly from your dashboard — vendors who respond quickly win significantly more bookings.</p>
+    <a href="${threadUrl}" class="btn">View Message &amp; Reply</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">You will not receive further email alerts for this conversation until you read the thread.</p>`
+  ));
+}
+
+export async function sendNewMessageToCustomer(
+  to: string,
+  customerName: string,
+  vendorBusiness: string,
+  messagePreview: string,
+  threadUrl: string
+) {
+  const preview = messagePreview.length > 120 ? messagePreview.slice(0, 120) + "…" : messagePreview;
+  return send(to, `New message from ${vendorBusiness} | Elbold`, wrap(
+    "New Message",
+    `<p>Hi ${customerName},</p>
+    <p><span class="highlight">${vendorBusiness}</span> has sent you a message on Elbold.</p>
+    <div class="detail-box">
+      <p style="font-style:italic;color:#374151">&ldquo;${preview}&rdquo;</p>
+    </div>
+    <a href="${threadUrl}" class="btn">View Message &amp; Reply</a>
+    <p style="margin-top:16px;font-size:13px;color:#9ca3af">You will not receive further email alerts for this conversation until you read the thread.</p>`
+  ));
+}
+
 export async function sendSubscriptionPaymentFailed(
   to: string,
   vendorName: string,
