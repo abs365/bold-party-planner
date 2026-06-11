@@ -6,6 +6,7 @@ import Image from "next/image";
 import {
   Search, MapPin, Star, CheckCircle2, Play, X, Clock,
   BadgeCheck, TrendingUp, Filter, Heart, Zap, Quote, ChevronDown, ChevronUp, Award,
+  Shield, ArrowRight,
 } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Vendor, type VendorCategory } from "@/types";
@@ -184,7 +185,7 @@ export function VendorMarketplace({
   ].filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       {/* Search header (h2 because the browse page already renders the page h1) */}
       <div className="pt-8 pb-6 px-4 text-center border-b border-gray-100">
         <div className="max-w-3xl mx-auto">
@@ -367,9 +368,10 @@ export function VendorMarketplace({
         </div>
       )}
 
-      {/* Category Pills: horizontally scrollable on mobile */}
+      {/* Category Pills: horizontally scrollable on mobile, centred on desktop */}
       <div className="py-4 border-b border-gray-100">
-        <div className="flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none" style={{ WebkitOverflowScrolling: "touch" }}>
+        <div className="max-w-5xl mx-auto">
+        <div className="flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none md:flex-wrap md:justify-center" style={{ WebkitOverflowScrolling: "touch" }}>
           <button
             onClick={() => setCategory("")}
             className={cn(
@@ -434,10 +436,42 @@ export function VendorMarketplace({
             ))}
           </div>
         )}
+        </div>
       </div>
 
+      {/* Founding Vendor Empty State — directly below filters */}
+      {filtered.length === 0 && (
+        <section className="py-16 px-4">
+          <div className="max-w-xl mx-auto text-center">
+            <div
+              className="w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center"
+              style={{ background: "rgba(11,31,77,0.06)" }}
+            >
+              <Shield size={24} style={{ color: "#0B1F4D" }} />
+            </div>
+            <p className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
+              Now Open
+            </p>
+            <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-3">
+              Founding Vendor Applications Now Open
+            </h2>
+            <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
+              We are currently onboarding our first verified event professionals across London, Essex and Kent.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/vendor/apply" className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">
+                Join as a Vendor <ArrowRight size={13} />
+              </Link>
+              <Link href="/how-it-works" className="btn-secondary-light text-sm px-8">
+                How It Works
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Smart Picks */}
-      {activeFilterCount === 0 && smartPicks.length > 0 && (
+      {filtered.length > 0 && activeFilterCount === 0 && smartPicks.length > 0 && (
         <div className="px-4 pt-8 pb-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-sm font-semibold text-gray-900">Top Picks</h2>
@@ -452,58 +486,38 @@ export function VendorMarketplace({
       )}
 
       {/* Results */}
-      <div className="px-4 pb-16 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-5 pt-4 border-t border-gray-100">
-          <p className="text-gray-500 text-sm">
-            <span className="text-gray-900 font-semibold">{filtered.length}</span> vendors
-            {category && ` in ${VENDOR_CATEGORIES[category]?.label ?? category}`}
-          </p>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <TrendingUp size={13} />
-            {sortBy === "smart" ? "Recommended" : "Custom sort"}
-          </div>
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="text-center py-20">
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-              style={{ background: "#0B1F4D" }}
-            >
-              <Search size={24} style={{ color: "#D4AF37" }} />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No vendors match your search</h3>
-            <p className="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
-              Try a different category, location, or budget range, or browse all verified professionals.
+      {filtered.length > 0 && (
+        <div className="px-4 pb-16 max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-5 pt-4 border-t border-gray-100">
+            <p className="text-gray-500 text-sm">
+              <span className="text-gray-900 font-semibold">{filtered.length}</span> vendors
+              {category && ` in ${VENDOR_CATEGORIES[category]?.label ?? category}`}
             </p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <button onClick={clearFilters} className="btn-luxury-dark text-sm">Clear Filters</button>
-              <Link href="/founding-vendors" className="btn-secondary-light text-sm">Join as a Vendor</Link>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <TrendingUp size={13} />
+              {sortBy === "smart" ? "Recommended" : "Custom sort"}
             </div>
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-              {filtered.slice(0, displayCount).map((vendor, index) => (
-                <VendorCard key={vendor.id} vendor={vendor} priority={index === 0} />
-              ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filtered.slice(0, displayCount).map((vendor, index) => (
+              <VendorCard key={vendor.id} vendor={vendor} priority={index === 0} />
+            ))}
+          </div>
+          {filtered.length > displayCount && (
+            <div className="flex flex-col items-center gap-2 mt-10">
+              <button
+                onClick={() => setDisplayCount((c) => c + VENDOR_PAGE_SIZE)}
+                className="btn-secondary-light px-8 py-3 text-sm"
+              >
+                Show more vendors
+              </button>
+              <p className="text-xs text-gray-400">
+                Showing {displayCount} of {filtered.length}
+              </p>
             </div>
-            {filtered.length > displayCount && (
-              <div className="flex flex-col items-center gap-2 mt-10">
-                <button
-                  onClick={() => setDisplayCount((c) => c + VENDOR_PAGE_SIZE)}
-                  className="btn-secondary-light px-8 py-3 text-sm"
-                >
-                  Show more vendors
-                </button>
-                <p className="text-xs text-gray-400">
-                  Showing {displayCount} of {filtered.length}
-                </p>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

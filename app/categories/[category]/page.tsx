@@ -80,8 +80,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <Link href={`/browse?category=${category}`} className="btn-luxury text-sm px-8 py-3.5">
               Browse All {cat.label}s <ArrowRight size={14} />
             </Link>
-            <Link href="/dashboard/create-event" className="btn-luxury-outline text-sm px-8 py-3.5">
-              Get Smart Recommendations
+            <Link href="/how-it-works" className="btn-luxury-outline text-sm px-8 py-3.5">
+              How It Works
             </Link>
           </div>
         </div>
@@ -102,25 +102,28 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       {/* ── VENDOR GRID ──────────────────────────────────────────────── */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
         {vendorList.length === 0 ? (
-          <div className="rounded-2xl p-20 text-center border border-gray-100">
+          <div className="max-w-xl mx-auto text-center py-8">
             <div
-              className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center"
+              className="w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center"
               style={{ background: "rgba(11,31,77,0.06)" }}
             >
-              <Shield size={26} style={{ color: "#0B1F4D" }} />
+              <Shield size={24} style={{ color: "#0B1F4D" }} />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              {cat.label}s coming soon
-            </h2>
-            <p className="text-gray-400 text-sm font-light max-w-sm mx-auto mb-8">
-              We are actively onboarding verified {cat.label.toLowerCase()}s. Browse our full marketplace or apply as a vendor.
+            <p className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
+              Now Open
             </p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href="/browse" className="btn-luxury-dark text-sm">
-                Browse All Categories <ArrowRight size={13} />
+            <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-3">
+              Founding Vendor Applications Now Open
+            </h2>
+            <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
+              We are currently onboarding our first verified event professionals across London, Essex and Kent.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/vendor/apply" className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">
+                Join as a Vendor <ArrowRight size={13} />
               </Link>
-              <Link href="/founding-vendors" className="btn-secondary-light text-sm">
-                Join As a Vendor
+              <Link href="/how-it-works" className="btn-secondary-light text-sm px-8">
+                How It Works
               </Link>
             </div>
           </div>

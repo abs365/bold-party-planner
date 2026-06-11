@@ -221,52 +221,31 @@ export default async function VendorSpotlightsPage() {
           </div>
         </section>
       ) : (
-        /* Building phase: coming soon */
-        <section className="py-32 px-4 bg-white">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-16">
-              <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
-                Coming Soon
-              </p>
-              <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-4">
-                Spotlights are building.
-              </h2>
-              <p className="text-sm text-gray-500 font-light leading-relaxed max-w-lg mx-auto">
-                Elbold is actively onboarding and verifying event professionals across the United Kingdom.
-                As our verified vendor community grows, we will feature profiles here from professionals
-                who represent the standard we stand for.
-              </p>
+        /* Building phase: clean empty state — no placeholder cards */
+        <section className="py-20 px-4 bg-white">
+          <div className="max-w-xl mx-auto text-center">
+            <div
+              className="w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center"
+              style={{ background: "rgba(11,31,77,0.06)" }}
+            >
+              <Shield size={24} style={{ color: "#0B1F4D" }} />
             </div>
-
-            {/* Preview cards: editorial placeholders */}
-            <div className="grid sm:grid-cols-3 gap-5">
-              {[
-                { category: "Photographers", city: "London", label: "PH" },
-                { category: "DJs", city: "Essex", label: "DJ" },
-                { category: "Decorators", city: "Kent", label: "DE" },
-              ].map(({ category, city, label }) => (
-                <div
-                  key={category}
-                  className="rounded-2xl overflow-hidden border border-gray-100"
-                >
-                  <div
-                    className="h-48 flex items-center justify-center text-lg font-semibold tracking-widest"
-                    style={{ background: "linear-gradient(160deg, #0B1F4D, #162447)", color: "rgba(212,175,55,0.25)" }}
-                  >
-                    {label}
-                  </div>
-                  <div className="p-5">
-                    <div className="text-xs tracking-wider font-semibold mb-1" style={{ color: "#C9A84C" }}>{category}</div>
-                    <div className="text-sm text-gray-400 font-light">{city}</div>
-                    <div
-                      className="mt-3 text-xs font-light"
-                      style={{ color: "rgba(11,31,77,0.25)" }}
-                    >
-                      Profile coming soon
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <p className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase" style={{ color: "#C9A84C" }}>
+              Now Open
+            </p>
+            <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-3">
+              Vendor Spotlights Coming Soon
+            </h2>
+            <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
+              We are currently onboarding founding vendors across London, Essex and Kent.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/vendor/apply" className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">
+                Join as a Vendor <ArrowRight size={13} />
+              </Link>
+              <Link href="/how-it-works" className="btn-secondary-light text-sm px-8">
+                How It Works
+              </Link>
             </div>
           </div>
         </section>

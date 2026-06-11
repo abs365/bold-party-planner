@@ -241,7 +241,7 @@ export default async function Home() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-5">
               <Link
                 href="/browse"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
@@ -257,6 +257,14 @@ export default async function Home() {
                 Join as a Vendor
               </Link>
             </div>
+
+            {/* Marketplace status signal */}
+            <p
+              className="text-xs font-light mb-10 tracking-wide"
+              style={{ color: "rgba(11,31,77,0.42)" }}
+            >
+              Now onboarding verified professionals across London, Essex and Kent.
+            </p>
 
             {/* Occasion chips */}
             <div className="flex flex-col items-center gap-3">
@@ -289,22 +297,39 @@ export default async function Home() {
         {/* ── SECTION 2: CATEGORY GRID ─────────────────────────────────────── */}
         <section className="pb-20 px-4" style={{ background: "#ffffff" }}>
           <div className="max-w-4xl mx-auto">
+            <div className="flex items-baseline justify-between mb-8">
+              <div>
+                <p className="text-xs tracking-[0.35em] font-semibold mb-1.5 uppercase" style={{ color: "#C9A84C" }}>
+                  Browse by Category
+                </p>
+                <h2 className="text-2xl font-light tracking-tight" style={{ color: "#0B1F4D" }}>
+                  What are you looking for?
+                </h2>
+              </div>
+              <Link
+                href="/browse"
+                className="hidden sm:flex items-center gap-1 text-xs font-medium hover:opacity-60 transition-opacity"
+                style={{ color: "rgba(11,31,77,0.45)" }}
+              >
+                All categories <ArrowRight size={11} />
+              </Link>
+            </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
               {CATEGORIES.map(({ label, icon: Icon, href }) => (
                 <Link
                   key={label}
                   href={href}
-                  className="group flex flex-col items-center gap-3 p-5 rounded-xl border transition-all hover:border-[#0B1F4D] hover:shadow-sm"
-                  style={{ borderColor: "rgba(11,31,77,0.1)", background: "#ffffff" }}
+                  className="group flex flex-col items-center gap-3.5 p-5 rounded-xl border transition-all duration-200 hover:border-[#0B1F4D] hover:shadow-md hover:-translate-y-0.5"
+                  style={{ borderColor: "rgba(11,31,77,0.12)", background: "#ffffff" }}
                 >
                   <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors group-hover:bg-[#0B1F4D]"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:bg-[#0B1F4D] group-hover:scale-105"
                     style={{ background: "rgba(11,31,77,0.06)" }}
                   >
-                    <Icon size={18} style={{ color: "#0B1F4D" }} className="group-hover:text-white transition-colors" />
+                    <Icon size={20} className="text-[#0B1F4D] group-hover:text-white transition-colors" />
                   </div>
                   <span
-                    className="text-xs font-medium text-center leading-tight"
+                    className="text-xs font-semibold text-center leading-tight"
                     style={{ color: "#0B1F4D" }}
                   >
                     {label}

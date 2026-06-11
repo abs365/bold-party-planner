@@ -73,8 +73,8 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex-shrink-0">
           <span
-            className="font-extrabold tracking-tight"
-            style={{ fontSize: "1.75rem", color: lightBg ? "#0B1F4D" : "rgba(255,255,255,0.95)" }}
+            className="font-black tracking-tight"
+            style={{ fontSize: "2rem", color: lightBg ? "#0B1F4D" : "rgba(255,255,255,0.95)" }}
           >
             Elbold
           </span>
@@ -203,9 +203,6 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
                 <>
                   <Link href="/login" className="btn-secondary-light text-sm py-2 px-4">
                     Sign In
-                  </Link>
-                  <Link href="/signup" className="btn-primary text-sm py-2 px-4">
-                    Get Started
                   </Link>
                 </>
               ) : (
