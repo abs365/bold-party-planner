@@ -47,6 +47,8 @@ export async function PATCH(request: Request) {
   if (typeof phone_verified === "boolean") updates.phone_verified = phone_verified;
   if (lifecycle_state) updates.lifecycle_state = lifecycle_state;
   if (admin_notes !== undefined) updates.admin_notes = admin_notes;
+  if (status === "rejected") updates.rejection_reason = rejection_reason ?? null;
+  else if (status === "approved") updates.rejection_reason = null;
 
   const { data: vendorBefore } = await auth.db
     .from("vendors")
@@ -122,9 +124,13 @@ export async function POST(request: Request) {
     .select("id, status, business_name, profile:profiles(email, full_name)")
     .in("id", vendor_ids);
 
+  const bulkUpdates: Record<string, unknown> = { status: newStatus };
+  if (action === "reject") bulkUpdates.rejection_reason = rejection_reason ?? null;
+  else if (action === "approve") bulkUpdates.rejection_reason = null;
+
   const { data: updated, error } = await auth.db
     .from("vendors")
-    .update({ status: newStatus })
+    .update(bulkUpdates)
     .in("id", vendor_ids)
     .select("id, status");
 

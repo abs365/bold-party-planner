@@ -93,6 +93,7 @@ export async function POST(request: Request) {
     portfolio_links: body.portfolio_links ?? [],
     status: "pending",
     admin_notes: null,
+    rejection_reason: null,
   };
 
   if (existingVendor && existingVendor.status === "rejected") {
