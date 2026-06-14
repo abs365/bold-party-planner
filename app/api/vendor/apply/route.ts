@@ -92,7 +92,6 @@ export async function POST(request: Request) {
     website_url: body.website_url || null,
     portfolio_links: body.portfolio_links ?? [],
     status: "pending",
-    rejection_reason: null,
     admin_notes: null,
   };
 
