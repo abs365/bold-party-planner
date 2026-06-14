@@ -23,7 +23,7 @@ async function send(to: string, subject: string, html: string): Promise<EmailRes
 // ── Email wrapper ─────────────────────────────────────────────────────────────
 
 function wrap(title: string, body: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const year = new Date().getFullYear();
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
     *{box-sizing:border-box}
@@ -77,7 +77,7 @@ function wrap(title: string, body: string) {
 // ── Email functions ───────────────────────────────────────────────────────────
 
 export async function sendVendorApplicationReceived(to: string, name: string, businessName: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, "Your application has been received | Elbold", wrap(
     "Application Received",
     `<p>Hi ${name},</p>
@@ -90,7 +90,7 @@ export async function sendVendorApplicationReceived(to: string, name: string, bu
 }
 
 export async function sendVendorApproved(to: string, name: string, businessName: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, "🎉 Your vendor profile is approved | Elbold", wrap(
     "You're Live on Elbold!",
     `<p>Hi ${name},</p>
@@ -124,7 +124,7 @@ export async function sendBookingRequest(
   to: string, vendorName: string, eventTitle: string, eventDate: string,
   customerName: string, amount: number, bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `New booking request for ${eventTitle} | Elbold`, wrap(
     "New Booking Request",
     `<p>Hi ${vendorName},</p>
@@ -143,7 +143,7 @@ export async function sendBookingRequest(
 export async function sendBookingAccepted(
   to: string, customerName: string, vendorBusiness: string, eventTitle: string, bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Booking confirmed: ${vendorBusiness} accepted your request`, wrap(
     "Booking Accepted! 🎉",
     `<p>Hi ${customerName},</p>
@@ -157,7 +157,7 @@ export async function sendBookingAccepted(
 export async function sendBookingRejected(
   to: string, customerName: string, vendorBusiness: string, eventTitle: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Booking update for ${eventTitle} | Elbold`, wrap(
     "Booking Update",
     `<p>Hi ${customerName},</p>
@@ -170,7 +170,7 @@ export async function sendBookingRejected(
 export async function sendPaymentReceived(
   to: string, name: string, amount: number, eventTitle: string, type: "deposit" | "full", bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const label = type === "deposit" ? "Deposit Payment" : "Full Payment";
   return send(to, `Payment received: ${label} for ${eventTitle}`, wrap(
     `${label} Confirmed ✅`,
@@ -184,7 +184,7 @@ export async function sendPaymentReceived(
 export async function sendVendorPaymentNotification(
   to: string, vendorName: string, amount: number, eventTitle: string, bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Payment received for ${eventTitle} | Elbold`, wrap(
     "Payment Received",
     `<p>Hi ${vendorName},</p>
@@ -197,7 +197,7 @@ export async function sendVendorPaymentNotification(
 export async function sendEventReminder(
   to: string, customerName: string, eventTitle: string, eventDate: string, daysLeft: number
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `${daysLeft} day${daysLeft !== 1 ? "s" : ""} until ${eventTitle} | Elbold`, wrap(
     `${daysLeft} days to go!`,
     `<p>Hi ${customerName},</p>
@@ -210,7 +210,7 @@ export async function sendEventReminder(
 export async function sendReviewRequest(
   to: string, customerName: string, vendorBusiness: string, bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `How was ${vendorBusiness}? Leave a review | Elbold`, wrap(
     "Share Your Experience",
     `<p>Hi ${customerName},</p>
@@ -224,7 +224,7 @@ export async function sendReviewRequest(
 export async function sendBookingPaymentFailed(
   to: string, name: string, eventTitle: string, bookingId: string, amount: number
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Payment failed: action required | Elbold`, wrap(
     "Payment Failed: Action Required",
     `<p>Hi ${name},</p>
@@ -264,7 +264,7 @@ export async function sendQuoteRequestToVendor(
   budgetMax: number | null,
   quoteId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const budgetLine = budgetMax ? `<p><span class="detail-label">Budget:</span> <span class="detail-value">up to £${budgetMax.toLocaleString("en-GB")}</span></p>` : "";
   const dateLine = eventDate ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>` : "";
   return send(to, `New quote request from ${customerName} | Elbold`, wrap(
@@ -289,7 +289,7 @@ export async function sendQuoteResponseToCustomer(
   price: number,
   quoteId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `${vendorBusiness} has responded to your quote | Elbold`, wrap(
     "Quote Response Received",
     `<p>Hi ${customerName},</p>
@@ -312,7 +312,7 @@ export async function sendQuoteAcceptedToVendor(
   price: number,
   bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Quote accepted: ${customerName} has booked you! | Elbold`, wrap(
     "Quote Accepted: Booking Created",
     `<p>Hi ${vendorName},</p>
@@ -336,7 +336,7 @@ export async function sendBookingAwaitingPayment(
   depositAmount: number,
   bookingId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const dateLine = eventDate
     ? `<p><span class="detail-label">Event date:</span> <span class="detail-value">${new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span></p>`
     : "";
@@ -364,7 +364,7 @@ export async function sendQuoteSubmittedToCustomer(
   quoteId: string,
   eventTitle?: string | null
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const dateStr = eventDate
     ? new Date(eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : null;
@@ -400,7 +400,7 @@ export async function sendQuoteRejectedToVendor(
   customerName: string,
   eventType: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   return send(to, `Quote update | Elbold`, wrap(
     "Quote Not Selected",
     `<p>Hi ${vendorName},</p>
@@ -421,7 +421,7 @@ export async function sendEventCreated(
   guestCount: number,
   eventId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const dateFormatted = new Date(eventDate).toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
@@ -450,7 +450,7 @@ export async function sendAdminNewVendorAlert(
   vendorEmail: string,
   vendorId: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const results = await Promise.allSettled(
     adminEmails.map((adminEmail) =>
       send(adminEmail, `New vendor application: ${businessName} - Elbold Admin`, wrap(
@@ -478,7 +478,7 @@ export async function sendAdminRefundAlert(
   customerEmail: string,
   cancelledBy: string
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   await Promise.allSettled(
     adminEmails.map((adminEmail) =>
       send(adminEmail, `Refund issued: ${eventTitle} — Elbold Admin`, wrap(
@@ -563,7 +563,7 @@ export async function sendSubscriptionPaymentFailed(
   plan: string,
   failCount: number
 ) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
   const retriesLeft = Math.max(0, 4 - failCount);
   const retriesLine = retriesLeft > 0

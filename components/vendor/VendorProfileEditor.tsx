@@ -41,6 +41,14 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
       : [...form.event_types, type]);
   }
 
+  function normalizeUrl(url: string): string {
+    const s = url.trim();
+    if (!s) return s;
+    if (/^https?:\/\//i.test(s)) return s;
+    if (/^www\./i.test(s)) return `https://${s}`;
+    return `https://${s}`;
+  }
+
   async function handleSave() {
     if (!form.business_name.trim()) { toast.error("Business name is required"); return; }
     if (!form.category) { toast.error("Please select a category"); return; }
@@ -53,6 +61,8 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          website_url: form.website_url ? normalizeUrl(form.website_url) : null,
+          instagram_url: form.instagram_url ? normalizeUrl(form.instagram_url) : null,
           min_price: form.min_price ? Number(form.min_price) : null,
           max_price: form.max_price ? Number(form.max_price) : null,
           years_experience: form.years_experience ? Number(form.years_experience) : null,
@@ -151,12 +161,27 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
 
         <div>
           <label className="block text-sm text-slate-300 mb-1.5 flex items-center gap-1"><Globe size={12} />Website</label>
-          <input type="url" value={form.website_url} onChange={(e) => set("website_url", e.target.value)} placeholder="https://..." className="input-field w-full" />
+          <input
+            type="text"
+            value={form.website_url}
+            onChange={(e) => set("website_url", e.target.value)}
+            onBlur={(e) => set("website_url", normalizeUrl(e.target.value))}
+            placeholder="www.yourbusiness.com or https://..."
+            className="input-field w-full"
+          />
+          <p className="text-xs text-slate-500 mt-1">You can enter www.example.com — we&apos;ll add https:// automatically</p>
         </div>
 
         <div>
           <label className="block text-sm text-slate-300 mb-1.5 flex items-center gap-1"><Link2 size={12} />Instagram</label>
-          <input type="url" value={form.instagram_url} onChange={(e) => set("instagram_url", e.target.value)} placeholder="https://instagram.com/..." className="input-field w-full" />
+          <input
+            type="text"
+            value={form.instagram_url}
+            onChange={(e) => set("instagram_url", e.target.value)}
+            onBlur={(e) => set("instagram_url", normalizeUrl(e.target.value))}
+            placeholder="instagram.com/yourbusiness or @yourbusiness"
+            className="input-field w-full"
+          />
         </div>
       </div>
 

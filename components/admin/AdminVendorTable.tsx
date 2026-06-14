@@ -23,11 +23,11 @@ interface AdminVendorTableProps {
 }
 
 const STATUS_TABS = [
-  { value: "all", label: "All" },
-  { value: "pending", label: "Pending" },
-  { value: "approved", label: "Approved" },
-  { value: "rejected", label: "Rejected" },
-  { value: "suspended", label: "Suspended" },
+  { value: "all", label: "All", statKey: "total_vendors" },
+  { value: "pending", label: "Pending", statKey: "pending_vendors" },
+  { value: "approved", label: "Approved", statKey: "approved_vendors" },
+  { value: "rejected", label: "Rejected", statKey: "rejected_vendors" },
+  { value: "suspended", label: "Suspended", statKey: "suspended_vendors" },
 ];
 
 const REJECTION_TEMPLATES = [
@@ -56,8 +56,15 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
 
   function applyFilters(status?: string, s?: string) {
     const params = new URLSearchParams();
-    params.set("status", status ?? currentStatus);
-    if (s !== undefined ? s : search) params.set("search", s !== undefined ? s : search);
+    const newStatus = status ?? currentStatus;
+    params.set("status", newStatus);
+    // When switching status tabs (status provided without explicit search), clear the search
+    // so the tab count matches what's actually in the list
+    const effectiveSearch = s !== undefined ? s : (status !== undefined ? "" : search);
+    if (effectiveSearch) params.set("search", effectiveSearch);
+    if (status !== undefined && s === undefined) {
+      setSearch(""); // clear search input when switching tabs
+    }
     startTransition(() => router.push(`/admin/vendors?${params.toString()}`));
   }
 
@@ -169,6 +176,19 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
     });
   }
 
+  const [archiveModal, setArchiveModal] = useState<{ vendorId: string; vendorName: string } | null>(null);
+  const [archiveNote, setArchiveNote] = useState("");
+
+  async function confirmArchive() {
+    if (!archiveModal) return;
+    await updateVendor(archiveModal.vendorId, {
+      status: "suspended",
+      admin_notes: `ARCHIVED_TEST_VENDOR — ${archiveNote || "test/seed vendor, not a real application"} [${new Date().toISOString().slice(0, 10)}]`,
+    }, "Archive");
+    setArchiveModal(null);
+    setArchiveNote("");
+  }
+
   const [sortByReadiness, setSortByReadiness] = useState(false);
 
   function vendorReadiness(vendor: Record<string, unknown>) {
@@ -260,15 +280,23 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
 
       {/* Tabs */}
       <div className="flex gap-1 bg-white/5 rounded-xl p-1">
-        {STATUS_TABS.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => applyFilters(tab.value)}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all ${currentStatus === tab.value ? "bg-brand-500 text-white" : "text-slate-400 hover:text-white"}`}
-          >
-            {tab.label}
-          </button>
-        ))}
+        {STATUS_TABS.map((tab) => {
+          const count = tab.statKey ? Number(stats?.[tab.statKey] ?? 0) : null;
+          return (
+            <button
+              key={tab.value}
+              onClick={() => applyFilters(tab.value)}
+              className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${currentStatus === tab.value ? "bg-brand-500 text-white" : "text-slate-400 hover:text-white"}`}
+            >
+              {tab.label}
+              {count !== null && count > 0 && (
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${currentStatus === tab.value ? "bg-white/20 text-white" : "bg-white/8 text-slate-500"}`}>
+                  {count}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Table */}
@@ -383,6 +411,11 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                         );
                       })()}
                       {!!vendor.tagline && <p className="text-xs text-slate-400 mt-1.5 italic truncate">&ldquo;{String(vendor.tagline)}&rdquo;</p>}
+                      {!!vendor.admin_notes && (
+                        <p className="text-xs text-orange-400/80 mt-1 truncate flex items-center gap-1">
+                          <span className="text-orange-400">⚑</span>{String(vendor.admin_notes)}
+                        </p>
+                      )}
                       {(() => {
                         const rs = vendorReadiness(vendor);
                         const color = rs.total >= 75 ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/8"
@@ -480,13 +513,25 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
                       )}
 
                       {(status === "rejected" || status === "suspended") && (
-                        <button
-                          onClick={() => updateVendor(vendorId, { status: "approved" }, "Reactivation")}
-                          disabled={!!actionLoading}
-                          className="btn-secondary text-xs py-1.5 px-3"
-                        >
-                          Reactivate
-                        </button>
+                        <>
+                          <button
+                            onClick={() => updateVendor(vendorId, { status: "approved" }, "Reactivation")}
+                            disabled={!!actionLoading}
+                            className="btn-secondary text-xs py-1.5 px-3"
+                          >
+                            Reactivate
+                          </button>
+                          {!String(vendor.admin_notes ?? "").includes("ARCHIVED_TEST_VENDOR") && (
+                            <button
+                              onClick={() => setArchiveModal({ vendorId, vendorName: String(vendor.business_name) })}
+                              disabled={!!actionLoading}
+                              title="Mark as archived test vendor"
+                              className="text-xs py-1.5 px-3 rounded-lg bg-slate-500/20 text-slate-400 border border-slate-500/30 hover:bg-slate-500/30 transition-colors"
+                            >
+                              Archive
+                            </button>
+                          )}
+                        </>
                       )}
 
                       <div className="flex gap-1">
@@ -553,6 +598,48 @@ export function AdminVendorTable({ vendors, stats, currentStatus, currentSearch 
           <button onClick={() => setSelectedIds(new Set())} className="text-slate-500 hover:text-white transition-colors ml-1">
             <X size={16} />
           </button>
+        </div>
+      )}
+
+      {/* Archive as Test modal */}
+      {archiveModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-md shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-white/6">
+              <div>
+                <h2 className="text-base font-bold text-white">Archive as Test Vendor</h2>
+                <p className="text-sm text-slate-400 mt-0.5">{archiveModal.vendorName}</p>
+              </div>
+              <button onClick={() => setArchiveModal(null)} className="text-slate-500 hover:text-white transition-colors">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-slate-300">
+                This will mark the vendor as <span className="text-orange-400 font-medium">ARCHIVED_TEST_VENDOR</span> in admin notes and keep it suspended. It will not appear publicly.
+              </p>
+              <div>
+                <p className="text-xs font-medium text-slate-400 mb-2">Reason (optional)</p>
+                <input
+                  type="text"
+                  value={archiveNote}
+                  onChange={(e) => setArchiveNote(e.target.value)}
+                  placeholder="e.g. seed data, internal test account"
+                  className="input-field w-full text-sm"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 p-6 pt-0">
+              <button onClick={() => setArchiveModal(null)} className="flex-1 btn-secondary">Cancel</button>
+              <button
+                onClick={confirmArchive}
+                disabled={!!actionLoading}
+                className="flex-1 py-2 px-4 rounded-lg bg-slate-500/20 text-slate-300 border border-slate-500/30 hover:bg-slate-500/30 transition-colors font-medium text-sm disabled:opacity-50"
+              >
+                {actionLoading ? "Archiving…" : "Confirm Archive"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

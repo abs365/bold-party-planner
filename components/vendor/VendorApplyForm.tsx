@@ -111,9 +111,27 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
     setPortfolioLinks((prev) => [...prev, { type: "website" as PortfolioLinkType, url: "" }]);
   }
 
+  function normalizeUrl(raw: string): string {
+    const s = raw.trim();
+    if (!s) return s;
+    if (/^https?:\/\//i.test(s)) return s;
+    if (/^www\./i.test(s)) return `https://${s}`;
+    // bare domain like "ted.com" — prepend https://
+    return `https://${s}`;
+  }
+
   function updatePortfolioLink(index: number, field: "type" | "url", value: string) {
     setPortfolioLinks((prev) =>
       prev.map((link, i) => i === index ? { ...link, [field]: value } : link)
+    );
+  }
+
+  function handlePortfolioUrlBlur(index: number) {
+    setPortfolioLinks((prev) =>
+      prev.map((link, i) => {
+        if (i !== index || !link.url.trim()) return link;
+        return { ...link, url: normalizeUrl(link.url) };
+      })
     );
   }
 
@@ -161,18 +179,26 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
         return;
       }
 
-      // Validate: all portfolio link URLs must be valid https:// URLs
+      // Normalise URLs before validation (auto-add https:// for bare domains)
+      const normalizedLinks = filledLinks.map((l) => ({ ...l, url: normalizeUrl(l.url) }));
+
+      // Validate: all portfolio link URLs must be valid URLs
       const URL_RE = /^https?:\/\/.+\..+/;
-      const invalidLink = filledLinks.find((l) => !URL_RE.test(l.url.trim()));
+      const invalidLink = normalizedLinks.find((l) => !URL_RE.test(l.url));
       if (invalidLink) {
-        toast.error("Portfolio links must be valid URLs starting with https://");
+        toast.error(`"${invalidLink.url}" is not a valid web address`);
         setSubmitting(false);
         return;
       }
 
+      // Update state so normalised URLs are shown in the form
+      setPortfolioLinks((prev) =>
+        prev.map((link) => link.url.trim() ? { ...link, url: normalizeUrl(link.url) } : link)
+      );
+
       // Derive legacy fields from portfolio_links for backwards compatibility
-      const instagramLink = filledLinks.find((l) => l.type === "instagram");
-      const websiteLink   = filledLinks.find((l) => l.type === "website");
+      const instagramLink = normalizedLinks.find((l) => l.type === "instagram");
+      const websiteLink   = normalizedLinks.find((l) => l.type === "website");
 
       const res = await fetch("/api/vendor/apply", {
         method: "POST",
@@ -190,7 +216,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
           years_experience: formData.years_experience ? Number(formData.years_experience) : null,
           instagram_url: instagramLink?.url || null,
           website_url: websiteLink?.url || null,
-          portfolio_links: filledLinks,
+          portfolio_links: normalizedLinks,
         }),
       });
 
@@ -599,11 +625,12 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                               ))}
                             </select>
                             <input
-                              type="url"
+                              type="text"
                               value={link.url}
                               onChange={(e) => updatePortfolioLink(i, "url", e.target.value)}
+                              onBlur={() => handlePortfolioUrlBlur(i)}
                               placeholder={PORTFOLIO_LINK_PLACEHOLDERS[link.type]}
-                              className="input-light flex-1"
+                              className="input-light flex-1 min-w-0"
                             />
                             <button
                               type="button"

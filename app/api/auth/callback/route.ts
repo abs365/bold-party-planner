@@ -16,6 +16,12 @@ export async function GET(request: Request) {
 
     if (error) {
       logger.warn("auth.callback.exchange_failed", { err: error });
+      // Distinguish expired/already-used links from other failures
+      const msg = error.message?.toLowerCase() ?? "";
+      if (msg.includes("expired") || msg.includes("invalid") || msg.includes("already") || msg.includes("code")) {
+        return NextResponse.redirect(`${origin}/login?error=link_expired`);
+      }
+      return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
     }
 
     if (!error && data.user) {

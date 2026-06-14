@@ -31,8 +31,10 @@ export default async function VendorApplyPage() {
       if (vendor.status === "approved") {
         redirect("/vendor/dashboard");
       }
-      // pending, rejected, suspended — show onboarding page which handles all these states
-      redirect("/vendor/onboarding");
+      if (vendor.status === "pending" || vendor.status === "suspended") {
+        redirect("/vendor/onboarding");
+      }
+      // status === "rejected" — fall through and show the apply form so they can reapply
     }
   }
 

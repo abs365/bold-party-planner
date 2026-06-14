@@ -21,10 +21,13 @@ export default async function AdminCustomersPage({
 
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
 
+  // Fetch all profiles that are not vendors or admins.
+  // This includes role='customer', role=NULL (trigger failed), and any other non-vendor roles.
+  // A separate vendor-role sub-query excludes anyone with a vendor record.
   let query = adminSupabase
     .from("profiles")
     .select("*")
-    .eq("role", "customer")
+    .or("role.eq.customer,role.is.null")
     .order("created_at", { ascending: false });
 
   if (sp.search) {

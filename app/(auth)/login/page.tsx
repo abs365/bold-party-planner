@@ -3,15 +3,40 @@
 import { useState, useEffect, useActionState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, AlertTriangle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, AlertTriangle, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 import { loginAction } from "@/app/actions/login";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [resendEmail, setResendEmail] = useState("");
+  const [resending, setResending] = useState(false);
   const searchParams = useSearchParams();
   const redirectTo  = searchParams.get("redirect") ?? "/dashboard";
   const errorParam  = searchParams.get("error");
+
+  async function handleResendConfirmation(e: React.FormEvent) {
+    e.preventDefault();
+    if (!resendEmail.trim()) { toast.error("Enter your email address first"); return; }
+    setResending(true);
+    try {
+      const res = await fetch("/api/auth/resend-confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: resendEmail }),
+      });
+      if (res.ok) {
+        toast.success("Confirmation email sent. Check your inbox.");
+      } else {
+        const d = await res.json() as { error?: string };
+        toast.error(d.error ?? "Could not send email. Try again or contact support.");
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setResending(false);
+    }
+  }
 
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
@@ -93,19 +118,44 @@ function LoginForm() {
 
         <div className="w-full max-w-sm">
 
-          {/* Auth callback error: shown when email confirmation link fails */}
-          {errorParam === "auth_callback_failed" && (
-            <div className="mb-6 flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
-              <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-amber-800">Confirmation link didn&apos;t work</p>
-                <p className="text-xs text-amber-700 mt-1 leading-relaxed">
-                  This usually happens when the link expires or is opened on a different device.
-                  If your email is already confirmed, sign in below. Otherwise check your inbox
-                  for a newer confirmation email, or contact{" "}
-                  <a href="mailto:hello@elbold.com" className="underline font-medium">hello@elbold.com</a>.
-                </p>
+          {/* Auth callback errors */}
+          {(errorParam === "auth_callback_failed" || errorParam === "link_expired") && (
+            <div className="mb-6 rounded-xl bg-amber-50 border border-amber-200 overflow-hidden">
+              <div className="flex items-start gap-3 p-4">
+                <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-800">
+                    {errorParam === "link_expired" ? "Confirmation link has expired" : "Confirmation link didn’t work"}
+                  </p>
+                  <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                    {errorParam === "link_expired"
+                      ? "The link is only valid for 24 hours and can only be used once. Enter your email below to receive a fresh link."
+                      : "This can happen when the link expires, has already been used, or is opened on a different device or browser than the one you signed up with."}
+                  </p>
+                  {errorParam !== "link_expired" && (
+                    <p className="text-xs text-amber-700 mt-1">
+                      If your email is already confirmed, sign in below. Otherwise request a new link.
+                    </p>
+                  )}
+                </div>
               </div>
+              <form onSubmit={handleResendConfirmation} className="px-4 pb-4 flex gap-2">
+                <input
+                  type="email"
+                  value={resendEmail}
+                  onChange={(e) => setResendEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="flex-1 text-xs px-3 py-2 rounded-lg border border-amber-300 bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                />
+                <button
+                  type="submit"
+                  disabled={resending}
+                  className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-200 transition-colors disabled:opacity-60"
+                >
+                  {resending ? <Loader2 size={11} className="animate-spin" /> : <RefreshCw size={11} />}
+                  Resend
+                </button>
+              </form>
             </div>
           )}
 

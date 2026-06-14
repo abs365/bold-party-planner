@@ -63,38 +63,68 @@ export async function POST(request: Request) {
     if (error) logger.warn("vendor.apply.metadata_sync_failed", { userId: user.id, err: error });
   });
 
-  // Insert vendor row
   const db = await createAdminClient();
-  const { data: vendor, error } = await db
+
+  // For rejected vendors reapplying: update their existing row back to pending.
+  // For first-time applicants: insert a new row.
+  const { data: existingVendor } = await db
     .from("vendors")
-    .insert({
-      user_id: user.id,
-      business_name: body.business_name,
-      category: body.category,
-      custom_category_description: body.category === "other" ? (body.custom_category_description || null) : null,
-      bio: body.bio || null,
-      location: body.location || "",
-      city: body.city,
-      phone: body.phone,
-      travel_radius_km: body.travel_radius_km ?? 30,
-      min_price: body.min_price ?? null,
-      max_price: body.max_price ?? null,
-      years_experience: body.years_experience ?? null,
-      instagram_url: body.instagram_url || null,
-      website_url: body.website_url || null,
-      portfolio_links: body.portfolio_links ?? [],
-      status: "pending",
-    })
-    .select()
-    .single();
+    .select("id, status")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  let vendor: { id: string; [key: string]: unknown };
+  let error: { code: string; message: string } | null;
+
+  const vendorPayload = {
+    business_name: body.business_name,
+    category: body.category,
+    custom_category_description: body.category === "other" ? (body.custom_category_description || null) : null,
+    bio: body.bio || null,
+    location: body.location || "",
+    city: body.city,
+    phone: body.phone,
+    travel_radius_km: body.travel_radius_km ?? 30,
+    min_price: body.min_price ?? null,
+    max_price: body.max_price ?? null,
+    years_experience: body.years_experience ?? null,
+    instagram_url: body.instagram_url || null,
+    website_url: body.website_url || null,
+    portfolio_links: body.portfolio_links ?? [],
+    status: "pending",
+    rejection_reason: null,
+    admin_notes: null,
+  };
+
+  if (existingVendor && existingVendor.status === "rejected") {
+    // Rejected vendor reapplying — reset their row
+    const res = await db
+      .from("vendors")
+      .update(vendorPayload)
+      .eq("id", existingVendor.id)
+      .select()
+      .single();
+    vendor = res.data as typeof vendor;
+    error = res.error as typeof error;
+  } else if (existingVendor) {
+    // Pending/approved/suspended — not a reapplication scenario
+    if (existingVendor.status === "approved") {
+      return NextResponse.json({ error: "Vendor already approved. Visit your dashboard." }, { status: 409 });
+    }
+    return NextResponse.json({ error: "You already have an active vendor application." }, { status: 409 });
+  } else {
+    const res = await db
+      .from("vendors")
+      .insert({ user_id: user.id, ...vendorPayload })
+      .select()
+      .single();
+    vendor = res.data as typeof vendor;
+    error = res.error as typeof error;
+  }
 
   if (error) {
     logger.warn("vendor.apply.insert_failed", { userId: user.id, code: error.code, err: error });
-    // Revert profile role so the user isn't stuck as a vendor with no vendor row
     void supabase.from("profiles").update({ role: "customer" }).eq("id", user.id);
-    if (error.code === "23505") {
-      return NextResponse.json({ error: "You already have a vendor application." }, { status: 409 });
-    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
@@ -107,26 +137,20 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .maybeSingle();
 
-  // Send welcome email to vendor — fire and forget
   if (profile?.email) {
     const { sendVendorApplicationReceived, sendAdminNewVendorAlert } = await import("@/lib/resend");
-    void sendVendorApplicationReceived(
-      profile.email,
-      profile.full_name ?? body.business_name,
-      body.business_name
-    );
-    // Notify all admins of the new application
+    sendVendorApplicationReceived(profile.email, profile.full_name ?? body.business_name, body.business_name)
+      .then((r) => { if (!r.success) logger.warn("vendor.apply.email_failed", { userId: user.id, error: r.error }); });
+
     const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
     if (adminEmails.length > 0) {
-      void sendAdminNewVendorAlert(
-        adminEmails,
-        body.business_name,
-        body.category,
-        body.city,
-        profile.email,
-        vendor.id
-      );
+      sendAdminNewVendorAlert(adminEmails, body.business_name, body.category, body.city, profile.email, vendor.id)
+        .then((r) => { if (!r.success) logger.warn("vendor.apply.admin_alert_failed", { userId: user.id }); });
+    } else {
+      logger.warn("vendor.apply.no_admin_emails_configured", { userId: user.id, vendorId: vendor.id });
     }
+  } else {
+    logger.warn("vendor.apply.no_profile_email", { userId: user.id, vendorId: vendor.id });
   }
 
   void track({

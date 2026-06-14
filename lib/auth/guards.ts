@@ -5,7 +5,7 @@ import type { User } from "@supabase/supabase-js";
 type AnonClient = Awaited<ReturnType<typeof createClient>>;
 type AdminClient = Awaited<ReturnType<typeof createAdminClient>>;
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 export type AuthContext = { user: User; supabase: AnonClient };
 export type VendorContext = AuthContext & { vendorId: string };
@@ -33,7 +33,7 @@ export async function requireVendor(): Promise<VendorContext | null> {
     .from("vendors")
     .select("id")
     .eq("user_id", ctx.user.id)
-    .single();
+    .maybeSingle();
   if (!vendor) return null;
   return { ...ctx, vendorId: vendor.id };
 }
@@ -45,7 +45,7 @@ export async function requireApprovedVendor(): Promise<VendorContext | null> {
     .from("vendors")
     .select("id, status")
     .eq("user_id", ctx.user.id)
-    .single();
+    .maybeSingle();
   if (!vendor || vendor.status !== "approved") return null;
   return { ...ctx, vendorId: vendor.id };
 }
