@@ -9,10 +9,32 @@ const FROM = "Elbold <noreply@elbold.com>";
 
 interface EmailResult { success: boolean; error?: string }
 
-async function send(to: string, subject: string, html: string): Promise<EmailResult> {
+function htmlToText(html: string): string {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&ldquo;/g, '"').replace(/&rdquo;/g, '"').replace(/&nbsp;/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+async function send(
+  to: string,
+  subject: string,
+  html: string,
+  opts?: { headers?: Record<string, string> }
+): Promise<EmailResult> {
   try {
     const resend = getResend();
-    await resend.emails.send({ from: FROM, to, subject, html });
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject,
+      html,
+      text: htmlToText(html),
+      ...(opts?.headers ? { headers: opts.headers } : {}),
+    });
     return { success: true };
   } catch (err: unknown) {
     console.error("Email send error:", err);
@@ -107,17 +129,30 @@ export async function sendVendorApproved(to: string, name: string, businessName:
 }
 
 export async function sendVendorRejected(to: string, name: string, businessName: string, reason?: string) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.elbold.com";
   const reasonBlock = reason
-    ? `<div class="detail-box"><p><strong>Reason:</strong> ${reason}</p></div>`
+    ? `<div class="detail-box"><p><strong>Feedback:</strong> ${reason}</p></div>`
     : "";
-  return send(to, "Update on your vendor application | Elbold", wrap(
-    "Application Update",
-    `<p>Hi ${name},</p>
-    <p>Thank you for applying to Elbold. After review, we were unable to approve <span class="highlight">${businessName}</span> at this time.</p>
-    ${reasonBlock}
-    <p>You're welcome to reapply with more details about your business and portfolio.</p>
-    <p>If you have questions, please contact us at <a href="mailto:support@elbold.com" style="color:#0d1b3e">support@elbold.com</a>.</p>`
-  ));
+  return send(
+    to,
+    "Your Elbold application — next steps | Elbold",
+    wrap(
+      "Application Reviewed",
+      `<p>Hi ${name},</p>
+      <p>Thank you for your interest in joining Elbold as a vendor. We have reviewed your application for <span class="highlight">${businessName}</span>.</p>
+      <p>After careful consideration, we are not able to approve this application at this stage.</p>
+      ${reasonBlock}
+      <p>Many vendors successfully reapply after strengthening their profile with more photos, a detailed bio, and portfolio links. You are welcome to submit a new application at any time.</p>
+      <a href="${appUrl}/vendor/apply" class="btn">Submit a New Application</a>
+      <p style="margin-top:16px;font-size:13px;color:#6b7280">Questions? Email us at <a href="mailto:support@elbold.com" style="color:#0d1b3e">support@elbold.com</a> and we will be happy to help.</p>`
+    ),
+    {
+      headers: {
+        "List-Unsubscribe": `<mailto:unsubscribe@elbold.com?subject=unsubscribe>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    }
+  );
 }
 
 export async function sendBookingRequest(
