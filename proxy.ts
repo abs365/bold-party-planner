@@ -100,14 +100,29 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 4. Non-approved vendor → operational vendor routes: redirect to onboarding.
-  // Apply and onboarding are always accessible so vendors can see their status.
-  const VENDOR_OPEN_PREFIXES = ["/vendor/apply", "/vendor/onboarding"];
-  const isVendorOperationalRoute =
-    pathname.startsWith("/vendor/") &&
-    !VENDOR_OPEN_PREFIXES.some((p) => pathname.startsWith(p));
+  // 4. Vendor route access — two-tier model:
+  //    OS routes  → accessible from application submission (pending + approved)
+  //    Marketplace routes → approved only
+  //    Apply and onboarding are always accessible.
+  const VENDOR_ALWAYS_OPEN = ["/vendor/apply", "/vendor/onboarding"];
+  const VENDOR_OS_PREFIXES = [
+    "/vendor/dashboard",
+    "/vendor/profile",
+    "/vendor/media",
+    "/vendor/services",
+    "/vendor/contacts",
+    "/vendor/customers",
+    "/vendor/analytics",
+    "/vendor/verification",
+    "/vendor/availability",
+    "/vendor/subscription",
+  ];
 
-  if (isVendorOperationalRoute && user) {
+  const isVendorRoute = pathname.startsWith("/vendor/");
+  const isVendorAlwaysOpen = VENDOR_ALWAYS_OPEN.some((p) => pathname.startsWith(p));
+  const isVendorOsRoute = VENDOR_OS_PREFIXES.some((p) => pathname.startsWith(p));
+
+  if (isVendorRoute && !isVendorAlwaysOpen && user) {
     const metaRole = user.user_metadata?.role as string | undefined;
     if (metaRole === "vendor") {
       const { data: vendorRow } = await supabase
@@ -116,8 +131,19 @@ export async function proxy(request: NextRequest) {
         .eq("user_id", user.id)
         .maybeSingle();
 
-      if (vendorRow && vendorRow.status !== "approved") {
-        return NextResponse.redirect(new URL("/vendor/onboarding", request.url));
+      if (vendorRow) {
+        const { status } = vendorRow;
+        if (isVendorOsRoute) {
+          // OS routes: accessible to pending and approved; redirect suspended/rejected
+          if (status !== "approved" && status !== "pending") {
+            return NextResponse.redirect(new URL("/vendor/onboarding", request.url));
+          }
+        } else {
+          // Marketplace routes: approved only
+          if (status !== "approved") {
+            return NextResponse.redirect(new URL("/vendor/onboarding", request.url));
+          }
+        }
       }
     }
   }

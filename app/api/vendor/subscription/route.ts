@@ -57,6 +57,12 @@ export async function POST(req: Request) {
   if (vendor.status === "suspended") {
     return NextResponse.json({ error: "Suspended vendors cannot change subscription" }, { status: 403 });
   }
+  if (vendor.status === "pending") {
+    return NextResponse.json(
+      { error: "Paid plans become available once your application is approved." },
+      { status: 403 }
+    );
+  }
 
   const { plan, billing_cycle = "monthly", action } = await req.json() as {
     plan?: string;

@@ -40,14 +40,11 @@ export async function POST(req: Request) {
   const { data: vendor } = await supabase.from("vendors").select("id, status").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
-  // Lifecycle governance: only approved vendors may create packages.
-  // Pending (applied/under_review) vendors cannot build marketplace offerings
-  // until their application is approved.
-  if (vendor.status !== "approved") {
-    return NextResponse.json(
-      { error: "Packages can only be created once your application is approved" },
-      { status: 403 }
-    );
+  // Suspended and rejected vendors cannot create packages.
+  // Pending vendors may create packages in advance; they are not visible to
+  // customers until the vendor is approved (matching API filters status = approved).
+  if (vendor.status === "suspended" || vendor.status === "rejected") {
+    return NextResponse.json({ error: "Account not active" }, { status: 403 });
   }
 
   const body = await req.json();

@@ -17,12 +17,13 @@ export async function PATCH(req: Request) {
 
   if (!vendorCheck) return NextResponse.json({ error: "Vendor profile not found" }, { status: 404 });
 
-  if (vendorCheck.status !== "approved") {
-    const msg = vendorCheck.status === "suspended"
-      ? "Your account has been suspended"
-      : "Profile updates are only available once your application is approved";
-    return NextResponse.json({ error: msg }, { status: 403 });
+  if (vendorCheck.status === "suspended") {
+    return NextResponse.json({ error: "Your account has been suspended" }, { status: 403 });
   }
+  if (vendorCheck.status === "rejected") {
+    return NextResponse.json({ error: "Your application was not approved" }, { status: 403 });
+  }
+  // pending and approved vendors may both update their profile
 
   const body = await req.json();
 
