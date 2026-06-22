@@ -32,7 +32,7 @@ const BENEFITS = [
     icon: CheckCircle2,
     title: "Free to list your services.",
     description:
-      "Creating your profile and receiving enquiries costs nothing. Elbold earns a small percentage only when a booking is completed — so our incentives are aligned with yours. No hidden fees, no required subscription.",
+      "Creating your profile and receiving enquiries costs nothing. Elbold earns a small percentage only when a booking is completed, so our incentives are aligned with yours. No hidden fees, no required subscription.",
   },
   {
     icon: Star,
@@ -48,7 +48,7 @@ const BENEFITS = [
   },
   {
     icon: Zap,
-    title: "A full business dashboard — included",
+    title: "A full business dashboard. Already live.",
     description:
       "Revenue analytics, client CRM, direct contact tracking, lead funnel reporting, and booking intelligence are already live. Founding Vendors access every tool as it ships, before any vendor who joins later.",
   },
@@ -69,7 +69,7 @@ const BENEFITS = [
 const STEPS = [
   {
     n: "1",
-    label: "Apply — takes 5 minutes",
+    label: "Apply in five minutes",
     sub: "Business name, category, city, pricing. Nothing complicated.",
   },
   {
@@ -261,7 +261,7 @@ export default async function FoundingVendorsPage() {
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 The 20 Founding Vendor places exist because Elbold is building
-                something that requires trust from both sides — customers and
+                something that requires trust from both sides: customers and
                 professionals. The vendors who join now help establish the
                 platform standard, and in return receive permanent advantages
                 that no later applicant can access.
@@ -269,8 +269,7 @@ export default async function FoundingVendorsPage() {
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
                 When the founding period closes, new vendor applications enter a
                 standard queue. No priority placement. No Founding Vendor badge.
-                No early access to features. The window is specific and finite —
-                not a marketing tactic.
+                No early access to features. The window is specific and finite. This is not a marketing tactic.
               </p>
               <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
                 <AlertCircle size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
@@ -298,10 +297,10 @@ export default async function FoundingVendorsPage() {
                 {
                   title: "After the window closes",
                   items: [
-                    "Standard placement — below all Founding Vendors",
+                    "Standard placement, below all Founding Vendors",
                     "No founding badge",
                     "Features released to Founding Vendors first",
-                    "Same quality review process — same platform",
+                    "Same quality review process, same platform",
                   ],
                   positive: false,
                 },
@@ -362,7 +361,7 @@ export default async function FoundingVendorsPage() {
             </h2>
             <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
               Most event professionals use social media and maybe one or two
-              directories. Here is how they compare — honestly.
+              directories. Here is how they compare. Honestly.
             </p>
           </div>
 
@@ -475,7 +474,7 @@ export default async function FoundingVendorsPage() {
           </div>
 
           <p className="text-xs text-gray-300 font-light mt-5 text-center">
-            Comparison reflects typical platform policies — individual platforms vary.
+            Comparison reflects typical platform policies. Individual platforms vary.
           </p>
         </div>
       </section>
@@ -529,7 +528,7 @@ export default async function FoundingVendorsPage() {
                 Long-Term Value
               </p>
               <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
-                The longer you are on Elbold,<br />the more valuable your account becomes.
+                The longer you're on Elbold,<br />the more valuable your account becomes.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Every booking you complete builds your review history. Every client you manage through
@@ -538,16 +537,15 @@ export default async function FoundingVendorsPage() {
               </p>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
                 When you leave a social media platform, you lose your followers. When you leave Elbold,
-                you would lose your verified reviews, your booking history, your client relationships,
-                and the placement advantage you built by joining early — all of which took real time
-                to earn. That is not a lock-in tactic. That is what it means to run a real business
-                on a real platform.
+                you'd lose your verified reviews, your booking history, your client relationships,
+                and the placement advantage you built by joining early. All of which took real time to earn.
+                That's not a lock-in tactic. That's what it means to run a real business on a real platform.
               </p>
               <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
                 <TrendingUp size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
                 <p className="text-xs font-light leading-relaxed" style={{ color: "rgba(11,31,77,0.6)" }}>
                   Revenue analytics, lead funnel data, seasonal demand trends, and client CRM are
-                  already live in the Vendor Dashboard — and growing every quarter.
+                  already live in the Vendor Dashboard, and growing every quarter.
                 </p>
               </div>
             </div>
@@ -563,7 +561,7 @@ export default async function FoundingVendorsPage() {
                 },
                 {
                   label: "Client CRM",
-                  sub: "Off-platform contacts — Instagram enquiries, WhatsApp leads, referrals — are logged and tracked. That relationship history stays yours.",
+                  sub: "Instagram enquiries, WhatsApp leads, referrals and other off-platform contacts are logged and tracked. That relationship history stays yours.",
                 },
                 {
                   label: "Verified status",
@@ -605,14 +603,14 @@ export default async function FoundingVendorsPage() {
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Elbold is a curated platform. We review every application, and we
-                maintain standards after approval. That is what makes the
-                verification badge meaningful — and what protects the platform
+                maintain standards after approval. That's what makes the
+                verification badge meaningful, and what protects the platform
                 for every vendor on it.
               </p>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
                 Our full Vendor Standards document is published and publicly
-                available. We believe vendors should know exactly what we expect
-                — and exactly what happens if standards are not maintained.
+                available. We believe vendors should know exactly what we expect,
+                and exactly what happens if standards are not met.
               </p>
               <Link
                 href="/vendor-standards"
@@ -627,7 +625,7 @@ export default async function FoundingVendorsPage() {
               {[
                 {
                   title: "Genuine portfolio",
-                  desc: "Images and samples must represent your actual, current work — not other vendors' work or stock photography.",
+                  desc: "Images and samples must represent your actual work. Not other vendors' work or stock photography.",
                 },
                 {
                   title: "Accurate pricing",

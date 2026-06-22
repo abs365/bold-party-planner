@@ -198,7 +198,7 @@ export default async function HowItWorksPage() {
               </h2>
             </div>
             <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.4)" }}>
-              A question we encourage you to ask. Here is the honest answer.
+              A question we encourage you to ask. Here's the honest answer.
             </p>
           </div>
           <div className="divide-y divide-gray-100">

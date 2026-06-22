@@ -107,7 +107,7 @@ const HOW_IT_WORKS = [
   {
     n: "01",
     title: "Tell us about your event",
-    desc: "Create your event — date, type, budget and location. Takes two minutes. Our Smart Planner suggests the vendors you need.",
+    desc: "Enter your event date, type, budget and location. Takes two minutes. Our Smart Planner suggests the right vendors for you.",
   },
   {
     n: "02",
@@ -242,7 +242,7 @@ export default async function Home() {
               style={{ color: "#6b7280" }}
             >
               Tell us about your event. Receive free quotes from verified photographers, DJs,
-              caterers and more. Compare, choose, and book — with every payment protected.
+              caterers and more. Compare, choose and book. Every payment is protected.
             </p>
 
             {/* CTAs */}
@@ -313,7 +313,7 @@ export default async function Home() {
                 className="text-3xl font-light tracking-tight"
                 style={{ color: "#0B1F4D" }}
               >
-                From first idea to your event day — in four steps.
+                From your first idea to event day, in four steps.
               </h2>
             </div>
 
@@ -839,7 +839,7 @@ export default async function Home() {
             </h2>
             <p className="text-base font-light mb-10" style={{ color: "#6b7280" }}>
               Every professional is individually reviewed before they join.
-              Create your event, request quotes, compare — and book with complete confidence.
+              Create your event, request quotes and book with complete confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
