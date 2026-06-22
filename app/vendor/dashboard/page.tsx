@@ -8,6 +8,7 @@ import { ProfileStrengthWidget } from "@/components/vendor/ProfileStrengthWidget
 import { VendorActivationChecklist } from "@/components/vendor/VendorActivationChecklist";
 import { VendorGovernanceWidget } from "@/components/vendor/VendorGovernanceWidget";
 import { FoundingVendorBanner } from "@/components/vendor/FoundingVendorBanner";
+import { VendorSharePanel } from "@/components/vendor/VendorSharePanel";
 import { computeVendorCompletion } from "@/lib/vendor/completion";
 import { calculateVendorHealthScore } from "@/lib/vendor/health";
 import { detectComputedWarnings } from "@/lib/vendor/warnings";
@@ -177,7 +178,7 @@ export default async function VendorDashboardPage() {
             )}
           </div>
           <div className="flex gap-2 flex-shrink-0">
-            <Link href={`/vendors/${vendor.id}`} className="btn-secondary text-sm py-2">
+            <Link href={`/vendors/${vendor.slug ?? vendor.id}`} className="btn-secondary text-sm py-2">
               <Eye size={14} />View Profile
             </Link>
             <Link href="/vendor/analytics" className="btn-secondary text-sm py-2">
@@ -185,6 +186,33 @@ export default async function VendorDashboardPage() {
             </Link>
           </div>
         </div>
+
+        {/* ─── Your Public Page ─────────────────────────────────── */}
+        {vendor.status === "approved" && vendor.slug && (
+          <div className="bg-[#0d1b3e] border border-[rgba(201,168,76,0.2)] rounded-2xl p-5 animate-fade-in-up">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-xs text-slate-400 mb-1 uppercase tracking-wide font-medium">Your public profile</p>
+                <p className="text-sm font-semibold text-white mb-3 truncate">
+                  elbold.com/vendors/{vendor.slug}
+                </p>
+                <VendorSharePanel slug={vendor.slug} businessName={vendor.business_name} />
+              </div>
+              <div className="flex gap-6 flex-shrink-0 sm:text-right">
+                {[
+                  { label: "Views (30d)", value: profileViews },
+                  { label: "Quotes (30d)", value: quoteRequests },
+                  { label: "Active Bookings", value: confirmed.length },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <div className="text-xl font-bold text-white">{value}</div>
+                    <div className="text-xs text-slate-500">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ─── First-Login Getting Started Banner ─────────────────── */}
         {allBookings.length === 0 && profileCompletion < 3 && vendor.status === "approved" && (

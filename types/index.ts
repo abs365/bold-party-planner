@@ -91,6 +91,7 @@ export interface Profile {
 
 export interface Vendor {
   id: string;
+  slug: string;
   user_id: string;
   business_name: string;
   tagline: string | null;

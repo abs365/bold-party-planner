@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { VendorProfileView } from "@/components/vendor/VendorProfileView";
+import { ProfileViewTracker } from "@/components/vendor/ProfileViewTracker";
+import { computeVendorCompletion } from "@/lib/vendor/completion";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
 import { Star, CheckCircle2, MapPin } from "lucide-react";
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const SIMILAR_VENDOR_FALLBACK: Partial<Record<VendorCategory, string>> = {
   photographer:      "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=400&q=60",
@@ -27,82 +31,119 @@ const SIMILAR_VENDOR_FALLBACK: Partial<Record<VendorCategory, string>> = {
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
-  const supabase = await createClient();
-  const { data: vendor } = await supabase
-    .from("vendors")
-    .select("business_name, category, city, bio, rating, review_count")
-    .eq("id", id)
-    .eq("status", "approved")
+// ── Shared vendor select fragment ─────────────────────────────────────────────
+const VENDOR_SELECT = `
+  *,
+  profile:profiles(id, full_name, avatar_url),
+  media:vendor_media(id, url, type, is_cover, caption, sort_order, moderation_status, alt_text, width, height, duration_secs),
+  packages:vendor_packages(id, name, description, price, duration_hours, includes, is_popular)
+`;
+
+// ── Resolve id param → vendor row (handles UUID, slug, old slug) ──────────────
+async function resolveVendor(id: string, adminDb: Awaited<ReturnType<typeof createAdminClient>>) {
+  if (UUID_RE.test(id)) {
+    const res = await adminDb.from("vendors").select(VENDOR_SELECT).eq("id", id).eq("status", "approved").single();
+    return { vendor: res.data, redirectToSlug: res.data?.slug ?? null };
+  }
+
+  // Try current slug first
+  const bySlug = await adminDb.from("vendors").select(VENDOR_SELECT).eq("slug", id).eq("status", "approved").single();
+  if (bySlug.data) return { vendor: bySlug.data, redirectToSlug: null };
+
+  // Check redirect history (old slug after name change)
+  const { data: history } = await adminDb
+    .from("vendor_slug_history")
+    .select("vendor_id")
+    .eq("old_slug", id)
     .single();
 
+  if (history) {
+    const byId = await adminDb.from("vendors").select(VENDOR_SELECT).eq("id", history.vendor_id).eq("status", "approved").single();
+    return { vendor: byId.data, redirectToSlug: byId.data?.slug ?? null };
+  }
+
+  return { vendor: null, redirectToSlug: null };
+}
+
+// ── generateMetadata ──────────────────────────────────────────────────────────
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const adminDb = await createAdminClient();
+
+  const { vendor } = await resolveVendor(id, adminDb);
   if (!vendor) return { title: "Vendor Not Found" };
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
   const title = `${vendor.business_name} | ${cat?.label ?? vendor.category} in ${vendor.city} | Elbold`;
-  const description = (vendor as { bio?: string }).bio?.slice(0, 160) ??
+  const description = (vendor.bio as string | null)?.slice(0, 160) ??
     `Book ${vendor.business_name}, a trusted ${cat?.label ?? vendor.category} in ${vendor.city}. Verified on Elbold.`;
+
+  const coverMedia = (vendor.media as Array<{ url: string; type: string; is_cover: boolean }> | null)
+    ?.find((m) => m.is_cover && m.type === "image") ??
+    (vendor.media as Array<{ url: string; type: string }> | null)?.find((m) => m.type === "image");
+
+  const ogImage = coverMedia?.url ?? "/icons/icon-512.png";
+  const canonicalUrl = `https://www.elbold.com/vendors/${vendor.slug}`;
 
   return {
     title,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
       type: "profile",
-      images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: title }],
+      url: canonicalUrl,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [{ url: "/icons/icon-512.png", alt: title }],
+      images: [{ url: ogImage, alt: title }],
     },
   };
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default async function VendorProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const adminDb = await createAdminClient();
+  const [adminDb, supabase] = await Promise.all([createAdminClient(), createClient()]);
 
-  const [vendorRes, authRes, reviewsRes] = await Promise.all([
-    adminDb
-      .from("vendors")
-      .select(`
-        *,
-        profile:profiles(id, full_name, avatar_url),
-        media:vendor_media(id, url, type, is_cover, caption, sort_order, moderation_status, alt_text, width, height, duration_secs),
-        packages:vendor_packages(id, name, description, price, duration_hours, includes, is_popular)
-      `)
-      .eq("id", id)
-      .eq("status", "approved")
-      .single(),
-    supabase.auth.getUser(),
+  const { vendor: vendorData, redirectToSlug } = await resolveVendor(id, adminDb);
+
+  // UUID or old slug → permanent redirect to canonical slug URL
+  if (redirectToSlug) permanentRedirect(`/vendors/${redirectToSlug}`);
+  if (!vendorData) notFound();
+
+  // Profile quality gate: score < 50 → not publicly visible
+  const mediaCount = (vendorData.media as unknown[] | null)?.length ?? 0;
+  const packageCount = (vendorData.packages as unknown[] | null)?.length ?? 0;
+  const completion = computeVendorCompletion({ vendor: vendorData, mediaCount, packageCount, hasAvailability: false });
+  const qualityThreshold = vendorData.is_founding_vendor ? 32 : 50;
+  if (completion.score < qualityThreshold) notFound();
+
+  const [reviewsRes, authRes] = await Promise.all([
     adminDb
       .from("reviews")
       .select("id, rating, comment, created_at, response, response_at, profile:profiles(full_name, avatar_url)")
-      .eq("vendor_id", id)
+      .eq("vendor_id", vendorData.id)
       .order("created_at", { ascending: false })
       .limit(20),
+    supabase.auth.getUser(),
   ]);
 
-  if (!vendorRes.data) notFound();
-
-  const vendorWithReviews = { ...vendorRes.data, reviews: reviewsRes.data ?? [] };
+  const vendor = { ...vendorData, reviews: reviewsRes.data ?? [] };
 
   const { data: similarVendors } = await adminDb
     .from("vendors")
-    .select("id, business_name, category, city, rating, review_count, min_price, verified, media:vendor_media(url, type, is_cover)")
+    .select("id, slug, business_name, category, city, rating, review_count, min_price, verified, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
-    .eq("category", vendorRes.data.category)
-    .neq("id", id)
+    .eq("category", vendor.category)
+    .neq("id", vendor.id)
     .gte("rating", 4.0)
     .order("rating", { ascending: false })
     .limit(4);
-
-  const vendor = vendorWithReviews;
 
   let profile = null;
   if (authRes.data.user) {
@@ -111,16 +152,17 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   }
 
   const cat = VENDOR_CATEGORIES[vendor.category as keyof typeof VENDOR_CATEGORIES];
-  const avgRating = (vendor.reviews as { rating: number }[] ?? []).length > 0
-    ? (vendor.reviews as { rating: number }[]).reduce((s: number, r: { rating: number }) => s + r.rating, 0) / (vendor.reviews as { rating: number }[]).length
+  const reviewsArr = vendor.reviews as { rating: number }[];
+  const avgRating = reviewsArr.length > 0
+    ? reviewsArr.reduce((s, r) => s + r.rating, 0) / reviewsArr.length
     : null;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": vendor.business_name,
-    "description": (vendor as { bio?: string }).bio ?? undefined,
-    "url": `https://www.elbold.com/vendors/${id}`,
+    "description": vendor.bio ?? undefined,
+    "url": `https://www.elbold.com/vendors/${vendor.slug}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": vendor.city,
@@ -131,7 +173,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
     "aggregateRating": avgRating && (vendor.review_count ?? 0) > 0 ? {
       "@type": "AggregateRating",
       "ratingValue": avgRating.toFixed(1),
-      "reviewCount": vendor.review_count ?? (vendor.reviews as unknown[]).length,
+      "reviewCount": vendor.review_count ?? reviewsArr.length,
       "bestRating": "5",
       "worstRating": "1",
     } : undefined,
@@ -142,6 +184,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   return (
     <div className="min-h-screen bg-white">
       <Navbar user={profile} lightBg />
+      <ProfileViewTracker vendorId={vendor.id} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -165,7 +208,7 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
                   return (
                     <Link
                       key={v.id}
-                      href={`/vendors/${v.id}`}
+                      href={`/vendors/${v.slug ?? v.id}`}
                       className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
                     >
                       <div className="relative h-44 bg-gray-100 overflow-hidden">
