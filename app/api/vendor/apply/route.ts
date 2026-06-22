@@ -97,10 +97,18 @@ export async function POST(request: Request) {
   };
 
   if (existingVendor && existingVendor.status === "rejected") {
-    // Rejected vendor reapplying — reset their row
+    // Rejected vendor reapplying — reset their row and refresh slug (name may have changed)
+    const { data: slugData } = await db.rpc("generate_vendor_slug", {
+      p_name: body.business_name,
+      p_vendor_id: existingVendor.id,
+    });
+    const slug: string =
+      typeof slugData === "string" && slugData
+        ? slugData
+        : `${body.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "vendor"}-${Date.now()}`;
     const res = await db
       .from("vendors")
-      .update(vendorPayload)
+      .update({ slug, ...vendorPayload })
       .eq("id", existingVendor.id)
       .select()
       .single();
@@ -113,9 +121,19 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ error: "You already have an active vendor application." }, { status: 409 });
   } else {
+    // Pre-generate the UUID so the slug function can exclude it from its own uniqueness check
+    const newVendorId = crypto.randomUUID();
+    const { data: slugData } = await db.rpc("generate_vendor_slug", {
+      p_name: body.business_name,
+      p_vendor_id: newVendorId,
+    });
+    const slug: string =
+      typeof slugData === "string" && slugData
+        ? slugData
+        : `${body.business_name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "vendor"}-${Date.now()}`;
     const res = await db
       .from("vendors")
-      .insert({ user_id: user.id, ...vendorPayload })
+      .insert({ id: newVendorId, user_id: user.id, slug, ...vendorPayload })
       .select()
       .single();
     vendor = res.data as typeof vendor;
