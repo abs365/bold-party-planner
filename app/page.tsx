@@ -106,18 +106,23 @@ const CATEGORIES = [
 const HOW_IT_WORKS = [
   {
     n: "01",
-    title: "Browse verified professionals",
-    desc: "Filter by category, location, and budget. Every vendor is reviewed by our team before they appear.",
+    title: "Tell us about your event",
+    desc: "Create your event — date, type, budget and location. Takes two minutes. Our Smart Planner suggests the vendors you need.",
   },
   {
     n: "02",
-    title: "Request a free quote",
-    desc: "Send your event details directly to the vendors you like. No obligation. Vendors respond within 48 hours.",
+    title: "Request free quotes from verified professionals",
+    desc: "Send your brief to photographers, DJs, caterers and more. Every vendor is individually reviewed before they appear. No obligation.",
   },
   {
     n: "03",
-    title: "Book and pay securely",
-    desc: "Accept the quote that suits you. Pay a 30% deposit through Stripe. The rest is due after your event.",
+    title: "Compare and book with confidence",
+    desc: "Review quotes side by side, read verified reviews, and choose the one that fits. Pay a 30% deposit through Stripe. The rest is due after your event.",
+  },
+  {
+    n: "04",
+    title: "Manage everything in your dashboard",
+    desc: "Track all your vendors, payments, and bookings in one place. Your event hub keeps you organised from first quote to the day itself.",
   },
 ];
 
@@ -236,25 +241,25 @@ export default async function Home() {
               className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-10"
               style={{ color: "#6b7280" }}
             >
-              Every professional on Elbold is reviewed before joining.
-              Compare trusted providers, request quotes and book with confidence.
+              Tell us about your event. Receive free quotes from verified photographers, DJs,
+              caterers and more. Compare, choose, and book — with every payment protected.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-5">
               <Link
-                href="/browse"
+                href="/dashboard/create-event"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
                 style={{ background: "#0B1F4D", color: "#ffffff", border: "2px solid #0B1F4D" }}
               >
-                Find Professionals <ArrowRight size={16} />
+                Plan My Event <ArrowRight size={16} />
               </Link>
               <Link
                 href="/founding-vendors"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-80"
                 style={{ border: "2px solid #0B1F4D", color: "#0B1F4D", background: "transparent" }}
               >
-                Join as a Vendor
+                Join as a Founding Vendor
               </Link>
             </div>
 
@@ -294,7 +299,59 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 2: CATEGORY GRID ─────────────────────────────────────── */}
+        {/* ── SECTION 2: HOW IT WORKS ──────────────────────────────────────── */}
+        <section className="py-20 px-4" style={{ background: "#f8f7f5", borderTop: "1px solid rgba(11,31,77,0.06)" }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-14">
+              <p
+                className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase"
+                style={{ color: "#D4AF37" }}
+              >
+                How It Works
+              </p>
+              <h2
+                className="text-3xl font-light tracking-tight"
+                style={{ color: "#0B1F4D" }}
+              >
+                From first idea to your event day — in four steps.
+              </h2>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {HOW_IT_WORKS.map(({ n, title, desc }) => (
+                <div key={n} className="relative">
+                  <div
+                    className="text-5xl font-light mb-5 leading-none"
+                    style={{ color: "rgba(11,31,77,0.08)" }}
+                  >
+                    {n}
+                  </div>
+                  <h3
+                    className="text-base font-semibold mb-2"
+                    style={{ color: "#0B1F4D" }}
+                  >
+                    {title}
+                  </h3>
+                  <p className="text-sm font-light leading-relaxed" style={{ color: "#6b7280" }}>
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <Link
+                href="/how-it-works"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold hover:opacity-70 transition-opacity"
+                style={{ color: "#0B1F4D" }}
+              >
+                Read how it works in full <ArrowRight size={13} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── SECTION 3: CATEGORY GRID ─────────────────────────────────────── */}
         <section className="pb-20 px-4" style={{ background: "#ffffff" }}>
           <div className="max-w-4xl mx-auto">
             <div className="flex items-baseline justify-between mb-8">
@@ -600,58 +657,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── SECTION 7: HOW IT WORKS ──────────────────────────────────────── */}
-        <section className="py-24 px-4" style={{ background: "#ffffff" }}>
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-14">
-              <p
-                className="text-xs tracking-[0.35em] font-semibold mb-3 uppercase"
-                style={{ color: "#D4AF37" }}
-              >
-                How It Works
-              </p>
-              <h2
-                className="text-3xl font-light tracking-tight"
-                style={{ color: "#0B1F4D" }}
-              >
-                From browsing to booked in three steps.
-              </h2>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {HOW_IT_WORKS.map(({ n, title, desc }) => (
-                <div key={n} className="relative">
-                  <div
-                    className="text-5xl font-light mb-5 leading-none"
-                    style={{ color: "rgba(11,31,77,0.08)" }}
-                  >
-                    {n}
-                  </div>
-                  <h3
-                    className="text-base font-semibold mb-2"
-                    style={{ color: "#0B1F4D" }}
-                  >
-                    {title}
-                  </h3>
-                  <p className="text-sm font-light leading-relaxed" style={{ color: "#6b7280" }}>
-                    {desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link
-                href="/how-it-works"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold hover:opacity-70 transition-opacity"
-                style={{ color: "#0B1F4D" }}
-              >
-                Read how it works in full <ArrowRight size={13} />
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* ── SECTION 8: THE ELBOLD PROMISE ────────────────────────────────── */}
         <section className="py-24 px-4" style={{ background: "#0B1F4D" }}>
           <div className="max-w-5xl mx-auto">
@@ -833,23 +838,23 @@ export default async function Home() {
               you can trust completely.
             </h2>
             <p className="text-base font-light mb-10" style={{ color: "#6b7280" }}>
-              Elbold reviews every professional before they join.
-              You compare, request quotes, and book with confidence.
+              Every professional is individually reviewed before they join.
+              Create your event, request quotes, compare — and book with complete confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/browse"
+                href="/dashboard/create-event"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
                 style={{ background: "#0B1F4D", color: "#ffffff" }}
               >
-                Find Professionals <ArrowRight size={16} />
+                Plan My Event <ArrowRight size={16} />
               </Link>
               <Link
-                href="/how-it-works"
+                href="/browse"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-80"
                 style={{ border: "2px solid rgba(11,31,77,0.2)", color: "#0B1F4D" }}
               >
-                How It Works
+                Browse Professionals
               </Link>
             </div>
           </div>

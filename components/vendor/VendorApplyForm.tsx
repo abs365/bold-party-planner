@@ -94,7 +94,9 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
     return draft ? { ...FORM_DEFAULTS, ...draft } : FORM_DEFAULTS;
   });
 
-  const [portfolioLinks, setPortfolioLinks] = useState<PortfolioLink[]>([]);
+  const [portfolioLinks, setPortfolioLinks] = useState<PortfolioLink[]>([
+    { type: "instagram" as PortfolioLinkType, url: "" },
+  ]);
 
   const [step, setStep] = useState<number>(() => {
     const draft = readDraft();
@@ -108,7 +110,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   function addPortfolioLink() {
-    setPortfolioLinks((prev) => [...prev, { type: "website" as PortfolioLinkType, url: "" }]);
+    setPortfolioLinks((prev) => [...prev, { type: "instagram" as PortfolioLinkType, url: "" }]);
   }
 
   function normalizeUrl(raw: string): string {
@@ -322,10 +324,13 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
             Get your business in front of customers searching for vendors like you.
           </h1>
           <p
-            className="max-w-lg mx-auto text-base font-light leading-relaxed"
+            className="max-w-lg mx-auto text-base font-light leading-relaxed mb-4"
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
             List your services free. Receive verified enquiries. Grow your bookings with a platform built for UK event professionals.
+          </p>
+          <p className="text-xs font-light tracking-wide" style={{ color: "rgba(255,255,255,0.28)" }}>
+            Takes about 5 minutes. No credit card required.
           </p>
         </div>
       </div>
@@ -612,52 +617,56 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                         Add at least one link so we can verify your work. Website, Instagram, Google Business, or any professional profile.
                       </p>
 
-                      <div className="space-y-2 mb-3">
+                      <div className="space-y-3 mb-3">
                         {portfolioLinks.map((link, i) => (
-                          <div key={i} className="flex gap-2">
-                            <select
-                              value={link.type}
-                              onChange={(e) => updatePortfolioLink(i, "type", e.target.value)}
-                              className="input-light w-40 flex-shrink-0 text-sm"
-                            >
-                              {(Object.keys(PORTFOLIO_LINK_LABELS) as PortfolioLinkType[]).map((t) => (
-                                <option key={t} value={t}>{PORTFOLIO_LINK_LABELS[t]}</option>
-                              ))}
-                            </select>
+                          <div key={i} className="space-y-1.5">
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={link.type}
+                                onChange={(e) => updatePortfolioLink(i, "type", e.target.value)}
+                                className="input-light w-36 flex-shrink-0 text-sm"
+                              >
+                                {(Object.keys(PORTFOLIO_LINK_LABELS) as PortfolioLinkType[]).map((t) => (
+                                  <option key={t} value={t}>{PORTFOLIO_LINK_LABELS[t]}</option>
+                                ))}
+                              </select>
+                              <button
+                                type="button"
+                                onClick={() => removePortfolioLink(i)}
+                                className="ml-auto p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                                title="Remove link"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
                             <input
                               type="text"
                               value={link.url}
                               onChange={(e) => updatePortfolioLink(i, "url", e.target.value)}
                               onBlur={() => handlePortfolioUrlBlur(i)}
                               placeholder={PORTFOLIO_LINK_PLACEHOLDERS[link.type]}
-                              className="input-light flex-1 min-w-0"
+                              className="input-light w-full"
                             />
-                            <button
-                              type="button"
-                              onClick={() => removePortfolioLink(i)}
-                              className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
-                              title="Remove link"
-                            >
-                              <Trash2 size={14} />
-                            </button>
+                            <p className="text-xs text-gray-400 font-light">
+                              Example: {PORTFOLIO_LINK_PLACEHOLDERS[link.type]}
+                            </p>
                           </div>
                         ))}
                       </div>
 
+                      {portfolioLinks.length === 0 && (
+                        <p className="text-xs text-amber-600 mb-2">
+                          At least one link is required. Add your Instagram, website, or any professional profile.
+                        </p>
+                      )}
                       <button
                         type="button"
                         onClick={addPortfolioLink}
                         className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors border border-dashed border-gray-300 hover:border-gray-400 px-3 py-2 rounded-lg w-full justify-center"
                       >
                         <Plus size={13} />
-                        Add Link
+                        Add Another Link
                       </button>
-
-                      {portfolioLinks.length === 0 && (
-                        <p className="text-xs text-amber-600 mt-2">
-                          At least 1 link is required to submit your application.
-                        </p>
-                      )}
                     </div>
 
                     <div

@@ -48,9 +48,9 @@ const BENEFITS = [
   },
   {
     icon: Zap,
-    title: "First access to new features",
+    title: "A full business dashboard — included",
     description:
-      "Founding Vendors are first to access new tools as Elbold grows — analytics, promoted listings, review widgets, and more. You help shape what gets built next.",
+      "Revenue analytics, client CRM, direct contact tracking, lead funnel reporting, and booking intelligence are already live. Founding Vendors access every tool as it ships, before any vendor who joins later.",
   },
   {
     icon: Shield,
@@ -149,6 +149,22 @@ const COMPARISON_ROWS = [
     social: false,
     directories: false,
     dirNote: "Rare exceptions",
+  },
+  {
+    feature: "Business analytics and revenue tracking",
+    elbold: true,
+    social: false,
+    socialNote: "No business data",
+    directories: false,
+    dirNote: "Not available",
+  },
+  {
+    feature: "Client CRM for off-platform contacts",
+    elbold: true,
+    social: false,
+    socialNote: "DMs, not a system",
+    directories: false,
+    dirNote: "Not available",
   },
 ];
 
@@ -500,6 +516,73 @@ export default async function FoundingVendorsPage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHY STAY ─────────────────────────────────────────────────────── */}
+      <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div>
+              <p className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase" style={{ color: "#C9A84C" }}>
+                Long-Term Value
+              </p>
+              <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
+                The longer you are on Elbold,<br />the more valuable your account becomes.
+              </h2>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
+                Every booking you complete builds your review history. Every client you manage through
+                the CRM stays attached to your account. Every month of revenue data makes your
+                analytics more meaningful.
+              </p>
+              <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
+                When you leave a social media platform, you lose your followers. When you leave Elbold,
+                you would lose your verified reviews, your booking history, your client relationships,
+                and the placement advantage you built by joining early — all of which took real time
+                to earn. That is not a lock-in tactic. That is what it means to run a real business
+                on a real platform.
+              </p>
+              <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
+                <TrendingUp size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
+                <p className="text-xs font-light leading-relaxed" style={{ color: "rgba(11,31,77,0.6)" }}>
+                  Revenue analytics, lead funnel data, seasonal demand trends, and client CRM are
+                  already live in the Vendor Dashboard — and growing every quarter.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {[
+                {
+                  label: "Verified reviews",
+                  sub: "Every review comes from a confirmed booking. They accumulate on your profile and cannot be replicated on any other platform.",
+                },
+                {
+                  label: "Booking history and revenue analytics",
+                  sub: "12-month revenue trends, month-over-month comparisons, average booking value, and payout tracking grow more useful over time.",
+                },
+                {
+                  label: "Client CRM",
+                  sub: "Off-platform contacts — Instagram enquiries, WhatsApp leads, referrals — are logged and tracked. That relationship history stays yours.",
+                },
+                {
+                  label: "Verified status",
+                  sub: "Your verification level reflects documentation our team has reviewed. It communicates credibility that social media cannot replicate.",
+                },
+                {
+                  label: "Permanent placement advantage",
+                  sub: "Founding Vendors hold their priority placement permanently. No algorithm can demote you based on posting frequency or paid promotion.",
+                },
+              ].map(({ label, sub }) => (
+                <div key={label} className="flex gap-3 rounded-xl p-5 border border-gray-100 bg-white">
+                  <CheckCircle2 size={14} style={{ color: "#0B1F4D", flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900 mb-0.5">{label}</div>
+                    <div className="text-xs text-gray-400 font-light leading-relaxed">{sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
