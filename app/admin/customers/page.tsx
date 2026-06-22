@@ -50,8 +50,30 @@ export default async function AdminCustomersPage({
       : Promise.resolve({ data: [] }),
   ]);
 
+  // Count of manual contacts across all vendors (for admin visibility)
+  const { count: directContactsTotal } = await adminSupabase
+    .from("manual_contacts")
+    .select("id", { count: "exact", head: true })
+    .eq("is_archived", false);
+
   return (
     <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
+      {/* Attribution clarity banner */}
+      <div className="mb-4 bg-blue-500/5 border border-blue-500/15 rounded-xl px-5 py-3 flex items-center justify-between gap-4">
+        <p className="text-blue-300/70 text-xs">
+          <strong className="text-blue-300">Registered customers only.</strong>{" "}
+          Off-platform contacts added by vendors are not shown here — they are not auth users.
+          {(directContactsTotal ?? 0) > 0 && (
+            <> Platform-wide: <strong className="text-blue-200">{directContactsTotal} direct contact{directContactsTotal !== 1 ? "s" : ""}</strong> across vendor accounts.</>
+          )}
+        </p>
+        <a
+          href="/admin/direct-contacts"
+          className="text-xs text-blue-400 hover:text-blue-300 underline flex-shrink-0"
+        >
+          View direct contacts →
+        </a>
+      </div>
       <AdminCustomerTable
         customers={customers ?? []}
         events={eventsRes.data ?? []}

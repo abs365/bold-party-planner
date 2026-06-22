@@ -9,7 +9,7 @@ import {
   Store, Users, BarChart3, Settings, FileText, AlertCircle,
   MessageSquare, Wallet, TrendingUp, CalendarCheck, BadgeCheck,
   Inbox, Heart, Mail, HelpCircle, Shield, Rocket, Server, DollarSign, Activity, ThumbsUp,
-  Scale, Eye, ClipboardList, Lock, Zap, GitBranch, Map, Send, Target, HeartPulse,
+  Scale, Eye, ClipboardList, Lock, Zap, GitBranch, Map, Send, Target, HeartPulse, BookUser,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
@@ -41,10 +41,12 @@ const CUSTOMER_NAV: NavItem[] = [
 ];
 
 const VENDOR_NAV: NavItem[] = [
-  { href: "/vendor/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/vendor/bookings", label: "Bookings", icon: ShoppingBag },
-  { href: "/vendor/quotes", label: "Leads", icon: Inbox },
-  { href: "/vendor/messages", label: "Messages", icon: MessageSquare },
+  { href: "/vendor/dashboard",  label: "Dashboard",    icon: LayoutDashboard },
+  { href: "/vendor/bookings",   label: "Bookings",     icon: ShoppingBag },
+  { href: "/vendor/quotes",     label: "Leads",        icon: Inbox },
+  { href: "/vendor/customers",  label: "Customers",    icon: Users },
+  { href: "/vendor/contacts",   label: "Contacts",     icon: BookUser },
+  { href: "/vendor/messages",   label: "Messages",     icon: MessageSquare },
   { href: "/vendor/profile", label: "My Profile", icon: User },
   { href: "/vendor/services", label: "Services & Packages", icon: Settings },
   { href: "/vendor/media", label: "Photos & Videos", icon: FileText },
@@ -68,8 +70,9 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/scoreboard",   label: "Weekly Scoreboard",   icon: Target },
       { href: "/admin/health",       label: "Marketplace Health",  icon: HeartPulse },
       { href: "/admin/vendors",   label: "Vendors",        icon: Store },
-      { href: "/admin/customers", label: "Customers",      icon: Users },
-      { href: "/admin/bookings",  label: "Bookings",       icon: ShoppingBag },
+      { href: "/admin/customers",       label: "Customers",      icon: Users },
+      { href: "/admin/direct-contacts", label: "Direct Contacts", icon: BookUser },
+      { href: "/admin/bookings",        label: "Bookings",        icon: ShoppingBag },
       { href: "/admin/quotes",    label: "Quote Pipeline", icon: Inbox },
       { href: "/admin/reviews",   label: "Reviews",        icon: Star },
     ],

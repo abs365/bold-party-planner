@@ -229,6 +229,7 @@ export interface Booking {
   vendor_id: string;
   package_id: string | null;
   customer_id: string;
+  booking_source?: BookingSource;
   status: BookingStatus;
   payment_status: PaymentStatus;
   total_amount: number;
@@ -402,6 +403,46 @@ export const EVENT_TYPES: Record<EventType, { label: string; icon: string }> = {
 };
 
 export const COMMISSION_RATE = 0.1; // 10% platform commission
+
+// ── Vendor-Owned Contacts (Phase 69C Stage A) ─────────────────────────────────
+
+export type BookingSource =
+  | "elbold_marketplace"
+  | "instagram"
+  | "facebook"
+  | "tiktok"
+  | "whatsapp"
+  | "referral"
+  | "existing_customer"
+  | "direct"
+  | "other";
+
+export type ManualContactSource = Exclude<BookingSource, "elbold_marketplace">;
+
+export interface ManualContact {
+  id: string;
+  vendor_id: string;
+  display_name: string;
+  display_email: string | null;
+  display_phone: string | null;
+  source: ManualContactSource;
+  source_detail: string | null;
+  notes: string | null;
+  linked_profile_id: string | null;
+  is_archived: boolean;
+  gdpr_anonymised: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ManualContactNote {
+  id: string;
+  vendor_id: string;
+  manual_contact_id: string;
+  note: string;
+  created_at: string;
+  updated_at: string;
+}
 
 // ── Guest Management ──────────────────────────────────────────────────────────
 
