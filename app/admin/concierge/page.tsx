@@ -1,13 +1,11 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatDate } from "@/lib/utils";
 import { Calendar, MapPin, Users, MessageSquare, CheckCircle2, Clock, ArrowRight, Mail, Phone } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",").map((e) => e.trim()).filter(Boolean);
 
 const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   new:         { label: "New",         color: "text-amber-700",   bg: "bg-amber-50 border-amber-200" },
@@ -18,13 +16,10 @@ const STATUS_LABELS: Record<string, { label: string; color: string; bg: string }
 };
 
 export default async function AdminConciergePage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
-
-  const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   // Try to fetch concierge requests (table may not exist yet if migration hasn't run)
   const { data: requests, error } = await db
@@ -47,7 +42,7 @@ export default async function AdminConciergePage() {
   );
 
   return (
-    <DashboardLayout user={{ id: user.id, email: user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }}>
+    <DashboardLayout user={{ id: auth.user.id, email: auth.user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto space-y-6">
 
         <div className="flex items-start justify-between">

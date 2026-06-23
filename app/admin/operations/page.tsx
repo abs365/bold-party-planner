@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import type { Profile } from "@/types";
 import {
@@ -11,7 +11,6 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 type ActionItem = {
   id: string;
@@ -26,14 +25,10 @@ type ActionItem = {
 };
 
 export default async function OperationsPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-
-  const db = await createAdminClient();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
   const now = new Date();
 
   const todayStart = new Date(now);
@@ -187,8 +182,8 @@ export default async function OperationsPage() {
   const allClear = actions.filter((a) => a.urgent).length === 0;
 
   const adminProfile: Profile = {
-    id: user.id,
-    email: user.email ?? "",
+    id: auth.user.id,
+    email: auth.user.email ?? "",
     role: "admin",
     full_name: profile?.full_name ?? null,
     phone: profile?.phone ?? null,
@@ -198,7 +193,7 @@ export default async function OperationsPage() {
   };
 
   return (
-    <DashboardLayout user={adminProfile}>
+    <DashboardLayout user={adminProfile} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Header */}

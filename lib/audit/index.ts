@@ -27,6 +27,16 @@ export type AuditAction =
   | "admin.report.dismiss"
   | "admin.media.approve"
   | "admin.media.reject"
+  // Admin — review moderation (correct action types; admin.media.approve retained for legacy log entries)
+  | "admin.review.approve"
+  | "admin.review.flag"
+  | "admin.review.remove"
+  // Admin — payout (previously unlogged)
+  | "admin.payout.mark_paid"
+  | "admin.payout.cancel"
+  // Admin — role management
+  | "admin.role.grant"
+  | "admin.role.revoke"
   // Admin — alerts
   | "admin.alert.read"
   | "admin.alert.read_all"
@@ -70,7 +80,7 @@ export interface AuditEntry {
   /** The user performing the action */
   actorUserId: string;
   /** The role of the actor */
-  actorRole?: "admin" | "vendor" | "customer" | "system";
+  actorRole?: "admin" | "founder" | "global_admin" | "ops_admin" | "reviewer" | "vendor" | "customer" | "system";
   /** The user being acted upon (e.g. vendor being approved) */
   targetUserId?: string;
   action: AuditAction;

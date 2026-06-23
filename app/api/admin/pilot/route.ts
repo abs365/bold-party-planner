@@ -1,16 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
-
-function periodToInterval(period: string): string {
-  switch (period) {
-    case "24h":  return "24 hours";
-    case "7d":   return "7 days";
-    case "30d":  return "30 days";
-    default:     return "30 days";
-  }
-}
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 
 function periodToDate(period: string): string {
   const now = new Date();
@@ -23,16 +12,12 @@ function periodToDate(period: string): string {
 }
 
 export async function GET(req: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);
   const period = searchParams.get("period") ?? "30d";
   const since  = periodToDate(period);
-
-  const db = await createAdminClient();
 
   const [
     quotesRes,
@@ -46,56 +31,16 @@ export async function GET(req: Request) {
     activityVendorsRes,
     activityReviewsRes,
   ] = await Promise.all([
-    // Quotes in period
-    db.from("quotes")
-      .select("id, status, created_at, responded_at, accepted_at")
-      .gte("created_at", since),
-
-    // Bookings in period
-    db.from("bookings")
-      .select("id, status, total_amount, commission_amount, created_at")
-      .gte("created_at", since),
-
-    // New vendors in period
-    db.from("vendors")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", since),
-
-    // New customers in period
-    db.from("profiles")
-      .select("id", { count: "exact", head: true })
-      .eq("role", "customer")
-      .gte("created_at", since),
-
-    // New reviews in period
-    db.from("reviews")
-      .select("id, rating", { count: "exact" })
-      .gte("created_at", since),
-
-    // New events in period
-    db.from("events")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", since),
-
-    // Activity: quotes last 24h
-    db.from("quotes")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", periodToDate("24h")),
-
-    // Activity: bookings last 24h
-    db.from("bookings")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", periodToDate("24h")),
-
-    // Activity: vendor registrations last 24h
-    db.from("vendors")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", periodToDate("24h")),
-
-    // Activity: reviews last 24h
-    db.from("reviews")
-      .select("id", { count: "exact", head: true })
-      .gte("created_at", periodToDate("24h")),
+    auth.db.from("quotes").select("id, status, created_at, responded_at, accepted_at").gte("created_at", since),
+    auth.db.from("bookings").select("id, status, total_amount, commission_amount, created_at").gte("created_at", since),
+    auth.db.from("vendors").select("id", { count: "exact", head: true }).gte("created_at", since),
+    auth.db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer").gte("created_at", since),
+    auth.db.from("reviews").select("id, rating", { count: "exact" }).gte("created_at", since),
+    auth.db.from("events").select("id", { count: "exact", head: true }).gte("created_at", since),
+    auth.db.from("quotes").select("id", { count: "exact", head: true }).gte("created_at", periodToDate("24h")),
+    auth.db.from("bookings").select("id", { count: "exact", head: true }).gte("created_at", periodToDate("24h")),
+    auth.db.from("vendors").select("id", { count: "exact", head: true }).gte("created_at", periodToDate("24h")),
+    auth.db.from("reviews").select("id", { count: "exact", head: true }).gte("created_at", periodToDate("24h")),
   ]);
 
   const quotes    = quotesRes.data ?? [];
@@ -103,9 +48,7 @@ export async function GET(req: Request) {
 
   const quotesRequested = quotes.length;
   const quotesSubmitted = quotes.filter((q) => q.responded_at != null).length;
-  const quotesAccepted  = quotes.filter((q) =>
-    ["accepted", "converted"].includes(q.status)
-  ).length;
+  const quotesAccepted  = quotes.filter((q) => ["accepted", "converted"].includes(q.status)).length;
 
   const bookingsCreated = bookings.length;
   const revenueTotal    = bookings
@@ -140,7 +83,6 @@ export async function GET(req: Request) {
       bookings24h: activityBookingsRes.count  ?? 0,
       vendors24h:  activityVendorsRes.count   ?? 0,
       reviews24h:  activityReviewsRes.count   ?? 0,
-      // 7-day = period data when period = 7d; else re-use period data
       quotes7d:   period === "7d" ? quotesRequested : 0,
       bookings7d: period === "7d" ? bookingsCreated : 0,
     },

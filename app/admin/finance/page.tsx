@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { planMRRContribution } from "@/lib/vendor/entitlements";
 import { assertStripeKey } from "@/lib/stripe";
@@ -13,21 +13,15 @@ import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
 function fmt(n: number) {
   return n.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
 }
 
 export default async function FinanceDashboard() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const db = await createAdminClient();
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const now       = new Date();
   const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
@@ -152,13 +146,13 @@ export default async function FinanceDashboard() {
   const failureEvents   = webhookEvents.filter((e) => e.type === "payment_intent.payment_failed").length;
 
   const safeUser: Profile = profile ?? {
-    id: user.id, email: user.email ?? "", role: "admin",
+    id: auth.user.id, email: auth.user.email ?? "", role: "admin",
     full_name: null, phone: null, phone_verified: false,
     avatar_url: null, created_at: new Date().toISOString(),
   };
 
   return (
-    <DashboardLayout user={safeUser}>
+    <DashboardLayout user={safeUser} adminRole={auth.role}>
       <div className="max-w-7xl mx-auto space-y-7">
 
         {/* ── Header ───────────────────────────────────────────────────────── */}

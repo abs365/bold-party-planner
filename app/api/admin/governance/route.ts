@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
 import { calculateVendorHealthScore } from "@/lib/vendor/health";
 import { detectComputedWarnings } from "@/lib/vendor/warnings";
@@ -12,7 +13,7 @@ import type { WarningType, WarningSeverity } from "@/lib/vendor/warnings";
 // ── GET — governance overview ─────────────────────────────────────────────────
 
 export async function GET(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(request.url);
@@ -74,7 +75,7 @@ export async function GET(request: Request) {
 // ── POST — governance actions ─────────────────────────────────────────────────
 
 export async function POST(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const body = await request.json() as {
@@ -118,12 +119,23 @@ export async function POST(request: Request) {
 
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.vendor.warn",
       entityType: "vendor",
       entityId: vendor_id,
       after: { type, severity, title },
       ipAddress: ip,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "vendor.warning_issued",
+      entityType:     "vendor",
+      entityId:       vendor_id,
+      reason:         message,
+      adminNotes:     admin_notes,
+      ipAddress:      ip,
     });
     void track({ event: "governance.warning_issued", userId: auth.user.id, properties: { vendor_id, type, severity } });
 
@@ -159,12 +171,22 @@ export async function POST(request: Request) {
 
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.vendor.resolve_warning",
       entityType: "vendor_warning",
       entityId: warning_id,
       after: { resolved: true },
       ipAddress: ip,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "vendor.warning_resolved",
+      entityType:     "vendor",
+      entityId:       warning?.vendor_id ?? warning_id,
+      adminNotes:     resolution_notes,
+      ipAddress:      ip,
     });
     void track({ event: "governance.warning_resolved", userId: auth.user.id, properties: { warning_id } });
 
@@ -184,12 +206,22 @@ export async function POST(request: Request) {
 
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.vendor.flag",
       entityType: "vendor",
       entityId: vendor_id,
       after: { suspicious_flag: true, reason },
       ipAddress: ip,
+    });
+    void createGovernanceDecision({
+      actorUserId: auth.user.id,
+      actorEmail:  auth.user.email ?? "",
+      actorRole:   auth.role,
+      actionType:  "vendor.flagged",
+      entityType:  "vendor",
+      entityId:    vendor_id,
+      reason:      reason,
+      ipAddress:   ip,
     });
     void track({ event: "governance.vendor_flagged", userId: auth.user.id, properties: { vendor_id } });
 
@@ -209,12 +241,21 @@ export async function POST(request: Request) {
 
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.vendor.unflag",
       entityType: "vendor",
       entityId: vendor_id,
       after: { suspicious_flag: false },
       ipAddress: ip,
+    });
+    void createGovernanceDecision({
+      actorUserId: auth.user.id,
+      actorEmail:  auth.user.email ?? "",
+      actorRole:   auth.role,
+      actionType:  "vendor.unflagged",
+      entityType:  "vendor",
+      entityId:    vendor_id,
+      ipAddress:   ip,
     });
     void track({ event: "governance.vendor_unflagged", userId: auth.user.id, properties: { vendor_id } });
 

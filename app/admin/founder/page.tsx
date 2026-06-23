@@ -1,6 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -11,17 +11,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",").map((e) => e.trim()).filter(Boolean);
-
 export default async function FounderDashboardPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
-
-  const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("founder");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const [
     { count: pendingVendors    },
@@ -87,7 +81,7 @@ export default async function FounderDashboardPage() {
   ];
 
   return (
-    <DashboardLayout user={{ id: user.id, email: user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }}>
+    <DashboardLayout user={{ id: auth.user.id, email: auth.user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Header */}

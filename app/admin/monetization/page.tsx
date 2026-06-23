@@ -1,20 +1,15 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminMonetizationDashboard } from "@/components/admin/AdminMonetizationDashboard";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
 export default async function AdminMonetizationPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) redirect("/");
+  const { data: profile } = await auth.db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   // Fetch monetization data server-side
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
@@ -37,7 +32,7 @@ export default async function AdminMonetizationPage() {
   };
 
   return (
-    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
+    <DashboardLayout user={(profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile} adminRole={auth.role}>
       <div className="p-6 space-y-6 max-w-5xl mx-auto">
         <div>
           <h1 className="text-2xl font-bold text-gray-100">Monetization</h1>

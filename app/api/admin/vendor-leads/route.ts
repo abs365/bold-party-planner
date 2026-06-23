@@ -1,24 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { scoreLead } from "@/lib/vendor-acquisition/scoring";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
-async function assertAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) return null;
-  return user;
-}
-
 export async function GET(req: NextRequest) {
-  const user = await assertAdmin();
-  if (!user) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
-  const db = await createAdminClient();
   const { searchParams } = new URL(req.url);
 
-  let query = db.from("vendor_leads").select("*");
+  let query = auth.db.from("vendor_leads").select("*");
 
   const status   = searchParams.get("status");
   const category = searchParams.get("category");
@@ -39,10 +29,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = await assertAdmin();
-  if (!user) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
-  const db = await createAdminClient();
   const body = await req.json();
 
   const scoreResult = scoreLead({
@@ -57,7 +46,7 @@ export async function POST(req: NextRequest) {
     review_count: body.review_count ?? null,
   });
 
-  const { data, error } = await db.from("vendor_leads").insert({
+  const { data, error } = await auth.db.from("vendor_leads").insert({
     ...body,
     lead_score: scoreResult.total,
     priority:   scoreResult.priority,

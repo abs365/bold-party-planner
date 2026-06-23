@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { scoreLead } from "@/lib/vendor-acquisition/scoring";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 function parseCSV(text: string): Record<string, string>[] {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
@@ -19,11 +17,8 @@ function normalise(v: string | undefined) {
 }
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
   const formData = await req.formData();
   const file = formData.get("file") as File | null;
@@ -33,8 +28,7 @@ export async function POST(req: NextRequest) {
   const rows = parseCSV(text);
   if (rows.length === 0) return NextResponse.json({ error: "No data rows found" }, { status: 400 });
 
-  const db = await createAdminClient();
-  const { data: existing } = await db.from("vendor_leads").select("email, website, instagram, business_name, city");
+  const { data: existing } = await auth.db.from("vendor_leads").select("email, website, instagram, business_name, city");
 
   const existingEmails    = new Set((existing ?? []).map((r) => normalise(r.email)));
   const existingWebsites  = new Set((existing ?? []).map((r) => normalise(r.website)));
@@ -90,7 +84,6 @@ export async function POST(req: NextRequest) {
       status:        "new",
     });
 
-    // Update duplicate detection sets
     if (email)   existingEmails.add(normalise(email));
     if (website) existingWebsites.add(normalise(website));
     if (ig)      existingIg.add(normalise(ig));
@@ -99,7 +92,7 @@ export async function POST(req: NextRequest) {
 
   let inserted = 0;
   if (toInsert.length > 0) {
-    const { error } = await db.from("vendor_leads").insert(toInsert);
+    const { error } = await auth.db.from("vendor_leads").insert(toInsert);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     inserted = toInsert.length;
   }

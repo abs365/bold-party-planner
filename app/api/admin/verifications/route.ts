@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import {
   sendVerificationApproved,
   sendVerificationRejected,
@@ -8,11 +8,12 @@ import {
   sendLevelUpgraded,
 } from "@/lib/resend/verification-emails";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
 import { getRequirementsForCategory } from "@/lib/verification-requirements";
 
 export async function GET(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);
@@ -67,7 +68,7 @@ const patchSchema = z.object({
 });
 
 export async function PATCH(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const body = await req.json();
@@ -161,16 +162,44 @@ export async function PATCH(req: Request) {
       notes: notes ?? null,
     });
 
+    const ip = ipFromRequest(req);
+
     // Audit + analytics (fire-and-forget)
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.approve",
       entityType: "vendor_verification",
       entityId: id,
       targetUserId: vendor.id,
-      ipAddress: ipFromRequest(req),
+      ipAddress: ip,
     });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "verification.document_approved",
+      entityType:     "vendor_verification",
+      entityId:       id,
+      previousStatus: verif.status,
+      newStatus:      "approved",
+      adminNotes:     notes,
+      ipAddress:      ip,
+    });
+    // If a level upgrade occurred, log that separately
+    if (updates.verification_level) {
+      void createGovernanceDecision({
+        actorUserId:    auth.user.id,
+        actorEmail:     auth.user.email ?? "",
+        actorRole:      auth.role,
+        actionType:     "verification.level_upgraded",
+        entityType:     "vendor",
+        entityId:       vendor.id,
+        previousStatus: String(vendor.verification_level),
+        newStatus:      String(updates.verification_level),
+        ipAddress:      ip,
+      });
+    }
     void track({ event: "vendor.verification.approved", userId: auth.user.id, properties: { verification_id: id, vendor_id: vendor.id } });
 
     // Send email + level-upgrade email if level changed
@@ -214,15 +243,28 @@ export async function PATCH(req: Request) {
       notes: rejection_reason ?? notes ?? null,
     });
 
-    // Audit + analytics (fire-and-forget)
+    const rejectIp = ipFromRequest(req);
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.reject",
       entityType: "vendor_verification",
       entityId: id,
       targetUserId: vendor.id,
-      ipAddress: ipFromRequest(req),
+      ipAddress: rejectIp,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "verification.document_rejected",
+      entityType:     "vendor_verification",
+      entityId:       id,
+      previousStatus: verif.status,
+      newStatus:      "rejected",
+      reason:         rejection_reason,
+      adminNotes:     notes,
+      ipAddress:      rejectIp,
     });
     void track({ event: "vendor.verification.rejected", userId: auth.user.id, properties: { verification_id: id, vendor_id: vendor.id } });
 
@@ -265,15 +307,28 @@ export async function PATCH(req: Request) {
       notes: rejection_reason ?? null,
     });
 
-    // Audit (fire-and-forget)
+    const resubIp = ipFromRequest(req);
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.request_resubmission",
       entityType: "vendor_verification",
       entityId: id,
       targetUserId: vendor.id,
-      ipAddress: ipFromRequest(req),
+      ipAddress: resubIp,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "verification.resubmission_requested",
+      entityType:     "vendor_verification",
+      entityId:       id,
+      previousStatus: verif.status,
+      newStatus:      "rejected",
+      reason:         rejection_reason,
+      adminNotes:     notes,
+      ipAddress:      resubIp,
     });
 
     const resubContact = await getVendorContact();
@@ -302,14 +357,24 @@ export async function PATCH(req: Request) {
       notes: suspicious_reason ?? null,
     });
 
-    // Audit (fire-and-forget)
+    const flagIp = ipFromRequest(req);
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.flag",
       entityType: "vendor",
       entityId: vendor.id,
-      ipAddress: ipFromRequest(req),
+      ipAddress: flagIp,
+    });
+    void createGovernanceDecision({
+      actorUserId: auth.user.id,
+      actorEmail:  auth.user.email ?? "",
+      actorRole:   auth.role,
+      actionType:  "vendor.flagged",
+      entityType:  "vendor",
+      entityId:    vendor.id,
+      reason:      suspicious_reason,
+      ipAddress:   flagIp,
     });
 
     return NextResponse.json({ success: true });
@@ -329,14 +394,23 @@ export async function PATCH(req: Request) {
       action: "unflagged",
     });
 
-    // Audit (fire-and-forget)
+    const unflagIp = ipFromRequest(req);
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.unflag",
       entityType: "vendor",
       entityId: vendor.id,
-      ipAddress: ipFromRequest(req),
+      ipAddress: unflagIp,
+    });
+    void createGovernanceDecision({
+      actorUserId: auth.user.id,
+      actorEmail:  auth.user.email ?? "",
+      actorRole:   auth.role,
+      actionType:  "vendor.unflagged",
+      entityType:  "vendor",
+      entityId:    vendor.id,
+      ipAddress:   unflagIp,
     });
 
     return NextResponse.json({ success: true });
@@ -362,16 +436,29 @@ export async function PATCH(req: Request) {
       notes: notes ?? null,
     });
 
-    // Audit (fire-and-forget)
+    const levelIp = ipFromRequest(req);
+    const isUpgrade = level > (currentVendor?.verification_level ?? 0);
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: "admin.verification.set_level",
       entityType: "vendor_verification",
       entityId: id,
       targetUserId: vendor.id,
       after: { level },
-      ipAddress: ipFromRequest(req),
+      ipAddress: levelIp,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     isUpgrade ? "verification.level_upgraded" : "verification.level_downgraded",
+      entityType:     "vendor_verification",
+      entityId:       id,
+      previousStatus: String(currentVendor?.verification_level ?? 0),
+      newStatus:      String(level),
+      adminNotes:     notes,
+      ipAddress:      levelIp,
     });
 
     if (level > (currentVendor?.verification_level ?? 0)) {
@@ -388,7 +475,7 @@ export async function PATCH(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { vendor_id, type } = await req.json() as { vendor_id: string; type: string };

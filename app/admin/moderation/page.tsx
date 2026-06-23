@@ -1,20 +1,15 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminModerationView } from "@/components/admin/AdminModerationView";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
 export default async function AdminModerationPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const [reportsRes, mediaRes] = await Promise.all([
     db
@@ -40,7 +35,7 @@ export default async function AdminModerationPage() {
   ]);
 
   return (
-    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
+    <DashboardLayout user={profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }} adminRole={auth.role}>
       <AdminModerationView
         reports={(reportsRes.data ?? []) as unknown as Parameters<typeof AdminModerationView>[0]["reports"]}
         pendingMedia={(mediaRes.data ?? []) as unknown as Parameters<typeof AdminModerationView>[0]["pendingMedia"]}

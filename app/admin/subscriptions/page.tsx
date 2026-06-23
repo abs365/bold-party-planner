@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { BadgeCheck, TrendingUp, Users, Wallet, AlertTriangle } from "lucide-react";
 import { planMRRContribution } from "@/lib/vendor/entitlements";
@@ -7,18 +7,12 @@ import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
 export default async function AdminSubscriptionsPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) redirect("/");
+  const { data: profile } = await auth.db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const adminClient = await createAdminClient();
-  const { data: subs } = await adminClient
+  const { data: subs } = await auth.db
     .from("vendor_subscriptions")
     .select("*, vendor:vendors(business_name, user_id)")
     .order("created_at", { ascending: false });
@@ -33,8 +27,8 @@ export default async function AdminSubscriptionsPage() {
   const mrrFormatted = mrr.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
 
   const safeUser: Profile = profile ?? {
-    id: user.id,
-    email: user.email ?? "",
+    id: auth.user.id,
+    email: auth.user.email ?? "",
     role: "admin",
     full_name: null,
     phone: null,
@@ -44,7 +38,7 @@ export default async function AdminSubscriptionsPage() {
   };
 
   return (
-    <DashboardLayout user={safeUser}>
+    <DashboardLayout user={safeUser} adminRole={auth.role}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Subscriptions</h1>

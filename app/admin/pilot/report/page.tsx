@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import type { Profile } from "@/types";
 import { startOfWeek, subWeeks, format } from "date-fns";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 function weekStart(weeksAgo: number) {
   return startOfWeek(subWeeks(new Date(), weeksAgo), { weekStartsOn: 1 }).toISOString();
@@ -32,13 +31,10 @@ function SectionHeader({ title, period }: { title: string; period: string }) {
 }
 
 export default async function PilotReportPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-  const db = await createAdminClient();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const thisWeek = weekStart(0);
   const lastWeek = weekStart(1);
@@ -106,7 +102,7 @@ export default async function PilotReportPage() {
   const weekLabel  = `Week of ${format(new Date(thisWeek), "d MMM yyyy")}`;
 
   return (
-    <DashboardLayout user={(profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
+    <DashboardLayout user={(profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-10">
 
         {/* Header */}

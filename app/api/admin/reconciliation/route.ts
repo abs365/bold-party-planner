@@ -1,25 +1,25 @@
 import { NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { appendLedgerEvent } from "@/lib/finance/ledger";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-
 export async function GET(request: Request) {
-  // Allow both admin users and the cron secret
+  // Allow both authenticated admin users and the cron secret
   const cronSecret = request.headers.get("x-cron-secret");
   const isAuthorisedCron = cronSecret && cronSecret === process.env.CRON_SECRET;
 
-  if (!isAuthorisedCron) {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-  }
+  let db: Awaited<ReturnType<typeof createAdminClient>>;
 
-  const db = await createAdminClient();
+  if (isAuthorisedCron) {
+    db = await createAdminClient();
+  } else {
+    // Financial reconciliation — Global Admin minimum
+    const auth = await requireAdminRole("global_admin");
+    if (!auth) return forbidden();
+    db = auth.db;
+  }
 
   // ── Source 1: payments table (what Stripe actually paid us) ──────────────
   const { data: allPayments } = await db
@@ -63,7 +63,6 @@ export async function GET(request: Request) {
     .filter(l => l.payout_status === "not_due" || l.payout_status === "scheduled")
     .reduce((s, l) => s + Number(l.vendor_amount ?? 0), 0);
 
-  // GMV drift: payments table vs ledger (ledger may be incomplete for older transactions)
   const gmvDrift = Math.abs(paymentsGMV - ledgerGMV);
 
   // ── Source 4: vendor payouts outstanding ──────────────────────────────────
@@ -81,7 +80,6 @@ export async function GET(request: Request) {
   const paidBookingIds = new Set(succeededPayments.map((p) => p.booking_id));
   const orphanedConfirmedBookings = paidBookings.filter((b) => !paidBookingIds.has(b.id)).length;
 
-  // ── Determine overall status ──────────────────────────────────────────────
   let discrepanciesFound = 0;
   const discrepancyDetails: Record<string, unknown> = {};
 
@@ -119,7 +117,6 @@ export async function GET(request: Request) {
     discrepancy_details:    discrepancyDetails,
   };
 
-  // ── Store reconciliation result ───────────────────────────────────────────
   const { data: run, error: runError } = await db.from("reconciliation_runs").insert({
     payments_gmv:          paymentsGMV,
     ledger_gmv:            ledgerGMV,
@@ -137,7 +134,6 @@ export async function GET(request: Request) {
     console.error("[reconciliation] Failed to store run:", runError.message);
   }
 
-  // Append to financial event log
   void appendLedgerEvent(db, "RECONCILIATION_RUN", {
     status,
     discrepancies_found: discrepanciesFound,

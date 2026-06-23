@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 
 export async function GET(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(request.url);

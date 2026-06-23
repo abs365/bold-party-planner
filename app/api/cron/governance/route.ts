@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { createAuditLog } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
 import { calculateVendorHealthScore } from "@/lib/vendor/health";
 import { detectComputedWarnings, hasCriticalOrHighWarning } from "@/lib/vendor/warnings";
@@ -76,6 +77,17 @@ export async function GET(request: Request) {
       if (!warnErr) {
         existingSet.add(key);
         newWarnings++;
+        void createGovernanceDecision({
+          actorUserId:  "system",
+          actorEmail:   "system@elbold.internal",
+          actorRole:    "system",
+          actionType:   "vendor.auto_warning_issued",
+          entityType:   "vendor",
+          entityId:     vendor.id,
+          reason:       w.message,
+          adminNotes:   `Auto-generated: ${w.type} (${w.severity})`,
+          isAutomated:  true,
+        });
         void track({
           event: "governance.warning_issued",
           userId: vendor.user_id,
@@ -95,11 +107,21 @@ export async function GET(request: Request) {
         flagged++;
         void createAuditLog({
           actorUserId: "system",
-          actorRole: "admin",
+          actorRole: "system",
           action: "admin.vendor.flag",
           entityType: "vendor",
           entityId: vendor.id,
           after: { suspicious_flag: true, reason: "Auto-flagged: critical health score", health_total: health.total },
+        });
+        void createGovernanceDecision({
+          actorUserId:  "system",
+          actorEmail:   "system@elbold.internal",
+          actorRole:    "system",
+          actionType:   "vendor.auto_flagged",
+          entityType:   "vendor",
+          entityId:     vendor.id,
+          reason:       `Auto-flagged: critical health score (${health.total}/100)`,
+          isAutomated:  true,
         });
       }
     }
@@ -115,11 +137,21 @@ export async function GET(request: Request) {
         unflagged++;
         void createAuditLog({
           actorUserId: "system",
-          actorRole: "admin",
+          actorRole: "system",
           action: "admin.vendor.unflag",
           entityType: "vendor",
           entityId: vendor.id,
           after: { suspicious_flag: false, reason: "Auto-cleared: health recovered", health_total: health.total },
+        });
+        void createGovernanceDecision({
+          actorUserId:  "system",
+          actorEmail:   "system@elbold.internal",
+          actorRole:    "system",
+          actionType:   "vendor.auto_unflagged",
+          entityType:   "vendor",
+          entityId:     vendor.id,
+          reason:       `Auto-cleared: health recovered (${health.total}/100)`,
+          isAutomated:  true,
         });
         void track({ event: "governance.vendor_recovered", userId: vendor.user_id, properties: { vendor_id: vendor.id } });
       }

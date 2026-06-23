@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { z } from "zod";
 
 const schema = z.object({
@@ -20,7 +20,7 @@ const schema = z.object({
 });
 
 export async function GET() {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { data, error } = await auth.db
@@ -33,7 +33,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const body = await req.json();
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);
@@ -74,7 +74,7 @@ export async function PATCH(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);

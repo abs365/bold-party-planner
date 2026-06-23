@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 
 const schema = z.object({
@@ -12,7 +12,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const { id } = await params;
@@ -39,7 +39,7 @@ export async function PATCH(
 
   void createAuditLog({
     actorUserId: auth.user.id,
-    actorRole: "admin",
+    actorRole: auth.role,
     action: parsed.data.moderation_status === "approved" ? "admin.media.approve" : "admin.media.reject",
     entityType: "vendor_media",
     entityId: id,

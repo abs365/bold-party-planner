@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 
 const schema = z.object({
   status: z.enum(["reviewing", "resolved", "dismissed"]),
@@ -12,7 +13,7 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const { id } = await params;
@@ -32,13 +33,28 @@ export async function PATCH(
   const { error } = await auth.db.from("content_reports").update(update).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  const ip = ipFromRequest(req);
+  const isResolved = parsed.data.status === "resolved";
+
   void createAuditLog({
     actorUserId: auth.user.id,
-    actorRole: "admin",
-    action: parsed.data.status === "resolved" ? "admin.report.resolve" : "admin.report.dismiss",
+    actorRole: auth.role,
+    action: isResolved ? "admin.report.resolve" : "admin.report.dismiss",
     entityType: "content_report",
     entityId: id,
-    ipAddress: ipFromRequest(req),
+    ipAddress: ip,
+  });
+
+  void createGovernanceDecision({
+    actorUserId: auth.user.id,
+    actorEmail:  auth.user.email ?? "",
+    actorRole:   auth.role,
+    actionType:  isResolved ? "dispute.resolved" : "dispute.dismissed",
+    entityType:  "dispute",
+    entityId:    id,
+    newStatus:   parsed.data.status,
+    adminNotes:  parsed.data.resolution_notes,
+    ipAddress:   ip,
   });
 
   return NextResponse.json({ success: true });

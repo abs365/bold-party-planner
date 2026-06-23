@@ -1,6 +1,6 @@
 ﻿import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import {
   CheckCircle2, AlertTriangle, XCircle, ArrowRight,
@@ -9,10 +9,6 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",")
-  .map((e) => e.trim())
-  .filter(Boolean);
 
 interface JourneyScore {
   name: string;
@@ -226,13 +222,10 @@ function avgScore(j: JourneyScore): number {
 }
 
 export default async function TrustAuditPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (ADMIN_EMAILS.length === 0 || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
-
-  const adminDb = await createAdminClient();
-  const { data: profile } = await adminDb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const adminDb = auth.db;
+  const { data: profile } = await adminDb.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const [vendorCount, reviewCount, bookingCount] = await Promise.all([
     adminDb.from("vendors").select("id", { count: "exact", head: true }).eq("verified", true),
@@ -250,7 +243,7 @@ export default async function TrustAuditPage() {
   const totalImprovements = JOURNEYS.reduce((s, j) => s + j.improvements.length, 0);
 
   return (
-    <DashboardLayout user={profile as any}>
+    <DashboardLayout user={(profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as any} adminRole={auth.role}>
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
 
         {/* Header */}

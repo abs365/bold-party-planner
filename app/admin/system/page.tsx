@@ -1,13 +1,12 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ExternalLink, CheckCircle2, XCircle, Server } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 const MIGRATIONS = [
   { id: "001", name: "initial" },
@@ -60,12 +59,9 @@ function EnvRow({ label, present }: { label: string; present: boolean }) {
 }
 
 export default async function AdminSystemPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const { data: profileData } = await auth.db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const envVars = {
     NEXT_PUBLIC_SUPABASE_URL:    !!process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -94,7 +90,7 @@ export default async function AdminSystemPage() {
   };
 
   return (
-    <DashboardLayout user={(profileData ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile}>
+    <DashboardLayout user={(profileData ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile} adminRole={auth.role}>
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-start justify-between">
           <div>

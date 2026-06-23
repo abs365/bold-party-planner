@@ -1,7 +1,7 @@
 ﻿import { redirect } from "next/navigation";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
@@ -14,23 +14,12 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",")
-  .map((e) => e.trim())
-  .filter(Boolean);
-
 export default async function AdminDashboard() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  // Redirect to homepage (NOT /dashboard) to avoid the loop:
-  // /admin (email mismatch) → /dashboard → (profile.role=admin) → /admin → …
-  if (ADMIN_EMAILS.length === 0 || !ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
 
-  // Service-role client bypasses RLS; admin sees all data
-  const db = await createAdminClient();
-
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const cutoff7  = new Date(); cutoff7.setDate(cutoff7.getDate() - 7);
   const cutoff30 = new Date(); cutoff30.setDate(cutoff30.getDate() - 30);
@@ -146,7 +135,7 @@ export default async function AdminDashboard() {
     .slice(0, 8);
 
   return (
-    <DashboardLayout user={{ id: user.id, email: user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }}>
+    <DashboardLayout user={{ id: auth.user.id, email: auth.user.email ?? "", role: "admin", full_name: profile?.full_name ?? null, phone: profile?.phone ?? null, phone_verified: profile?.phone_verified ?? false, avatar_url: profile?.avatar_url ?? null, created_at: profile?.created_at ?? new Date().toISOString() }} adminRole={auth.role}>
       <div data-testid="admin-dashboard" className="max-w-7xl mx-auto space-y-7">
 
         {/* ── Header ─────────────────────────────────────────────────────────── */}
@@ -398,8 +387,9 @@ export default async function AdminDashboard() {
                     <div className="flex gap-1.5 flex-shrink-0">
                       <form action={async () => {
                         "use server";
-                        const s = await createAdminClient();
-                        await s.from("vendors").update({ status: "rejected" }).eq("id", vendor.id);
+                        const ga = await requireAdminRole("global_admin");
+                        if (!ga) return;
+                        await ga.db.from("vendors").update({ status: "rejected" }).eq("id", vendor.id);
                       }}>
                         <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors border border-red-500/15">
                           Reject
@@ -407,8 +397,9 @@ export default async function AdminDashboard() {
                       </form>
                       <form action={async () => {
                         "use server";
-                        const s = await createAdminClient();
-                        await s.from("vendors").update({ status: "approved" }).eq("id", vendor.id);
+                        const ga = await requireAdminRole("global_admin");
+                        if (!ga) return;
+                        await ga.db.from("vendors").update({ status: "approved" }).eq("id", vendor.id);
                       }}>
                         <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors border border-emerald-500/15">
                           Approve

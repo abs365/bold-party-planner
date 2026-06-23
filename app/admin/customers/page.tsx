@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminCustomerTable } from "@/components/admin/AdminCustomerTable";
 
@@ -11,15 +11,10 @@ export default async function AdminCustomersPage({
   searchParams: Promise<{ search?: string }>;
 }) {
   const sp = await searchParams;
-  const supabase = await createClient();
-  const adminSupabase = await createAdminClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-  if (!adminEmails.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const adminSupabase = auth.db;
+  const { data: profile } = await adminSupabase.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   // Fetch all profiles that are not vendors or admins.
   // This includes role='customer', role=NULL (trigger failed), and any other non-vendor roles.
@@ -57,7 +52,7 @@ export default async function AdminCustomersPage({
     .eq("is_archived", false);
 
   return (
-    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
+    <DashboardLayout user={profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }} adminRole={auth.role}>
       {/* Attribution clarity banner */}
       <div className="mb-4 bg-blue-500/5 border border-blue-500/15 rounded-xl px-5 py-3 flex items-center justify-between gap-4">
         <p className="text-blue-300/70 text-xs">

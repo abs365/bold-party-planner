@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 
 export async function GET(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(req.url);
@@ -29,7 +29,7 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { ids, markAllRead } = await req.json() as { ids?: string[]; markAllRead?: boolean };

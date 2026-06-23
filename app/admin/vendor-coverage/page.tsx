@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
+import { createAdminClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import {
   Tag, MapPin, TrendingUp, AlertTriangle, CheckCircle2, Circle,
@@ -10,7 +11,6 @@ import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
 
 // ── Targets ───────────────────────────────────────────────────────────────────
 
@@ -152,24 +152,20 @@ function barColor(pct: number) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function VendorCoveragePage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase
-    .from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const { data: profile } = await auth.db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const data = await fetchCoverageData();
 
   const vendorProfileUser = (profile ?? {
-    id: user.id, email: user.email ?? "", role: "admin" as const,
+    id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const,
     full_name: null, phone: null, phone_verified: false,
     avatar_url: null, created_at: new Date().toISOString(),
   }) as Profile;
 
   return (
-    <DashboardLayout user={vendorProfileUser}>
+    <DashboardLayout user={vendorProfileUser} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
 
         {/* Header */}

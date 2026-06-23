@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
 
 export async function GET(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const { searchParams } = new URL(request.url);
@@ -26,10 +27,25 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const auth = await requireAdmin();
+  const rawBody = await request.json() as {
+    vendor_id: string;
+    status?: string;
+    featured?: boolean;
+    verified?: boolean;
+    phone_verified?: boolean;
+    rejection_reason?: string;
+    lifecycle_state?: string;
+    admin_notes?: string;
+  };
+
+  // Status changes (approve/reject/suspend/reinstate) are governance actions — require Global Admin+
+  // Non-status writes (admin_notes, featured, verified, etc.) require Ops Admin+
+  const auth = rawBody.status
+    ? await requireAdminRole("global_admin")
+    : await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
-  const { vendor_id, status, featured, verified, phone_verified, rejection_reason, lifecycle_state, admin_notes } = await request.json() as {
+  const { vendor_id, status, featured, verified, phone_verified, rejection_reason, lifecycle_state, admin_notes } = rawBody as {
     vendor_id: string;
     status?: string;
     featured?: boolean;
@@ -71,16 +87,46 @@ export async function PATCH(request: Request) {
     status === "rejected" ? "admin.vendor.reject" :
     status === "suspended" ? "admin.vendor.suspend" :
     "vendor.profile.update";
+
+  const ip = ipFromRequest(request);
+
   void createAuditLog({
     actorUserId: auth.user.id,
-    actorRole: "admin",
+    actorRole: auth.role,
     action: auditAction,
     entityType: "vendor",
     entityId: vendor_id,
     before: vendorBefore ? { status: vendorBefore.status } : undefined,
     after: updates.status !== undefined ? { status: updates.status } : undefined,
-    ipAddress: ipFromRequest(request),
+    ipAddress: ip,
   });
+
+  // Governance decision log — only for status changes
+  if (status) {
+    const isReinstatement = status === "approved" && vendorBefore?.status === "suspended";
+    const govActionType =
+      isReinstatement        ? "vendor.reinstated" :
+      status === "approved"  ? "vendor.approved"   :
+      status === "rejected"  ? "vendor.rejected"   :
+      status === "suspended" ? "vendor.suspended"  :
+      null;
+
+    if (govActionType) {
+      void createGovernanceDecision({
+        actorUserId:     auth.user.id,
+        actorEmail:      auth.user.email ?? "",
+        actorRole:       auth.role,
+        actionType:      govActionType,
+        entityType:      "vendor",
+        entityId:        vendor_id,
+        previousStatus:  vendorBefore?.status,
+        newStatus:       status,
+        reason:          rejection_reason,
+        adminNotes:      admin_notes,
+        ipAddress:       ip,
+      });
+    }
+  }
 
   if (status === "approved" || status === "rejected") {
     void track({
@@ -103,7 +149,7 @@ export async function PATCH(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const { vendor_ids, action, rejection_reason } = await request.json() as {
@@ -137,19 +183,32 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   const auditAction = action === "approve" ? "admin.vendor.approve" : action === "reject" ? "admin.vendor.reject" : "admin.vendor.suspend";
+  const govActionType = action === "approve" ? "vendor.bulk_approved" : action === "reject" ? "vendor.bulk_rejected" : "vendor.bulk_suspended";
   const ip = ipFromRequest(request);
 
   for (const v of vendorsBefore ?? []) {
     const profile = v.profile as unknown as Record<string, string> | null;
     void createAuditLog({
       actorUserId: auth.user.id,
-      actorRole: "admin",
+      actorRole: auth.role,
       action: auditAction,
       entityType: "vendor",
       entityId: String(v.id),
       before: { status: v.status },
       after: { status: newStatus },
       ipAddress: ip,
+    });
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     govActionType,
+      entityType:     "vendor",
+      entityId:       String(v.id),
+      previousStatus: v.status,
+      newStatus:      newStatus,
+      reason:         rejection_reason,
+      ipAddress:      ip,
     });
     if (profile?.email) {
       if (action === "approve") {

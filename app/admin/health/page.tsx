@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -11,8 +11,6 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "")
-  .split(",").map((e) => e.trim()).filter(Boolean);
 
 const TARGET_CATEGORIES = [
   "dj", "decorator", "photographer", "videographer", "caterer",
@@ -20,13 +18,10 @@ const TARGET_CATEGORIES = [
 ];
 
 export default async function MarketplaceHealthPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-  if (!ADMIN_EMAILS.includes(user.email ?? "")) redirect("/");
-
-  const db = await createAdminClient();
-  const { data: profile } = await db.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const db = auth.db;
+  const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   const now     = new Date();
   const week    = new Date(now); week.setDate(week.getDate() - 7);
@@ -143,7 +138,7 @@ export default async function MarketplaceHealthPage() {
     missingMedia.length + missingPackages.length;
 
   const userObj = {
-    id: user.id, email: user.email ?? "", role: "admin" as const,
+    id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const,
     full_name: profile?.full_name ?? null,
     phone: profile?.phone ?? null,
     phone_verified: profile?.phone_verified ?? false,
@@ -152,7 +147,7 @@ export default async function MarketplaceHealthPage() {
   };
 
   return (
-    <DashboardLayout user={userObj}>
+    <DashboardLayout user={userObj} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Header */}

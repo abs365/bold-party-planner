@@ -13,6 +13,14 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/types";
+import type { AdminRole } from "@/lib/auth/guards";
+
+const ROLE_WEIGHT: Record<AdminRole, number> = {
+  founder:      4,
+  global_admin: 3,
+  ops_admin:    2,
+  reviewer:     1,
+};
 import { SmartConcierge } from "@/components/smart/SmartConcierge";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 
@@ -20,6 +28,7 @@ interface NavItem {
   href: string;
   label: string;
   icon: React.ElementType;
+  minRole?: AdminRole; // undefined = ops_admin (default minimum)
 }
 
 interface NavGroup {
@@ -80,19 +89,21 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
   {
     label: "Trust & Safety",
     items: [
-      { href: "/admin/disputes",      label: "Disputes",      icon: Scale },
-      { href: "/admin/verifications", label: "Verifications", icon: BadgeCheck },
-      { href: "/admin/moderation",    label: "Moderation",    icon: Eye },
-      { href: "/admin/governance",    label: "Governance",    icon: Shield },
+      { href: "/admin/disputes",       label: "Disputes",        icon: Scale },
+      { href: "/admin/verifications",  label: "Verifications",   icon: BadgeCheck },
+      { href: "/admin/moderation",     label: "Moderation",      icon: Eye },
+      { href: "/admin/governance",     label: "Governance",      icon: Shield },
+      { href: "/admin/governance-log", label: "Governance Log",  icon: ClipboardList, minRole: "global_admin" as AdminRole },
+      { href: "/admin/team",           label: "Admin Team",      icon: Users,         minRole: "founder" as AdminRole },
     ],
   },
   {
     label: "Finance",
     items: [
-      { href: "/admin/finance",       label: "Finance Dashboard", icon: TrendingUp },
-      { href: "/admin/payouts",       label: "Payouts",           icon: Wallet },
-      { href: "/admin/subscriptions", label: "Subscriptions",     icon: BadgeCheck },
-      { href: "/admin/monetization",  label: "Monetization",      icon: DollarSign },
+      { href: "/admin/finance",       label: "Finance Dashboard", icon: TrendingUp,  minRole: "global_admin" as AdminRole },
+      { href: "/admin/payouts",       label: "Payouts",           icon: Wallet,      minRole: "global_admin" as AdminRole },
+      { href: "/admin/subscriptions", label: "Subscriptions",     icon: BadgeCheck,  minRole: "global_admin" as AdminRole },
+      { href: "/admin/monetization",  label: "Monetization",      icon: DollarSign,  minRole: "global_admin" as AdminRole },
     ],
   },
   {
@@ -121,17 +132,25 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/pilot/vendors",  label: "Pilot CRM",        icon: Users },
       { href: "/admin/pilot/report",   label: "Pilot Report",     icon: FileText },
       { href: "/admin/pilot/outreach", label: "Outreach Pack",    icon: MessageSquare },
-      { href: "/admin/founder",            label: "Founder Dashboard",   icon: LayoutDashboard },
-      { href: "/admin/cohort",             label: "Founder Queue",       icon: Users },
+      { href: "/admin/founder",            label: "Founder Dashboard",   icon: LayoutDashboard, minRole: "founder" as AdminRole },
+      { href: "/admin/cohort",             label: "Founder Queue",       icon: Users,           minRole: "founder" as AdminRole },
       { href: "/admin/recruitment",        label: "Recruitment",         icon: TrendingUp },
       { href: "/admin/verification-audit", label: "Verification Audit",  icon: BadgeCheck },
       { href: "/admin/concierge",          label: "Concierge Requests",  icon: MessageSquare },
       { href: "/admin/launch",             label: "Launch Readiness",    icon: Rocket },
-      { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock },
+      { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock,            minRole: "founder" as AdminRole },
       { href: "/admin/pilot-testing",    label: "Pilot Testing Centre", icon: ClipboardList },
     ],
   },
 ];
+
+function filterByRole(items: NavItem[], adminRole?: AdminRole): NavItem[] {
+  if (!adminRole) return items;
+  return items.filter((item) => {
+    const min = item.minRole ?? "ops_admin";
+    return ROLE_WEIGHT[adminRole] >= ROLE_WEIGHT[min];
+  });
+}
 
 interface SidebarContentProps {
   user: Profile;
@@ -139,11 +158,12 @@ interface SidebarContentProps {
   navGroups?: NavGroup[];
   roleLabel: string;
   pathname: string;
+  adminRole?: AdminRole;
   onClose: () => void;
   onSignOut: () => void;
 }
 
-function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, onSignOut }: SidebarContentProps) {
+function SidebarContent({ user, nav, navGroups, roleLabel, pathname, adminRole, onClose, onSignOut }: SidebarContentProps) {
   function NavLink({ href, label, icon: Icon }: NavItem) {
     const active = pathname === href;
     return (
@@ -185,17 +205,21 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
 
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
         {navGroups ? (
-          // Grouped nav: admin command centre
-          navGroups.map((group) => (
-            <div key={group.label} className="mb-4">
-              <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 mb-1">
-                {group.label}
-              </p>
-              <div className="space-y-0.5">
-                {group.items.map((item) => <NavLink key={item.href} {...item} />)}
+          // Grouped nav: admin command centre — filtered by adminRole
+          navGroups.map((group) => {
+            const visibleItems = filterByRole(group.items, adminRole);
+            if (visibleItems.length === 0) return null;
+            return (
+              <div key={group.label} className="mb-4">
+                <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider px-3 mb-1">
+                  {group.label}
+                </p>
+                <div className="space-y-0.5">
+                  {visibleItems.map((item) => <NavLink key={item.href} {...item} />)}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           // Flat nav: customer / vendor
           <div className="space-y-0.5">
@@ -236,6 +260,7 @@ function SidebarContent({ user, nav, navGroups, roleLabel, pathname, onClose, on
 interface DashboardLayoutProps {
   children: React.ReactNode;
   user?: Profile;
+  adminRole?: AdminRole;
 }
 
 const ADMIN_PLACEHOLDER: Profile = {
@@ -244,7 +269,7 @@ const ADMIN_PLACEHOLDER: Profile = {
   created_at: "",
 };
 
-export function DashboardLayout({ children, user }: DashboardLayoutProps) {
+export function DashboardLayout({ children, user, adminRole }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
@@ -268,6 +293,7 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const sidebarProps: SidebarContentProps = {
     user: resolvedUser, nav, roleLabel, pathname,
     navGroups: resolvedUser.role === "admin" ? ADMIN_NAV_GROUPS : undefined,
+    adminRole: resolvedUser.role === "admin" ? adminRole : undefined,
     onClose: () => setSidebarOpen(false),
     onSignOut: handleSignOut,
   };

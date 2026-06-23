@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireAdmin, forbidden } from "@/lib/auth/guards";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import {
   sendFoundingVendorWelcome,
   sendVerificationReminder,
@@ -12,7 +12,7 @@ const EMAIL_TYPES = ["welcome", "verification", "packages", "profile"] as const;
 type EmailType = typeof EMAIL_TYPES[number];
 
 export async function POST(request: Request) {
-  const auth = await requireAdmin();
+  const auth = await requireAdminRole("ops_admin");
   if (!auth) return forbidden();
 
   const body = await request.json() as { vendor_id?: string; email_type?: string };

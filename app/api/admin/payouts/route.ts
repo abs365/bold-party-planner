@@ -1,19 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
+import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 
 export async function GET() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
-  const db = await createAdminClient();
-
-  // Return all vendor_payouts records with booking + vendor context
-  const { data, error } = await db
+  const { data, error } = await auth.db
     .from("vendor_payouts")
     .select(`
       id, booking_id, vendor_id, amount, status, notes, created_at,
@@ -30,11 +24,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) return forbidden();
 
   const { payout_id, action, notes } = await request.json() as {
     payout_id: string;
@@ -46,38 +37,60 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Missing payout_id or action" }, { status: 400 });
   }
 
-  const db = await createAdminClient();
+  // Fetch before-state for audit trail
+  const { data: payoutBefore } = await auth.db
+    .from("vendor_payouts")
+    .select("status, amount, vendor_id, booking_id")
+    .eq("id", payout_id)
+    .maybeSingle();
+
+  const ip = ipFromRequest(request);
 
   if (action === "mark_paid") {
-    const { error } = await db
+    const { error } = await auth.db
       .from("vendor_payouts")
-      .update({
-        status: "paid",
-        notes: notes ?? null,
-      })
+      .update({ status: "paid", notes: notes ?? null })
       .eq("id", payout_id);
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    // Notify vendor that their payout has been sent
-    const { data: payout } = await db
-      .from("vendor_payouts")
-      .select("vendor_id, amount, booking_id")
-      .eq("id", payout_id)
-      .maybeSingle();
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole:   auth.role,
+      action:      "admin.payout.mark_paid",
+      entityType:  "payout",
+      entityId:    payout_id,
+      before:      payoutBefore ? { status: payoutBefore.status } : undefined,
+      after:       { status: "paid" },
+      ipAddress:   ip,
+    });
 
-    if (payout?.vendor_id) {
-      const { data: vendor } = await db
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "payout.marked_paid",
+      entityType:     "payout",
+      entityId:       payout_id,
+      previousStatus: payoutBefore?.status,
+      newStatus:      "paid",
+      adminNotes:     notes,
+      ipAddress:      ip,
+    });
+
+    // Notify vendor that their payout has been sent
+    if (payoutBefore?.vendor_id) {
+      const { data: vendor } = await auth.db
         .from("vendors")
         .select("user_id, business_name")
-        .eq("id", payout.vendor_id)
+        .eq("id", payoutBefore.vendor_id)
         .maybeSingle();
 
       if (vendor?.user_id) {
-        await db.rpc("notify_user", {
+        await auth.db.rpc("notify_user", {
           p_user_id: vendor.user_id,
           p_title: "Payout Sent",
-          p_message: `Your payout of £${Number(payout.amount).toFixed(2)} has been sent to your registered bank account.`,
+          p_message: `Your payout of £${Number(payoutBefore.amount).toFixed(2)} has been sent to your registered bank account.`,
           p_type: "payment",
           p_link: "/vendor/dashboard",
         });
@@ -88,12 +101,37 @@ export async function PATCH(request: Request) {
   }
 
   if (action === "cancel") {
-    const { error } = await db
+    const { error } = await auth.db
       .from("vendor_payouts")
       .update({ status: "cancelled", notes: notes ?? null })
       .eq("id", payout_id);
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    void createAuditLog({
+      actorUserId: auth.user.id,
+      actorRole:   auth.role,
+      action:      "admin.payout.cancel",
+      entityType:  "payout",
+      entityId:    payout_id,
+      before:      payoutBefore ? { status: payoutBefore.status } : undefined,
+      after:       { status: "cancelled" },
+      ipAddress:   ip,
+    });
+
+    void createGovernanceDecision({
+      actorUserId:    auth.user.id,
+      actorEmail:     auth.user.email ?? "",
+      actorRole:      auth.role,
+      actionType:     "payout.cancelled",
+      entityType:     "payout",
+      entityId:       payout_id,
+      previousStatus: payoutBefore?.status,
+      newStatus:      "cancelled",
+      adminNotes:     notes,
+      ipAddress:      ip,
+    });
+
     return NextResponse.json({ success: true });
   }
 

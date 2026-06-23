@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { SourceBadge } from "@/components/vendor/SourceBadge";
 import { formatDate } from "@/lib/utils";
@@ -13,16 +13,10 @@ export default async function AdminDirectContactsPage({
   searchParams: Promise<{ search?: string; source?: string }>;
 }) {
   const sp = await searchParams;
-  const supabase = await createClient();
-  const adminSupabase = await createAdminClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-  if (!adminEmails.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const adminSupabase = auth.db;
+  const { data: profile } = await adminSupabase.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   // Fetch all manual contacts across all vendors with vendor details
   let query = adminSupabase
@@ -53,12 +47,12 @@ export default async function AdminDirectContactsPage({
   const convertedCount = filtered.filter((c) => c.linked_profile_id).length;
 
   const resolvedProfile = profile ?? {
-    id: user.id, email: user.email ?? "", role: "admin" as const,
+    id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const,
     full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString(),
   };
 
   return (
-    <DashboardLayout user={resolvedProfile}>
+    <DashboardLayout user={resolvedProfile} adminRole={auth.role}>
       <div className="max-w-5xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Direct Contacts</h1>

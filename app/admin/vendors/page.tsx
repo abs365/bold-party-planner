@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminVendorTable } from "@/components/admin/AdminVendorTable";
 import { logger } from "@/lib/logger";
@@ -12,15 +12,10 @@ export default async function AdminVendorsPage({
   searchParams: Promise<{ status?: string; search?: string; page?: string }>;
 }) {
   const sp = await searchParams;
-  const supabase = await createClient();
-  const adminSupabase = await createAdminClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
-
-  const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim()).filter(Boolean);
-  if (!adminEmails.includes(user.email ?? "")) redirect("/dashboard");
-
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) redirect("/");
+  const adminSupabase = auth.db;
+  const { data: profile } = await adminSupabase.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
   let query = adminSupabase
     .from("vendors")
@@ -45,7 +40,7 @@ export default async function AdminVendorsPage({
   const { data: stats } = await adminSupabase.from("platform_stats").select("*").single();
 
   return (
-    <DashboardLayout user={profile ?? { id: user.id, email: user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }}>
+    <DashboardLayout user={profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }} adminRole={auth.role}>
       <AdminVendorTable
         vendors={vendors ?? []}
         stats={stats}

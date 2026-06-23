@@ -1,24 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
+import { createAdminClient } from "@/lib/supabase/server";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
+import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
-
-async function assertAdmin(req?: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) return null;
-  return user;
-}
 
 // GET /api/admin/reviews
 // ?status=flagged   — returns flagged reviews (default)
 // ?status=all       — returns all
 // ?status=removed   — returns removed
 export async function GET(request: Request) {
-  const admin = await assertAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const auth = await requireAdminRole("ops_admin");
+  if (!auth) return forbidden();
 
   const db = await createAdminClient();
   const { searchParams } = new URL(request.url);
@@ -51,8 +44,8 @@ export async function GET(request: Request) {
 // POST /api/admin/reviews
 // body: { action: "approve"|"flag"|"remove", review_id, notes? }
 export async function POST(request: Request) {
-  const admin = await assertAdmin();
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) return forbidden();
 
   const db = await createAdminClient();
   const { action, review_id, notes } = await request.json() as {
@@ -82,7 +75,7 @@ export async function POST(request: Request) {
     .update({
       moderation_status: newStatus,
       moderation_notes:  notes ?? null,
-      moderated_by:      admin.id,
+      moderated_by:      auth.user.id,
       moderated_at:      new Date().toISOString(),
     })
     .eq("id", review_id);
@@ -93,25 +86,45 @@ export async function POST(request: Request) {
   if (action !== "flag") {
     await db
       .from("review_reports")
-      .update({ status: action === "remove" ? "resolved" : "dismissed", resolved_by: admin.id, resolved_at: new Date().toISOString() })
+      .update({ status: action === "remove" ? "resolved" : "dismissed", resolved_by: auth.user.id, resolved_at: new Date().toISOString() })
       .eq("review_id", review_id)
       .eq("status", "open");
   }
 
+  const auditAction =
+    action === "approve" ? "admin.review.approve" :
+    action === "flag"    ? "admin.review.flag"    :
+                           "admin.review.remove";
+
+  const ip = ipFromRequest(request);
+
   void createAuditLog({
-    actorUserId: admin.id,
-    actorRole:   "admin",
-    action:      "admin.media.approve",
+    actorUserId: auth.user.id,
+    actorRole:   auth.role,
+    action:      auditAction,
     entityType:  "review",
     entityId:    review_id,
     before:      { moderation_status: review.moderation_status },
     after:       { moderation_status: newStatus },
-    ipAddress:   ipFromRequest(request),
+    ipAddress:   ip,
+  });
+
+  void createGovernanceDecision({
+    actorUserId:    auth.user.id,
+    actorEmail:     auth.user.email ?? "",
+    actorRole:      auth.role,
+    actionType:     `review.${action === "approve" ? "approved" : action === "flag" ? "flagged" : "removed"}`,
+    entityType:     "review",
+    entityId:       review_id,
+    previousStatus: review.moderation_status,
+    newStatus:      newStatus,
+    adminNotes:     notes,
+    ipAddress:      ip,
   });
 
   void track({
     event:  "governance.warning_resolved",
-    userId: admin.id,
+    userId: auth.user.id,
     properties: { entity_type: "review", review_id, action, vendor_id: review.vendor_id },
   });
 

@@ -1,23 +1,18 @@
 import { NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { planMRRContribution } from "@/lib/vendor/entitlements";
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "").split(",").map((e) => e.trim());
-
 export async function GET(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !ADMIN_EMAILS.includes(user.email ?? "")) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  // Financial settings and MRR data — Global Admin minimum (Founder can change settings; Global Admin can view)
+  const auth = await requireAdminRole("global_admin");
+  if (!auth) return forbidden();
 
-  const db = await createAdminClient();
   const { searchParams } = new URL(request.url);
   const daysBack = parseInt(searchParams.get("days") ?? "30");
   const since = new Date(Date.now() - daysBack * 86400000).toISOString();
 
   // ── Active subscriptions ──────────────────────────────────────────────────
-  const { data: subs } = await db
+  const { data: subs } = await auth.db
     .from("vendor_subscriptions")
     .select("plan, status, billing_cycle, vendor_id, current_period_end, failed_payment_count")
     .order("created_at", { ascending: false });
@@ -29,7 +24,7 @@ export async function GET(request: Request) {
   // ── MRR calculation ───────────────────────────────────────────────────────
   const mrr = activeSubs.reduce((sum, s) => {
     const monthly = planMRRContribution(s.plan);
-    if (s.billing_cycle === "annual") return sum + monthly; // already monthly equivalent
+    if (s.billing_cycle === "annual") return sum + monthly;
     return sum + monthly;
   }, 0);
 
@@ -41,8 +36,7 @@ export async function GET(request: Request) {
     planCounts[s.plan] = (planCounts[s.plan] ?? 0) + 1;
   }
 
-  // Free vendors (no subscription row) — get from vendors table
-  const { count: totalVendors } = await db
+  const { count: totalVendors } = await auth.db
     .from("vendors")
     .select("id", { count: "exact", head: true })
     .eq("status", "approved");
@@ -52,7 +46,7 @@ export async function GET(request: Request) {
   planCounts.free += freeVendorCount;
 
   // ── Revenue by vendor category ────────────────────────────────────────────
-  const { data: vendorCats } = await db
+  const { data: vendorCats } = await auth.db
     .from("vendors")
     .select("id, category, subscription_plan")
     .in("subscription_plan", ["pro", "premium", "featured", "elite"]);
@@ -64,21 +58,19 @@ export async function GET(request: Request) {
   }
 
   // ── Billing events (recent period) ───────────────────────────────────────
-  const { data: billingEvents } = await db
+  const { data: billingEvents } = await auth.db
     .from("subscription_billing_events")
     .select("event_type, plan_slug, amount_gbp, created_at, vendor_id")
     .gte("created_at", since)
     .order("created_at", { ascending: false })
     .limit(100);
 
-  // ── Upgrade / downgrade trend ─────────────────────────────────────────────
   const events = billingEvents ?? [];
   const upgrades  = events.filter((e) => e.event_type === "subscription_started" || e.event_type === "subscription_updated");
   const cancels   = events.filter((e) => e.event_type === "subscription_cancelled");
   const failures  = events.filter((e) => e.event_type === "payment_failed");
   const recovered = events.filter((e) => e.event_type === "payment_succeeded");
 
-  // ── At-risk revenue (past_due subs) ───────────────────────────────────────
   const atRiskMRR = pastDueSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
 
   return NextResponse.json({
