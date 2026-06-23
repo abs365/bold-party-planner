@@ -130,6 +130,23 @@ export default async function VendorPayoutsPage() {
           <p className="text-slate-400 text-sm mt-1">Your earnings, commission breakdown, and payout history</p>
         </div>
 
+        {/* ── Payout System Beta Notice ─────────────────────────────────────── */}
+        <div className="bg-amber-500/8 border border-amber-500/25 rounded-xl p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <span className="text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full">Beta</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-amber-300 mb-1">Payout System Beta</p>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                ELBOLD currently processes vendor payouts manually. Bank details collected here are stored securely
+                and will be used for automated payouts when Stripe Connect launches.
+                This does not affect your current bookings.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* ── Summary Cards ────────────────────────────────────────────────── */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {[

@@ -8,6 +8,7 @@ import { ProfileStrengthWidget } from "@/components/vendor/ProfileStrengthWidget
 import { VendorActivationChecklist } from "@/components/vendor/VendorActivationChecklist";
 import { VendorGovernanceWidget } from "@/components/vendor/VendorGovernanceWidget";
 import { FoundingVendorBanner } from "@/components/vendor/FoundingVendorBanner";
+import { PendingVendorBanner } from "@/components/vendor/PendingVendorBanner";
 import { VendorSharePanel } from "@/components/vendor/VendorSharePanel";
 import { computeVendorCompletion } from "@/lib/vendor/completion";
 import { calculateVendorHealthScore } from "@/lib/vendor/health";
@@ -149,6 +150,9 @@ export default async function VendorDashboardPage() {
 
         {/* ─── Founding Vendor Banner ────────────────────────────────── */}
         {vendor.status === "approved" && <FoundingVendorBanner />}
+
+        {/* ─── Pending Vendor Banner ─────────────────────────────────── */}
+        {vendor.status === "pending" && <PendingVendorBanner />}
 
         {/* ─── Header ──────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -558,6 +562,7 @@ export default async function VendorDashboardPage() {
                 governance={governance}
                 health={health}
                 computedWarnings={warnings}
+                isPending={vendor.status === "pending"}
               />
             )}
 

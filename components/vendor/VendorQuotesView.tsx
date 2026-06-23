@@ -360,6 +360,29 @@ export function VendorQuotesView({ quotes }: VendorQuotesViewProps) {
             When customers request a quote, it appears here. Respond quickly: vendors who reply within 2 hours win more bookings.
           </p>
         </div>
+
+        {/* How Elbold Leads Work */}
+        <div className="bg-white/3 border border-white/6 rounded-xl p-5">
+          <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">How ELBOLD Leads Work</h4>
+          <ol className="space-y-3">
+            {[
+              "Customer submits a quote request",
+              "Matching vendors are selected",
+              "Vendors receive notifications",
+              "Vendors respond with quotes",
+              "Customer chooses a vendor",
+              "Booking and payment are completed through ELBOLD",
+            ].map((step, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="w-5 h-5 rounded-full bg-white/8 border border-white/12 flex items-center justify-center text-xs font-semibold text-slate-400 flex-shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
+                <span className="text-sm text-slate-300">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
         <div className="grid sm:grid-cols-3 gap-3">
           {[
             { icon: Camera,      title: "Upload 5+ photos",         desc: "Profiles with more photos attract significantly more enquiries",  href: "/vendor/media" },

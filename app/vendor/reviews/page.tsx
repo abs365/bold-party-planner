@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { VendorReviewsView } from "@/components/vendor/VendorReviewsView";
+import { PendingVendorBanner } from "@/components/vendor/PendingVendorBanner";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export default async function VendorReviewsPage() {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile || profile.role !== "vendor") redirect("/dashboard");
 
-  const { data: vendor } = await supabase.from("vendors").select("id, rating, total_reviews").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, rating, total_reviews, status").eq("user_id", user.id).single();
   if (!vendor) redirect("/vendor/onboarding");
 
   const { data: reviews } = await supabase
@@ -27,6 +28,11 @@ export default async function VendorReviewsPage() {
 
   return (
     <DashboardLayout user={profile}>
+      {vendor.status === "pending" && (
+        <div className="max-w-4xl mx-auto mb-6">
+          <PendingVendorBanner />
+        </div>
+      )}
       <VendorReviewsView
         reviews={reviews ?? []}
         vendorRating={Number(vendor.rating ?? 0)}

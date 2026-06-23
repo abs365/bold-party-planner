@@ -20,6 +20,12 @@ export default async function VendorSubscriptionPage({
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile || profile.role !== "vendor") redirect("/dashboard");
 
+  const { data: vendor } = await supabase
+    .from("vendors")
+    .select("id, status, is_founding_vendor")
+    .eq("user_id", user.id)
+    .single();
+
   return (
     <DashboardLayout user={profile as Profile}>
       <div className="max-w-4xl mx-auto">
@@ -42,7 +48,10 @@ export default async function VendorSubscriptionPage({
           </div>
         )}
 
-        <VendorSubscriptionView />
+        <VendorSubscriptionView
+          isFoundingVendor={vendor?.is_founding_vendor ?? false}
+          vendorStatus={vendor?.status ?? ""}
+        />
       </div>
     </DashboardLayout>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, Zap, Star, Crown, CheckCircle, ArrowRight, Loader2, ExternalLink, AlertTriangle } from "lucide-react";
+import { Sparkles, Zap, Star, Crown, CheckCircle, ArrowRight, Loader2, ExternalLink, AlertTriangle, Lock, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PlanRow {
@@ -58,7 +58,12 @@ const FEATURE_COMPARISON = [
   { feature: "Business insights",   free: "-", pro: "-", premium: "-", elite: "✓" },
 ];
 
-export function VendorSubscriptionView() {
+interface VendorSubscriptionViewProps {
+  isFoundingVendor?: boolean;
+  vendorStatus?: string;
+}
+
+export function VendorSubscriptionView({ isFoundingVendor, vendorStatus }: VendorSubscriptionViewProps = {}) {
   const [data, setData] = useState<{ subscription: Subscription | null; plans: PlanRow[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState<string | null>(null);
@@ -209,6 +214,57 @@ export function VendorSubscriptionView() {
           </button>
         </div>
       </div>
+
+      {/* Founding Vendor Benefit Banner */}
+      {isFoundingVendor && (
+        <div className="bg-[#0d1b3e] border border-[rgba(201,168,76,0.3)] rounded-2xl p-5">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(201,168,76,0.12)" }}>
+              <Crown className="w-5 h-5" style={{ color: "#C9A84C" }} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="font-semibold text-white">Founding Vendor Benefit Active</span>
+                <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: "rgba(201,168,76,0.15)", color: "#C9A84C", border: "1px solid rgba(201,168,76,0.3)" }}>
+                  Founding Vendor
+                </span>
+              </div>
+              <p className="text-sm text-slate-400 mb-3">
+                Your first 6 months of Pro membership are included at no cost.{" "}
+                <span className="text-slate-500">Value: £174</span>
+              </p>
+              <p className="text-xs text-slate-500 mb-2 font-medium">Your founding benefits include:</p>
+              <ul className="space-y-1">
+                {[
+                  "Priority placement",
+                  "Founding Vendor badge",
+                  "Early feature access",
+                  "Reduced future pricing eligibility",
+                ].map((b) => (
+                  <li key={b} className="flex items-center gap-2 text-xs text-slate-400">
+                    <CheckCircle className="w-3 h-3 flex-shrink-0" style={{ color: "#C9A84C" }} />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-xs text-slate-600 mt-3">Subscription billing begins after your founding period ends.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pending Vendor Guard */}
+      {vendorStatus === "pending" && (
+        <div className="bg-amber-500/8 border border-amber-500/25 rounded-xl p-4 flex items-start gap-3">
+          <Lock size={15} className="text-amber-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-amber-300 mb-0.5">Plans available after approval</p>
+            <p className="text-xs text-slate-400">
+              You can view and compare plans, but paid plans become available once your application is approved.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Plan cards */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">

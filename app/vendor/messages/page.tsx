@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { MessagingView } from "@/components/messaging/MessagingView";
+import { PendingVendorBanner } from "@/components/vendor/PendingVendorBanner";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export default async function VendorMessagesPage({
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile) redirect("/onboarding");
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, status").eq("user_id", user.id).single();
   if (!vendor) redirect("/vendor/apply");
 
   const { data: threads } = await supabase
@@ -35,8 +36,9 @@ export default async function VendorMessagesPage({
 
   return (
     <DashboardLayout user={profile as Profile}>
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {vendor.status === "pending" && <PendingVendorBanner />}
+        <div>
           <h1 className="text-2xl font-bold text-white">Messages</h1>
           <p className="text-white/60 mt-1">Conversations with your customers about bookings and quotes</p>
         </div>

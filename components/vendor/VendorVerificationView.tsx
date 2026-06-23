@@ -424,6 +424,40 @@ export function VendorVerificationView({
       {activeTab === "documents" && (
         <div className="space-y-6">
 
+          {/* Compliance Panel */}
+          <div className="bg-white/4 border border-white/8 rounded-2xl p-5">
+            <div className="flex items-start gap-3">
+              <Lock size={16} className="text-slate-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-white mb-2">Why We Request Verification Documents</h3>
+                <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                  To protect customers and vendors, ELBOLD verifies identity before granting higher trust levels.
+                </p>
+                <p className="text-xs text-slate-500 font-medium mb-2">Your documents:</p>
+                <ul className="space-y-1.5 mb-3">
+                  {[
+                    "Are encrypted and securely stored",
+                    "Are only accessible to authorised ELBOLD staff",
+                    "Are processed under UK GDPR",
+                    "Are never displayed publicly",
+                    "Are used solely for verification purposes",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-xs text-slate-400">
+                      <Shield size={11} className="text-slate-500 flex-shrink-0 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="/legal/privacy"
+                  className="text-xs text-brand-400 hover:text-brand-300 transition-colors"
+                >
+                  Learn more about verification and privacy
+                </a>
+              </div>
+            </div>
+          </div>
+
           {/* Upload Section */}
           <div className="bg-white/4 border border-white/8 rounded-2xl p-5">
             <h3 className="font-bold text-white mb-4">Submit a Document</h3>

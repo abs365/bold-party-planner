@@ -5,6 +5,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ShoppingBag, Calendar, Users, Camera, ArrowRight } from "lucide-react";
+import { PendingVendorBanner } from "@/components/vendor/PendingVendorBanner";
 import type { Booking } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +18,7 @@ export default async function VendorBookingsPage() {
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile || profile.role !== "vendor") redirect("/dashboard");
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, status").eq("user_id", user.id).single();
   if (!vendor) redirect("/vendor/apply");
 
   const { data: bookings } = await supabase
@@ -32,6 +33,7 @@ export default async function VendorBookingsPage() {
   return (
     <DashboardLayout user={profile}>
       <div className="max-w-4xl mx-auto space-y-6">
+        {vendor.status === "pending" && <PendingVendorBanner />}
         <div>
           <h1 className="text-2xl font-bold text-white">Bookings</h1>
           <p className="text-slate-400 text-sm mt-1">Manage all your booking requests</p>

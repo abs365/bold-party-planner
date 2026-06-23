@@ -15,6 +15,7 @@ interface Props {
   governance: GovernanceResult;
   health: VendorHealthScore;
   computedWarnings: ComputedWarning[];
+  isPending?: boolean;
 }
 
 const HEALTH_BAR_COLOR = (score: number) =>
@@ -40,7 +41,7 @@ function LifecycleIcon({ state }: { state: string }) {
   return <Shield size={14} className="text-slate-400" />;
 }
 
-export function VendorGovernanceWidget({ governance, health, computedWarnings }: Props) {
+export function VendorGovernanceWidget({ governance, health, computedWarnings, isPending }: Props) {
   const { lifecycleState, capabilities, visibilityReason } = governance;
   const meta = LIFECYCLE_STATE_META[lifecycleState];
   const activeWarnings = computedWarnings.filter((w) => w.severity !== "low");
@@ -145,6 +146,16 @@ export function VendorGovernanceWidget({ governance, health, computedWarnings }:
                 <span>Not eligible for featured placement</span>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Pending explanation */}
+        {isPending && (!capabilities.canReceiveQuotes || !capabilities.canReceiveBookings) && (
+          <div className="border-t border-white/5 pt-3">
+            <p className="text-xs text-slate-400 leading-relaxed">
+              These features are temporarily unavailable because your application is still under review.
+              Complete your profile while we finish verification.
+            </p>
           </div>
         )}
 
