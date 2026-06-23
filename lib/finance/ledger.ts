@@ -24,7 +24,13 @@ export type FinancialEventType =
   | "WEBHOOK_REJECTED"
   | "RECONCILIATION_RUN"
   | "LEDGER_CREATED"
-  | "LEDGER_UPDATED";
+  | "LEDGER_UPDATED"
+  | "CONNECT_ACCOUNT_CREATED"
+  | "CONNECT_ACCOUNT_UPDATED"
+  | "CONNECT_ACCOUNT_ACTIVATED"
+  | "CONNECT_ACCOUNT_RESTRICTED"
+  | "CONNECT_ACCOUNT_DISABLED"
+  | "REQUIREMENT_UPDATED";
 
 export interface CreateLedgerEntryParams {
   bookingId:               string;
@@ -57,6 +63,7 @@ export async function createLedgerEntry(
       gross_amount:               params.grossAmount,
       platform_commission_amount: commission,
       vendor_amount:              vendor,
+      commission_rate:            rate,
       currency:                   params.currency ?? "gbp",
       payment_status:             params.paymentStatus ?? "paid",
       payout_status:              params.payoutStatus ?? "not_due",

@@ -90,3 +90,16 @@ export function assertWebhookSecret(): string {
   }
   return secret;
 }
+
+/**
+ * Returns the Stripe Connect webhook signing secret.
+ * This is a separate secret from the platform webhook — each endpoint in Stripe Dashboard
+ * has its own signing secret. Using the wrong secret causes all signature verifications to fail.
+ */
+export function assertConnectWebhookSecret(): string {
+  const secret = process.env.STRIPE_CONNECT_WEBHOOK_SECRET;
+  if (!secret) {
+    throw new Error("STRIPE_CONNECT_WEBHOOK_SECRET environment variable is not set.");
+  }
+  return secret;
+}
