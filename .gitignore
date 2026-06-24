@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -47,3 +48,15 @@ next-env.d.ts
 .vercel
 
 .env*.local
+
+# Test artifacts, E2E scripts, and screenshot collections
+e2e-*.cjs
+scripts/*.mjs
+docs/p53-*.png
+docs/smoke-*.png
+docs/phase68-screenshots/
+docs/phase69f-audit/
+docs/phase69f-audit-v2/
+docs/screenshots/
+docs/backups/
+supabase/.temp/
