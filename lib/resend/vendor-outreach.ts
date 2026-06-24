@@ -10,8 +10,21 @@ const FROM = "Elbold <noreply@elbold.com>";
 interface EmailResult { success: boolean; error?: string }
 
 async function send(to: string, subject: string, html: string): Promise<EmailResult> {
+  let recipient = to;
+  let emailSubject = subject;
+
+  if (process.env.VERCEL_ENV !== "production") {
+    const override = process.env.RESEND_DEV_OVERRIDE_EMAIL;
+    if (!override) {
+      console.info(`[resend:dev] Email to "${to}" suppressed (VERCEL_ENV is not "production"). Set RESEND_DEV_OVERRIDE_EMAIL to redirect emails in dev.`);
+      return { success: true };
+    }
+    emailSubject = `[DEV → ${to}] ${subject}`;
+    recipient = override;
+  }
+
   try {
-    await getResend().emails.send({ from: FROM, to, subject, html });
+    await getResend().emails.send({ from: FROM, to: recipient, subject: emailSubject, html });
     return { success: true };
   } catch (err: unknown) {
     console.error("Outreach email error:", err);

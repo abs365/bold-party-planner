@@ -25,12 +25,25 @@ async function send(
   html: string,
   opts?: { headers?: Record<string, string> }
 ): Promise<EmailResult> {
+  let recipient = to;
+  let emailSubject = subject;
+
+  if (process.env.VERCEL_ENV !== "production") {
+    const override = process.env.RESEND_DEV_OVERRIDE_EMAIL;
+    if (!override) {
+      console.info(`[resend:dev] Email to "${to}" suppressed (VERCEL_ENV is not "production"). Set RESEND_DEV_OVERRIDE_EMAIL to redirect emails in dev.`);
+      return { success: true };
+    }
+    emailSubject = `[DEV → ${to}] ${subject}`;
+    recipient = override;
+  }
+
   try {
     const resend = getResend();
     await resend.emails.send({
       from: FROM,
-      to,
-      subject,
+      to: recipient,
+      subject: emailSubject,
       html,
       text: htmlToText(html),
       ...(opts?.headers ? { headers: opts.headers } : {}),

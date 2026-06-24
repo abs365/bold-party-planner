@@ -1,15 +1,15 @@
 /**
- * Returns the Stripe secret key with environment safety checks.
+ * Returns the Stripe secret key with bidirectional environment safety checks.
  *
  * Behaviour:
- *   - VERCEL_ENV=production: throws if the key is a test key OR if the prefix is
- *     not a recognised Stripe secret-key format (sk_live_, rk_live_).
- *   - VERCEL_ENV=preview: warns but allows test keys for E2E testing.
- *   - Local dev (NODE_ENV=development): logs a warning for non-standard key formats
- *     but never blocks, so local development with placeholder keys still works.
+ *   - VERCEL_ENV=production: throws if the key is not a recognised live key
+ *     (sk_live_* or rk_live_*). Live key required in production.
+ *   - Everything else (local dev, GitHub Codespaces, Vercel preview): throws if
+ *     the key IS a live key. Live keys create real GBP charges — only test keys
+ *     (sk_test_* or rk_test_*) are permitted outside of production.
  *
- * VERCEL_ENV is set automatically by Vercel and is never 'production' in local dev,
- * so the production guard only fires on the real production deployment.
+ * VERCEL_ENV is injected by Vercel's build system and is absent in local dev and
+ * GitHub Codespaces, making it the reliable signal for "real production".
  *
  * Recognised Stripe key prefixes:
  *   sk_live_  — live secret key
@@ -36,15 +36,8 @@ export function assertStripeKey(): string {
     throw new Error("STRIPE_SECRET_KEY environment variable is not set.");
   }
 
-  const isProductionDeploy =
-    process.env.NODE_ENV === "production" &&
-    process.env.VERCEL_ENV === "production";
-
-  const isPreviewDeploy =
-    process.env.NODE_ENV === "production" &&
-    process.env.VERCEL_ENV === "preview";
-
-  if (isProductionDeploy) {
+  if (process.env.VERCEL_ENV === "production") {
+    // Production: live key required
     if (!isLiveKey(key)) {
       throw new Error(
         `STRIPE_SECRET_KEY has an invalid or non-live prefix "${key.slice(0, 8)}..." ` +
@@ -52,21 +45,16 @@ export function assertStripeKey(): string {
           "Check Stripe Dashboard → Developers → API Keys and update the Vercel environment variable."
       );
     }
-  } else if (isPreviewDeploy) {
-    if (!hasValidStripePrefix(key)) {
-      console.warn(
-        `[stripe] WARNING: STRIPE_SECRET_KEY has an unrecognised prefix "${key.slice(0, 8)}...". ` +
-          "Expected sk_live_*, sk_test_*, rk_live_*, or rk_test_*. " +
-          "Verify the key in Stripe Dashboard → Developers → API Keys."
-      );
-    } else if (!VALID_TEST_PREFIXES.some((p) => key.startsWith(p))) {
-      console.warn(
-        "[stripe] Warning: Using a live key in a Vercel preview deployment. " +
-          "Consider using a test key for staging/E2E to avoid real charges."
+  } else {
+    // Non-production (local dev, Codespace, preview): live key blocked
+    if (isLiveKey(key)) {
+      throw new Error(
+        `STRIPE_SECRET_KEY is a live key (${key.slice(0, 8)}...) but this is not a Vercel production ` +
+          'deployment (VERCEL_ENV is not "production"). Live keys create real GBP charges. ' +
+          "Use a test key (sk_test_* or rk_test_*) in local dev, GitHub Codespaces, and preview deployments.\n" +
+          "Get a test key: Stripe Dashboard → Developers → API Keys → toggle Test mode."
       );
     }
-  } else {
-    // Local dev
     if (!hasValidStripePrefix(key)) {
       console.warn(
         `[stripe] WARNING: STRIPE_SECRET_KEY has an unrecognised prefix "${key.slice(0, 8)}...". ` +
