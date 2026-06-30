@@ -23,6 +23,7 @@ const ROLE_WEIGHT: Record<AdminRole, number> = {
 };
 import { SmartConcierge } from "@/components/smart/SmartConcierge";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { NotificationBell } from "@/components/layout/NotificationBell";
 
 interface NavItem {
   href: string;
@@ -345,10 +346,7 @@ export function DashboardLayout({ children, user, adminRole }: DashboardLayoutPr
                 Plan Event
               </Link>
             )}
-            <Link href="/dashboard/notifications" className="relative p-2 rounded-lg hover:bg-white/5">
-              <Bell size={17} className="text-slate-400" />
-              <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
-            </Link>
+            <NotificationBell />
           </div>
         </header>
 

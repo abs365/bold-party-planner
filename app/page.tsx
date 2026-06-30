@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import {
-  ArrowRight, Star, CheckCircle2, MapPin, Shield, Award,
+  ArrowRight, Star, CheckCircle, MapPin, Shield, Award,
   Camera, Music, Sparkles, UtensilsCrossed, Building2, Mic2,
 } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
@@ -402,7 +402,7 @@ export default async function Home() {
           <div className="max-w-5xl mx-auto px-4 py-5">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {[
-                { icon: CheckCircle2, label: "Every vendor reviewed by us" },
+                { icon: CheckCircle, label: "Every vendor reviewed by us" },
                 { icon: Star,         label: "Reviews from real bookings only" },
                 { icon: Shield,       label: "Payments secured through Stripe" },
                 { icon: Award,        label: "Full refund if vendor cancels" },
@@ -687,7 +687,7 @@ export default async function Home() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
               {[
                 {
-                  icon: CheckCircle2,
+                  icon: CheckCircle,
                   title: "Every vendor reviewed by a human",
                   body: "Every application is assessed by our team against published standards before a profile goes live. No automation. No auto-approval.",
                 },
@@ -743,22 +743,42 @@ export default async function Home() {
               ))}
             </div>
 
-            {/* Stats — dynamic vendor count only when ≥ 30 real vendors */}
+            {/* Platform stats — always 4, designed for any growth stage */}
             <div
               className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-12"
               style={{ borderTop: "1px solid rgba(212,175,55,0.07)" }}
             >
-              {[
-                ...(vendorCount >= 30 ? [{ value: `${vendorCount}+`, label: "Approved Vendors" }] : []),
-                { value: "UK",   label: "Essex · Kent · London" },
-                { value: "100%", label: "Individually Reviewed" },
-                { value: "90%",  label: "Kept by Every Vendor" },
-              ].map(({ value, label }) => (
+              {((): Array<{ value: string; label: string }> => {
+                const base = [
+                  { value: "100%",   label: "Individually Reviewed" },
+                  { value: "Stripe", label: "Payments Protected" },
+                  { value: "UK",     label: "London · Essex · Kent" },
+                ];
+                if (vendorCount >= 30) {
+                  return [
+                    { value: `${vendorCount}+`, label: "Verified Professionals" },
+                    ...base,
+                  ];
+                }
+                // Early stage: replace vendor count with how-we-work stat
+                return [
+                  ...base,
+                  { value: "30%",    label: "Deposit Secures Booking" },
+                ];
+              })().map(({ value, label }) => (
                 <div key={label} className="text-center">
-                  <div className="text-3xl font-light tracking-tight mb-1" style={{ color: "#D4AF37" }}>
+                  <div
+                    className="text-3xl font-light tracking-tight mb-1"
+                    style={{ color: "#D4AF37" }}
+                  >
                     {value}
                   </div>
-                  <div className="text-xs font-light" style={{ color: "rgba(255,255,255,0.28)" }}>{label}</div>
+                  <div
+                    className="text-xs font-light leading-snug"
+                    style={{ color: "rgba(255,255,255,0.30)" }}
+                  >
+                    {label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -788,7 +808,7 @@ export default async function Home() {
                         className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                         style={{ background: "rgba(11,31,77,0.07)" }}
                       >
-                        <CheckCircle2 size={12} style={{ color: "#0B1F4D" }} />
+                        <CheckCircle size={12} style={{ color: "#0B1F4D" }} />
                       </div>
                       <div>
                         <div className="text-sm font-semibold text-gray-900 mb-1">{b.title}</div>

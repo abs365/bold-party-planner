@@ -1,6 +1,14 @@
 // ELBOLD UI Component Library — barrel exports
 // Use these paths in new code. Existing deep-path imports remain valid during migration.
 
+// ── P0 Components (ESP 1.1) ───────────────────────────────────────────────────
+export { FilterTabs } from "./FilterTabs";
+export type { FilterTab } from "./FilterTabs";
+export { NotificationIndicator } from "./NotificationIndicator";
+export { StatusPage } from "./StatusPage";
+export { StatGrid } from "./StatGrid";
+export type { StatItem } from "./StatGrid";
+
 // ── State & Feedback ──────────────────────────────────────────────────────────
 export { LoadingState, EmptyState, ErrorState } from "./StateComponents";
 export { LoadingSpinner, PageLoader } from "./LoadingSpinner";
