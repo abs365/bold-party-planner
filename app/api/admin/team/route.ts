@@ -5,7 +5,7 @@ import { createGovernanceDecision } from "@/lib/governance";
 import type { AdminRole } from "@/lib/auth/guards";
 
 export async function GET() {
-  const auth = await requireAdminRole("ops_admin");
+  const auth = await requireAdminRole("global_admin");
   if (!auth) return forbidden();
 
   const { data, error } = await auth.db

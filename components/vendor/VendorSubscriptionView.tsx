@@ -45,6 +45,11 @@ const PLAN_COLORS: Record<string, { border: string; icon: string; bg: string; ba
   elite:    { border: "border-rose-500/50",   icon: "text-rose-400",   bg: "bg-rose-500/20",   badge: "Elite",              badgeText: "bg-gradient-to-r from-[#D4AF37] to-[#b8932a] text-white" },
 };
 
+function renderFeatureCell(value: string) {
+  if (value === "✓") return <CheckCircle className="w-4 h-4 text-green-400 mx-auto" />;
+  return <>{value}</>;
+}
+
 const FEATURE_COMPARISON = [
   { feature: "Portfolio photos", free: "5", pro: "20", premium: "50", elite: "Unlimited" },
   { feature: "Video portfolio",  free: "-", pro: "✓",  premium: "✓",  elite: "✓" },
@@ -370,10 +375,10 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus }: Vendo
             {FEATURE_COMPARISON.map((row) => (
               <tr key={row.feature}>
                 <td className="py-2.5 pr-4 text-slate-400">{row.feature}</td>
-                <td className="py-2.5 px-3 text-center text-slate-500">{row.free}</td>
-                <td className="py-2.5 px-3 text-center text-slate-300">{row.pro}</td>
-                <td className="py-2.5 px-3 text-center text-amber-300">{row.premium}</td>
-                <td className="py-2.5 px-3 text-center text-rose-300">{row.elite}</td>
+                <td className="py-2.5 px-3 text-center text-slate-500">{renderFeatureCell(row.free)}</td>
+                <td className="py-2.5 px-3 text-center text-slate-300">{renderFeatureCell(row.pro)}</td>
+                <td className="py-2.5 px-3 text-center text-amber-300">{renderFeatureCell(row.premium)}</td>
+                <td className="py-2.5 px-3 text-center text-rose-300">{renderFeatureCell(row.elite)}</td>
               </tr>
             ))}
           </tbody>

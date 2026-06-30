@@ -94,7 +94,7 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/moderation",     label: "Moderation",      icon: Eye },
       { href: "/admin/governance",     label: "Governance",      icon: Shield },
       { href: "/admin/governance-log", label: "Governance Log",  icon: ClipboardList, minRole: "global_admin" as AdminRole },
-      { href: "/admin/team",           label: "Admin Team",      icon: Users,         minRole: "founder" as AdminRole },
+      { href: "/admin/team",           label: "Admin Team",      icon: Users,         minRole: "global_admin" as AdminRole },
     ],
   },
   {

@@ -23,7 +23,7 @@ const ROLE_COLOURS: Record<string, string> = {
 };
 
 export default async function AdminTeamPage() {
-  const auth = await requireAdminRole("founder");
+  const auth = await requireAdminRole("global_admin");
   if (!auth) redirect("/");
   const db = auth.db;
   const { data: profile } = await db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
@@ -37,6 +37,13 @@ export default async function AdminTeamPage() {
 
   const activeRoles = (roleRows ?? []).filter((r) => !r.revoked_at);
   const revokedRoles = (roleRows ?? []).filter((r) => r.revoked_at);
+
+  // Resolve display names for role holders
+  const allUserIds = [...new Set((roleRows ?? []).map((r) => r.user_id))];
+  const { data: roleProfiles } = allUserIds.length > 0
+    ? await db.from("profiles").select("id, full_name, email").in("id", allUserIds)
+    : { data: [] as { id: string; full_name: string | null; email: string }[] };
+  const profileById = Object.fromEntries((roleProfiles ?? []).map((p) => [p.id, p]));
 
   // Recent role governance decisions
   const { data: roleDecisions } = await db
@@ -96,8 +103,13 @@ export default async function AdminTeamPage() {
             {activeRoles.map((r) => (
               <div key={r.id} className="flex items-center justify-between px-4 py-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{r.user_id}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {profileById[r.user_id]?.full_name ?? profileById[r.user_id]?.email ?? r.user_id}
+                  </p>
                   <p className="text-xs text-gray-400">
+                    {profileById[r.user_id]?.email && profileById[r.user_id]?.full_name
+                      ? `${profileById[r.user_id].email} · `
+                      : ""}
                     Granted {new Date(r.granted_at).toLocaleDateString("en-GB")}
                     {r.notes ? ` — ${r.notes}` : ""}
                   </p>
@@ -144,7 +156,9 @@ export default async function AdminTeamPage() {
               {revokedRoles.map((r) => (
                 <div key={r.id} className="flex items-center justify-between px-4 py-3 opacity-60">
                   <div>
-                    <p className="text-sm text-gray-700">{r.user_id}</p>
+                    <p className="text-sm text-gray-700">
+                      {profileById[r.user_id]?.full_name ?? profileById[r.user_id]?.email ?? r.user_id}
+                    </p>
                     <p className="text-xs text-gray-400">
                       {ROLE_LABELS[r.role] ?? r.role} · Revoked {new Date(r.revoked_at!).toLocaleDateString("en-GB")}
                     </p>
@@ -156,11 +170,6 @@ export default async function AdminTeamPage() {
           </section>
         )}
 
-        {/* Phase note */}
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
-          <p className="font-medium">Phase 70D.5 pending</p>
-          <p className="mt-1">Role assignment via this page is not yet active. Route-level enforcement is implemented in Phase 70D.5. Until then, only Founder Admin (AY) has active admin access.</p>
-        </div>
 
       </div>
     </DashboardLayout>
