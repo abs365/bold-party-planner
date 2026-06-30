@@ -3,6 +3,7 @@
 import React from "react";
 import * as Sentry from "@sentry/nextjs";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+// ErrorState for data-fetch errors lives in StateComponents.tsx — import from there.
 
 interface Props {
   children: React.ReactNode;
@@ -50,17 +51,3 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
-export function ErrorState({ message, onRetry }: { message?: string; onRetry?: () => void }) {
-  return (
-    <div className="bg-white/4 border border-white/6 rounded-xl p-8 text-center">
-      <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-      <h3 className="text-white font-semibold mb-2">Unable to load</h3>
-      <p className="text-white/50 text-sm mb-4">{message ?? "Something went wrong. Please try again."}</p>
-      {onRetry && (
-        <button onClick={onRetry} className="btn-secondary flex items-center gap-2 mx-auto">
-          <RefreshCw className="w-4 h-4" /> Try Again
-        </button>
-      )}
-    </div>
-  );
-}

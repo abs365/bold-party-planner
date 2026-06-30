@@ -24,16 +24,3 @@ export function PageLoader() {
   );
 }
 
-export function SkeletonCard() {
-  return (
-    <div className="bg-white/4 border border-white/6 rounded-xl p-4 animate-pulse">
-      <div className="h-48 bg-white/5 rounded-lg mb-4" />
-      <div className="h-4 bg-white/5 rounded mb-2 w-3/4" />
-      <div className="h-3 bg-white/5 rounded mb-4 w-1/2" />
-      <div className="flex gap-2">
-        <div className="h-6 bg-white/5 rounded-full w-16" />
-        <div className="h-6 bg-white/5 rounded-full w-20" />
-      </div>
-    </div>
-  );
-}

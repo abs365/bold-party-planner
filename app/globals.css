@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand = Navy spectrum (replaces purple/magenta) */
+  /* ── Typography ───────────────────────────────────────────────────────────── */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Brand = Navy spectrum ────────────────────────────────────────────────── */
   --color-brand-50:  #f0f4ff;
   --color-brand-100: #dce8f8;
   --color-brand-200: #b5cdf5;
@@ -13,14 +16,14 @@
   --color-brand-800: #040a14;
   --color-brand-900: #02060d;
 
-  /* Gold system — exact ELBOLD brand values */
+  /* ── Gold system — exact ELBOLD brand values ──────────────────────────────── */
   --color-gold-50:  #fffbeb;
   --color-gold-100: #fef3c7;
-  --color-gold-400: #D4AF37;
-  --color-gold-500: #C9A84C;
+  --color-gold-400: #D4AF37;   /* Primary gold — nav accents, active states, CTAs */
+  --color-gold-500: #C9A84C;   /* Muted gold — FoundingVendorBanner, secondary accent */
   --color-gold-600: #b8932a;
 
-  /* ELBOLD luxury palette — canonical values */
+  /* ── ELBOLD luxury palette — canonical values ─────────────────────────────── */
   --color-elbold-navy:       #0B1F4D;
   --color-elbold-navy-deep:  #07152E;
   --color-elbold-navy-mid:   #162447;
@@ -29,6 +32,13 @@
   --color-elbold-gold-muted: rgba(212, 175, 55, 0.65);
   --color-elbold-silver:     #E8EDF5;
   --color-elbold-sky:        #DCEEFF;
+
+  /* ── Semantic surface tokens ──────────────────────────────────────────────── */
+  /* Use these instead of hardcoded hex values in components and inline styles. */
+  --color-bg-base:    #0a0a0f;   /* Authenticated app body background */
+  --color-bg-surface: #0d0d18;   /* Sidebar, modals, elevated cards */
+  --color-bg-brand:   #0D1B3E;   /* Hero panels, auth left column */
+  --color-bg-footer:  #091529;   /* Footer (intentionally darker than bg-base) */
 }
 
 @layer base {
@@ -42,7 +52,7 @@
   }
 
   body {
-    background-color: #0a0a0f;
+    background-color: var(--color-bg-base);
     color: #f8fafc;
   }
 
