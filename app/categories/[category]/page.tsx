@@ -116,7 +116,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               Founding Vendor Applications Now Open
             </h2>
             <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
-              We are currently onboarding our first verified event professionals across London, Essex and Kent.
+              We are currently onboarding our first verified event professionals across the UK.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/vendor/apply" className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">

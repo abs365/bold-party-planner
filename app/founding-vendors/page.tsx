@@ -18,11 +18,11 @@ import {
 export const metadata: Metadata = {
   title: "Join as a Founding Vendor | List Your Services Free | Elbold",
   description:
-    "Be one of Elbold's first verified event professionals in London, Kent and Essex. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
+    "Be one of Elbold's first verified event professionals anywhere in the UK. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
   openGraph: {
     title: "Founding Vendor Programme | Elbold",
     description:
-      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available across London, Kent and Essex.",
+      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available UK-wide.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
 };
@@ -220,7 +220,7 @@ export default async function FoundingVendorsPage() {
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
             Elbold connects event hosts with verified DJs, photographers, caterers,
-            decorators and more across London, Kent and Essex. List your services
+            decorators and more across the UK. List your services
             free, receive enquiries from customers actively looking to book, and
             build your reputation on a platform designed specifically for UK event
             professionals.

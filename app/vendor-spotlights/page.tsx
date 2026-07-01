@@ -237,7 +237,7 @@ export default async function VendorSpotlightsPage() {
               Vendor Spotlights Coming Soon
             </h2>
             <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
-              We are currently onboarding founding vendors across London, Essex and Kent.
+              We are currently onboarding founding vendors across the UK.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/vendor/apply" className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">

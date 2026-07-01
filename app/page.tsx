@@ -268,7 +268,7 @@ export default async function Home() {
               className="text-xs font-light mb-10 tracking-wide"
               style={{ color: "rgba(11,31,77,0.42)" }}
             >
-              Now onboarding verified professionals across London, Essex and Kent.
+              Now onboarding verified professionals across the UK.
             </p>
 
             {/* Occasion chips */}
@@ -752,7 +752,7 @@ export default async function Home() {
                 const base = [
                   { value: "100%",   label: "Individually Reviewed" },
                   { value: "Stripe", label: "Payments Protected" },
-                  { value: "UK",     label: "London · Essex · Kent" },
+                  { value: "UK",     label: "Nationwide Coverage" },
                 ];
                 if (vendorCount >= 30) {
                   return [
