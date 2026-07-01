@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { VENDOR_CATEGORIES } from "@/types";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .from("vendors")
       .select("id, updated_at")
       .eq("status", "approved")
+      .not("id", "in", TEST_VENDOR_EXCLUSION)
       .order("updated_at", { ascending: false })
       .limit(200);
 

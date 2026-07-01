@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, Star, Shield, MapPin, CheckCircle2 } from "lucide-react";
 import { VENDOR_CATEGORIES } from "@/types";
 import type { Vendor } from "@/types";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 type LocationVendor = Pick<
   Vendor,
@@ -105,6 +106,7 @@ export async function LocationPage({
     .from("vendors")
     .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, verification_level, media:vendor_media(url, type, is_cover)")
     .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION)
     .ilike("city", `%${loc?.county ?? location}%`)
     .order("rating", { ascending: false })
     .limit(24);

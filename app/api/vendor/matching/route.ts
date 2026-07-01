@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export async function GET(req: Request) {
   const supabase = await createClient();
@@ -23,7 +24,8 @@ export async function GET(req: Request) {
       media:vendor_media(url, is_cover, type),
       packages:vendor_packages(id, name, price, includes)
     `)
-    .eq("status", "approved");
+    .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION);
 
   if (category) query = query.eq("category", category);
 

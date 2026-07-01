@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, CheckCircle2, Shield, Star, Heart, Users } from "lucide-react";
+import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const metadata: Metadata = {
   title: "About Elbold | Why We Exist, Who We Are, What We Stand For",
@@ -59,7 +60,8 @@ export default async function AboutPage() {
   const { count: vendorCount } = await supabase
     .from("vendors")
     .select("id", { count: "exact", head: true })
-    .eq("status", "approved");
+    .eq("status", "approved")
+    .not("id", "in", TEST_VENDOR_EXCLUSION);
 
   return (
     <div className="min-h-screen bg-white">
