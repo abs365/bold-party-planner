@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Copy, Check, Share2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface VendorSharePanelProps {
@@ -11,10 +11,18 @@ interface VendorSharePanelProps {
 
 export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) {
   const [copied, setCopied] = useState(false);
+  // Defaults false on the server (no `navigator`) and flips post-hydration —
+  // required for SSR correctness, not a mirror of already-known render state.
+  const [canNativeShare, setCanNativeShare] = useState(false);
 
   const profileUrl = `${typeof window !== "undefined" ? window.location.origin : "https://www.elbold.com"}/vendors/${slug}`;
   const encodedUrl = encodeURIComponent(profileUrl);
   const encodedText = encodeURIComponent(`Book ${businessName} for your event on Elbold`);
+  const shareText = `Book ${businessName} for your event on Elbold`;
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") setCanNativeShare(true);
+  }, []);
 
   function copyLink() {
     navigator.clipboard.writeText(profileUrl).then(() => {
@@ -24,8 +32,31 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
     });
   }
 
+  async function nativeShare() {
+    try {
+      await navigator.share({ title: businessName, text: shareText, url: profileUrl });
+    } catch {
+      // User cancelled the share sheet — no error needed.
+    }
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-2">
+      {/* Native share sheet — on mobile this surfaces Instagram, TikTok, Messages,
+          Mail and any other installed app with a share target, none of which
+          support URL-based web share links like WhatsApp/Facebook do. */}
+      {canNativeShare && (
+        <button
+          onClick={nativeShare}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90"
+          style={{ backgroundColor: "#0B1F4D" }}
+          aria-label="Share profile"
+        >
+          <Share2 size={14} />
+          Share
+        </button>
+      )}
+
       {/* WhatsApp */}
       <a
         href={`https://wa.me/?text=${encodedText}%20${encodedUrl}`}

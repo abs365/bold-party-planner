@@ -9,7 +9,7 @@ import { VendorProfileView } from "@/components/vendor/VendorProfileView";
 import { ProfileViewTracker } from "@/components/vendor/ProfileViewTracker";
 import { computeVendorCompletion } from "@/lib/vendor/completion";
 import { VENDOR_CATEGORIES, type VendorCategory } from "@/types";
-import { Star, CheckCircle2, MapPin } from "lucide-react";
+import { Star, CheckCircle2, MapPin, ArrowRight } from "lucide-react";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -116,12 +116,38 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
   if (redirectToSlug) permanentRedirect(`/vendors/${redirectToSlug}`);
   if (!vendorData) notFound();
 
-  // Profile quality gate: score < 50 → not publicly visible
+  // Profile quality gate: below threshold → soft "launching soon" page, not a
+  // hard 404. A vendor may share this exact URL on Instagram/WhatsApp/Google
+  // Business Profile before their profile is fully built out, or their score
+  // could dip later (e.g. a photo removed in moderation) — a 404 makes a
+  // previously-shared link look broken/dead, which directly undermines
+  // confidence in sharing it. See UK_EXPANSION_READINESS_REPORT.md Priority 3.
   const mediaCount = (vendorData.media as unknown[] | null)?.length ?? 0;
   const packageCount = (vendorData.packages as unknown[] | null)?.length ?? 0;
   const completion = computeVendorCompletion({ vendor: vendorData, mediaCount, packageCount, hasAvailability: false });
   const qualityThreshold = vendorData.is_founding_vendor ? 32 : 50;
-  if (completion.score < qualityThreshold) notFound();
+  if (completion.score < qualityThreshold) {
+    const cat = VENDOR_CATEGORIES[vendorData.category as keyof typeof VENDOR_CATEGORIES];
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar user={null} lightBg />
+        <div className="pt-24 pb-20 px-4">
+          <div className="max-w-lg mx-auto text-center">
+            <MapPin size={28} className="mx-auto mb-4 text-gray-300" />
+            <h1 className="text-2xl font-semibold text-gray-900 mb-2">{vendorData.business_name}</h1>
+            <p className="text-sm text-gray-500 mb-1">{cat?.label ?? vendorData.category} · {vendorData.city}</p>
+            <p className="text-base text-gray-600 mt-6 leading-relaxed">
+              This profile is still being finalised and isn&apos;t fully live yet. Check back soon, or explore other verified professionals on Elbold in the meantime.
+            </p>
+            <Link href="/browse" className="btn-luxury inline-flex items-center gap-2 mt-8">
+              Browse the marketplace <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const [reviewsRes, authRes] = await Promise.all([
     adminDb
