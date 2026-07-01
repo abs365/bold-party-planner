@@ -15,6 +15,13 @@ import { calculateVendorHealthScore } from "@/lib/vendor/health";
 import { detectComputedWarnings } from "@/lib/vendor/warnings";
 import { resolveGovernance } from "@/lib/vendor/governance";
 import { calculateVendorScore } from "@/lib/vendor/ranking";
+import {
+  computeBusinessControlCentre,
+  computeBusinessHealthScore,
+  type ControlCentreBooking,
+  type ControlCentreQuote,
+} from "@/lib/vendor/business-control-centre";
+import { BusinessControlCentre } from "@/components/vendor/BusinessControlCentre";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import {
   ShoppingBag, CreditCard, Star, Eye, TrendingUp, ArrowRight,
@@ -46,7 +53,7 @@ export default async function VendorDashboardPage() {
   const cutoff30 = new Date();
   cutoff30.setDate(cutoff30.getDate() - 30);
 
-  const [bookingsRes, reviewsRes, analyticsRes, quotesRes, unreadRes] = await Promise.all([
+  const [bookingsRes, reviewsRes, analyticsRes, quotesRes, unreadRes, unreadMsgRes, availabilityRes] = await Promise.all([
     supabase
       .from("bookings")
       .select("id, status, payment_status, total_amount, vendor_payout, deposit_amount, created_at, event:events(title, date, city, guest_count), customer:profiles(full_name, email, avatar_url)")
@@ -66,21 +73,37 @@ export default async function VendorDashboardPage() {
       .gte("created_at", cutoff30.toISOString()),
     supabase
       .from("quotes")
-      .select("id, status, created_at")
+      .select("id, status, created_at, expires_at, budget_max, customer:profiles(full_name), event:events(title, date, city)")
       .eq("vendor_id", vendor.id)
-      .eq("status", "pending"),
+      .in("status", ["pending", "shortlisted"])
+      .order("created_at", { ascending: false }),
     supabase
       .from("notifications")
       .select("id", { count: "exact", head: true })
       .eq("user_id", user.id)
       .eq("read", false),
+    // Business Control Centre — unread message count (messages.read_by_vendor via thread's vendor_id)
+    supabase
+      .from("messages")
+      .select("id, thread_id!inner(vendor_id)", { count: "exact", head: true })
+      .eq("thread_id.vendor_id", vendor.id)
+      .eq("read_by_vendor", false),
+    // Business Control Centre — calendar/availability configured
+    supabase
+      .from("vendor_availability")
+      .select("id", { count: "exact", head: true })
+      .eq("vendor_id", vendor.id)
+      .limit(1),
   ]);
 
   const allBookings  = (bookingsRes.data ?? []) as unknown as Booking[];
   const reviews      = reviewsRes.data ?? [];
   const analytics    = analyticsRes.data ?? [];
-  const pendingQuotes = quotesRes.data ?? [];
+  const allQuotes    = quotesRes.data ?? [];
+  const pendingQuotes = allQuotes.filter((q) => q.status === "pending");
   const unreadCount  = unreadRes.count ?? 0;
+  const unreadMessageCount = unreadMsgRes.count ?? 0;
+  const hasAvailabilityRow = (availabilityRes.count ?? 0) > 0;
 
   const pending   = allBookings.filter((b) => b.status === "pending");
   const awaitingPayment = allBookings.filter((b) => b.status === "pending_payment");
@@ -109,7 +132,7 @@ export default async function VendorDashboardPage() {
     vendor,
     mediaCount,
     packageCount,
-    hasAvailability: false, // not fetched on dashboard for perf; full check in /vendor/onboarding
+    hasAvailability: hasAvailabilityRow,
   });
 
   const health   = calculateVendorHealthScore(vendor);
@@ -144,9 +167,51 @@ export default async function VendorDashboardPage() {
 
   const nowMs = new Date().getTime();
 
+  // ─── Business Control Centre (ESP 1.3 / 1.3A / 1.3B, Wave 1) ────────────────
+  const mediaViews    = analytics.filter((a) => a.event_type === "media_view").length;
+  const contactClicks = analytics.filter((a) => a.event_type === "contact_click").length;
+  const packageViews  = analytics.filter((a) => a.event_type === "package_view").length;
+
+  const controlCentreInput = {
+    vendor: {
+      id: vendor.id,
+      subscription_plan: vendor.subscription_plan,
+      response_rate: vendor.response_rate,
+      rating: vendor.rating,
+      review_count: vendor.review_count,
+      verified_review_count: vendor.verified_review_count,
+      verification_level: vendor.verification_level,
+      cancellation_rate: vendor.cancellation_rate,
+      completed_jobs_count: vendor.completed_jobs_count,
+      repeat_customer_count: vendor.repeat_customer_count,
+      suspicious_flag: vendor.suspicious_flag,
+      featured: vendor.featured,
+      avg_communication: vendor.avg_communication,
+      avg_professionalism: vendor.avg_professionalism,
+      avg_punctuality: vendor.avg_punctuality,
+      avg_quality: vendor.avg_quality,
+      avg_value: vendor.avg_value,
+    },
+    allBookings: allBookings as unknown as ControlCentreBooking[],
+    quotes: allQuotes as unknown as ControlCentreQuote[],
+    unreadMessageCount,
+    hasAvailability: hasAvailabilityRow,
+    analyticsEvents: { profileViews, quoteRequests, mediaViews, contactClicks, packageViews },
+    completion,
+    rankScore: { total: rankScore, tier: calculateVendorScore({ ...vendor, packages: (vendor as Vendor & { packages?: unknown[] }).packages ?? [] }).tier },
+    governance: { lifecycleState: governance.lifecycleState, visibilityReason: governance.visibilityReason },
+    warnings,
+  };
+
+  const controlCentreData = computeBusinessControlCentre(controlCentreInput);
+  const healthScore = computeBusinessHealthScore(controlCentreInput);
+
   return (
     <DashboardLayout user={profile}>
       <div data-testid="vendor-dashboard" className="max-w-6xl mx-auto space-y-6">
+
+        {/* ─── Business Control Centre (ESP 1.3 / 1.3A / 1.3B) ────────── */}
+        <BusinessControlCentre controlCentreData={controlCentreData} healthScore={healthScore} />
 
         {/* ─── Founding Vendor Banner ────────────────────────────────── */}
         {vendor.status === "approved" && <FoundingVendorBanner />}

@@ -50,3 +50,12 @@ export type { SocialPost } from "./social/VendorSocialFeed";
 // ── Utilities ─────────────────────────────────────────────────────────────────
 export { CopyButton } from "./CopyButton";
 export { LegalPage } from "./LegalPage";
+
+// ── Business Control Centre (ESP 1.3 / 1.3A / 1.3B) ───────────────────────────
+export { BusinessControlCentre } from "../vendor/BusinessControlCentre";
+export { TodaysPrioritiesCard } from "../vendor/TodaysPrioritiesCard";
+export { BusinessHealthWidget } from "../vendor/BusinessHealthWidget";
+export { RevenuePanel } from "../vendor/RevenuePanel";
+export { MarketplaceActivityPanel } from "../vendor/MarketplaceActivityPanel";
+export { BusinessOperationsPanel } from "../vendor/BusinessOperationsPanel";
+export { DailyHighestImpactActionCard } from "../vendor/DailyHighestImpactActionCard";
