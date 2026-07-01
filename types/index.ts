@@ -137,6 +137,11 @@ export interface Vendor {
   repeat_customer_count: number;
   dispute_count: number;
   phone_verified: boolean;
+  avg_communication: number | null;
+  avg_professionalism: number | null;
+  avg_punctuality: number | null;
+  avg_quality: number | null;
+  avg_value: number | null;
   created_at: string;
   updated_at: string | null;
   profile?: Profile;
