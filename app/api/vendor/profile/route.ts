@@ -29,7 +29,7 @@ export async function PATCH(req: Request) {
 
   const allowed = [
     "business_name", "tagline", "bio", "category", "custom_category_description", "city", "address",
-    "phone", "website_url", "instagram_url", "min_price", "max_price",
+    "phone", "website_url", "instagram_url", "portfolio_links", "min_price", "max_price",
     "years_experience", "event_types",
   ];
 

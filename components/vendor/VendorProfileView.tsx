@@ -337,6 +337,36 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                   <span className="font-bold text-[10px] leading-none">IG</span> Instagram
                 </a>
               )}
+              {vendor.portfolio_links?.find((l) => l.type === "facebook") && (
+                <a
+                  href={vendor.portfolio_links.find((l) => l.type === "facebook")!.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium hover:bg-blue-50 transition-colors"
+                >
+                  <span className="font-bold text-[10px] leading-none">FB</span> Facebook
+                </a>
+              )}
+              {vendor.portfolio_links?.find((l) => l.type === "tiktok") && (
+                <a
+                  href={vendor.portfolio_links.find((l) => l.type === "tiktok")!.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium hover:bg-slate-100 transition-colors"
+                >
+                  <span className="font-bold text-[10px] leading-none">TT</span> TikTok
+                </a>
+              )}
+              {vendor.portfolio_links?.find((l) => l.type === "whatsapp") && (
+                <a
+                  href={vendor.portfolio_links.find((l) => l.type === "whatsapp")!.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium hover:bg-green-50 transition-colors"
+                >
+                  <MessageCircle size={11} /> WhatsApp
+                </a>
+              )}
             </div>
 
             {/* Rating summary */}

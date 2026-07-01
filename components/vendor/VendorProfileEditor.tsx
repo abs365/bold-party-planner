@@ -10,6 +10,10 @@ interface VendorProfileEditorProps {
   vendor: Vendor;
 }
 
+function findLink(links: Vendor["portfolio_links"], type: string): string {
+  return links?.find((l) => l.type === type)?.url ?? "";
+}
+
 export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -24,6 +28,9 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
     phone: vendor.phone ?? "",
     website_url: vendor.website_url ?? "",
     instagram_url: vendor.instagram_url ?? "",
+    facebook_url: findLink(vendor.portfolio_links, "facebook"),
+    tiktok_url: findLink(vendor.portfolio_links, "tiktok"),
+    whatsapp_number: findLink(vendor.portfolio_links, "whatsapp").replace(/^https:\/\/wa\.me\//, ""),
     min_price: vendor.min_price ?? "",
     max_price: vendor.max_price ?? "",
     years_experience: vendor.years_experience ?? "",
@@ -56,16 +63,32 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
 
     setSaving(true);
     try {
+      // portfolio_links keeps any entries this form doesn't manage (e.g. a
+      // generic link added at application time) and updates/removes the
+      // facebook/tiktok/whatsapp entries based on the form fields below.
+      const managedTypes = ["facebook", "tiktok", "whatsapp"];
+      const otherLinks = (vendor.portfolio_links ?? []).filter((l) => !managedTypes.includes(l.type));
+      const portfolio_links = [
+        ...otherLinks,
+        ...(form.facebook_url ? [{ type: "facebook", url: normalizeUrl(form.facebook_url) }] : []),
+        ...(form.tiktok_url ? [{ type: "tiktok", url: normalizeUrl(form.tiktok_url) }] : []),
+        ...(form.whatsapp_number.trim() ? [{ type: "whatsapp", url: `https://wa.me/${form.whatsapp_number.trim().replace(/\D/g, "")}` }] : []),
+      ];
+
       const res = await fetch("/api/vendor/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          facebook_url: undefined,
+          tiktok_url: undefined,
+          whatsapp_number: undefined,
           website_url: form.website_url ? normalizeUrl(form.website_url) : null,
           instagram_url: form.instagram_url ? normalizeUrl(form.instagram_url) : null,
           min_price: form.min_price ? Number(form.min_price) : null,
           max_price: form.max_price ? Number(form.max_price) : null,
           years_experience: form.years_experience ? Number(form.years_experience) : null,
+          portfolio_links,
         }),
       });
       const data = await res.json();
@@ -180,6 +203,41 @@ export function VendorProfileEditor({ vendor }: VendorProfileEditorProps) {
             onChange={(e) => set("instagram_url", e.target.value)}
             onBlur={(e) => set("instagram_url", normalizeUrl(e.target.value))}
             placeholder="instagram.com/yourbusiness or @yourbusiness"
+            className="input-field w-full"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm text-slate-300 mb-1.5 flex items-center gap-1"><Link2 size={12} />Facebook</label>
+          <input
+            type="text"
+            value={form.facebook_url}
+            onChange={(e) => set("facebook_url", e.target.value)}
+            onBlur={(e) => set("facebook_url", normalizeUrl(e.target.value))}
+            placeholder="facebook.com/yourbusiness"
+            className="input-field w-full"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm text-slate-300 mb-1.5 flex items-center gap-1"><Link2 size={12} />TikTok</label>
+          <input
+            type="text"
+            value={form.tiktok_url}
+            onChange={(e) => set("tiktok_url", e.target.value)}
+            onBlur={(e) => set("tiktok_url", normalizeUrl(e.target.value))}
+            placeholder="tiktok.com/@yourbusiness"
+            className="input-field w-full"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm text-slate-300 mb-1.5 flex items-center gap-1"><Phone size={12} />WhatsApp</label>
+          <input
+            type="text"
+            value={form.whatsapp_number}
+            onChange={(e) => set("whatsapp_number", e.target.value)}
+            placeholder="447700900000 (include country code, no + or spaces)"
             className="input-field w-full"
           />
         </div>
