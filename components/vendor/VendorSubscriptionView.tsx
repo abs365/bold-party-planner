@@ -345,7 +345,10 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus }: Vendo
                   {isUpgrading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                     <>
                       <ArrowRight className="w-3.5 h-3.5" />
-                      {slug === "free" ? "Downgrade" : "Upgrade"}
+                      {slug === "free" ? "Downgrade" :
+                       slug === "pro" ? "Grow My Bookings" :
+                       slug === "premium" || slug === "featured" ? "Get Featured" :
+                       slug === "elite" ? "Go Elite" : "Upgrade"}
                     </>
                   )}
                 </button>
