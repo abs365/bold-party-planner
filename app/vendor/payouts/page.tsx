@@ -6,13 +6,19 @@ import {
   CreditCard, RotateCcw, ShieldCheck, ChevronRight,
 } from "lucide-react";
 import { BankDetailsForm } from "@/components/vendor/BankDetailsForm";
+import { StripeConnectCard } from "@/components/vendor/StripeConnectCard";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
 const fmt = (n: number) => n.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
 
-export default async function VendorPayoutsPage() {
+export default async function VendorPayoutsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ connected?: string; refresh?: string }>;
+}) {
+  const { connected } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
@@ -146,6 +152,9 @@ export default async function VendorPayoutsPage() {
             </div>
           </div>
         </div>
+
+        {/* ── Secure Business Verification (Stripe Connect) ────────────────── */}
+        <StripeConnectCard justConnected={connected === "1"} />
 
         {/* ── Summary Cards ────────────────────────────────────────────────── */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
