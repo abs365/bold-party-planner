@@ -99,7 +99,7 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
               </Link>
               {user.role === "customer" && (
                 <Link
-                  href="/vendor/apply"
+                  href="/founding-vendors"
                   className={cn(
                     "text-sm font-medium transition-colors",
                     lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
@@ -150,7 +150,7 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
                     </Link>
                     {user.role === "customer" && (
                       <Link
-                        href="/vendor/apply"
+                        href="/founding-vendors"
                         className={dropdownItemClass}
                         onClick={() => setProfileOpen(false)}
                       >
@@ -191,7 +191,7 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
           ) : (
             <>
               <Link
-                href="/vendor/apply"
+                href="/founding-vendors"
                 className={cn(
                   "text-sm font-medium transition-colors hidden lg:block",
                   lightBg ? "text-gray-500 hover:text-gray-900" : "text-slate-400 hover:text-white"
@@ -266,7 +266,7 @@ export function Navbar({ user, lightBg = false, notificationCount = 0 }: NavbarP
                   Sign In
                 </Link>
                 <Link
-                  href="/vendor/apply"
+                  href="/founding-vendors"
                   className={cn(
                     "block text-sm py-2 text-center",
                     lightBg ? "text-gray-500" : "text-slate-400"

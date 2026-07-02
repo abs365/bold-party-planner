@@ -32,7 +32,7 @@ const BENEFITS = [
     icon: CheckCircle2,
     title: "Free to list your services.",
     description:
-      "Creating your profile and receiving enquiries costs nothing. Elbold earns a small percentage only when a booking is completed, so our incentives are aligned with yours. No hidden fees, no required subscription.",
+      "Creating your profile and receiving enquiries costs nothing. Elbold earns a 10% commission only when a booking is completed, so our incentives are aligned with yours. No hidden fees, no required subscription.",
   },
   {
     icon: Star,
