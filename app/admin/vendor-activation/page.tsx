@@ -24,6 +24,7 @@ interface VendorRow {
   phone: string | null;
   city: string | null;
   min_price: number | null;
+  subscription_plan: string | null;
   created_at: string;
 }
 
@@ -32,8 +33,8 @@ interface ActivatedVendor extends VendorRow {
   packageCount: number;
   quoteCount: number;
   bookingCount: number;
-  stages: boolean[];   // [s1..s8]
-  stageIndex: number;  // 0-7, highest sequential stage reached
+  stages: boolean[];   // [s1..s9]
+  stageIndex: number;  // 0-8, highest sequential stage reached
   quoteReady: boolean;
   daysApproved: number | null;
   daysToFirstQuote: number | null;
@@ -53,6 +54,7 @@ function computeStages(v: VendorRow & { mediaCount: number; packageCount: number
     v.packageCount >= 1,               // S6: services added
     v.quoteCount >= 1,                 // S7: first quote received
     v.bookingCount >= 1,               // S8: first booking received
+    !!v.subscription_plan && v.subscription_plan !== "free", // S9: subscribed to a paid plan
   ];
 }
 
@@ -71,6 +73,7 @@ const STAGE_LABELS = [
   "Services",
   "Quote",
   "Booking",
+  "Subscribed",
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -90,7 +93,7 @@ async function fetchActivationData(): Promise<ActivatedVendor[]> {
 
   const { data: rawVendors } = await db
     .from("vendors")
-    .select("id, business_name, category, status, verification_level, bio, phone, city, min_price, created_at")
+    .select("id, business_name, category, status, verification_level, bio, phone, city, min_price, subscription_plan, created_at")
     .not("status", "eq", "rejected")
     .order("created_at", { ascending: true })
     .limit(50);
@@ -233,7 +236,7 @@ export default async function VendorActivationPage() {
               Vendor Activation
             </h1>
             <p className="text-slate-500 text-xs mt-1 font-light">
-              Track each vendor from application to first quote received
+              Track each vendor from application through to a paid subscription
             </p>
           </div>
           <div className="flex gap-2">
