@@ -90,14 +90,19 @@ async function fetchVendorGrowthData() {
   const appsThisWeek  = all.filter(v => v.created_at >= week).length;
   const appsThisMonth = all.filter(v => v.created_at >= month).length;
 
+  // Stage-to-stage conversion (of the previous numeric stage, not of total) -
+  // surfaces the actual drop-off point rather than just raw counts.
+  const pctOf = (count: number, prevCount: number): string | null =>
+    prevCount > 0 ? `${Math.round((count / prevCount) * 100)}% of previous stage` : null;
+
   const FUNNEL = [
-    { stage: "Prospects",  count: "∞",              color: "text-slate-500",   note: "Vendors Elbold has not yet contacted" },
-    { stage: "Contacted",  count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker" },
-    { stage: "Interested", count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker" },
-    { stage: "Applied",    count: all.length,        color: "text-blue-400",    note: `${appsThisMonth} in last 30 days` },
-    { stage: "Approved",   count: approved.length,   color: "text-amber-400",   note: `${rejected.length} rejected, ${pending.length} pending` },
-    { stage: "Active",     count: activeVendors.length, color: "text-emerald-400", note: "Paid plan or has booking" },
-    { stage: "Booked",     count: bookedVendors.length, color: "text-purple-400",  note: "At least one confirmed booking" },
+    { stage: "Prospects",  count: "∞",              color: "text-slate-500",   note: "Vendors Elbold has not yet contacted",                  conversion: null as string | null },
+    { stage: "Contacted",  count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker",                             conversion: null as string | null },
+    { stage: "Interested", count: "Manual",          color: "text-slate-400",   note: "Track in outreach tracker",                             conversion: null as string | null },
+    { stage: "Applied",    count: all.length,        color: "text-blue-400",    note: `${appsThisMonth} in last 30 days`,                       conversion: null as string | null },
+    { stage: "Approved",   count: approved.length,   color: "text-amber-400",   note: `${rejected.length} rejected, ${pending.length} pending`, conversion: pctOf(approved.length, all.length) },
+    { stage: "Active",     count: activeVendors.length, color: "text-emerald-400", note: "Paid plan or has booking",                            conversion: pctOf(activeVendors.length, approved.length) },
+    { stage: "Booked",     count: bookedVendors.length, color: "text-purple-400",  note: "At least one confirmed booking",                      conversion: pctOf(bookedVendors.length, activeVendors.length) },
   ];
 
   // ── Vendor leads acquisition metrics ──────────────────────────────────────
@@ -290,7 +295,7 @@ export default async function VendorGrowthPage() {
             <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Acquisition Funnel</h2>
           </div>
           <div className="bg-white/3 border border-white/6 rounded-xl overflow-hidden">
-            {data.funnel.map(({ stage, count, color, note }, i) => (
+            {data.funnel.map(({ stage, count, color, note, conversion }, i) => (
               <div
                 key={stage}
                 className={`flex items-center gap-4 px-5 py-4 ${
@@ -304,6 +309,9 @@ export default async function VendorGrowthPage() {
                   <div className="text-sm font-semibold text-slate-200">{stage}</div>
                   <div className="text-xs text-slate-600 font-light mt-0.5">{note}</div>
                 </div>
+                {conversion && (
+                  <div className="text-xs text-slate-500 font-light flex-shrink-0 hidden sm:block">{conversion}</div>
+                )}
                 <div className={`text-xl font-bold flex-shrink-0 ${color}`}>
                   {String(count)}
                 </div>
