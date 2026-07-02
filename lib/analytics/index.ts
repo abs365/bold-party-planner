@@ -68,6 +68,8 @@ export type AnalyticsEvent =
   | "review.moderated"
   | "review.response_added"
   // Subscriptions
+  | "vendor.subscription.page_viewed"
+  | "vendor.subscription.checkout_started"
   | "vendor.subscription.upgraded"
   | "vendor.subscription.downgraded"
   | "vendor.subscription.cancelled"

@@ -64,10 +64,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const { plan, billing_cycle = "monthly", action } = await req.json() as {
+  const { plan, billing_cycle = "monthly", action, source } = await req.json() as {
     plan?: string;
     billing_cycle?: "monthly" | "annual";
     action?: "cancel" | "reactivate";
+    source?: string; // Phase 72 Priority 4 - which nudge/page sent the vendor here
   };
 
   // ── Cancel subscription ───────────────────────────────────────────────────
@@ -134,6 +135,12 @@ export async function POST(req: Request) {
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/vendor/subscription?success=true&plan=${plan}`,
     cancel_url:  `${process.env.NEXT_PUBLIC_APP_URL}/vendor/subscription?cancelled=true`,
     metadata: { vendor_id: vendor.id, plan, billing_cycle },
+  });
+
+  void track({
+    event: "vendor.subscription.checkout_started",
+    userId: user.id,
+    properties: { vendor_id: vendor.id, plan, billing_cycle, source: source ?? "direct" },
   });
 
   return NextResponse.json({ checkout_url: session.url });

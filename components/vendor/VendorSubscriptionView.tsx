@@ -68,9 +68,10 @@ const FEATURE_COMPARISON = [
 interface VendorSubscriptionViewProps {
   isFoundingVendor?: boolean;
   vendorStatus?: string;
+  source?: string; // Phase 72 Priority 4 - attributes which nudge sent the vendor here
 }
 
-export function VendorSubscriptionView({ isFoundingVendor, vendorStatus }: VendorSubscriptionViewProps = {}) {
+export function VendorSubscriptionView({ isFoundingVendor, vendorStatus, source }: VendorSubscriptionViewProps = {}) {
   const [data, setData] = useState<{ subscription: Subscription | null; plans: PlanRow[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState<string | null>(null);
@@ -92,7 +93,7 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus }: Vendo
       const res = await fetch("/api/vendor/subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: slug, billing_cycle: annual ? "annual" : "monthly" }),
+        body: JSON.stringify({ plan: slug, billing_cycle: annual ? "annual" : "monthly", source: source ?? "direct" }),
       });
       const result = await res.json() as { checkout_url?: string; success?: boolean; plan?: string; error?: string };
       if (result.error) {

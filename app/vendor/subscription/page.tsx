@@ -2,6 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { VendorSubscriptionView } from "@/components/vendor/VendorSubscriptionView";
+import { track } from "@/lib/analytics";
 import type { Profile } from "@/types";
 import { CheckCircle, XCircle } from "lucide-react";
 
@@ -10,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function VendorSubscriptionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ success?: string; cancelled?: string }>;
+  searchParams: Promise<{ success?: string; cancelled?: string; src?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
@@ -25,6 +26,16 @@ export default async function VendorSubscriptionPage({
     .select("id, status, is_founding_vendor")
     .eq("user_id", user.id)
     .single();
+
+  // Phase 72 Priority 4 - the only way to eventually learn which nudge (if
+  // any) actually drives upgrades is to record where the visit came from.
+  // `src` is set by nudge CTA links (e.g. the CRM contact-limit banner, the
+  // Business Control Centre's Daily Highest-Impact-Action card).
+  void track({
+    event: "vendor.subscription.page_viewed",
+    userId: user.id,
+    properties: { source: params.src ?? "direct", vendor_id: vendor?.id ?? null },
+  });
 
   return (
     <DashboardLayout user={profile as Profile}>
@@ -51,6 +62,7 @@ export default async function VendorSubscriptionPage({
         <VendorSubscriptionView
           isFoundingVendor={vendor?.is_founding_vendor ?? false}
           vendorStatus={vendor?.status ?? ""}
+          source={params.src ?? "direct"}
         />
       </div>
     </DashboardLayout>

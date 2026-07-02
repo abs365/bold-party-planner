@@ -387,10 +387,17 @@ function computeDailyHighestImpactAction(
   if (input.vendor.subscription_plan === "free" || input.vendor.subscription_plan == null) {
     if (input.analyticsEvents.profileViews >= 15 && input.allBookings.filter((b) => b.status === "confirmed").length === 0) {
       candidates.push({
-        message: `Your profile attracted ${input.analyticsEvents.profileViews} visitors this month but no bookings. Pro vendors with your view count get priority placement in search.`,
+        message: `Your profile attracted ${input.analyticsEvents.profileViews} visitors this month but no bookings. Pro vendors get a +3 search ranking boost, so more of that traffic sees them first.`,
         ctaLabel: "See what Pro gives you",
-        ctaHref: "/vendor/subscription",
-        measurableClaim: "typically 2-3 extra enquiries/month",
+        ctaHref: "/vendor/subscription?src=daily_action",
+        // Phase 72 Priority 4: this was previously an unverified "typically
+        // 2-3 extra enquiries/month" claim with no data behind it. +3 is the
+        // actual, code-verifiable visibilityBoost difference between free
+        // and pro plans (lib/vendor/entitlements.ts) - a real fact, not an
+        // asserted conversion outcome. Once vendor.subscription.page_viewed/
+        // checkout_started have enough volume, this can be revisited with an
+        // actual measured claim.
+        measurableClaim: "+3 search ranking boost",
       });
     }
   }

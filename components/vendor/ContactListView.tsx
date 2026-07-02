@@ -118,7 +118,7 @@ export function ContactListView({ contacts, showArchived = false, maxContacts = 
             {" "}Upgrade to Pro for unlimited contacts and automatic follow-up reminders.
           </p>
           <Link
-            href="/vendor/subscription"
+            href="/vendor/subscription?src=crm_contact_limit"
             className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-gold-400/15 text-gold-400 border border-gold-400/30 hover:bg-gold-400/25 transition-colors whitespace-nowrap"
           >
             Upgrade to Pro
