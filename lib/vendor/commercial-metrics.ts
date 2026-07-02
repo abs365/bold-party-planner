@@ -1,5 +1,6 @@
 import { planMRRContribution } from "@/lib/vendor/entitlements";
 import { getEventCounts } from "@/lib/analytics";
+import { withoutTestData } from "@/lib/test-vendors";
 
 /**
  * Single source of truth for every commercial number ELBOLD shows anywhere -
@@ -68,10 +69,9 @@ export async function computeCommercialMetrics(
   const since = new Date(Date.now() - daysBack * 86400000).toISOString();
 
   // ── Approved vendors (the population "paying vendors" and "conversion" are measured against) ──
-  const { data: approvedVendorRows } = await db
-    .from("vendors")
-    .select("id")
-    .eq("status", "approved");
+  const { data: approvedVendorRows } = await withoutTestData(
+    db.from("vendors").select("id").eq("status", "approved")
+  );
   const approvedVendorIds = new Set((approvedVendorRows ?? []).map((v: { id: string }) => v.id));
   const totalVendors = approvedVendorIds.size;
 
@@ -108,11 +108,12 @@ export async function computeCommercialMetrics(
   planCounts.free += Math.max(0, totalVendors - paidVendorCount);
 
   // ── Revenue by vendor category ────────────────────────────────────────────
-  const { data: vendorCats } = await db
-    .from("vendors")
-    .select("id, category, subscription_plan")
-    .eq("status", "approved")
-    .in("subscription_plan", ["pro", "premium", "featured", "elite"]);
+  const { data: vendorCats } = await withoutTestData(
+    db.from("vendors")
+      .select("id, category, subscription_plan")
+      .eq("status", "approved")
+      .in("subscription_plan", ["pro", "premium", "featured", "elite"])
+  );
 
   const categoryRevenue: Record<string, number> = {};
   for (const v of vendorCats ?? []) {

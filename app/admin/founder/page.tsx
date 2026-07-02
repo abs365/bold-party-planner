@@ -4,6 +4,7 @@ import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
 import { computeCommercialMetrics } from "@/lib/vendor/commercial-metrics";
+import { withoutTestData } from "@/lib/test-vendors";
 import {
   CheckCircle2, Clock, Users, MessageSquare, ShoppingBag,
   CreditCard, TrendingUp, Target, ArrowRight, Shield,
@@ -30,9 +31,9 @@ export default async function FounderDashboardPage() {
     { data: payments           },
     { count: reviewsTotal      },
   ] = await Promise.all([
-    db.from("vendors").select("*", { count: "exact", head: true }).eq("status", "pending"),
-    db.from("vendors").select("*", { count: "exact", head: true }).eq("status", "approved"),
-    db.from("vendors").select("*", { count: "exact", head: true }).gte("verification_level", 2),
+    withoutTestData(db.from("vendors").select("*", { count: "exact", head: true }).eq("status", "pending")),
+    withoutTestData(db.from("vendors").select("*", { count: "exact", head: true }).eq("status", "approved")),
+    withoutTestData(db.from("vendors").select("*", { count: "exact", head: true }).gte("verification_level", 2)),
     db.from("quotes").select("*", { count: "exact", head: true }),
     db.from("quotes").select("*", { count: "exact", head: true }).in("status", ["responded", "viewed", "shortlisted", "accepted", "converted"]),
     db.from("bookings").select("*", { count: "exact", head: true }),
@@ -40,6 +41,16 @@ export default async function FounderDashboardPage() {
     db.from("payments").select("amount, commission_amount").eq("status", "succeeded").neq("type", "refund"),
     db.from("reviews").select("*", { count: "exact", head: true }),
   ]);
+  // Quotes/bookings/payments/reviews aren't filtered by is_test_data here -
+  // that column lives on vendors/profiles, not these tables, and cross-table
+  // filtering would need a subquery the Supabase query builder can't express
+  // directly. In practice this is a non-issue going forward: migration 071
+  // already removed every existing test record's quotes/bookings, and the
+  // policy (see lib/test-vendors.ts) is that new test vendors/customers must
+  // be marked is_test_data=true at creation - so the vendor/customer counts
+  // above (the ones that were actually visibly wrong in production) are
+  // fixed; a future test vendor's bookings would still need a manual check
+  // if this ever becomes a real problem again.
 
   const gmv        = (payments ?? []).reduce((s, p) => s + (p.amount ?? 0), 0);
   const commission = (payments ?? []).reduce((s, p) => s + (p.commission_amount ?? 0), 0);
@@ -59,7 +70,7 @@ export default async function FounderDashboardPage() {
     { count: bookingsToday     },
     { data: paymentsToday      },
   ] = await Promise.all([
-    db.from("vendors").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
+    withoutTestData(db.from("vendors").select("*", { count: "exact", head: true }).gte("created_at", todayIso)),
     db.from("quotes").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
     db.from("bookings").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
     db.from("payments").select("amount, commission_amount").eq("status", "succeeded").neq("type", "refund").gte("created_at", todayIso),

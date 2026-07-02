@@ -5,6 +5,7 @@ import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatusBadge } from "@/components/ui/Badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { withoutTestData } from "@/lib/test-vendors";
 import {
   Users, Store, CreditCard, TrendingUp, AlertCircle,
   ArrowRight, CheckCircle2, Shield, BarChart2, Eye, Clock,
@@ -45,10 +46,10 @@ export default async function AdminDashboard() {
     recentVendorsRes,
     pilotVendorsRes,
   ] = await Promise.all([
-    db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer"),
-    db.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved"),
-    db.from("vendors").select("id", { count: "exact", head: true }),
-    db.from("vendors").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    withoutTestData(db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer")),
+    withoutTestData(db.from("vendors").select("id", { count: "exact", head: true }).eq("status", "approved")),
+    withoutTestData(db.from("vendors").select("id", { count: "exact", head: true })),
+    withoutTestData(db.from("vendors").select("id", { count: "exact", head: true }).eq("status", "pending")),
     db.from("bookings").select("total_amount, commission_amount, status, created_at")
       .order("created_at", { ascending: false }).limit(200),
     db.from("bookings").select("total_amount, commission_amount, created_at")
@@ -61,13 +62,15 @@ export default async function AdminDashboard() {
     db.from("reviews").select("id", { count: "exact", head: true }).eq("moderation_status", "flagged"),
     db.from("admin_alerts").select("id, type, title, body, severity, created_at, read")
       .eq("read", false).order("created_at", { ascending: false }).limit(8),
-    db.from("vendors").select("id, business_name, category, city, created_at, profile:profiles(full_name, email)")
-      .eq("status", "pending").order("created_at", { ascending: false }).limit(10),
-    db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer").not("phone", "is", null),
+    withoutTestData(
+      db.from("vendors").select("id, business_name, category, city, created_at, profile:profiles(full_name, email)")
+        .eq("status", "pending")
+    ).order("created_at", { ascending: false }).limit(10),
+    withoutTestData(db.from("profiles").select("id", { count: "exact", head: true }).eq("role", "customer").not("phone", "is", null)),
     db.from("events").select("id", { count: "exact", head: true }),
-    db.from("profiles").select("id, full_name, created_at").eq("role", "customer")
+    withoutTestData(db.from("profiles").select("id, full_name, created_at").eq("role", "customer"))
       .order("created_at", { ascending: false }).limit(4),
-    db.from("vendors").select("id, business_name, category, status, created_at")
+    withoutTestData(db.from("vendors").select("id, business_name, category, status, created_at"))
       .order("created_at", { ascending: false }).limit(4),
     db.from("pilot_vendors").select("status, business_name, created_at").then((r) => r.error ? { data: [], error: null } : r),
   ]);
@@ -112,17 +115,17 @@ export default async function AdminDashboard() {
   // Recent activity timeline: merge 3 event types, sort by time
   type ActivityItem = { icon: string; label: string; sub: string; time: string };
   const activity: ActivityItem[] = [
-    ...recentCustomers.map((c) => ({
+    ...recentCustomers.map((c: { full_name: string | null; created_at: string }) => ({
       icon: "👤",
-      label: `New customer: ${(c.full_name as string | null) ?? "Unknown"}`,
+      label: `New customer: ${c.full_name ?? "Unknown"}`,
       sub: "Customer signup",
-      time: c.created_at as string,
+      time: c.created_at,
     })),
-    ...recentVendors.map((v) => ({
+    ...recentVendors.map((v: { business_name: string; status: string; category: string; created_at: string }) => ({
       icon: "🏪",
-      label: v.business_name as string,
-      sub: `Vendor ${(v.status as string) === "pending" ? "application" : "registered"} · ${(v.category as string).replace(/_/g, " ")}`,
-      time: v.created_at as string,
+      label: v.business_name,
+      sub: `Vendor ${v.status === "pending" ? "application" : "registered"} · ${v.category.replace(/_/g, " ")}`,
+      time: v.created_at,
     })),
     ...allBookings.slice(0, 4).map((b) => ({
       icon: "📋",
@@ -373,7 +376,7 @@ export default async function AdminDashboard() {
               </div>
             ) : (
               <div className="space-y-3">
-                {pendingVendors.slice(0, 5).map((vendor) => (
+                {pendingVendors.slice(0, 5).map((vendor: { id: string; business_name: string; category: string; city: string; profile?: { full_name?: string } }) => (
                   <div key={vendor.id} className="flex items-center gap-3 p-3.5 rounded-xl bg-white/3 border border-white/6 hover:border-white/10 transition-colors">
                     <div className="w-9 h-9 rounded-xl bg-brand-500/15 flex items-center justify-center text-sm font-bold text-brand-400 flex-shrink-0">
                       {vendor.business_name.charAt(0).toUpperCase()}

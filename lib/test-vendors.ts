@@ -22,3 +22,23 @@ export const TEST_VENDOR_IDS = [
 
 // Supabase-formatted exclusion clause: .not("id", "in", TEST_VENDOR_EXCLUSION)
 export const TEST_VENDOR_EXCLUSION = `(${TEST_VENDOR_IDS.join(",")})`;
+
+// ── is_test_data (migration 072) ─────────────────────────────────────────
+//
+// This is the durable, forward-looking replacement for the hardcoded ID
+// list above. Migrations 067 and 071 both had to hunt down and manually
+// delete test/demo data found live in production after the fact - a real
+// `vendors.is_test_data` / `profiles.is_test_data` column now exists so any
+// future test/QA/smoke-test record can be marked at creation time instead
+// of requiring another cleanup migration later.
+//
+// ANY code path that creates a vendor or profile purely for testing,
+// QA, or demo purposes MUST set is_test_data = true. ANY query used for a
+// production dashboard, marketplace listing, or commercial/KPI report MUST
+// exclude is_test_data = true rows - apply `withoutTestData()` below, or the
+// equivalent `.eq("is_test_data", false)` filter directly.
+//
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts any Supabase query builder (vendors or profiles); typed `any` deliberately, since Supabase's generic builder types cause "type instantiation excessively deep" errors when threaded through a wrapper function like this
+export function withoutTestData(query: any): any {
+  return query.eq("is_test_data", false);
+}
