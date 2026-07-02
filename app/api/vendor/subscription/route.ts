@@ -5,11 +5,19 @@ import { track } from "@/lib/analytics";
 import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 
 // Stripe price IDs per plan per billing cycle — configure in .env
+//
+// Phase "Return to Commercial Execution" (2026-07-02): these env var names
+// previously did not match what's actually configured in production
+// (code read *_MONTHLY_PRICE_ID / *_ANNUAL_PRICE_ID; Vercel has
+// *_PRICE_MONTHLY / *_PRICE_YEARLY). Every paid-plan checkout attempt was
+// silently failing with "price ID not configured" - fixed to read the
+// variable names that are actually set, rather than renaming the
+// already-configured production env vars.
 const PRICE_IDS: Record<string, { monthly: string; annual: string }> = {
-  pro:     { monthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID     ?? process.env.STRIPE_PRO_PRICE_ID     ?? "", annual: process.env.STRIPE_PRO_ANNUAL_PRICE_ID     ?? "" },
-  premium: { monthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID ?? process.env.STRIPE_FEATURED_PRICE_ID ?? "", annual: process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID ?? "" },
-  featured:{ monthly: process.env.STRIPE_FEATURED_PRICE_ID        ?? "", annual: process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID ?? "" }, // legacy alias
-  elite:   { monthly: process.env.STRIPE_ELITE_MONTHLY_PRICE_ID   ?? "", annual: process.env.STRIPE_ELITE_ANNUAL_PRICE_ID   ?? "" },
+  pro:     { monthly: process.env.STRIPE_PRO_PRICE_MONTHLY     ?? "", annual: process.env.STRIPE_PRO_PRICE_YEARLY     ?? "" },
+  premium: { monthly: process.env.STRIPE_PREMIUM_PRICE_MONTHLY ?? "", annual: process.env.STRIPE_PREMIUM_PRICE_YEARLY ?? "" },
+  featured:{ monthly: process.env.STRIPE_PREMIUM_PRICE_MONTHLY ?? "", annual: process.env.STRIPE_PREMIUM_PRICE_YEARLY ?? "" }, // legacy alias for premium
+  elite:   { monthly: process.env.STRIPE_ELITE_PRICE_MONTHLY   ?? "", annual: process.env.STRIPE_ELITE_PRICE_YEARLY   ?? "" },
 };
 
 export async function GET() {
