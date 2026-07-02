@@ -8,6 +8,7 @@ import {
   CheckCircle2, Clock, Users, MessageSquare, ShoppingBag,
   CreditCard, TrendingUp, Target, ArrowRight, Shield,
   Star, AlertCircle, ChevronRight, DollarSign, TrendingDown, UserCheck,
+  Sunrise, Sparkles,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +43,30 @@ export default async function FounderDashboardPage() {
 
   const gmv        = (payments ?? []).reduce((s, p) => s + (p.amount ?? 0), 0);
   const commission = (payments ?? []).reduce((s, p) => s + (p.commission_amount ?? 0), 0);
+
+  // ── Today's operational KPIs (Phase 73) ───────────────────────────────────
+  // The rest of this page is all-time cumulative counts - useful for overall
+  // health, but a founder opening this every morning needs "what happened
+  // since I last looked," not "what's happened ever." Uses created_at, the
+  // one timestamp every one of these tables already has - no new columns.
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayIso = todayStart.toISOString();
+
+  const [
+    { count: applicationsToday },
+    { count: quotesToday       },
+    { count: bookingsToday     },
+    { data: paymentsToday      },
+  ] = await Promise.all([
+    db.from("vendors").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
+    db.from("quotes").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
+    db.from("bookings").select("*", { count: "exact", head: true }).gte("created_at", todayIso),
+    db.from("payments").select("amount, commission_amount").eq("status", "succeeded").neq("type", "refund").gte("created_at", todayIso),
+  ]);
+
+  const gmvToday        = (paymentsToday ?? []).reduce((s, p) => s + (p.amount ?? 0), 0);
+  const commissionToday = (paymentsToday ?? []).reduce((s, p) => s + (p.commission_amount ?? 0), 0);
 
   // First Booking Mission — 7-step tracker
   const hasQuote        = (quotesRequested ?? 0) > 0;
@@ -117,6 +142,32 @@ export default async function FounderDashboardPage() {
               Launch Checklist <ArrowRight size={13} />
             </Link>
           </div>
+        </div>
+
+        {/* Today — Phase 73 daily operational KPIs */}
+        <div>
+          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <Sunrise size={12} /> Today
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "New Applications", value: applicationsToday ?? 0,        icon: Users,      color: "text-brand-400" },
+              { label: "Quotes Requested", value: quotesToday ?? 0,               icon: MessageSquare, color: "text-sky-400" },
+              { label: "Bookings Created", value: bookingsToday ?? 0,             icon: Sparkles,   color: "text-emerald-400" },
+              { label: "Revenue Today",    value: formatCurrency(gmvToday),       icon: DollarSign, color: "text-emerald-400" },
+            ].map(({ label, value, icon: Icon, color }) => (
+              <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col justify-between min-h-[90px]">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-slate-500 leading-tight">{label}</span>
+                  <Icon size={14} className={color} />
+                </div>
+                <div className={`font-bold text-white ${typeof value === "string" ? "text-lg" : "text-2xl"}`}>{value}</div>
+              </div>
+            ))}
+          </div>
+          {commissionToday > 0 && (
+            <p className="text-xs text-slate-500 mt-2">{formatCurrency(commissionToday)} commission earned today</p>
+          )}
         </div>
 
         {/* 9 Core Metrics */}
