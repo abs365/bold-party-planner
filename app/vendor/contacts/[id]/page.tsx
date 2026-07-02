@@ -25,7 +25,7 @@ export default async function ContactDetailPage({
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile || profile.role !== "vendor") redirect("/dashboard");
 
-  const { data: vendor } = await supabase.from("vendors").select("id").eq("user_id", user.id).single();
+  const { data: vendor } = await supabase.from("vendors").select("id, subscription_plan").eq("user_id", user.id).single();
   if (!vendor) redirect("/vendor/apply");
 
   const { data: contact } = await supabase
@@ -143,7 +143,7 @@ export default async function ContactDetailPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Edit / Archive — takes 2 cols */}
           <div className="lg:col-span-2">
-            <ContactDetailClient contact={contact as ManualContact} />
+            <ContactDetailClient contact={contact as ManualContact} subscriptionPlan={vendor.subscription_plan} />
           </div>
 
           {/* Notes + timeline sidebar */}

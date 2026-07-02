@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Archive, ArchiveRestore, Loader2, Check, X, Clock } from "lucide-react";
+import Link from "next/link";
+import { Edit2, Archive, ArchiveRestore, Loader2, Check, X, Clock, Sparkles } from "lucide-react";
+import { isPaidPlan } from "@/lib/vendor/entitlements";
 import type { ManualContact, ManualContactSource, ManualContactStage } from "@/types";
 
 const SOURCE_OPTIONS: { value: ManualContactSource; label: string }[] = [
@@ -24,11 +26,12 @@ const STAGE_OPTIONS: { value: ManualContactStage; label: string }[] = [
   { value: "lost",      label: "Lost" },
 ];
 
-function PipelineControls({ contact }: { contact: ManualContact }) {
+function PipelineControls({ contact, subscriptionPlan }: { contact: ManualContact; subscriptionPlan: string | null }) {
   const router = useRouter();
   const [stage, setStage] = useState<ManualContactStage>(contact.stage);
   const [followUpAt, setFollowUpAt] = useState(contact.follow_up_at?.slice(0, 10) ?? "");
   const [saving, setSaving] = useState(false);
+  const remindersIncluded = isPaidPlan(subscriptionPlan);
 
   async function save(patch: Record<string, unknown>) {
     setSaving(true);
@@ -82,13 +85,24 @@ function PipelineControls({ contact }: { contact: ManualContact }) {
               </button>
             )}
           </div>
+          {followUpAt && (
+            remindersIncluded ? (
+              <p className="text-xs text-emerald-400/80 mt-1.5">You&apos;ll get a reminder when this date arrives.</p>
+            ) : (
+              <p className="text-xs text-white/35 mt-1.5 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-gold-400" />
+                Free plan: this date is tracked but won&apos;t send you a reminder.{" "}
+                <Link href="/vendor/subscription" className="text-gold-400 hover:text-gold-300 underline">Upgrade to Pro</Link> to get notified automatically.
+              </p>
+            )
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export function ContactDetailClient({ contact }: { contact: ManualContact }) {
+export function ContactDetailClient({ contact, subscriptionPlan }: { contact: ManualContact; subscriptionPlan: string | null }) {
   const router   = useRouter();
   const [editing,  setEditing]  = useState(false);
   const [saving,   setSaving]   = useState(false);
@@ -145,7 +159,7 @@ export function ContactDetailClient({ contact }: { contact: ManualContact }) {
   if (!editing) {
     return (
       <div className="space-y-4">
-        <PipelineControls contact={contact} />
+        <PipelineControls contact={contact} subscriptionPlan={subscriptionPlan} />
         <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-5">
         <div className="flex items-center justify-between">
           <h2 className="text-white font-semibold text-sm">Contact Details</h2>
