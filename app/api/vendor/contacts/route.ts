@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logContactActivity } from "@/lib/vendor/contact-activity";
+import { canAddMoreContacts, getMaxContacts } from "@/lib/vendor/entitlements";
 import type { ManualContactSource, ManualContactStage } from "@/types";
 
 const ALLOWED_SOURCES: ManualContactSource[] = [
@@ -64,7 +65,7 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data: vendor } = await supabase
-    .from("vendors").select("id").eq("user_id", user.id).maybeSingle();
+    .from("vendors").select("id, subscription_plan").eq("user_id", user.id).maybeSingle();
   if (!vendor) return NextResponse.json({ error: "Not a vendor" }, { status: 403 });
 
   const body = await req.json() as {
@@ -86,6 +87,19 @@ export async function POST(req: Request) {
   }
   if (body.stage && !ALLOWED_STAGES.includes(body.stage as ManualContactStage)) {
     return NextResponse.json({ error: "Invalid stage" }, { status: 400 });
+  }
+
+  const { count: activeContactCount } = await supabase
+    .from("manual_contacts")
+    .select("id", { count: "exact", head: true })
+    .eq("vendor_id", vendor.id)
+    .eq("is_archived", false);
+
+  if (!canAddMoreContacts(vendor.subscription_plan, activeContactCount ?? 0)) {
+    return NextResponse.json({
+      error: `You've reached the ${getMaxContacts(vendor.subscription_plan)}-contact limit on the Free plan. Upgrade to Pro for unlimited contacts.`,
+      upgradeRequired: true,
+    }, { status: 403 });
   }
 
   const { data: contact, error } = await supabase

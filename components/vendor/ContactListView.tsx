@@ -36,9 +36,11 @@ const SOURCE_OPTIONS = [
 interface Props {
   contacts: ManualContact[];
   showArchived?: boolean;
+  maxContacts?: number;         // -1 = unlimited
+  activeContactCount?: number;
 }
 
-export function ContactListView({ contacts, showArchived = false }: Props) {
+export function ContactListView({ contacts, showArchived = false, maxContacts = -1, activeContactCount = 0 }: Props) {
   const [query,     setQuery]     = useState("");
   const [source,    setSource]    = useState("");
   const [page,      setPage]      = useState(1);
@@ -99,6 +101,30 @@ export function ContactListView({ contacts, showArchived = false }: Props) {
           </Link>
         </div>
       </div>
+
+      {/* Contextual subscription nudge - only shown when approaching/at the
+          Free plan contact limit, i.e. tied to real CRM usage rather than a
+          generic upsell */}
+      {!showArchived && maxContacts !== -1 && activeContactCount >= Math.floor(maxContacts * 0.8) && (
+        <div className={`rounded-xl border px-4 py-3 flex items-center justify-between gap-4 ${
+          activeContactCount >= maxContacts
+            ? "bg-amber-500/10 border-amber-500/25"
+            : "bg-white/4 border-white/8"
+        }`}>
+          <p className="text-sm text-white/70">
+            {activeContactCount >= maxContacts
+              ? `You've reached the ${maxContacts}-contact limit on the Free plan.`
+              : `You're using ${activeContactCount} of ${maxContacts} contacts on the Free plan.`}
+            {" "}Upgrade to Pro for unlimited contacts and automatic follow-up reminders.
+          </p>
+          <Link
+            href="/vendor/subscription"
+            className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-gold-400/15 text-gold-400 border border-gold-400/30 hover:bg-gold-400/25 transition-colors whitespace-nowrap"
+          >
+            Upgrade to Pro
+          </Link>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-3 flex-wrap">

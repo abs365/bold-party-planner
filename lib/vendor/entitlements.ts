@@ -17,6 +17,7 @@ export interface PlanConfig {
   visibilityBoost:            number;  // sort-level boost in marketplace ranking (not quality score)
   maxImages:                  number;  // -1 = unlimited
   maxPackages:                number;  // -1 = unlimited
+  maxContacts:                number;  // -1 = unlimited; active (non-archived) manual_contacts
   analyticsTier:              "basic" | "standard" | "advanced";
   featuredEligible:           boolean; // eligible for homepage featured slot
   categoryFeaturedEligible:   boolean; // eligible for top of category pages
@@ -29,14 +30,14 @@ export const PLAN_CONFIG: Record<PlanSlug, PlanConfig> = {
   free: {
     slug: "free", name: "Free",
     monthlyPrice: 0, annualPrice: 0,
-    visibilityBoost: 0, maxImages: 5, maxPackages: 1,
+    visibilityBoost: 0, maxImages: 5, maxPackages: 1, maxContacts: 25,
     analyticsTier: "basic",
     featuredEligible: false, categoryFeaturedEligible: false, prioritySupport: false,
   },
   pro: {
     slug: "pro", name: "Pro",
     monthlyPrice: 29, annualPrice: 279,
-    visibilityBoost: 3, maxImages: 20, maxPackages: -1,
+    visibilityBoost: 3, maxImages: 20, maxPackages: -1, maxContacts: -1,
     analyticsTier: "standard",
     featuredEligible: false, categoryFeaturedEligible: false, prioritySupport: false,
   },
@@ -44,21 +45,21 @@ export const PLAN_CONFIG: Record<PlanSlug, PlanConfig> = {
   featured: {
     slug: "featured", name: "Premium",
     monthlyPrice: 79, annualPrice: 759,
-    visibilityBoost: 6, maxImages: 50, maxPackages: -1,
+    visibilityBoost: 6, maxImages: 50, maxPackages: -1, maxContacts: -1,
     analyticsTier: "advanced",
     featuredEligible: true, categoryFeaturedEligible: true, prioritySupport: false,
   },
   premium: {
     slug: "premium", name: "Premium",
     monthlyPrice: 79, annualPrice: 759,
-    visibilityBoost: 6, maxImages: 50, maxPackages: -1,
+    visibilityBoost: 6, maxImages: 50, maxPackages: -1, maxContacts: -1,
     analyticsTier: "advanced",
     featuredEligible: true, categoryFeaturedEligible: true, prioritySupport: false,
   },
   elite: {
     slug: "elite", name: "Elite",
     monthlyPrice: 149, annualPrice: 1428,
-    visibilityBoost: 10, maxImages: -1, maxPackages: -1,
+    visibilityBoost: 10, maxImages: -1, maxPackages: -1, maxContacts: -1,
     analyticsTier: "advanced",
     featuredEligible: true, categoryFeaturedEligible: true, prioritySupport: true,
   },
@@ -78,6 +79,7 @@ export interface VendorEntitlements {
   plan:                       PlanSlug;
   maxImages:                  number;   // -1 = unlimited
   maxPackages:                number;   // -1 = unlimited
+  maxContacts:                number;   // -1 = unlimited
   canAccessAdvancedAnalytics: boolean;
   canAccessStandardAnalytics: boolean;
   canAppearAsFeatured:        boolean;  // homepage featured slot
@@ -116,6 +118,7 @@ export function getEntitlements(
     plan:                        slug,
     maxImages:                   config.maxImages,
     maxPackages:                 config.maxPackages,
+    maxContacts:                 config.maxContacts,
     canAccessAdvancedAnalytics:  config.analyticsTier === "advanced",
     canAccessStandardAnalytics:  config.analyticsTier !== "basic",
     canAppearAsFeatured,
@@ -163,6 +166,15 @@ export function getMaxImages(plan: PlanSlug | string | null): number {
 
 export function getMaxPackages(plan: PlanSlug | string | null): number {
   return PLAN_CONFIG[normalizePlan(plan)]?.maxPackages ?? 1;
+}
+
+export function getMaxContacts(plan: PlanSlug | string | null): number {
+  return PLAN_CONFIG[normalizePlan(plan)]?.maxContacts ?? 25;
+}
+
+export function canAddMoreContacts(plan: PlanSlug | string | null, currentCount: number): boolean {
+  const limit = getMaxContacts(plan);
+  return limit === -1 || currentCount < limit;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

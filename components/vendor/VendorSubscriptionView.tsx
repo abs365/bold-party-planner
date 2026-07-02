@@ -54,6 +54,8 @@ const FEATURE_COMPARISON = [
   { feature: "Portfolio photos", free: "5", pro: "20", premium: "50", elite: "Unlimited" },
   { feature: "Video portfolio",  free: "-", pro: "✓",  premium: "✓",  elite: "✓" },
   { feature: "Service packages", free: "1", pro: "Unlimited", premium: "Unlimited", elite: "Unlimited" },
+  { feature: "CRM contacts",     free: "25", pro: "Unlimited", premium: "Unlimited", elite: "Unlimited" },
+  { feature: "Automatic follow-up reminders", free: "-", pro: "✓", premium: "✓", elite: "✓" },
   { feature: "Analytics dashboard", free: "Basic", pro: "Full", premium: "Advanced", elite: "Advanced" },
   { feature: "Search ranking boost", free: "-", pro: "+3", premium: "+6", elite: "+10" },
   { feature: "Smart lead boosts",   free: "-", pro: "✓", premium: "✓", elite: "✓" },
