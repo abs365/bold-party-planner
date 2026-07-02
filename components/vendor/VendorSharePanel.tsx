@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Copy, Check, Share2 } from "lucide-react";
+import { Copy, Check, Share2, QrCode } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface VendorSharePanelProps {
@@ -11,6 +11,7 @@ interface VendorSharePanelProps {
 
 export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) {
   const [copied, setCopied] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   // Defaults false on the server (no `navigator`) and flips post-hydration —
   // required for SSR correctness, not a mirror of already-known render state.
   const [canNativeShare, setCanNativeShare] = useState(false);
@@ -22,6 +23,10 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
   const encodedUrl = encodeURIComponent(profileUrl);
   const encodedText = encodeURIComponent(`Book ${businessName} for your event on Elbold`);
   const shareText = `Book ${businessName} for your event on Elbold`;
+  // Public, no-signup QR image service - avoids adding a QR-generation
+  // dependency for what's a secondary, non-critical utility (business cards,
+  // printed materials, Instagram bio link-in-image use).
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodedUrl}`;
 
   useEffect(() => {
     if (typeof navigator !== "undefined" && typeof navigator.share === "function") setCanNativeShare(true);
@@ -44,6 +49,7 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
   }
 
   return (
+    <div>
     <div className="flex flex-wrap items-center gap-2">
       {/* Native share sheet — on mobile this surfaces Instagram, TikTok, Messages,
           Mail and any other installed app with a share target, none of which
@@ -109,6 +115,34 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
         {copied ? <Check size={14} className="text-green-600" /> : <Copy size={14} />}
         {copied ? "Copied!" : "Copy link"}
       </button>
+
+      {/* QR code — for business cards, printed materials, and Instagram/TikTok
+          bio use, where a tappable link isn't an option */}
+      <button
+        onClick={() => setShowQr((v) => !v)}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors"
+        style={{ borderColor: "#E5E7EB", color: "#374151" }}
+        aria-label="Show QR code"
+      >
+        <QrCode size={14} />
+        {showQr ? "Hide QR code" : "QR code"}
+      </button>
+    </div>
+
+    {showQr && (
+      <div className="mt-3 inline-flex flex-col items-center gap-2 p-4 rounded-xl border" style={{ borderColor: "#E5E7EB" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- external QR service, not a local/optimizable asset */}
+        <img src={qrImageUrl} alt={`QR code linking to ${businessName}'s Elbold profile`} width={180} height={180} />
+        <a
+          href={qrImageUrl}
+          download={`${slug}-elbold-qr.png`}
+          className="text-xs font-medium hover:underline"
+          style={{ color: "#0B1F4D" }}
+        >
+          Download for print
+        </a>
+      </div>
+    )}
     </div>
   );
 }
