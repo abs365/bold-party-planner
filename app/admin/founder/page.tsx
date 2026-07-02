@@ -3,7 +3,7 @@ import Link from "next/link";
 import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
-import { planMRRContribution } from "@/lib/vendor/entitlements";
+import { computeCommercialMetrics } from "@/lib/vendor/commercial-metrics";
 import {
   CheckCircle2, Clock, Users, MessageSquare, ShoppingBag,
   CreditCard, TrendingUp, Target, ArrowRight, Shield,
@@ -82,23 +82,15 @@ export default async function FounderDashboardPage() {
   const completed   = (bookingsCompleted ?? 0) > 0;
   const hasReview   = (reviewsTotal ?? 0) > 0;
 
-  // ── Commercial overview (Phase 71) ────────────────────────────────────────
-  // Reuses the exact same computation as /api/admin/monetization rather than
-  // duplicating a second MRR/churn implementation - the founder previously
-  // had to leave their own dashboard to see this on a separate admin page.
-  const { data: subs } = await db
-    .from("vendor_subscriptions")
-    .select("plan, status");
-
-  const activeSubs    = (subs ?? []).filter((s) => s.status === "active");
-  const pastDueSubs   = (subs ?? []).filter((s) => s.status === "past_due");
-  const cancelledSubs = (subs ?? []).filter((s) => s.status === "cancelled");
-
-  const mrr = activeSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
-  const atRiskMRR = pastDueSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
-  const paidConversion = (approvedVendors ?? 0) > 0
-    ? Math.round((activeSubs.length / (approvedVendors ?? 1)) * 100)
-    : 0;
+  // ── Commercial overview ────────────────────────────────────────────────────
+  // Calls the same commercial-metrics service /admin/monetization uses -
+  // this used to be a hand-duplicated MRR/churn formula that had already
+  // silently diverged from the monetization page's numbers in production
+  // (confirmed live: this page showed MRR £178 / 200% conversion while
+  // monetization showed £0 / 0%, from the same underlying data). One
+  // function, one set of numbers, everywhere.
+  const commercial = await computeCommercialMetrics(db, 30);
+  const { mrr, at_risk_mrr: atRiskMRR, paid_conversion: paidConversion, paying_vendors: payingVendorsCount, cancelled_count: cancelledCount, past_due_count: pastDueCount } = commercial.summary;
 
   const missionSteps = [
     { label: "Customer requests a quote",          done: hasQuote,    href: "/admin/quotes" },
@@ -212,7 +204,7 @@ export default async function FounderDashboardPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { label: "MRR",              value: formatCurrency(mrr),      icon: DollarSign,  color: "text-emerald-400" },
-              { label: "Paying Vendors",   value: activeSubs.length,        icon: UserCheck,   color: "text-brand-400" },
+              { label: "Paying Vendors",   value: payingVendorsCount,       icon: UserCheck,   color: "text-brand-400" },
               { label: "Paid Conversion",  value: `${paidConversion}%`,     icon: TrendingUp,  color: "text-blue-400" },
               {
                 label: "At-Risk MRR",
@@ -235,14 +227,14 @@ export default async function FounderDashboardPage() {
                 <div className="text-2xl font-bold text-white">{value}</div>
                 {urgent && (
                   <div className="flex items-center gap-1 text-xs text-amber-400 mt-1">
-                    <AlertCircle size={10} /> {pastDueSubs.length} past-due
+                    <AlertCircle size={10} /> {pastDueCount} past-due
                   </div>
                 )}
               </div>
             ))}
           </div>
-          {cancelledSubs.length > 0 && (
-            <p className="text-xs text-slate-500 mt-2">{cancelledSubs.length} cancelled subscription{cancelledSubs.length === 1 ? "" : "s"} to date</p>
+          {cancelledCount > 0 && (
+            <p className="text-xs text-slate-500 mt-2">{cancelledCount} cancelled subscription{cancelledCount === 1 ? "" : "s"} to date</p>
           )}
         </div>
 

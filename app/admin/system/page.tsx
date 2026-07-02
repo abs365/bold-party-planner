@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { readdirSync } from "fs";
+import { join } from "path";
 import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ExternalLink, CheckCircle2, XCircle, Server } from "lucide-react";
@@ -7,39 +9,27 @@ import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
 
-
-const MIGRATIONS = [
-  { id: "001", name: "initial" },
-  { id: "002", name: "phase2" },
-  { id: "003", name: "phase3" },
-  { id: "004", name: "phase4" },
-  { id: "005", name: "phase5" },
-  { id: "006", name: "phase6" },
-  { id: "007", name: "phase7" },
-  { id: "008", name: "data_consistency_fix" },
-  { id: "009", name: "schema_grants_fix" },
-  { id: "010", name: "trigger_and_category_fix" },
-  { id: "011", name: "marketplace_operations" },
-  { id: "012", name: "moderation" },
-  { id: "013", name: "vendor_verification_system" },
-  { id: "014", name: "verification_automation" },
-  { id: "015", name: "demo_password_rpc" },
-  { id: "016", name: "admin_alerts_rls" },
-  { id: "017", name: "demo_user_fix" },
-  { id: "018", name: "complete_demo_cleanup" },
-  { id: "019", name: "force_demo_auth_cleanup" },
-  { id: "020", name: "restore_robust_trigger" },
-  { id: "021", name: "analytics_and_audit" },
-  { id: "022", name: "vendor_governance" },
-  { id: "023", name: "vendor_reviews_and_reputation" },
-  { id: "024", name: "subscription_infrastructure" },
-  { id: "025", name: "gdpr_and_production" },
-  { id: "026", name: "push_subscriptions" },
-  { id: "027", name: "event_planner_category" },
-  { id: "030", name: "custom_category" },
-  { id: "031", name: "quote_workflow" },
-  { id: "032", name: "vendor_bank_details" },
-];
+// Reads the real migrations directory at request time rather than a
+// hand-maintained list - the hardcoded version of this list was found stuck
+// at 30 migrations (last: 032, dated 2026-06-01) during a live production
+// audit, while the repo actually had 73 migration files (up to 070) at the
+// time of that same audit. A manually-updated list of this kind will always
+// eventually go stale; reading the directory cannot.
+function getMigrations(): { id: string; name: string }[] {
+  try {
+    const dir = join(process.cwd(), "supabase", "migrations");
+    return readdirSync(dir)
+      .filter((f) => f.endsWith(".sql"))
+      .sort()
+      .map((f) => {
+        const withoutExt = f.replace(/\.sql$/, "");
+        const [id, ...rest] = withoutExt.split("_");
+        return { id, name: rest.join("_") };
+      });
+  } catch {
+    return [];
+  }
+}
 
 function EnvRow({ label, present }: { label: string; present: boolean }) {
   return (
@@ -75,13 +65,21 @@ export default async function AdminSystemPage() {
     BOLD_PARTY_SEED_SECRET:           !!process.env.BOLD_PARTY_SEED_SECRET,
     TELEGRAM_BOT_TOKEN:               !!process.env.TELEGRAM_BOT_TOKEN,
     STRIPE_WEBHOOK_SECRET:            !!process.env.STRIPE_WEBHOOK_SECRET,
-    STRIPE_PRO_MONTHLY_PRICE_ID:      !!process.env.STRIPE_PRO_MONTHLY_PRICE_ID,
-    STRIPE_PREMIUM_MONTHLY_PRICE_ID:  !!process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID,
-    STRIPE_ELITE_MONTHLY_PRICE_ID:    !!process.env.STRIPE_ELITE_MONTHLY_PRICE_ID,
-    STRIPE_PRO_ANNUAL_PRICE_ID:       !!process.env.STRIPE_PRO_ANNUAL_PRICE_ID,
-    STRIPE_PREMIUM_ANNUAL_PRICE_ID:   !!process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID,
-    STRIPE_ELITE_ANNUAL_PRICE_ID:     !!process.env.STRIPE_ELITE_ANNUAL_PRICE_ID,
+    STRIPE_CONNECT_WEBHOOK_SECRET:    !!process.env.STRIPE_CONNECT_WEBHOOK_SECRET,
+    STRIPE_CONNECT_ENABLED:           process.env.STRIPE_CONNECT_ENABLED === "true",
+    // These were checked under the wrong variable names until this fix
+    // (STRIPE_PRO_MONTHLY_PRICE_ID etc.) - confirmed live in production that
+    // the real, correctly-configured vars use *_PRICE_MONTHLY / *_PRICE_YEARLY.
+    STRIPE_PRO_PRICE_MONTHLY:         !!process.env.STRIPE_PRO_PRICE_MONTHLY,
+    STRIPE_PRO_PRICE_YEARLY:          !!process.env.STRIPE_PRO_PRICE_YEARLY,
+    STRIPE_PREMIUM_PRICE_MONTHLY:     !!process.env.STRIPE_PREMIUM_PRICE_MONTHLY,
+    STRIPE_PREMIUM_PRICE_YEARLY:      !!process.env.STRIPE_PREMIUM_PRICE_YEARLY,
+    STRIPE_ELITE_PRICE_MONTHLY:       !!process.env.STRIPE_ELITE_PRICE_MONTHLY,
+    STRIPE_ELITE_PRICE_YEARLY:        !!process.env.STRIPE_ELITE_PRICE_YEARLY,
   };
+
+  const migrations = getMigrations();
+  const lastMigration = migrations[migrations.length - 1];
 
   const buildInfo = {
     nodeEnv:    process.env.NODE_ENV ?? "unknown",
@@ -139,12 +137,14 @@ export default async function AdminSystemPage() {
 
         {/* Migrations */}
         <div className="bg-white/4 border border-white/6 rounded-xl p-5">
-          <h2 className="font-semibold text-white mb-1 text-sm">Required Migrations</h2>
+          <h2 className="font-semibold text-white mb-1 text-sm">Migration Files in Deployed Code</h2>
           <p className="text-xs text-slate-500 mb-4">
-            All 30 migrations applied and verified in Supabase. Last applied: 032_vendor_bank_details (2026-06-01).
+            {migrations.length} migration files present in this deployment&apos;s <code className="font-mono">supabase/migrations</code> directory.
+            {lastMigration && <> Last: <code className="font-mono">{lastMigration.id}_{lastMigration.name}</code>.</>}{" "}
+            This reflects what shipped with the code, not independent confirmation that every migration has been applied to this database - cross-check with <code className="font-mono">supabase migration list</code> if in doubt.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {MIGRATIONS.map((m) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto pr-1">
+            {migrations.map((m) => (
               <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5">
                 <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
                 <span className="text-xs font-mono text-slate-300">
@@ -152,12 +152,6 @@ export default async function AdminSystemPage() {
                 </span>
               </div>
             ))}
-          </div>
-          <div className="mt-4 p-3 rounded-xl bg-amber-500/8 border border-amber-500/20 text-amber-300 text-xs">
-            Migration 021 adds <code className="font-mono">actor_role</code> and{" "}
-            <code className="font-mono">target_user_id</code> columns to{" "}
-            <code className="font-mono">audit_logs</code>, and creates the{" "}
-            <code className="font-mono">analytics_events</code> table. Run it if the audit system returns errors.
           </div>
         </div>
 

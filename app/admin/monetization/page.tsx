@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminMonetizationDashboard } from "@/components/admin/AdminMonetizationDashboard";
+import { computeCommercialMetrics } from "@/lib/vendor/commercial-metrics";
 import type { Profile } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -11,27 +12,14 @@ export default async function AdminMonetizationPage() {
   if (!auth) redirect("/");
   const { data: profile } = await auth.db.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
 
-  // Fetch monetization data server-side
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.elbold.com";
-  let data = null;
-  try {
-    const res = await fetch(`${baseUrl}/api/admin/monetization?days=30`, {
-      headers: { cookie: "" }, // server-to-server; auth checked via supabase above
-      cache: "no-store",
-    });
-    if (res.ok) data = await res.json();
-  } catch { /* non-critical */ }
-
-  // Fallback empty state
-  const monetizationData = data ?? {
-    summary: { mrr: 0, arr: 0, paying_vendors: 0, total_vendors: 0, paid_conversion: 0, past_due_count: 0, cancelled_count: 0, at_risk_mrr: 0 },
-    plan_distribution: { free: 0, pro: 0, premium: 0, elite: 0 },
-    category_revenue: {},
-    billing_events: [],
-    trends: { upgrades: 0, cancels: 0, failures: 0, recovered: 0, net_new: 0 },
-    subscription_funnel: { period_days: 30, page_viewed: 0, checkout_started: 0, upgraded: 0 },
-    churn_risk: [],
-  };
+  // Computed directly, in-process - this used to do a self-fetch to its own
+  // /api/admin/monetization route with an empty cookie header, which meant
+  // that route's own auth check always failed silently and this page
+  // rendered a hardcoded all-zero fallback in production regardless of real
+  // data. There is no reason for a server component to fetch its own API
+  // route over HTTP at all; calling the shared metrics function directly
+  // removes the entire class of bug.
+  const monetizationData = await computeCommercialMetrics(auth.db, 30);
 
   return (
     <DashboardLayout user={(profile ?? { id: auth.user.id, email: auth.user.email ?? "", role: "admin" as const, full_name: null, phone: null, phone_verified: false, avatar_url: null, created_at: new Date().toISOString() }) as Profile} adminRole={auth.role}>
