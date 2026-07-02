@@ -19,6 +19,10 @@
     {
       "path": "/api/cron/vendor-crm-followups",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/vendor-daily-summary",
+      "schedule": "0 5 * * *"
     }
   ]
 }
