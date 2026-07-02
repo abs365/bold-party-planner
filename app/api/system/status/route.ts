@@ -51,9 +51,9 @@ export async function GET() {
       stripe:         !!process.env.STRIPE_SECRET_KEY,
       stripeWebhook:  !!process.env.STRIPE_WEBHOOK_SECRET,
       stripePrices:   !!(
-        process.env.STRIPE_PRO_MONTHLY_PRICE_ID &&
-        process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID &&
-        process.env.STRIPE_ELITE_MONTHLY_PRICE_ID
+        process.env.STRIPE_PRO_PRICE_MONTHLY &&
+        process.env.STRIPE_PREMIUM_PRICE_MONTHLY &&
+        process.env.STRIPE_ELITE_PRICE_MONTHLY
       ),
       resend:         !!process.env.RESEND_API_KEY,
     },
