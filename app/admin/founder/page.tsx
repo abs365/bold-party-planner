@@ -3,10 +3,11 @@ import Link from "next/link";
 import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
+import { planMRRContribution } from "@/lib/vendor/entitlements";
 import {
   CheckCircle2, Clock, Users, MessageSquare, ShoppingBag,
   CreditCard, TrendingUp, Target, ArrowRight, Shield,
-  Star, AlertCircle, ChevronRight,
+  Star, AlertCircle, ChevronRight, DollarSign, TrendingDown, UserCheck,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -55,6 +56,24 @@ export default async function FounderDashboardPage() {
   const depositPaid = (depositCount ?? 0) > 0;
   const completed   = (bookingsCompleted ?? 0) > 0;
   const hasReview   = (reviewsTotal ?? 0) > 0;
+
+  // ── Commercial overview (Phase 71) ────────────────────────────────────────
+  // Reuses the exact same computation as /api/admin/monetization rather than
+  // duplicating a second MRR/churn implementation - the founder previously
+  // had to leave their own dashboard to see this on a separate admin page.
+  const { data: subs } = await db
+    .from("vendor_subscriptions")
+    .select("plan, status");
+
+  const activeSubs    = (subs ?? []).filter((s) => s.status === "active");
+  const pastDueSubs   = (subs ?? []).filter((s) => s.status === "past_due");
+  const cancelledSubs = (subs ?? []).filter((s) => s.status === "cancelled");
+
+  const mrr = activeSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
+  const atRiskMRR = pastDueSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
+  const paidConversion = (approvedVendors ?? 0) > 0
+    ? Math.round((activeSubs.length / (approvedVendors ?? 1)) * 100)
+    : 0;
 
   const missionSteps = [
     { label: "Customer requests a quote",          done: hasQuote,    href: "/admin/quotes" },
@@ -129,6 +148,51 @@ export default async function FounderDashboardPage() {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* Commercial Overview — MRR/churn, previously only on /admin/monetization */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Commercial Overview</h2>
+            <Link href="/admin/monetization" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">
+              Full Monetization View <ArrowRight size={11} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "MRR",              value: formatCurrency(mrr),      icon: DollarSign,  color: "text-emerald-400" },
+              { label: "Paying Vendors",   value: activeSubs.length,        icon: UserCheck,   color: "text-brand-400" },
+              { label: "Paid Conversion",  value: `${paidConversion}%`,     icon: TrendingUp,  color: "text-blue-400" },
+              {
+                label: "At-Risk MRR",
+                value: formatCurrency(atRiskMRR),
+                icon: TrendingDown,
+                color: atRiskMRR > 0 ? "text-amber-400" : "text-slate-500",
+                urgent: atRiskMRR > 0,
+              },
+            ].map(({ label, value, icon: Icon, color, urgent }) => (
+              <div
+                key={label}
+                className={`rounded-xl p-4 border flex flex-col justify-between min-h-[90px] ${
+                  urgent ? "bg-amber-500/8 border-amber-500/20" : "bg-white/4 border-white/6"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-slate-500 leading-tight">{label}</span>
+                  <Icon size={14} className={color} />
+                </div>
+                <div className="text-2xl font-bold text-white">{value}</div>
+                {urgent && (
+                  <div className="flex items-center gap-1 text-xs text-amber-400 mt-1">
+                    <AlertCircle size={10} /> {pastDueSubs.length} past-due
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          {cancelledSubs.length > 0 && (
+            <p className="text-xs text-slate-500 mt-2">{cancelledSubs.length} cancelled subscription{cancelledSubs.length === 1 ? "" : "s"} to date</p>
+          )}
         </div>
 
         {/* First Booking Mission */}
