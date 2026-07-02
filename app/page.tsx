@@ -245,30 +245,38 @@ export default async function Home() {
               caterers and more. Compare, choose and book. Every payment is protected.
             </p>
 
-            {/* CTAs */}
+            {/* CTAs — Browse is primary: it's the only path with no signup wall,
+                so a first-time visitor can see real vendors before being asked
+                to commit. "Plan My Event" (guided multi-vendor planning) is
+                secondary since it requires an account. Vendor recruitment is
+                deliberately not in this row - it competes with the customer
+                decision this hero exists to drive; it has its own section
+                further down the page. */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-5">
               <Link
-                href="/dashboard/create-event"
+                href="/browse"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-90"
                 style={{ background: "#0B1F4D", color: "#ffffff", border: "2px solid #0B1F4D" }}
               >
-                Plan My Event <ArrowRight size={16} />
+                Browse Vendors <ArrowRight size={16} />
               </Link>
               <Link
-                href="/founding-vendors"
+                href="/dashboard/create-event"
                 className="inline-flex items-center justify-center gap-2 text-base font-semibold px-10 py-4 rounded-lg transition-opacity hover:opacity-80"
                 style={{ border: "2px solid #0B1F4D", color: "#0B1F4D", background: "transparent" }}
               >
-                Join as a Founding Vendor
+                Plan My Event
               </Link>
             </div>
 
-            {/* Marketplace status signal */}
+            {/* Trust/no-risk reassurance - replaces a prior line about vendor
+                onboarding status, which spoke to supply-side ops rather than
+                the customer's actual decision */}
             <p
               className="text-xs font-light mb-10 tracking-wide"
               style={{ color: "rgba(11,31,77,0.42)" }}
             >
-              Now onboarding verified professionals across the UK.
+              Free to use &middot; No obligation to book &middot; Every payment protected
             </p>
 
             {/* Occasion chips */}
