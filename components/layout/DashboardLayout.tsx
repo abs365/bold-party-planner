@@ -69,6 +69,59 @@ const VENDOR_NAV: NavItem[] = [
   { href: "/vendor/feedback", label: "Share Feedback", icon: ThumbsUp },
 ];
 
+// Vendor Success Centre grouping (Phase 71) - same 16 destinations as
+// VENDOR_NAV, reorganised into a named, task-oriented structure instead of
+// one flat undifferentiated list. Reuses the grouped-nav render path
+// already built for admin (see ADMIN_NAV_GROUPS) rather than new UI.
+const VENDOR_NAV_GROUPS: NavGroup[] = [
+  {
+    label: "Today",
+    items: [
+      { href: "/vendor/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Grow My Business",
+    items: [
+      { href: "/vendor/quotes",    label: "Leads",     icon: Inbox },
+      { href: "/vendor/contacts",  label: "Contacts",  icon: BookUser },
+      { href: "/vendor/customers", label: "Customers", icon: Users },
+      { href: "/vendor/messages",  label: "Messages",  icon: MessageSquare },
+      { href: "/vendor/reviews",   label: "Reviews",   icon: Star },
+    ],
+  },
+  {
+    label: "Bookings & Calendar",
+    items: [
+      { href: "/vendor/bookings",     label: "Bookings",     icon: ShoppingBag },
+      { href: "/vendor/availability", label: "Availability", icon: CalendarCheck },
+    ],
+  },
+  {
+    label: "My Listing",
+    items: [
+      { href: "/vendor/profile",  label: "My Profile",           icon: User },
+      { href: "/vendor/services", label: "Services & Packages",  icon: Settings },
+      { href: "/vendor/media",    label: "Photos & Videos",      icon: FileText },
+    ],
+  },
+  {
+    label: "Performance & Payouts",
+    items: [
+      { href: "/vendor/analytics", label: "Analytics",         icon: TrendingUp },
+      { href: "/vendor/payouts",   label: "Revenue & Payouts",  icon: Wallet },
+    ],
+  },
+  {
+    label: "Account",
+    items: [
+      { href: "/vendor/subscription",  label: "Subscription", icon: BadgeCheck },
+      { href: "/vendor/verification",  label: "Get Verified", icon: Shield },
+      { href: "/vendor/feedback",      label: "Share Feedback", icon: ThumbsUp },
+    ],
+  },
+];
+
 // Kept for type compatibility with nav prop; admin uses ADMIN_NAV_GROUPS below
 const ADMIN_NAV: NavItem[] = [];
 
@@ -282,7 +335,7 @@ export function DashboardLayout({ children, user, adminRole }: DashboardLayoutPr
 
   const roleLabel =
     resolvedUser.role === "admin" ? "Admin" :
-    resolvedUser.role === "vendor" ? "Vendor" : "Customer";
+    resolvedUser.role === "vendor" ? "Vendor Success Centre" : "Customer";
 
   async function handleSignOut() {
     const { createClient } = await import("@/lib/supabase/client");
@@ -293,7 +346,9 @@ export function DashboardLayout({ children, user, adminRole }: DashboardLayoutPr
 
   const sidebarProps: SidebarContentProps = {
     user: resolvedUser, nav, roleLabel, pathname,
-    navGroups: resolvedUser.role === "admin" ? ADMIN_NAV_GROUPS : undefined,
+    navGroups:
+      resolvedUser.role === "admin"  ? ADMIN_NAV_GROUPS :
+      resolvedUser.role === "vendor" ? VENDOR_NAV_GROUPS : undefined,
     adminRole: resolvedUser.role === "admin" ? adminRole : undefined,
     onClose: () => setSidebarOpen(false),
     onSignOut: handleSignOut,
