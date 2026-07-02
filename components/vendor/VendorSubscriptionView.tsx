@@ -77,6 +77,8 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus, source 
   const [upgrading, setUpgrading] = useState<string | null>(null);
   const [openingPortal, setOpeningPortal] = useState(false);
   const [annual, setAnnual] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   useEffect(() => {
     fetch("/api/vendor/subscription")
@@ -111,6 +113,30 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus, source 
       toast.error(err instanceof Error ? err.message : "Upgrade failed. Please try again.");
     }
     setUpgrading(null);
+  }
+
+  async function cancelSubscription() {
+    setCancelling(true);
+    try {
+      const res = await fetch("/api/vendor/subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "cancel" }),
+      });
+      const result = await res.json() as { success?: boolean; error?: string };
+      const { default: toast } = await import("react-hot-toast");
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Subscription set to cancel at the end of your current billing period.");
+        setData((prev) => prev ? { ...prev, subscription: { ...prev.subscription!, cancel_at_period_end: true } } : prev);
+        setShowCancelConfirm(false);
+      }
+    } catch (err) {
+      const { default: toast } = await import("react-hot-toast");
+      toast.error(err instanceof Error ? err.message : "Could not cancel subscription. Please try again.");
+    }
+    setCancelling(false);
   }
 
   async function openPortal() {
@@ -199,6 +225,51 @@ export function VendorSubscriptionView({ isFoundingVendor, vendorStatus, source 
                 Manage billing
               </button>
             )}
+            {!sub.cancel_at_period_end && (
+              <button
+                onClick={() => setShowCancelConfirm(true)}
+                className="text-sm text-white/40 hover:text-white/70 underline"
+              >
+                Cancel subscription
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Retention moment: cancelling only ever happened via Stripe's own
+          portal before, giving Elbold no in-app touchpoint at the highest-
+          risk moment. Shows what they'd lose before confirming - reuses the
+          same plan.highlights already rendered on the plan cards below,
+          rather than inventing new copy. */}
+      {showCancelConfirm && sub && (
+        <div className="bg-amber-500/8 border border-amber-500/25 rounded-xl p-5">
+          <p className="text-white font-medium mb-2">Before you cancel...</p>
+          <p className="text-white/60 text-sm mb-3">
+            You&apos;ll keep {sub.plan} access until {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString("en-GB") : "the end of your billing period"}, then lose:
+          </p>
+          <div className="space-y-1.5 mb-4">
+            {(plans.find((p) => p.slug === sub.plan)?.features_json.highlights ?? []).map((h) => (
+              <div key={h} className="flex gap-2 text-sm text-white/70">
+                <CheckCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                {h}
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowCancelConfirm(false)}
+              className="btn-primary text-sm py-2 px-4"
+            >
+              Keep my plan
+            </button>
+            <button
+              onClick={() => void cancelSubscription()}
+              disabled={cancelling}
+              className="text-sm text-white/50 hover:text-white/80 disabled:opacity-40 px-4"
+            >
+              {cancelling ? <Loader2 className="w-4 h-4 animate-spin inline" /> : "Yes, cancel anyway"}
+            </button>
           </div>
         </div>
       )}
