@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Edit2, Archive, ArchiveRestore, Loader2, Check, X } from "lucide-react";
-import type { ManualContact, ManualContactSource } from "@/types";
+import { Edit2, Archive, ArchiveRestore, Loader2, Check, X, Clock } from "lucide-react";
+import type { ManualContact, ManualContactSource, ManualContactStage } from "@/types";
 
 const SOURCE_OPTIONS: { value: ManualContactSource; label: string }[] = [
   { value: "instagram",         label: "Instagram" },
@@ -15,6 +15,77 @@ const SOURCE_OPTIONS: { value: ManualContactSource; label: string }[] = [
   { value: "direct",            label: "Direct Enquiry" },
   { value: "other",             label: "Other" },
 ];
+
+const STAGE_OPTIONS: { value: ManualContactStage; label: string }[] = [
+  { value: "lead",      label: "Lead" },
+  { value: "contacted", label: "Contacted" },
+  { value: "quoted",    label: "Quoted" },
+  { value: "won",       label: "Won" },
+  { value: "lost",      label: "Lost" },
+];
+
+function PipelineControls({ contact }: { contact: ManualContact }) {
+  const router = useRouter();
+  const [stage, setStage] = useState<ManualContactStage>(contact.stage);
+  const [followUpAt, setFollowUpAt] = useState(contact.follow_up_at?.slice(0, 10) ?? "");
+  const [saving, setSaving] = useState(false);
+
+  async function save(patch: Record<string, unknown>) {
+    setSaving(true);
+    await fetch(`/api/vendor/contacts/${contact.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+    router.refresh();
+    setSaving(false);
+  }
+
+  return (
+    <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-white font-semibold text-sm">Pipeline</h2>
+        {saving && <Loader2 className="w-3.5 h-3.5 animate-spin text-white/40" />}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-white/60 text-xs font-medium mb-1.5">Stage</label>
+          <select
+            value={stage}
+            onChange={(e) => { const v = e.target.value as ManualContactStage; setStage(v); void save({ stage: v }); }}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500/50 appearance-none cursor-pointer"
+          >
+            {STAGE_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value} className="bg-[#0d0d18]">{o.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-white/60 text-xs font-medium mb-1.5 flex items-center gap-1.5">
+            <Clock className="w-3 h-3" /> Follow up on
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={followUpAt}
+              onChange={(e) => { setFollowUpAt(e.target.value); void save({ follow_up_at: e.target.value ? new Date(e.target.value).toISOString() : null }); }}
+              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500/50"
+            />
+            {followUpAt && (
+              <button
+                onClick={() => { setFollowUpAt(""); void save({ follow_up_at: null }); }}
+                className="px-3 rounded-lg text-xs border border-white/10 text-white/40 hover:text-white/70"
+                title="Clear"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ContactDetailClient({ contact }: { contact: ManualContact }) {
   const router   = useRouter();
@@ -72,7 +143,9 @@ export function ContactDetailClient({ contact }: { contact: ManualContact }) {
 
   if (!editing) {
     return (
-      <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-5">
+      <div className="space-y-4">
+        <PipelineControls contact={contact} />
+        <div className="bg-white/4 border border-white/6 rounded-xl p-5 space-y-5">
         <div className="flex items-center justify-between">
           <h2 className="text-white font-semibold text-sm">Contact Details</h2>
           <button
@@ -110,6 +183,7 @@ export function ContactDetailClient({ contact }: { contact: ManualContact }) {
             }
             {contact.is_archived ? "Restore contact" : "Archive contact"}
           </button>
+        </div>
         </div>
       </div>
     );

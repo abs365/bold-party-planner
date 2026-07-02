@@ -29,7 +29,7 @@ export default async function ContactDetailPage({
 
   const { data: contact } = await supabase
     .from("manual_contacts")
-    .select("id, display_name, display_email, display_phone, source, source_detail, notes, linked_profile_id, is_archived, gdpr_anonymised, created_at, updated_at")
+    .select("id, display_name, display_email, display_phone, source, source_detail, notes, linked_profile_id, is_archived, gdpr_anonymised, stage, follow_up_at, created_at, updated_at")
     .eq("id", contactId)
     .eq("vendor_id", vendor.id)
     .maybeSingle();

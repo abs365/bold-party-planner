@@ -2,12 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BookUser, Search, ArrowRight, Calendar, Mail, Phone, Archive } from "lucide-react";
+import { BookUser, Search, ArrowRight, Calendar, Mail, Phone, Archive, Clock } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { SourceBadge } from "@/components/vendor/SourceBadge";
-import type { ManualContact } from "@/types";
+import type { ManualContact, ManualContactStage } from "@/types";
 
 const PAGE_SIZE = 20;
+
+const STAGE_META: Record<ManualContactStage, { label: string; className: string }> = {
+  lead:       { label: "Lead",       className: "bg-slate-500/10 text-slate-400 border-slate-500/20" },
+  contacted:  { label: "Contacted",  className: "bg-blue-500/10 text-blue-400 border-blue-500/20" },
+  quoted:     { label: "Quoted",     className: "bg-amber-500/10 text-amber-400 border-amber-500/20" },
+  won:        { label: "Won",        className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  lost:       { label: "Lost",       className: "bg-red-500/10 text-red-400 border-red-500/20" },
+};
+
+function isOverdue(contact: ManualContact): boolean {
+  return !!contact.follow_up_at && new Date(contact.follow_up_at).getTime() <= Date.now();
+}
 
 const SOURCE_OPTIONS = [
   { value: "", label: "All sources" },
@@ -30,6 +42,9 @@ export function ContactListView({ contacts, showArchived = false }: Props) {
   const [query,     setQuery]     = useState("");
   const [source,    setSource]    = useState("");
   const [page,      setPage]      = useState(1);
+  const [followUpOnly, setFollowUpOnly] = useState(false);
+
+  const overdueCount = contacts.filter(isOverdue).length;
 
   const filtered = contacts.filter((c) => {
     const matchesSearch = !query.trim() || [
@@ -39,7 +54,8 @@ export function ContactListView({ contacts, showArchived = false }: Props) {
     ].some((v) => v.toLowerCase().includes(query.toLowerCase()));
 
     const matchesSource = !source || c.source === source;
-    return matchesSearch && matchesSource;
+    const matchesFollowUp = !followUpOnly || isOverdue(c);
+    return matchesSearch && matchesSource && matchesFollowUp;
   });
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -105,6 +121,19 @@ export function ContactListView({ contacts, showArchived = false }: Props) {
             <option key={o.value} value={o.value} className="bg-[#0d0d18]">{o.label}</option>
           ))}
         </select>
+        {overdueCount > 0 && (
+          <button
+            onClick={() => { setFollowUpOnly((v) => !v); setPage(1); }}
+            className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-medium border transition-colors ${
+              followUpOnly
+                ? "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                : "bg-white/4 border-white/8 text-white/50 hover:text-white/80"
+            }`}
+          >
+            <Clock className="w-3.5 h-3.5" />
+            {overdueCount} need{overdueCount === 1 ? "s" : ""} follow-up
+          </button>
+        )}
       </div>
 
       {/* List */}
@@ -154,6 +183,14 @@ export function ContactListView({ contacts, showArchived = false }: Props) {
                     {c.display_name}
                   </span>
                   <SourceBadge source={c.source} />
+                  <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs border ${STAGE_META[c.stage].className}`}>
+                    {STAGE_META[c.stage].label}
+                  </span>
+                  {isOverdue(c) && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                      <Clock className="w-2.5 h-2.5" /> Follow up
+                    </span>
+                  )}
                   {c.linked_profile_id && (
                     <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                       Converted

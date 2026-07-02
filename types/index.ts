@@ -424,6 +424,8 @@ export type BookingSource =
 
 export type ManualContactSource = Exclude<BookingSource, "elbold_marketplace">;
 
+export type ManualContactStage = "lead" | "contacted" | "quoted" | "won" | "lost";
+
 export interface ManualContact {
   id: string;
   vendor_id: string;
@@ -436,6 +438,8 @@ export interface ManualContact {
   linked_profile_id: string | null;
   is_archived: boolean;
   gdpr_anonymised: boolean;
+  stage: ManualContactStage;
+  follow_up_at: string | null;
   created_at: string;
   updated_at: string;
 }
