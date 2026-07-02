@@ -29,6 +29,8 @@ export default async function AdminMonetizationPage() {
     category_revenue: {},
     billing_events: [],
     trends: { upgrades: 0, cancels: 0, failures: 0, recovered: 0, net_new: 0 },
+    subscription_funnel: { period_days: 30, page_viewed: 0, checkout_started: 0, upgraded: 0 },
+    churn_risk: [],
   };
 
   return (

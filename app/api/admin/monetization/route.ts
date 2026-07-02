@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdminRole, forbidden } from "@/lib/auth/guards";
 import { planMRRContribution } from "@/lib/vendor/entitlements";
+import { getEventCounts } from "@/lib/analytics";
 
 export async function GET(request: Request) {
   // Financial settings and MRR data — Global Admin minimum (Founder can change settings; Global Admin can view)
@@ -14,7 +15,7 @@ export async function GET(request: Request) {
   // ── Active subscriptions ──────────────────────────────────────────────────
   const { data: subs } = await auth.db
     .from("vendor_subscriptions")
-    .select("plan, status, billing_cycle, vendor_id, current_period_end, failed_payment_count")
+    .select("plan, status, billing_cycle, vendor_id, current_period_end, failed_payment_count, cancel_at_period_end")
     .order("created_at", { ascending: false });
 
   const activeSubs = (subs ?? []).filter((s) => s.status === "active");
@@ -73,6 +74,52 @@ export async function GET(request: Request) {
 
   const atRiskMRR = pastDueSubs.reduce((sum, s) => sum + planMRRContribution(s.plan), 0);
 
+  // ── Churn risk (Phase 73) ─────────────────────────────────────────────────
+  // Billing-signal risk, distinct from the existing governance "at risk"
+  // system (which flags quality/compliance issues - reviews, response rate,
+  // inactivity - and has no concept of failed payments or cancellation
+  // intent). failed_payment_count and cancel_at_period_end were already
+  // being fetched above for every active sub but never used or shown
+  // anywhere - this is the first place either signal surfaces.
+  const churnRiskSubs = activeSubs.filter(
+    (s) => (s.failed_payment_count ?? 0) > 0 || s.cancel_at_period_end === true
+  );
+  const churnRiskVendorIds = churnRiskSubs.map((s) => s.vendor_id).filter(Boolean);
+  const { data: churnRiskVendors } = churnRiskVendorIds.length
+    ? await auth.db.from("vendors").select("id, business_name, category").in("id", churnRiskVendorIds)
+    : { data: [] };
+  const churnRiskVendorMap = new Map((churnRiskVendors ?? []).map((v) => [v.id, v]));
+  const churnRisk = churnRiskSubs.map((s) => {
+    const v = churnRiskVendorMap.get(s.vendor_id);
+    const reasons: string[] = [];
+    if ((s.failed_payment_count ?? 0) > 0) reasons.push(`${s.failed_payment_count} failed payment${s.failed_payment_count === 1 ? "" : "s"}`);
+    if (s.cancel_at_period_end) reasons.push("cancels at period end");
+    return {
+      vendor_id: s.vendor_id,
+      business_name: v?.business_name ?? "Unknown vendor",
+      category: v?.category ?? null,
+      plan: s.plan,
+      current_period_end: s.current_period_end,
+      mrr: planMRRContribution(s.plan),
+      reasons,
+    };
+  });
+
+  // ── Subscription conversion funnel (Phase 73) ─────────────────────────────
+  // Instrumented in a prior pass (vendor.subscription.page_viewed,
+  // .checkout_started) but nothing read it back until now - this is the
+  // first report showing the actual view -> checkout -> upgrade drop-off.
+  const funnelCounts = await getEventCounts(
+    ["vendor.subscription.page_viewed", "vendor.subscription.checkout_started"],
+    daysBack
+  );
+  const subscriptionFunnel = {
+    period_days:       daysBack,
+    page_viewed:       funnelCounts["vendor.subscription.page_viewed"] ?? 0,
+    checkout_started:  funnelCounts["vendor.subscription.checkout_started"] ?? 0,
+    upgraded:          upgrades.length,
+  };
+
   return NextResponse.json({
     summary: {
       mrr,
@@ -94,5 +141,7 @@ export async function GET(request: Request) {
       recovered: recovered.length,
       net_new:   upgrades.length - cancels.length,
     },
+    subscription_funnel: subscriptionFunnel,
+    churn_risk: churnRisk,
   });
 }

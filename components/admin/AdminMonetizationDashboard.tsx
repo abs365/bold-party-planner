@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TrendingUp, TrendingDown, DollarSign, Users, AlertTriangle, RefreshCw, CheckCircle, XCircle, ArrowUpCircle } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Users, AlertTriangle, RefreshCw, CheckCircle, XCircle, ArrowUpCircle, Eye, MousePointerClick } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MonetizationData {
@@ -25,6 +25,23 @@ interface MonetizationData {
     recovered: number;
     net_new: number;
   };
+  subscription_funnel: {
+    period_days: number;
+    page_viewed: number;
+    checkout_started: number;
+    upgraded: number;
+  };
+  churn_risk: ChurnRiskVendor[];
+}
+
+interface ChurnRiskVendor {
+  vendor_id: string;
+  business_name: string;
+  category: string | null;
+  plan: string;
+  current_period_end: string | null;
+  mrr: number;
+  reasons: string[];
 }
 
 interface BillingEvent {
@@ -81,7 +98,7 @@ const PLAN_LABEL: Record<string, string> = { free: "Free", pro: "Pro", featured:
 
 export function AdminMonetizationDashboard({ initialData }: Props) {
   const [data] = useState<MonetizationData>(initialData);
-  const { summary, plan_distribution, category_revenue, billing_events, trends } = data;
+  const { summary, plan_distribution, category_revenue, billing_events, trends, subscription_funnel, churn_risk } = data;
 
   const totalVendors = summary.total_vendors || 1;
 
@@ -166,6 +183,60 @@ export function AdminMonetizationDashboard({ initialData }: Props) {
             <div className="text-xs text-gray-500 mt-0.5">{label} (30d)</div>
           </div>
         ))}
+      </div>
+
+      {/* Subscription conversion funnel - instrumented previously, first
+          surfaced here: view -> checkout start -> actual upgrade */}
+      <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-gray-200 mb-1">Subscription Conversion Funnel</h3>
+        <p className="text-xs text-gray-500 mb-4">Last {subscription_funnel.period_days} days · vendor.subscription page views through to completed upgrade</p>
+        <div className="space-y-3">
+          {[
+            { label: "Viewed plans page", value: subscription_funnel.page_viewed, icon: Eye, color: "text-sky-400" },
+            { label: "Started checkout",  value: subscription_funnel.checkout_started, icon: MousePointerClick, color: "text-amber-400" },
+            { label: "Upgraded",          value: subscription_funnel.upgraded, icon: ArrowUpCircle, color: "text-emerald-400" },
+          ].map(({ label, value, icon: Icon, color }, i, arr) => {
+            const prev = i === 0 ? null : arr[i - 1].value;
+            const pct = prev !== null && prev > 0 ? Math.round((value / prev) * 100) : null;
+            return (
+              <div key={label} className="flex items-center gap-3">
+                <Icon size={14} className={color} />
+                <span className="text-xs text-gray-300 flex-1">{label}</span>
+                {pct !== null && <span className="text-xs text-gray-500">{pct}% of previous</span>}
+                <span className={cn("text-sm font-bold w-10 text-right", color)}>{value}</span>
+              </div>
+            );
+          })}
+        </div>
+        {subscription_funnel.page_viewed === 0 && (
+          <p className="text-xs text-gray-600 mt-3">No tracked page views yet in this period — data will populate as vendors visit the subscription page.</p>
+        )}
+      </div>
+
+      {/* Churn risk — billing-signal based (failed payments, cancel-at-period-end),
+          distinct from the quality/compliance "at risk" flags in Governance */}
+      <div className="bg-white/5 border border-white/10 rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-gray-200 mb-1">Churn Risk</h3>
+        <p className="text-xs text-gray-500 mb-4">Active paying vendors with a failed payment or a cancellation already scheduled</p>
+        {churn_risk.length === 0 ? (
+          <p className="text-gray-500 text-sm">No paying vendors currently at risk</p>
+        ) : (
+          <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
+            {churn_risk.map((v) => (
+              <div key={v.vendor_id} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
+                <AlertTriangle size={14} className="text-red-400 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs font-medium text-gray-200">{v.business_name}</span>
+                  <span className={cn("ml-2 text-xs px-1.5 py-0.5 rounded capitalize", PLAN_COLOR[v.plan] ?? "bg-gray-500/20 text-gray-400")}>
+                    {v.plan}
+                  </span>
+                  <div className="text-xs text-gray-500 mt-0.5">{v.reasons.join(", ")}</div>
+                </div>
+                <span className="text-xs text-gray-400 shrink-0">£{v.mrr}/mo</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Billing events log */}
