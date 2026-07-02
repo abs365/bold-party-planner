@@ -106,8 +106,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function VendorProfilePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function VendorProfilePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ ref?: string }>;
+}) {
   const { id } = await params;
+  const { ref } = await searchParams;
+  // Phase 72 Priority 3: a vendor sharing their own profile link (Instagram
+  // bio, WhatsApp, a business card) shouldn't send that traffic straight to
+  // a grid of their own competitors - that's the opposite of what a
+  // "shareable business microsite" should do. Internal marketplace browsing
+  // (no ?ref=share) keeps the cross-sell section; a vendor's own outbound
+  // shared link (VendorSharePanel appends ?ref=share) suppresses it.
+  const isSharedView = ref === "share";
   const [adminDb, supabase] = await Promise.all([createAdminClient(), createClient()]);
 
   const { vendor: vendorData, redirectToSlug } = await resolveVendor(id, adminDb);
@@ -161,15 +175,20 @@ export default async function VendorProfilePage({ params }: { params: Promise<{ 
 
   const vendor = { ...vendorData, reviews: reviewsRes.data ?? [] };
 
-  const { data: similarVendors } = await adminDb
-    .from("vendors")
-    .select("id, slug, business_name, category, city, rating, review_count, min_price, verified, media:vendor_media(url, type, is_cover)")
-    .eq("status", "approved")
-    .eq("category", vendor.category)
-    .neq("id", vendor.id)
-    .gte("rating", 4.0)
-    .order("rating", { ascending: false })
-    .limit(4);
+  // Skip entirely in shared view - the section is suppressed below anyway,
+  // and a vendor's own outbound link shouldn't cost a query to find their
+  // competitors.
+  const { data: similarVendors } = isSharedView
+    ? { data: [] }
+    : await adminDb
+        .from("vendors")
+        .select("id, slug, business_name, category, city, rating, review_count, min_price, verified, media:vendor_media(url, type, is_cover)")
+        .eq("status", "approved")
+        .eq("category", vendor.category)
+        .neq("id", vendor.id)
+        .gte("rating", 4.0)
+        .order("rating", { ascending: false })
+        .limit(4);
 
   let profile = null;
   if (authRes.data.user) {

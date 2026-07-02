@@ -40,6 +40,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
   const [booking] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savePending, setSavePending] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
   const cat = VENDOR_CATEGORIES[vendor.category];
   const router = useRouter();
 
@@ -435,7 +436,7 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
               <div>
                 <h2 className="text-xl font-bold text-gray-900 mb-5">What Clients Say</h2>
                 <div className="space-y-4">
-                  {reviews.slice(0, 6).map((review) => (
+                  {reviews.slice(0, showAllReviews ? reviews.length : 6).map((review) => (
                     <div
                       key={review.id}
                       className="rounded-2xl p-5"
@@ -478,6 +479,15 @@ export function VendorProfileView({ vendor, currentUser }: VendorProfileViewProp
                     </div>
                   ))}
                 </div>
+                {reviews.length > 6 && (
+                  <button
+                    onClick={() => setShowAllReviews((v) => !v)}
+                    className="mt-4 text-sm font-medium hover:underline"
+                    style={{ color: "#0B1F4D" }}
+                  >
+                    {showAllReviews ? "Show fewer reviews" : `Show all ${reviews.length} reviews`}
+                  </button>
+                )}
               </div>
             )}
 

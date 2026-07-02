@@ -15,7 +15,10 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
   // required for SSR correctness, not a mirror of already-known render state.
   const [canNativeShare, setCanNativeShare] = useState(false);
 
-  const profileUrl = `${typeof window !== "undefined" ? window.location.origin : "https://www.elbold.com"}/vendors/${slug}`;
+  // ?ref=share tells the profile page this is the vendor's own outbound link
+  // (Instagram bio, WhatsApp, business card) so it can drop the "More
+  // vendors near you" competitor section - see app/vendors/[id]/page.tsx.
+  const profileUrl = `${typeof window !== "undefined" ? window.location.origin : "https://www.elbold.com"}/vendors/${slug}?ref=share`;
   const encodedUrl = encodeURIComponent(profileUrl);
   const encodedText = encodeURIComponent(`Book ${businessName} for your event on Elbold`);
   const shareText = `Book ${businessName} for your event on Elbold`;
