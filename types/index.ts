@@ -453,6 +453,21 @@ export interface ManualContactNote {
   updated_at: string;
 }
 
+export type ManualContactActivityType =
+  | "created" | "stage_changed" | "follow_up_set" | "follow_up_cleared"
+  | "follow_up_reminder_sent" | "archived" | "restored";
+
+export interface ManualContactActivity {
+  id: string;
+  vendor_id: string;
+  manual_contact_id: string;
+  event_type: ManualContactActivityType;
+  description: string;
+  metadata: Record<string, unknown>;
+  actor: "vendor" | "system";
+  created_at: string;
+}
+
 // ── Guest Management ──────────────────────────────────────────────────────────
 
 export type RSVPStatus = "pending" | "accepted" | "declined" | "tentative";

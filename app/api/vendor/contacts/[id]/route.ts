@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { logContactActivity } from "@/lib/vendor/contact-activity";
 import type { ManualContactSource, ManualContactStage } from "@/types";
+
+const STAGE_LABELS: Record<ManualContactStage, string> = {
+  lead: "Lead", contacted: "Contacted", quoted: "Quoted", won: "Won", lost: "Lost",
+};
 
 const ALLOWED_SOURCES: ManualContactSource[] = [
   "instagram","facebook","tiktok","whatsapp",
@@ -81,6 +86,14 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: "No fields to update" }, { status: 400 });
   }
 
+  // Fetch pre-update state for anything we log a "changed from X to Y" event for
+  const { data: before } = await supabase
+    .from("manual_contacts")
+    .select("stage, follow_up_at, is_archived, display_name")
+    .eq("id", contactId)
+    .eq("vendor_id", vendor.id)
+    .maybeSingle();
+
   const { data: contact, error } = await supabase
     .from("manual_contacts")
     .update(patch)
@@ -91,6 +104,36 @@ export async function PATCH(req: Request, { params }: Params) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!contact) return NextResponse.json({ error: "Contact not found" }, { status: 404 });
+
+  if (before) {
+    if (body.stage !== undefined && body.stage !== before.stage) {
+      void logContactActivity({
+        vendorId: vendor.id,
+        manualContactId: contact.id,
+        eventType: "stage_changed",
+        description: `Stage changed from ${STAGE_LABELS[before.stage as ManualContactStage]} to ${STAGE_LABELS[body.stage as ManualContactStage]}`,
+        metadata: { from: before.stage, to: body.stage },
+      });
+    }
+    if (body.follow_up_at !== undefined && body.follow_up_at !== before.follow_up_at) {
+      void logContactActivity({
+        vendorId: vendor.id,
+        manualContactId: contact.id,
+        eventType: body.follow_up_at ? "follow_up_set" : "follow_up_cleared",
+        description: body.follow_up_at
+          ? `Follow-up scheduled for ${new Date(body.follow_up_at).toLocaleDateString("en-GB")}`
+          : "Follow-up cleared",
+      });
+    }
+    if (body.is_archived !== undefined && body.is_archived !== before.is_archived) {
+      void logContactActivity({
+        vendorId: vendor.id,
+        manualContactId: contact.id,
+        eventType: body.is_archived ? "archived" : "restored",
+        description: body.is_archived ? "Contact archived" : "Contact restored",
+      });
+    }
+  }
 
   return NextResponse.json({ contact });
 }

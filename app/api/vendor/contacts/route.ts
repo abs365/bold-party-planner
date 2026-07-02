@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { logContactActivity } from "@/lib/vendor/contact-activity";
 import type { ManualContactSource, ManualContactStage } from "@/types";
 
 const ALLOWED_SOURCES: ManualContactSource[] = [
@@ -104,5 +105,13 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  void logContactActivity({
+    vendorId: vendor.id,
+    manualContactId: contact.id,
+    eventType: "created",
+    description: `Added ${contact.display_name} as a contact`,
+  });
+
   return NextResponse.json({ contact }, { status: 201 });
 }

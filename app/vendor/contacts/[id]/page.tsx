@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ContactDetailClient } from "@/components/vendor/ContactDetailClient";
 import { ManualContactNotes } from "@/components/vendor/ManualContactNotes";
+import { ContactTimeline } from "@/components/vendor/ContactTimeline";
 import { SourceBadge } from "@/components/vendor/SourceBadge";
 import { formatDate } from "@/lib/utils";
 import { ArrowLeft, Mail, Phone, Calendar, StickyNote, ExternalLink } from "lucide-react";
@@ -145,9 +146,10 @@ export default async function ContactDetailPage({
             <ContactDetailClient contact={contact as ManualContact} />
           </div>
 
-          {/* Notes sidebar */}
-          <div>
+          {/* Notes + timeline sidebar */}
+          <div className="space-y-6">
             <ManualContactNotes contactId={contactId} />
+            <ContactTimeline contactId={contactId} />
           </div>
         </div>
       </div>

@@ -38,6 +38,7 @@ function PipelineControls({ contact }: { contact: ManualContact }) {
       body: JSON.stringify(patch),
     });
     router.refresh();
+    window.dispatchEvent(new CustomEvent("contact-activity-updated"));
     setSaving(false);
   }
 
