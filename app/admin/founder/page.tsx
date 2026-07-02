@@ -319,7 +319,7 @@ export default async function FounderDashboardPage() {
           {[
             { href: "/admin/vendors?status=pending", label: "Review Vendors",  badge: pendingVendors ?? 0 },
             { href: "/admin/vendor-activation",      label: "Activation Funnel", badge: null },
-            { href: "/admin/pilot/vendors",          label: "Pilot CRM",        badge: null },
+            { href: "/admin/pilot/vendors",          label: "Vendor Relationships", badge: null },
             { href: "/admin/verifications",          label: "Verifications",    badge: null },
           ].map((link) => (
             <Link
@@ -350,7 +350,7 @@ export default async function FounderDashboardPage() {
                 <p className="text-xs text-slate-400 mt-1">
                   You have {approvedVendors ?? 0} approved vendor{(approvedVendors ?? 0) !== 1 ? "s" : ""}.
                   Aim for 5+ before inviting the first customers.
-                  Use the Pilot CRM to track outreach and the vendor activation funnel to monitor quality.
+                  Use Vendor Relationships to track outreach and the vendor activation funnel to monitor quality.
                 </p>
                 <div className="flex gap-2 mt-3">
                   <Link href="/admin/pilot/outreach" className="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1">

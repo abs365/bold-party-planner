@@ -180,12 +180,16 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Pilot Launch",
+    // Was "Pilot Launch" - renamed as part of the Commercial Readiness
+    // Sprint's directive to remove pilot/development terminology from
+    // founder-facing navigation. Labels below changed; hrefs and underlying
+    // pages are untouched (no restructuring without a confirmed reason to).
+    label: "Founder & Growth",
     items: [
-      { href: "/admin/pilot",          label: "Pilot Ops",        icon: Activity },
-      { href: "/admin/pilot/vendors",  label: "Pilot CRM",        icon: Users },
-      { href: "/admin/pilot/report",   label: "Pilot Report",     icon: FileText },
-      { href: "/admin/pilot/outreach", label: "Outreach Pack",    icon: MessageSquare },
+      { href: "/admin/pilot",          label: "Growth Operations",     icon: Activity },
+      { href: "/admin/pilot/vendors",  label: "Vendor Relationships",  icon: Users },
+      { href: "/admin/pilot/report",   label: "Growth Report",         icon: FileText },
+      { href: "/admin/pilot/outreach", label: "Outreach Pack",         icon: MessageSquare },
       { href: "/admin/founder",            label: "Founder Dashboard",   icon: LayoutDashboard, minRole: "founder" as AdminRole },
       { href: "/admin/cohort",             label: "Founder Queue",       icon: Users,           minRole: "founder" as AdminRole },
       { href: "/admin/recruitment",        label: "Recruitment",         icon: TrendingUp },
@@ -193,7 +197,7 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
       { href: "/admin/concierge",          label: "Concierge Requests",  icon: MessageSquare },
       { href: "/admin/launch",             label: "Launch Readiness",    icon: Rocket },
       { href: "/admin/launch-freeze",    label: "Launch Freeze",        icon: Lock,            minRole: "founder" as AdminRole },
-      { href: "/admin/pilot-testing",    label: "Pilot Testing Centre", icon: ClipboardList },
+      { href: "/admin/pilot-testing",    label: "Quality Assurance",    icon: ClipboardList },
     ],
   },
 ];

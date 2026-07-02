@@ -234,23 +234,22 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* ── Pilot Launch KPIs ──────────────────────────────────────────────── */}
+        {/* ── Growth KPIs ──────────────────────────────────────────────── */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-              <Rocket size={11} className="text-brand-400" />Pilot Launch KPIs
+              <Rocket size={11} className="text-brand-400" />Growth KPIs
             </h2>
             <Link href="/admin/pilot" className="text-xs text-slate-500 hover:text-slate-300 flex items-center gap-1">
-              Pilot Ops <ArrowRight size={11} />
+              Growth Operations <ArrowRight size={11} />
             </Link>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
             {[
               { label: "Vendors Contacted",  value: String(pilotContacted), note: `of ${pilotVendors.length} tracked`, color: "text-blue-400",    href: "/admin/pilot/vendors" },
               { label: "Vendors Approved",   value: String(pilotApproved),  note: "reached approval",                  color: "text-brand-400",   href: "/admin/pilot/vendors" },
               { label: "Active on Platform", value: String(pilotActive),    note: "fully active",                      color: "text-emerald-400", href: "/admin/pilot" },
               { label: "Events Created",     value: String(totalEvents),    note: "customer events",                   color: "text-slate-400",  href: "/admin/bookings" },
-              { label: "Feedback Items",     value: "0",                    note: "check pilot report",                color: "text-slate-500",   href: "/admin/pilot/report" },
               { label: "Bugs Open",          value: "N/A",                  note: "track externally",                  color: "text-slate-600",   href: "/admin/system" },
               { label: "Launch Readiness",   value: "→",                    note: "view checklist",                    color: "text-gold-400",    href: "/admin/launch" },
             ].map(({ label, value, note, color, href }) => (
@@ -479,7 +478,7 @@ export default async function AdminDashboard() {
               { href: "/admin/vendors?status=pending", icon: "🏪", label: "Review Vendor Applications", badge: pendingVendorCount },
               { href: "/admin/quotes",                  icon: "📥", label: "Open Quote Pipeline",        badge: pendingQuotes },
               { href: "/admin/disputes",                icon: "⚖️",  label: "Check Disputes",             badge: disputeCount },
-              { href: "/admin/pilot/vendors",           icon: "🚀", label: "View Pilot CRM",             badge: null },
+              { href: "/admin/pilot/vendors",           icon: "🚀", label: "Vendor Relationships",       badge: null },
               { href: "/admin/launch",                  icon: "✅", label: "Launch Readiness",           badge: null },
               { href: "/admin/support",                 icon: "💬", label: "Support Queue",              badge: null },
             ].map((link) => (
