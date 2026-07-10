@@ -377,6 +377,55 @@ export interface DailyHighestImpactAction {
   measurableClaim: string;
 }
 
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+// Finds the vendor's historically busiest month from real completed/
+// confirmed booking dates and, if that month falls within the next 60
+// days, prompts an availability check. Requires at least 3 dated bookings
+// across at least 2 distinct months - below that, a "busiest month" isn't
+// a real pattern, it's one or two data points, so the function returns
+// null and this candidate is simply absent rather than guessing.
+function computeSeasonalAvailabilityInsight(
+  bookings: ControlCentreBooking[],
+): DailyHighestImpactAction | null {
+  const dated = bookings.filter(
+    (b) => b.event?.date && (b.status === "confirmed" || b.status === "completed" || b.status === "accepted")
+  );
+  if (dated.length < 3) return null;
+
+  const countsByMonth = new Map<number, number>();
+  for (const b of dated) {
+    const month = new Date(b.event!.date).getMonth();
+    countsByMonth.set(month, (countsByMonth.get(month) ?? 0) + 1);
+  }
+  if (countsByMonth.size < 2) return null;
+
+  let busiestMonth = 0;
+  let busiestCount = 0;
+  for (const [month, count] of countsByMonth) {
+    if (count > busiestCount) { busiestMonth = month; busiestCount = count; }
+  }
+
+  const now = new Date();
+  const thisYearOccurrence = new Date(now.getFullYear(), busiestMonth, 1);
+  const nextOccurrence = thisYearOccurrence >= now
+    ? thisYearOccurrence
+    : new Date(now.getFullYear() + 1, busiestMonth, 1);
+  const daysUntil = Math.ceil((nextOccurrence.getTime() - now.getTime()) / 86_400_000);
+
+  if (daysUntil < 0 || daysUntil > 60) return null;
+
+  return {
+    message: `${MONTH_NAMES[busiestMonth]} has historically been your busiest month (${busiestCount} of your last ${dated.length} bookings). Make sure your availability calendar reflects that before it arrives.`,
+    ctaLabel: "Check Availability",
+    ctaHref: "/vendor/availability",
+    measurableClaim: `${busiestCount}/${dated.length} bookings in ${MONTH_NAMES[busiestMonth]}`,
+  };
+}
+
 function computeDailyHighestImpactAction(
   input: ControlCentreInput,
   health: BusinessHealthScore,
@@ -417,6 +466,15 @@ function computeDailyHighestImpactAction(
       });
     }
   }
+
+  // 1.5. Seasonal booking pattern -> availability check (WP-C2, REG-17).
+  // Connects existing booking history to the existing availability page -
+  // no new query, no new capability, reuses allBookings already passed in
+  // for the revenue/priority calculations above. Only fires with genuine
+  // history (3+ dated bookings across 2+ distinct months) so it never
+  // fabricates a pattern from a handful of dates.
+  const seasonalInsight = computeSeasonalAvailabilityInsight(input.allBookings);
+  if (seasonalInsight) candidates.push(seasonalInsight);
 
   // 2. Next incomplete onboarding step (already point-ranked by completion.ts)
   if (input.completion.nextStep && input.completion.nextActionText) {
