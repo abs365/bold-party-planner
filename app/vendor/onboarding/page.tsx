@@ -47,7 +47,7 @@ export default async function VendorOnboardingPage() {
       {
         id: "review",
         label: "Review In Progress",
-        detail: "Our team is reviewing your profile, portfolio, and business details. This takes up to 2 working days.",
+        detail: "A member of our vendor standards team is reviewing your profile, portfolio, and business details against our published Vendor Standards. This takes up to 2 working days.",
         done: false,
         active: true,
       },
@@ -144,9 +144,10 @@ export default async function VendorOnboardingPage() {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">While you wait</p>
             <div className="space-y-3">
               {[
-                { label: "Add photos to your portfolio", href: "/vendor/media", sub: "Profiles with 8+ photos receive 3× more enquiries" },
+                { label: "Add photos to your portfolio", href: "/vendor/media", sub: "A fuller portfolio gives customers more reason to enquire" },
                 { label: "Write your bio", href: "/vendor/profile", sub: "Tell customers what makes your service worth booking" },
                 { label: "Set up your packages", href: "/vendor/services", sub: "Clear pricing builds customer confidence" },
+                { label: "Add your existing contacts to your CRM", href: "/vendor/contacts", sub: "Already have clients from Instagram, WhatsApp or referrals? Bring the first few over now" },
               ].map(({ label, href, sub }) => (
                 <Link
                   key={href}
