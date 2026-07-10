@@ -38,6 +38,29 @@ The problems identified are primarily:
 
 None of these are rebuild-scale problems. All are correctible within the current architecture.
 
+---
+
+## REFRESH — 2026-07-10
+
+**A fresh, code-verified full experience audit (all four page groups: Public, Customer, Vendor, Operations/Founder) was run 2026-07-10 as part of the ELBOLD Enterprise Commercial Transformation programme. This section adds what it found beyond the 2026-06-30 baseline above; it does not replace Sections below, which remain valid where not contradicted here.**
+
+**Confirmed still true, unresolved since 2026-06-30:** the two-incompatible-visual-themes finding (#1 above) is not just still true — it is now confirmed to recur a *third* time, independently, inside admin itself: `governance-log`, `team`, and three Vendor Acquisition pages (`vendor-pipeline`, `vendor-outreach`, `vendor-coverage`) plus `seo` render in a completely different light Tailwind-default theme against the dark navy/gold shell used by ~40 other admin pages. Design-token drift (inline hex instead of token classes) is now confirmed as **the single most recurring issue across all four audiences**, not just public/dashboard — the navy/gold tokens in `globals.css` are real and correct but treated as a reference palette rather than enforced, including in the vendor CRM's orange accent, which has **no token entry at all**.
+
+**New findings, not in the 2026-06-30 baseline (all Verified against current code, file:line cited in the full report):**
+
+- **Customer Invitations page** — sits in primary customer nav, but its four explainer icons are literally corrupted `"??"`/`"???"` glyphs hardcoded in source, and none of its four described features (RSVPs, calendar sync, custom messages) exist anywhere in the codebase. This is the inverse of a dormant/orphaned page — it's prominently promoted and non-functional.
+- **Customer Settings page** — fully built (profile card, phone verification, identity status) but unreachable from any nav element (sidebar, header, footer, mobile bottom nav all checked). Reachable only by typing the URL directly.
+- **`/categories/[category]` route tree** — fully built, SEO-correct (JSON-LD, per-category metadata), but zero internal on-site links point to it anywhere in `app/` or `components/`. Real category browsing happens through `/browse?category=x` instead.
+- **Duplicate legal route** — `/vendor-terms` and `/legal/vendor-terms` are byte-identical with no `canonical` tag on either, a real SEO duplicate-content risk.
+- **`PhoneVerifyModal.tsx`** — titled "Verify Phone Number" but its own copy states the code is sent by **email**, not SMS. A naming/mechanism mismatch on the exact page whose purpose is building vendor credibility.
+- **Vendor Payouts page** — the platform's best commission-transparency UX (exact 90/10 split, audited ledger tags) opens with an amber "Payout System Beta / manual processing" notice, undercutting trust on the single most money-sensitive page in the product.
+- **`components/admin/AdminPayoutsView.tsx`** — confirmed dead code, zero imports; the live page uses `AdminPayoutsQueue` instead.
+- **3 admin pages silently disable role-based nav filtering** — `vendor-acquisition`, `vendor-outreach`, `vendor-pipeline` call `DashboardLayout` with no `adminRole` prop, leaking founder-only nav links (Founder Dashboard, Launch Freeze) to every admin viewing those 3 pages. Underlying API routes remain correctly gated — this is a nav-visibility leak, not a data-access breach.
+- **`app/admin/seo/page.tsx`** bypasses the admin shell entirely, rendering the public marketing Navbar instead — a genuine navigational island inside admin.
+- **Enterprise "AI" language discipline confirmed holding platform-wide** — only one legitimate exception found across all four audiences (`app/admin/launch/page.tsx`'s infra-status label "OpenAI API key configured"), plus one non-user-facing internal type name (`AIEventPlan`). The Phase 4A.0 language rollout has stuck.
+
+**Full detail, per-page tables for all four groups, and the complete evidence-tagged methodology:** see the founder's Enterprise Commercial Transformation session record, 2026-07-10 (`experience_audit.md`, not yet migrated into this document's per-page section structure below — flagged as follow-up work, not done in this refresh pass).
+
 **Overall audit score: 61/100**
 
 | Category | Score | Assessment |
