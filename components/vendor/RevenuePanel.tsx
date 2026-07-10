@@ -58,7 +58,7 @@ export function RevenuePanel({ revenue }: Props) {
       )}
 
       <p className="text-xs text-slate-500 mt-3">
-        Confirmed and Pipeline reflect real bookings and quote requests in progress. Potential Revenue is an estimate based on customer-stated budgets.
+        Confirmed Revenue is bookings with at least a deposit paid — it isn&apos;t all paid out to you yet; see Business Operations below for exactly what&apos;s owed. Pipeline reflects quote requests in progress. Potential Revenue is an estimate based on customer-stated budgets.
       </p>
 
       <Link href="/vendor/payouts" className="text-xs font-medium text-gold-400 hover:text-gold-300 mt-2 inline-block">

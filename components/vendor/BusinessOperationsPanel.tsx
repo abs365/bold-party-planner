@@ -49,7 +49,7 @@ export function BusinessOperationsPanel({ businessOperations: o }: Props) {
       </p>
 
       <p className="text-xs text-slate-300">
-        Payouts: {formatCurrency(o.pendingPayout)} pending · {formatCurrency(o.earned)} earned to date
+        Payouts: {formatCurrency(o.pendingPayout)} awaiting final payment · {formatCurrency(o.earned)} owed to you to date
       </p>
 
       {o.activeWarnings.length > 0 && (
