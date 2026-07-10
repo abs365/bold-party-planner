@@ -29,10 +29,16 @@ export const metadata: Metadata = {
 
 const BENEFITS = [
   {
-    icon: CheckCircle2,
-    title: "Free to list your services.",
+    icon: Zap,
+    title: "A full business dashboard. Already live.",
     description:
-      "Creating your profile and receiving enquiries costs nothing. Elbold earns a 10% commission only when a booking is completed, so our incentives are aligned with yours. No hidden fees, no required subscription.",
+      "Revenue analytics, client CRM, direct contact tracking, lead funnel reporting, availability calendar and booking intelligence are already live — real tools for running your business, not just a listing. Founding Vendors access every tool as it ships, before any vendor who joins later.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Start free, upgrade when you're ready to grow.",
+    description:
+      "Creating your profile and receiving enquiries costs nothing. Elbold earns a fair, transparent 10% commission on marketplace bookings — charged only when you've been paid — so our incentives are aligned with yours. Paid plans unlock deeper business tools whenever your business is ready for them.",
   },
   {
     icon: Star,
@@ -45,12 +51,6 @@ const BENEFITS = [
     title: "Permanent top-of-page placement",
     description:
       "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you. Customers typically contact the first 3–5 vendors they see. That set is yours.",
-  },
-  {
-    icon: Zap,
-    title: "A full business dashboard. Already live.",
-    description:
-      "Revenue analytics, client CRM, direct contact tracking, lead funnel reporting, and booking intelligence are already live. Founding Vendors access every tool as it ships, before any vendor who joins later.",
   },
   {
     icon: Shield,
@@ -237,7 +237,7 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-7"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            20 founding places available. No credit card. No monthly fees. Cancel
+            20 founding places available. No credit card required. Free to start. Cancel
             anytime.
           </p>
         </div>
@@ -528,7 +528,7 @@ export default async function FoundingVendorsPage() {
                 Long-Term Value
               </p>
               <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
-                The longer you're on Elbold,<br />the more valuable your account becomes.
+                The longer you&apos;re on Elbold,<br />the more valuable your account becomes.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Every booking you complete builds your review history. Every client you manage through
@@ -537,9 +537,9 @@ export default async function FoundingVendorsPage() {
               </p>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
                 When you leave a social media platform, you lose your followers. When you leave Elbold,
-                you'd lose your verified reviews, your booking history, your client relationships,
+                you&apos;d lose your verified reviews, your booking history, your client relationships,
                 and the placement advantage you built by joining early. All of which took real time to earn.
-                That's not a lock-in tactic. That's what it means to run a real business on a real platform.
+                That&apos;s not a lock-in tactic. That&apos;s what it means to run a real business on a real platform.
               </p>
               <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
                 <TrendingUp size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
@@ -603,7 +603,7 @@ export default async function FoundingVendorsPage() {
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
                 Elbold is a curated platform. We review every application, and we
-                maintain standards after approval. That's what makes the
+                maintain standards after approval. That&apos;s what makes the
                 verification badge meaningful, and what protects the platform
                 for every vendor on it.
               </p>
@@ -806,8 +806,8 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-6"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            No credit card &nbsp;·&nbsp; Free to list &nbsp;·&nbsp; Elbold earns
-            only when you do &nbsp;·&nbsp; Cancel anytime
+            No credit card &nbsp;·&nbsp; Free to start &nbsp;·&nbsp; A real business dashboard from day one
+            &nbsp;·&nbsp; Cancel anytime
           </p>
         </div>
       </section>

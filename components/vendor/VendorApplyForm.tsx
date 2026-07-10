@@ -19,7 +19,7 @@ const BENEFITS = [
   { icon: Calendar, label: "Manage enquiries, bookings and availability in one place" },
   { icon: Star, label: "Build your reputation with verified reviews from real clients" },
   { icon: CreditCard, label: "Secure Stripe payments. No invoicing, no chasing, no disputes." },
-  { icon: TrendingUp, label: "You keep 90% of every booking. Elbold earns 10% only when you earn." },
+  { icon: TrendingUp, label: "You keep 90% of every marketplace booking, on top of your business dashboard" },
 ];
 
 const UK_PHONE_RE = /^(\+44\s?|0)[0-9]{9,10}$/;
@@ -361,7 +361,7 @@ export function VendorApplyForm({ profile }: VendorApplyFormProps) {
                     { n: "1", label: "Submit your application", sub: "Takes about 5 minutes. Nothing complicated." },
                     { n: "2", label: "We verify and activate you", sub: "Usually within 24–48 hours" },
                     { n: "3", label: "Complete your profile", sub: "Photos, packages and pricing. Better profiles get more enquiries." },
-                    { n: "4", label: "Start receiving enquiries", sub: "Customers searching in your category find and contact you" },
+                    { n: "4", label: "Your business dashboard activates", sub: "CRM, calendar and profile are live from day one — plus marketplace enquiries as they come in" },
                   ].map(({ n, label, sub }) => (
                     <div key={n} className="flex gap-3">
                       <div

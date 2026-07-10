@@ -128,12 +128,16 @@ const HOW_IT_WORKS = [
 
 const VENDOR_BENEFITS = [
   {
+    title: "A business platform, not just a listing",
+    desc: "A CRM, verified profile, availability calendar and analytics dashboard are yours from day one — real business tools most event professionals have never had access to.",
+  },
+  {
     title: "Reach customers actively planning events, not scrolling a feed",
     desc: "Every visitor on Elbold is searching for a vendor for a specific occasion. These are buyers, not browsers.",
   },
   {
-    title: "Keep 90% of every booking you receive",
-    desc: "No monthly subscription to get started. No hidden platform fees. We earn when you earn.",
+    title: "A fair, transparent share on every marketplace booking",
+    desc: "A clear commission applies to bookings that come through Elbold — no hidden platform fees, and it's only ever charged on a booking you've actually been paid for.",
   },
   {
     title: "A verified badge that social media cannot provide",
@@ -805,9 +809,9 @@ export default async function Home() {
                   Why Join Elbold Instead of Relying on Social Media?
                 </h2>
                 <p className="text-gray-400 text-sm font-light leading-relaxed mb-10">
-                  Instagram and Facebook are built for browsing. Elbold is built for booking.
-                  Customers who visit Elbold are actively searching for a vendor for a real event.
-                  They are ready to commit.
+                  Instagram and Facebook are built for browsing. Elbold is built for running an
+                  event business — a real CRM and analytics alongside customers who are actively
+                  searching for a vendor and ready to commit.
                 </p>
                 <div className="space-y-7">
                   {VENDOR_BENEFITS.map((b) => (
@@ -847,7 +851,7 @@ export default async function Home() {
                   </Link>
                 </div>
                 <p className="text-center mt-6 text-xs font-light" style={{ color: "rgba(255,255,255,0.16)" }}>
-                  No monthly fees to get started. Cancel anytime.
+                  Free to start. Upgrade when you&apos;re ready to grow. Cancel anytime.
                 </p>
               </div>
             </div>
