@@ -538,6 +538,18 @@ export default async function Home() {
                   <h2 className="text-3xl font-light text-gray-900 tracking-tight">
                     Trusted by Elbold
                   </h2>
+                  {/* E2: brings vendor value into the customer journey without
+                      moving or redesigning the vendor section further down the
+                      page (Enterprise Experience Architecture §3.1) — reuses
+                      the same <p>/<Link> text pattern already used elsewhere
+                      on this page, no new component or capability. */}
+                  <p className="text-sm text-gray-400 font-light mt-3 max-w-md leading-relaxed">
+                    Every badge you see is earned through Elbold&apos;s verification process
+                    — part of the same business platform every professional on Elbold builds on.{" "}
+                    <Link href="/founding-vendors" className="text-[#0B1F4D] font-medium hover:opacity-70 transition-opacity">
+                      See what a verified profile could do for your business &rarr;
+                    </Link>
+                  </p>
                 </div>
                 <Link
                   href="/browse"
