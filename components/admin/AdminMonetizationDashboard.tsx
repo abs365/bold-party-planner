@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { TrendingUp, TrendingDown, DollarSign, Users, AlertTriangle, RefreshCw, CheckCircle, XCircle, ArrowUpCircle, Eye, MousePointerClick } from "lucide-react";
+import Link from "next/link";
+import { TrendingUp, TrendingDown, DollarSign, Users, AlertTriangle, RefreshCw, CheckCircle, XCircle, ArrowUpCircle, Eye, MousePointerClick, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MonetizationData {
@@ -223,7 +224,12 @@ export function AdminMonetizationDashboard({ initialData }: Props) {
         ) : (
           <div className="space-y-1 max-h-72 overflow-y-auto pr-1">
             {churn_risk.map((v) => (
-              <div key={v.vendor_id} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
+              <Link
+                key={v.vendor_id}
+                href={`/admin/vendors?search=${encodeURIComponent(v.business_name)}`}
+                className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0 hover:bg-white/3 rounded-lg px-1 -mx-1 transition-colors group"
+                title="View this vendor's full record, including quality/compliance signals from Governance"
+              >
                 <AlertTriangle size={14} className="text-red-400 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <span className="text-xs font-medium text-gray-200">{v.business_name}</span>
@@ -233,7 +239,8 @@ export function AdminMonetizationDashboard({ initialData }: Props) {
                   <div className="text-xs text-gray-500 mt-0.5">{v.reasons.join(", ")}</div>
                 </div>
                 <span className="text-xs text-gray-400 shrink-0">£{v.mrr}/mo</span>
-              </div>
+                <ChevronRight size={12} className="text-gray-600 group-hover:text-gray-400 transition-colors shrink-0" />
+              </Link>
             ))}
           </div>
         )}

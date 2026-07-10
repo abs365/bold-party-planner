@@ -389,7 +389,11 @@ export default async function FounderDashboardPage() {
             </div>
             <div className="bg-white/4 border border-white/6 rounded-2xl divide-y divide-white/4 overflow-hidden">
               {vendorsNeedingAttention.map((v) => (
-                <div key={v.id} className="px-5 py-3.5 flex items-center justify-between gap-4">
+                <Link
+                  key={v.id}
+                  href={`/admin/vendors?search=${encodeURIComponent(v.business_name)}`}
+                  className="px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-white/3 transition-colors group"
+                >
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-white truncate">{v.business_name}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{v.category ?? "Uncategorised"}</p>
@@ -415,8 +419,9 @@ export default async function FounderDashboardPage() {
                         {formatCurrency(v.financialMRR)} MRR at risk
                       </span>
                     )}
+                    <ChevronRight size={12} className="text-slate-600 group-hover:text-slate-400 transition-colors" />
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <p className="text-xs text-slate-500 mt-2">
