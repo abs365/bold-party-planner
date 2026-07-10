@@ -108,8 +108,8 @@ export function PhoneVerifyModal({ phone, onVerified, onClose }: PhoneVerifyModa
       <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#0d1b3e] p-6 shadow-2xl">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Phone size={18} className="text-brand-400" />
-            Verify Phone Number
+            <Mail size={18} className="text-brand-400" />
+            Confirm Your Phone Number
           </h2>
           <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/8 transition-colors">
             <X size={16} />
