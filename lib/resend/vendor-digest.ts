@@ -81,6 +81,10 @@ export interface VendorDailySummaryInput {
   unreadMessages: number;
   contactsNeedingFollowUp: number;
   nextEvent: { title: string; date: string } | null;
+  // WP-C3 (REG-19): set when the vendor hasn't added a CRM contact in
+  // 14+ days (the count itself, not just a boolean, so the copy can be
+  // specific). null means no nudge this run.
+  crmQuietDays: number | null;
 }
 
 function statRow(label: string, value: number, attention = false): string {
@@ -94,6 +98,10 @@ export async function sendVendorDailySummary(input: VendorDailySummaryInput, to:
     ? `<p style="margin-top:20px">Next event: <strong>${input.nextEvent.title}</strong> on ${new Date(input.nextEvent.date).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}</p>`
     : "";
 
+  const crmQuietLine = input.crmQuietDays !== null
+    ? `<p style="margin-top:20px">It's been ${input.crmQuietDays} days since you added a contact to your CRM. Got a client from Instagram, WhatsApp or a referral recently? <a href="${APP_URL}/vendor/contacts">Add them now</a> so their history stays with your business, not scattered across apps.</p>`
+    : "";
+
   const body = `
     <h2>Good morning, ${input.businessName}</h2>
     <p>Here's what needs your attention today.</p>
@@ -104,6 +112,7 @@ export async function sendVendorDailySummary(input: VendorDailySummaryInput, to:
       ${statRow("Contacts due a follow-up", input.contactsNeedingFollowUp, true)}
     </div>
     ${nextEventLine}
+    ${crmQuietLine}
     <a href="${APP_URL}/vendor/dashboard" class="btn">Open Your Dashboard</a>
   `;
 
