@@ -166,9 +166,17 @@ export default async function VendorGrowthPage() {
 
         {/* ── FUNNEL ──────────────────────────────────────────────────── */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Users size={13} className="text-slate-500" />
-            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Acquisition Funnel</h2>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Users size={13} className="text-slate-500" />
+              <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Acquisition Funnel</h2>
+            </div>
+            {/* Approved vendors not converting to Active/Booked is a diagnosis
+                question this funnel can't answer on its own (Programme D, WP-D3) -
+                Vendor Activation already links back here; this closes the loop. */}
+            <Link href="/admin/vendor-activation" className="text-xs text-slate-500 hover:text-slate-300 flex items-center gap-1">
+              Diagnose Active/Booked drop-off <ArrowRight size={11} />
+            </Link>
           </div>
           <div className="bg-white/3 border border-white/6 rounded-xl overflow-hidden">
             {data.funnel.map(({ stage, count, color, note, conversion }, i) => (

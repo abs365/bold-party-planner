@@ -229,19 +229,34 @@ export default async function FounderDashboardPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "New Applications", value: applicationsToday ?? 0,        icon: Users,      color: "text-brand-400" },
-              { label: "Quotes Requested", value: quotesToday ?? 0,               icon: MessageSquare, color: "text-sky-400" },
-              { label: "Bookings Created", value: bookingsToday ?? 0,             icon: Sparkles,   color: "text-emerald-400" },
-              { label: "Revenue Today",    value: formatCurrency(gmvToday),       icon: DollarSign, color: "text-emerald-400" },
-            ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col justify-between min-h-[90px]">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-slate-500 leading-tight">{label}</span>
-                  <Icon size={14} className={color} />
+              // href set only where a genuine next action exists (Programme D, WP-D3) -
+              // "New Applications" -> the pending queue that needs review, "Quotes
+              // Requested"/"Bookings Created" -> the pipelines that need attention today.
+              // Revenue Today has no single next action, so it stays a plain tile.
+              { label: "New Applications", value: applicationsToday ?? 0,        icon: Users,      color: "text-brand-400",    href: "/admin/vendors?status=pending" },
+              { label: "Quotes Requested", value: quotesToday ?? 0,               icon: MessageSquare, color: "text-sky-400",   href: "/admin/quotes" },
+              { label: "Bookings Created", value: bookingsToday ?? 0,             icon: Sparkles,   color: "text-emerald-400", href: "/admin/bookings" },
+              { label: "Revenue Today",    value: formatCurrency(gmvToday),       icon: DollarSign, color: "text-emerald-400", href: null },
+            ].map(({ label, value, icon: Icon, color, href }) => {
+              const content = (
+                <>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-slate-500 leading-tight">{label}</span>
+                    <Icon size={14} className={color} />
+                  </div>
+                  <div className={`font-bold text-white ${typeof value === "string" ? "text-lg" : "text-2xl"}`}>{value}</div>
+                </>
+              );
+              return href ? (
+                <Link key={label} href={href} className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col justify-between min-h-[90px] hover:border-white/12 transition-colors">
+                  {content}
+                </Link>
+              ) : (
+                <div key={label} className="bg-white/4 border border-white/6 rounded-xl p-4 flex flex-col justify-between min-h-[90px]">
+                  {content}
                 </div>
-                <div className={`font-bold text-white ${typeof value === "string" ? "text-lg" : "text-2xl"}`}>{value}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {commissionToday > 0 && (
             <p className="text-xs text-slate-500 mt-2">{formatCurrency(commissionToday)} commission earned today</p>
@@ -359,7 +374,10 @@ export default async function FounderDashboardPage() {
               <p className="text-xs text-slate-500 mt-1">{growthData.appsThisMonth} this month</p>
             </Link>
 
-            <div className="rounded-xl p-4 border bg-white/4 border-white/6 flex flex-col justify-between min-h-[90px]">
+            <Link
+              href="/admin/bookings"
+              className="rounded-xl p-4 border bg-white/4 border-white/6 hover:border-white/12 transition-colors flex flex-col justify-between min-h-[90px]"
+            >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-slate-500 leading-tight">Booking Status Mix</span>
                 <PieChart size={14} className="text-sky-400" />
@@ -376,7 +394,7 @@ export default async function FounderDashboardPage() {
                   ))
                 )}
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 

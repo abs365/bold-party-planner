@@ -394,7 +394,11 @@ export default async function VendorActivationPage() {
                   "border-white/5 bg-white/2";
 
                 return (
-                  <div key={v.id} className={`rounded-xl border px-4 py-3.5 ${statusColor}`}>
+                  <Link
+                    key={v.id}
+                    href={`/admin/vendors?search=${encodeURIComponent(v.business_name ?? "")}`}
+                    className={`block rounded-xl border px-4 py-3.5 hover:border-white/20 transition-colors ${statusColor}`}
+                  >
                     <div className="flex items-center gap-3">
                       {/* Vendor name + category */}
                       <div className="min-w-0 w-44 flex-shrink-0">
@@ -438,7 +442,7 @@ export default async function VendorActivationPage() {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
