@@ -168,6 +168,46 @@ const COMPARISON_ROWS = [
   },
 ];
 
+// Honest treatment of what a vendor already uses — not "replace everything,"
+// per-tool, matching what Elbold can genuinely deliver today.
+const ALREADY_USING = [
+  {
+    tool: "A CRM (Dubsado, HoneyBook, 17hats)",
+    verdict: "Complements",
+    body: "These have contracts and invoicing Elbold doesn't build yet. Keep it for that. Use Elbold for the marketplace profile, verified reviews and off-platform contact tracking it doesn't do.",
+  },
+  {
+    tool: "A booking or scheduling tool",
+    verdict: "Complements",
+    body: "Your Elbold availability calendar protects you from a marketplace-driven double-booking. Run it alongside your existing scheduling tool, not instead of it.",
+  },
+  {
+    tool: "A personal website",
+    verdict: "Replaces",
+    body: "Your Elbold page already does more than most self-built vendor websites — verified badges, structured reviews, SEO, a booking flow. It can be your only website.",
+  },
+  {
+    tool: "Social media (Instagram, Facebook, TikTok)",
+    verdict: "Complements",
+    body: "Keep posting. Put your Elbold link in the bio — that's where a follower becomes a booking with a paper trail behind it.",
+  },
+  {
+    tool: "WhatsApp for enquiries",
+    verdict: "Complements",
+    body: "Keep messaging there. Log the contact in your Elbold CRM so it doesn't disappear when the chat scrolls away.",
+  },
+  {
+    tool: "A spreadsheet or paper diary",
+    verdict: "Replaces",
+    body: "This is exactly what the CRM is for. Your contact history stops depending on a notebook you could lose.",
+  },
+  {
+    tool: "Another marketplace (Bark, Poptop, Hitched)",
+    verdict: "Complements",
+    body: "List on both — most vendors do. What Elbold offers that a lead marketplace can't: reviews that are structurally impossible to fake, because every one is gated to a real, confirmed booking.",
+  },
+];
+
 async function getProfile() {
   try {
     const supabase = await createClient();
@@ -476,6 +516,49 @@ export default async function FoundingVendorsPage() {
           <p className="text-xs text-gray-300 font-light mt-5 text-center">
             Comparison reflects typical platform policies. Individual platforms vary.
           </p>
+        </div>
+      </section>
+
+      {/* ── ALREADY USING SOMETHING ──────────────────────────────────────── */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p
+              className="text-xs tracking-[0.35em] font-semibold mb-4 uppercase"
+              style={{ color: "#C9A84C" }}
+            >
+              Already Have a System?
+            </p>
+            <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-3">
+              You&apos;re not starting from nothing. Neither are we asking you to.
+            </h2>
+            <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
+              Every vendor who joins Elbold already runs their business somehow. Here&apos;s an
+              honest answer for each one — what stays, what Elbold adds.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {ALREADY_USING.map(({ tool, verdict, body }) => (
+              <div
+                key={tool}
+                className="bg-gray-50 border border-gray-100 rounded-2xl p-6"
+              >
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <h3 className="font-semibold text-gray-900 text-sm">{tool}</h3>
+                  <span
+                    className="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0"
+                    style={{
+                      background: verdict === "Replaces" ? "rgba(11,31,77,0.08)" : "rgba(201,168,76,0.1)",
+                      color: verdict === "Replaces" ? "#0B1F4D" : "#0d1b3e",
+                    }}
+                  >
+                    {verdict}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500 font-light leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
