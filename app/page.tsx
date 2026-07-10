@@ -37,7 +37,7 @@ export const dynamic = "force-dynamic";
 type FeaturedVendor = Pick<
   Vendor,
   "id" | "business_name" | "category" | "city" | "rating" | "review_count" |
-  "starting_price" | "subscription_plan" | "verified" | "min_price" | "verification_level" |
+  "subscription_plan" | "verified" | "min_price" | "verification_level" |
   "is_founding_vendor"
 > & { media?: Array<{ url: string; type: string; is_cover: boolean }> };
 
@@ -190,7 +190,7 @@ export default async function Home() {
   const [featuredRes, vendorCountRes] = await Promise.all([
     supabase
       .from("vendors")
-      .select("id, business_name, category, city, rating, review_count, starting_price, subscription_plan, verified, min_price, verification_level, is_founding_vendor, media:vendor_media(url, type, is_cover)")
+      .select("id, business_name, category, city, rating, review_count, subscription_plan, verified, min_price, verification_level, is_founding_vendor, media:vendor_media(url, type, is_cover)")
       .eq("status", "approved")
       .not("id", "in", TEST_VENDOR_EXCLUSION)
       .order("subscription_plan", { ascending: false })
@@ -606,11 +606,11 @@ export default async function Home() {
                           )}
                         </div>
 
-                        {(v.starting_price ?? 0) > 0 && (
+                        {(v.min_price ?? 0) > 0 && (
                           <div className="absolute bottom-3 right-3 bg-black/55 px-2.5 py-1 rounded backdrop-blur-sm">
                             <span className="text-xs text-white/60">From </span>
                             <span className="text-sm font-semibold text-white">
-                              {(v.starting_price ?? 0).toLocaleString("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 })}
+                              {(v.min_price ?? 0).toLocaleString("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 })}
                             </span>
                           </div>
                         )}
