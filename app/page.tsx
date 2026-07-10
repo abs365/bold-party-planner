@@ -427,26 +427,12 @@ export default async function Home() {
         </section>
 
         {/* ── SECTION 3: TRUST BAR ─────────────────────────────────────────── */}
-        <section style={{ background: "#f8f7f5", borderTop: "1px solid rgba(11,31,77,0.06)", borderBottom: "1px solid rgba(11,31,77,0.06)" }}>
-          <div className="max-w-5xl mx-auto px-4 py-5">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-              {[
-                { icon: CheckCircle, label: "Every vendor reviewed by us" },
-                { icon: Star,         label: "Reviews from real bookings only" },
-                { icon: Shield,       label: "Payments secured through Stripe" },
-                { icon: Award,        label: "Full refund if vendor cancels" },
-                { icon: MapPin,       label: "Based in the United Kingdom" },
-              ].map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center justify-center gap-2.5 py-1">
-                  <Icon size={14} style={{ color: "#0B1F4D", opacity: 0.7, flexShrink: 0 }} />
-                  <span className="text-xs font-light" style={{ color: "#374151" }}>
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Removed (E3, Trust progression): this bar restated the same five
+            facts The Elbold Promise states more fully below, with no distinct
+            content of its own. Per the Homepage Transformation Blueprint's
+            "Merge" verdict — a section that only repeats facts established
+            elsewhere is a compression candidate regardless of design quality.
+            The Elbold Promise is now the page's one full trust moment. */}
 
         {/* ── SECTION 4: OCCASION SHOWCASE — editorial photography cards ───── */}
         <section style={{ background: "#f8f7f5" }} className="py-20 px-4">
@@ -720,8 +706,9 @@ export default async function Home() {
                 className="text-sm font-light max-w-xl mx-auto leading-relaxed"
                 style={{ color: "rgba(255,255,255,0.42)" }}
               >
-                No vendor joins Elbold automatically. No review is unverified. No payment is unprotected.
-                These are not aspirations. They are the rules the platform operates by.
+                Every professional here was personally reviewed. Every review comes from a real event.
+                Every payment is protected from start to finish. These are not aspirations. They are the
+                rules the platform operates by.
               </p>
             </div>
 
@@ -730,7 +717,7 @@ export default async function Home() {
                 {
                   icon: CheckCircle,
                   title: "Every vendor reviewed by a human",
-                  body: "Every application is assessed by our team against published standards before a profile goes live. No automation. No auto-approval.",
+                  body: "Every application is assessed by our team against published standards before a profile goes live — reviewed by a real person, every time.",
                 },
                 {
                   icon: Shield,
@@ -740,7 +727,7 @@ export default async function Home() {
                 {
                   icon: Star,
                   title: "Reviews only from confirmed bookings",
-                  body: "You cannot leave a review on Elbold unless you have completed a booking through the platform. No anonymous reviews.",
+                  body: "Every review on Elbold comes from someone who completed a real booking through the platform — never an anonymous comment.",
                 },
                 {
                   icon: Award,
