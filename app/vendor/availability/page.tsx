@@ -29,7 +29,7 @@ export default async function VendorAvailabilityPage() {
           <p><strong className="text-white/70">How it works:</strong></p>
           <p>• Click any future date to block it as unavailable</p>
           <p>• Click a blocked date to unblock it</p>
-          <p>• Blocked dates are shown to customers when they browse your profile</p>
+          <p>• Blocked dates are protected — a customer can&apos;t request or accept a booking with you for a date you&apos;ve marked unavailable</p>
           <p>• Confirmed bookings automatically mark that date as unavailable</p>
         </div>
       </div>

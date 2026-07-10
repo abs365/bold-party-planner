@@ -138,7 +138,15 @@ export default async function VendorProfilePage({
   // confidence in sharing it. See UK_EXPANSION_READINESS_REPORT.md Priority 3.
   const mediaCount = (vendorData.media as unknown[] | null)?.length ?? 0;
   const packageCount = (vendorData.packages as unknown[] | null)?.length ?? 0;
-  const completion = computeVendorCompletion({ vendor: vendorData, mediaCount, packageCount, hasAvailability: false });
+  // Was hardcoded false (REG-03) — the public quality-gate score and the
+  // public "availability shown" claim both depend on this being real, same
+  // count-query pattern already proven correct on the vendor's own dashboard.
+  const { count: availabilityCount } = await adminDb
+    .from("vendor_availability")
+    .select("id", { count: "exact", head: true })
+    .eq("vendor_id", vendorData.id);
+  const hasAvailability = (availabilityCount ?? 0) > 0;
+  const completion = computeVendorCompletion({ vendor: vendorData, mediaCount, packageCount, hasAvailability });
   const qualityThreshold = vendorData.is_founding_vendor ? 32 : 50;
   if (completion.score < qualityThreshold) {
     const cat = VENDOR_CATEGORIES[vendorData.category as keyof typeof VENDOR_CATEGORIES];

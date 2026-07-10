@@ -212,6 +212,27 @@ export async function PATCH(req: Request, { params }: Params) {
       );
     }
 
+    // REG-03: honour a vendor-blocked date at the actual point of booking
+    // creation. vendor_availability was previously never consulted by any
+    // booking flow — a customer could accept a quote for a date the vendor
+    // had explicitly marked unavailable.
+    const { data: event } = await db.from("events").select("date").eq("id", quote.event_id).maybeSingle();
+    if (event?.date) {
+      const { data: blockedDate } = await db
+        .from("vendor_availability")
+        .select("id")
+        .eq("vendor_id", quote.vendor_id)
+        .eq("date", event.date)
+        .eq("is_available", false)
+        .maybeSingle();
+      if (blockedDate) {
+        return NextResponse.json(
+          { error: "This vendor is not available on the event date. Please contact them or choose a different vendor." },
+          { status: 409 }
+        );
+      }
+    }
+
     const { data: booking, error: bookErr } = await db
       .from("bookings")
       .insert({
