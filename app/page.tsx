@@ -230,23 +230,35 @@ export default async function Home() {
               <div className="h-px w-10" style={{ background: "rgba(11,31,77,0.15)" }} />
             </div>
 
-            {/* Headline */}
+            {/* Headline — E1: replaced the abstract "For Every Occasion" framing
+                with warmer, less corporate language per Enterprise Experience
+                Architecture §2.1 / Homepage Transformation Blueprint §2 (EDP-01
+                Moment 1). A fully dynamic, per-visitor occasion headline is out
+                of scope for this work package (new capability); this is the
+                static, warm default that recommendation falls back to when no
+                personalisation signal exists. */}
             <h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.06] mb-6"
               style={{ color: "#0B1F4D" }}
             >
               Find Trusted Professionals
               <br />
-              <span style={{ color: "#D4AF37" }}>For Every Occasion</span>
+              <span style={{ color: "#D4AF37" }}>For the Moments That Matter Most</span>
             </h1>
 
-            {/* Subheadline */}
+            {/* Subheadline — E1: removed the trailing "Every payment is
+                protected" clause. That fact is unchanged and still fully
+                stated in the Trust Bar and Elbold Promise sections; it was
+                previously repeated a second time three lines below in the
+                reassurance line, crowding the arrival moment with proof
+                language before any warmth was established (Architecture
+                §2.2 / EDP-01 Moment 1's "proof follows warmth" ordering). */}
             <p
               className="text-base sm:text-lg font-light leading-relaxed max-w-xl mx-auto mb-10"
               style={{ color: "#6b7280" }}
             >
               Tell us about your event. Receive free quotes from verified photographers, DJs,
-              caterers and more. Compare, choose and book. Every payment is protected.
+              caterers and more. Compare, choose, and book the professionals who feel right for your day.
             </p>
 
             {/* CTAs — Browse is primary: it's the only path with no signup wall,
@@ -275,12 +287,17 @@ export default async function Home() {
 
             {/* Trust/no-risk reassurance - replaces a prior line about vendor
                 onboarding status, which spoke to supply-side ops rather than
-                the customer's actual decision */}
+                the customer's actual decision. E1: dropped "Every payment
+                protected" - it duplicated the subheadline above (removed in
+                the same work package) and is still fully stated in the Trust
+                Bar and Elbold Promise sections below; this line now carries
+                only the no-risk/low-commitment signal, not the financial
+                trust claim. */}
             <p
               className="text-xs font-light mb-10 tracking-wide"
               style={{ color: "rgba(11,31,77,0.42)" }}
             >
-              Free to use &middot; No obligation to book &middot; Every payment protected
+              Free to use &middot; No obligation to book
             </p>
 
             {/* Occasion chips */}
