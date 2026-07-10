@@ -486,15 +486,12 @@ function computeDailyHighestImpactAction(
     });
   }
 
-  // 3. Weakest Business Health category
-  candidates.push({
-    message: health.actionText,
-    ctaLabel: "Improve Now",
-    ctaHref: health.actionHref,
-    measurableClaim: `${health.categories[health.weakestCategoryKey].score ?? 0}/100`,
-  });
-
-  // 4. Review volume fallback
+  // 3. Review volume — specific, zero-cost, always-actionable when reviews
+  // are low. Ordered ahead of the generic Business Health fallback below
+  // (Commercial Implementation Programme, WP4): that fallback is pushed
+  // unconditionally on every call, so it was winning as candidate[0] in
+  // practice almost every time, leaving this concrete, high-value nudge
+  // effectively unreachable despite being coded and tested.
   if (input.vendor.review_count < 5) {
     candidates.push({
       message: "Ask your last customer to leave a review to build trust with future customers.",
@@ -503,6 +500,16 @@ function computeDailyHighestImpactAction(
       measurableClaim: `${input.vendor.review_count}/5 reviews`,
     });
   }
+
+  // 4. Weakest Business Health category — unconditional, so it must stay
+  // last: it is the true last-resort catch-all every other candidate above
+  // (including review volume) should be tried before falling back to it.
+  candidates.push({
+    message: health.actionText,
+    ctaLabel: "Improve Now",
+    ctaHref: health.actionHref,
+    measurableClaim: `${health.categories[health.weakestCategoryKey].score ?? 0}/100`,
+  });
 
   const filtered = candidates.filter((c) => c.message !== activePriorityMessage);
 
