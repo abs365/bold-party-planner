@@ -21,6 +21,10 @@ Every claim is tagged **Verified** (traced to actual runtime code, cited — pri
 
 ---
 
+> **Enterprise Baseline v1.0.1 Correction (2026-07-10):** every reference below to the `vendors.response_rate` "scale mismatch" bug (Clusters 1, 2, 5, and Section 9's conclusion) is disproved by direct production verification — the live column accepts 0-100 writes with no CHECK constraint. This narrows this document's conclusion: of the three cross-cutting defects Section 9 named as the highest-leverage fixes, only two remain (the availability hardcode and the unverified cron authentication). Full evidence: `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md`. Original text below is left as-is, historical record only — do not act on the response_rate claims in it.
+
+---
+
 ## CLUSTER 1 — THE MORNING ARRIVAL (Business Control Centre, Business Health, Daily Summary)
 
 **1. Why does this experience exist?** This is the first thing a vendor sees when they open ELBOLD — the moment that decides whether today is a day they engage with their business platform or a day they don't.

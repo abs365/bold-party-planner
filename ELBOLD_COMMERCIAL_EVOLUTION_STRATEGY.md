@@ -28,6 +28,8 @@
 
 **5. Two new, previously unscored defects surfaced by the fresh audit, both bearing directly on this document's priority list:**
    - `vendors.response_rate` — schema (0-1) vs. application (0-100) scale mismatch silently fails every write, corrupting Business Health/verification/governance signals platform-wide. Not on the original Top 25; should be scored alongside Priority #21 (verification expiry) given the shared blast radius.
+
+> **Enterprise Baseline v1.0.1 Correction (2026-07-10):** disproved by direct production verification. Live `vendors.response_rate` is `NUMERIC(5,2)` with no CHECK constraint — writes succeed. No bug exists. See `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md`. Left uncorrected above as historical record.
    - Cron authentication header mismatch (`x-cron-secret` vs. Vercel's native `Authorization: Bearer`) affecting all 6 scheduled jobs, unverified against live logs — bears directly on Priority #5 (CRM follow-ups) and #8 (daily summary email), both of which may not actually be firing on schedule in production.
 
 **6. Fresh competitor evidence for Section 4.5's "Challenge to Default Assumptions."** The market research confirms Assumption 1's challenge with real comparators: platforms that charge a flat subscription for visibility alone with no operational fallback (Hitched, Bridebook) have the weakest supplier sentiment of every platform researched. This is now external evidence, not just internal reasoning, for "the business platform must deliver value independent of marketplace referrals."

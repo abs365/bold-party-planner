@@ -28,6 +28,10 @@ Every factual claim is tagged: **Verified** (read directly from live code/produc
 
 ---
 
+> **Enterprise Baseline v1.0.1 Correction (2026-07-10):** every reference below to the `vendors.response_rate` "scale mismatch" bug (Section 4, Section 8's trust map) is disproved. Direct production verification confirmed the live column accepts 0-100 writes correctly with no CHECK constraint blocking it. This does not change Section 4's conclusion that no verification-experience redesign is needed — if anything it strengthens it, since there was never a data-integrity fix required underneath the existing, correctly-designed UI. Full evidence: `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md`. Original text below is left as-is, historical record only.
+
+---
+
 ## SECTION 0 — THE ESTABLISHED BUSINESS OWNER'S REAL ALTERNATIVE
 
 Before evaluating ELBOLD's journey, the honest baseline: what does this vendor's business actually look like the day before they discover ELBOLD?

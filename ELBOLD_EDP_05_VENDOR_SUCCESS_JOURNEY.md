@@ -11,6 +11,10 @@
 
 ---
 
+> **Enterprise Baseline v1.0.1 Correction (2026-07-10):** every reference below to the `vendors.response_rate` "scale mismatch" bug (Day 1, Section 6 summary table) is disproved by direct production verification — the live column accepts 0-100 writes with no CHECK constraint. Day 1's "current friction" and "retention opportunity" entries, and the corresponding row in Section 6's summary table, should be read as historical record only; there is no data-integrity fix required at this stage of the journey. Full evidence: `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md`.
+
+---
+
 ## DAY 1 — APPROVAL TO FIRST LOGIN
 
 **Vendor goals:** Confirm the application was worth the time spent. See tangible proof the business dashboard is real, not a waiting room.

@@ -14,6 +14,8 @@
 
 **Deduplication:** the same underlying fix (e.g. the `vendors.response_rate` scale mismatch) was independently flagged in four separate source documents (2030 Strategy, Vendor Value Blueprint, Executive Business Status Review, EDP-03). It appears exactly once below, as REG-01, with every source cited.
 
+> **Enterprise Baseline v1.0.1 Correction (2026-07-10):** REG-01 was closed before implementation — production verification confirmed the scale-mismatch it describes does not exist live. See the REG-01 entry below and `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md` for full evidence. REG-02 is now the highest-priority open P0 item.
+
 **Scoring model:** each item is scored 1-5 on six dimensions, weighted, summed, and multiplied by 20 to produce a 0-100 Priority Score.
 
 | Dimension | Weight | 5 means | 1 means |
@@ -35,6 +37,11 @@
 *Data-integrity and trust defects that silently corrupt every other metric or promise in this register. Nothing else should be measured as "working" until these close.*
 
 ### REG-01 — Fix `vendors.response_rate` scale mismatch
+
+> **STATUS: Closed before implementation.**
+> **Production verification confirmed the issue does not exist.**
+> Direct query against live `bold-party-production` (`information_schema.columns`, `pg_constraint`, and a rolled-back live write test) confirmed the column is `NUMERIC(5,2)` with no CHECK constraint — 0-100 writes succeed cleanly. The finding below was based on static analysis of migration source files, not live schema, and was incorrectly tagged Verified rather than Observation. Full evidence: `ELBOLD_ENTERPRISE_BASELINE_v1.0.1_CORRECTIONS.md`. This entry, including its score, is retained below unmodified as the historical record of what Enterprise Baseline v1.0 believed — do not implement it, and do not delete it.
+
 - **Description:** DB column is `NUMERIC(4,3)` constrained 0-1; all application write paths send 0-100. Every write has been silently rejected since introduction, freezing the field at `DEFAULT 0.5` for effectively every vendor.
 - **Business Problem:** Corrupts Business Health scoring (shown to every vendor, every day), generates false "low response rate" warnings with a real ranking penalty, blocks Level 3 verification auto-upgrade, and feeds `/admin/governance`'s at-risk list with a false signal.
 - **Existing Capability:** **Verified** — the scoring/warning/verification logic that consumes this field is otherwise real and correctly wired (`capability_truth_audit.md` Capabilities 1, 13, 20); only the input is broken.
@@ -444,8 +451,8 @@
 
 | Order | ID | Item | Group | Score |
 |---|---|---|---|---|
-| 1 | REG-01 | Fix `response_rate` scale mismatch | P0 | 87 |
-| 2 | REG-02 | Verify/fix cron authentication | P0 | 83 |
+| 1 | REG-01 | ~~Fix `response_rate` scale mismatch~~ **CLOSED — v1.0.1, did not exist** | P0 | 87 |
+| 2 | REG-02 | Verify/fix cron authentication — **promoted to highest-priority open P0, v1.0.1** | P0 | 83 |
 | 3 | REG-03 | Fix availability hardcode + enforce in booking flows | P0 | 86 |
 | 4 | REG-04 | Enforce moderation status on public reviews | P0 | 68 |
 | 5 | REG-06 | Correct `.env.example` Stripe vars | P0 | 51 |
