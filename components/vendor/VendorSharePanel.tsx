@@ -16,19 +16,31 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
   // required for SSR correctness, not a mirror of already-known render state.
   const [canNativeShare, setCanNativeShare] = useState(false);
 
-  // ?ref=share tells the profile page this is the vendor's own outbound link
-  // (Instagram bio, WhatsApp, business card) so it can drop the "More
+  // ?ref=<channel> tells the profile page this is the vendor's own outbound
+  // link (not internal marketplace browsing) so it can drop the "More
   // vendors near you" competitor section - see app/vendors/[id]/page.tsx.
-  const profileUrl = `${typeof window !== "undefined" ? window.location.origin : "https://www.elbold.com"}/vendors/${slug}?ref=share`;
-  const encodedUrl = encodeURIComponent(profileUrl);
-  const encodedText = encodeURIComponent(`Book ${businessName} for your event on Elbold`);
+  // WP-C5 (REG-20): each channel now gets its own value, extending the
+  // pattern that previously only distinguished "share" from nothing - a
+  // vendor who prints a QR code on a business card can now find out
+  // whether it's working, separately from a WhatsApp or Facebook link,
+  // with no new tracking infrastructure - the destination page already
+  // reads this param, this only makes the value channel-specific.
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.elbold.com";
+  const urlFor = (ref: string) => `${origin}/vendors/${slug}?ref=${ref}`;
+  const profileUrl = urlFor("share"); // generic: copy link, native share sheet
   const shareText = `Book ${businessName} for your event on Elbold`;
+  const encodedText = encodeURIComponent(shareText);
   // Public, no-signup QR image service - avoids adding a QR-generation
   // dependency for what's a secondary, non-critical utility (business cards,
   // printed materials, Instagram bio link-in-image use).
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodedUrl}`;
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(urlFor("qr"))}`;
 
   useEffect(() => {
+    // Deliberate one-time mount check, not a subscription - navigator.share
+    // support doesn't change during a session. Runs client-only (SSR has no
+    // navigator), which is why this can't be a lazy useState initializer
+    // without risking a hydration mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (typeof navigator !== "undefined" && typeof navigator.share === "function") setCanNativeShare(true);
   }, []);
 
@@ -68,7 +80,7 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
 
       {/* WhatsApp */}
       <a
-        href={`https://wa.me/?text=${encodedText}%20${encodedUrl}`}
+        href={`https://wa.me/?text=${encodedText}%20${encodeURIComponent(urlFor("whatsapp"))}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90"
@@ -81,7 +93,7 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
 
       {/* Facebook */}
       <a
-        href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlFor("facebook"))}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90"
@@ -94,7 +106,7 @@ export function VendorSharePanel({ slug, businessName }: VendorSharePanelProps) 
 
       {/* LinkedIn */}
       <a
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(urlFor("linkedin"))}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-opacity hover:opacity-90"

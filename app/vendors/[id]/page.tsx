@@ -119,9 +119,13 @@ export default async function VendorProfilePage({
   // bio, WhatsApp, a business card) shouldn't send that traffic straight to
   // a grid of their own competitors - that's the opposite of what a
   // "shareable business microsite" should do. Internal marketplace browsing
-  // (no ?ref=share) keeps the cross-sell section; a vendor's own outbound
-  // shared link (VendorSharePanel appends ?ref=share) suppresses it.
-  const isSharedView = ref === "share";
+  // (no ref param) keeps the cross-sell section; any of the vendor's own
+  // outbound share channels suppresses it. WP-C5 (REG-20): VendorSharePanel
+  // now tags each channel distinctly (share/qr/whatsapp/facebook/linkedin)
+  // for attribution - all of them still count as a shared view here, only
+  // the exact-match check was too narrow.
+  const SHARE_CHANNELS = new Set(["share", "qr", "whatsapp", "facebook", "linkedin"]);
+  const isSharedView = !!ref && SHARE_CHANNELS.has(ref);
   const [adminDb, supabase] = await Promise.all([createAdminClient(), createClient()]);
 
   const { vendor: vendorData, redirectToSlug } = await resolveVendor(id, adminDb);
@@ -241,7 +245,7 @@ export default async function VendorProfilePage({
   return (
     <div className="min-h-screen bg-white">
       <Navbar user={profile} lightBg />
-      <ProfileViewTracker vendorId={vendor.id} />
+      <ProfileViewTracker vendorId={vendor.id} refParam={ref ?? null} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
