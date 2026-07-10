@@ -5,6 +5,7 @@ import { createGovernanceDecision } from "@/lib/governance";
 import { track } from "@/lib/analytics";
 import { calculateVendorHealthScore } from "@/lib/vendor/health";
 import { detectComputedWarnings, hasCriticalOrHighWarning } from "@/lib/vendor/warnings";
+import { isAuthorisedCron } from "@/lib/cron-auth";
 
 // Automated governance checks — runs on a schedule (e.g. daily via Vercel Cron).
 // Protected by CRON_SECRET header. Creates audit logs for all automated actions.
@@ -17,8 +18,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request: Request) {
-  const secret = request.headers.get("x-cron-secret");
-  if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+  if (!isAuthorisedCron(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { sendVendorDailySummary } from "@/lib/resend/vendor-digest";
+import { isAuthorisedCron } from "@/lib/cron-auth";
 
 // Daily digest email - only sent when there's at least one thing worth a
 // vendor's attention (pending booking/quote, unread message, overdue
@@ -11,8 +12,7 @@ import { sendVendorDailySummary } from "@/lib/resend/vendor-digest";
 // table's unread count, and the empty `email_log` table (migration 002,
 // never previously written to - wired up here for the first time).
 export async function GET(req: Request) {
-  const secret = req.headers.get("x-cron-secret");
-  if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+  if (!isAuthorisedCron(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

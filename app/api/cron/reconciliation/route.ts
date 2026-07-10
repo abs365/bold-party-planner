@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
+import { isAuthorisedCron } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 
 // Daily reconciliation cron — delegates to the admin reconciliation API
 // so all logic, logging, and DB writes live in one place.
 export async function GET(request: Request) {
-  const secret = request.headers.get("x-cron-secret") ?? "";
-  if (secret !== process.env.CRON_SECRET) {
+  if (!isAuthorisedCron(request)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

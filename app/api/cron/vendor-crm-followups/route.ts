@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { logContactActivity } from "@/lib/vendor/contact-activity";
 import { isPaidPlan } from "@/lib/vendor/entitlements";
+import { isAuthorisedCron } from "@/lib/cron-auth";
 
 // Daily reminder for vendors with a manual_contacts follow-up date that has
 // passed. Runs once daily (see vercel.json) so it naturally sends at most
@@ -14,8 +15,7 @@ import { isPaidPlan } from "@/lib/vendor/entitlements";
 // manually and see overdue items in the CRM UI, they just don't get pushed
 // a notification. The ContactListView banner surfaces this contextually.
 export async function GET(req: Request) {
-  const secret = req.headers.get("x-cron-secret");
-  if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
+  if (!isAuthorisedCron(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
