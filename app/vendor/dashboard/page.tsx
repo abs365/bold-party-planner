@@ -24,7 +24,7 @@ import {
 import { BusinessControlCentre } from "@/components/vendor/BusinessControlCentre";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import {
-  ShoppingBag, CreditCard, Star, Eye, TrendingUp, ArrowRight,
+  ShoppingBag, CreditCard, Star, Eye, ArrowRight,
   CheckCircle2, MessageSquare, Quote, Calendar,
   Zap, BarChart2, Award, Bell, Clock, Users, ChevronRight,
   Rocket, Package, Camera,
@@ -131,7 +131,6 @@ export default async function VendorDashboardPage() {
 
   const profileViews  = analytics.filter((a) => a.event_type === "profile_view").length;
   const quoteRequests = analytics.filter((a) => a.event_type === "quote_request").length;
-  const conversionRate = profileViews > 0 ? ((confirmed.length / profileViews) * 100).toFixed(1) : "0.0";
 
   const mediaCount   = (vendor as Vendor & { media?: unknown[] }).media?.length ?? 0;
   const packageCount = (vendor as Vendor & { packages?: unknown[] }).packages?.length ?? 0;
@@ -410,27 +409,6 @@ export default async function VendorDashboardPage() {
               </div>
               <div className="text-2xl font-bold text-white mb-1">{value}</div>
               <div className={cn_cls("text-xs", urgent ? "text-amber-400 font-medium" : "text-slate-600")}>{sub}</div>
-            </Link>
-          ))}
-        </div>
-
-        {/* ─── 30-day Performance ──────────────────────────────────── */}
-        <div className="grid grid-cols-3 gap-4">
-          {[
-            { label: "Profile Views",   value: profileViews,   icon: Eye,       color: "text-brand-400",   href: "/vendor/analytics" },
-            { label: "Quote Requests",  value: quoteRequests,  icon: TrendingUp, color: "text-slate-400",  href: "/vendor/quotes" },
-            { label: "Conversion Rate", value: `${conversionRate}%`, icon: BarChart2, color: "text-emerald-400", href: "/vendor/analytics" },
-          ].map(({ label, value, icon: Icon, color, href }) => (
-            <Link key={label} href={href} className="bg-white/4 border border-white/6 rounded-xl p-4 hover:border-white/10 transition-colors group">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon size={13} className={color} />
-                <span className="text-xs text-slate-500">{label}</span>
-                <span className="ml-auto text-slate-700 group-hover:text-slate-500 transition-colors">
-                  <ChevronRight size={12} />
-                </span>
-              </div>
-              <div className="text-xl font-bold text-white">{value}</div>
-              <div className="text-xs text-slate-600 mt-0.5">Last 30 days</div>
             </Link>
           ))}
         </div>
