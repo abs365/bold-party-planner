@@ -136,23 +136,6 @@ export default async function VendorPayoutsPage({
           <p className="text-slate-400 text-sm mt-1">Your earnings, commission breakdown, and payout history</p>
         </div>
 
-        {/* ── Payout System Beta Notice ─────────────────────────────────────── */}
-        <div className="bg-amber-500/8 border border-amber-500/25 rounded-xl p-4">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0 mt-0.5">
-              <span className="text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full">Beta</span>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-amber-300 mb-1">Payout System Beta</p>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                ELBOLD currently processes vendor payouts manually. Bank details collected here are stored securely
-                and will be used for automated payouts when Stripe Connect launches.
-                This does not affect your current bookings.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* ── Secure Business Verification (Stripe Connect) ────────────────── */}
         <StripeConnectCard justConnected={connected === "1"} />
 
@@ -368,10 +351,14 @@ export default async function VendorPayoutsPage({
               <ShieldCheck size={13} className="text-slate-500 mt-0.5 flex-shrink-0" />
               <p>Every payment is individually audited. You can see the exact commission and payout per booking in the table above.</p>
             </div>
+            <div className="flex items-start gap-2">
+              <Wallet size={13} className="text-slate-500 mt-0.5 flex-shrink-0" />
+              <p>Payouts are currently processed manually by our team, to the bank details you register here — this doesn&apos;t change what you&apos;re owed or when it&apos;s due, only how it&apos;s sent.</p>
+            </div>
           </div>
           <div className="mt-4 pt-4 border-t border-white/6 flex items-center gap-1.5 text-xs text-slate-500">
             <ChevronRight size={11} />
-            Automated bank payouts via Stripe Connect are planned. You will be notified before any transition.
+            Automated bank payouts via Stripe Connect are planned — the bank details above will carry over, and you&apos;ll be notified before any transition.
           </div>
         </div>
 
