@@ -54,6 +54,9 @@
 - **Suggested Implementation Order: 1**
 
 ### REG-02 — Verify and, if broken, fix cron authentication (6 scheduled jobs)
+
+> **STATUS: Shipped, commit `a95cc89`.** Confirmed real (unlike REG-01) via Vercel's own current docs — Vercel sends `Authorization: Bearer`, not `x-cron-secret`. All 6 routes now accept both conventions. See `ELBOLD_PROGRAMME_A_TRUST_FOUNDATION_COMPLETION_REPORT.md`.
+
 - **Description:** All `app/api/cron/*` routes authorize via a custom `x-cron-secret` header; Vercel's native Cron Jobs feature sends `Authorization: Bearer`. No bridging code found.
 - **Business Problem:** If broken, CRM follow-up reminders, the Daily Summary email, and verification auto-upgrade sweeps — three separate retention mechanisms this register otherwise treats as "built" — may never have fired in production.
 - **Existing Capability:** **Verified** — the logic inside every cron route is confirmed sound; only the trigger mechanism is unverified (`capability_truth_audit.md` Capabilities 4, 5, 13, New Finding #2).
@@ -66,6 +69,9 @@
 - **Suggested Implementation Order: 2**
 
 ### REG-03 — Fix hardcoded public-profile availability and enforce it in booking flows
+
+> **STATUS: Shipped, commit `5f99b4f`.** Completion-score query fixed; quote-acceptance path now checks `vendor_availability` before creating a booking. Direct "Book Now" path enforcement shipped together with REG-05 (same file, one coherent change). See completion report.
+
 - **Description:** `app/vendors/[id]/page.tsx:141` hardcodes `hasAvailability: false` for every vendor; separately, no quote or booking flow anywhere reads `vendor_availability` at all.
 - **Business Problem:** A customer can request or book a date a vendor explicitly blocked. The vendor-facing UI's own claim ("Blocked dates are shown to customers") is false. This is the single feature named across three documents as the platform's most important daily habit (`ELBOLD_VENDOR_VALUE_BLUEPRINT.md` §2.1) — and it currently has no protective payoff.
 - **Existing Capability:** **Verified** — the vendor's own calendar management works correctly and the same fix pattern already exists elsewhere in the codebase (`app/vendor/dashboard/page.tsx:106`).
@@ -78,6 +84,9 @@
 - **Suggested Implementation Order: 3**
 
 ### REG-04 — Enforce moderation status on the public reviews query
+
+> **STATUS: Shipped, commit `5fbfa95`.** See completion report.
+
 - **Description:** `app/vendors/[id]/page.tsx:166-172` queries all reviews for a vendor with no `moderation_status = 'approved'` filter; only the aggregate rating (DB-trigger maintained) currently excludes non-approved reviews.
 - **Business Problem:** An admin "remove" or "flag" action does not actually remove a review from public view — a genuine moderation/reputation-protection failure on the platform's core trust asset (Constitution Principle 5, the review system).
 - **Existing Capability:** **Verified** — the moderation workflow (approve/flag/remove, audit-logged) is otherwise fully real; only the read-side filter is missing.
@@ -90,6 +99,9 @@
 - **Suggested Implementation Order: 4**
 
 ### REG-05 — Server-side price verification on the direct "Book Now" path
+
+> **STATUS: Shipped, commit `3051a8c`.** New `POST /api/bookings` route; also folds in REG-03's availability enforcement for this second booking-creation entry point. See completion report.
+
 - **Description:** `BookingRequestForm.tsx` computes `total_amount`/`deposit_amount`/`commission_amount` client-side; the Stripe checkout route trusts this figure without recomputing it against the vendor's real package price.
 - **Business Problem:** A real, if narrow, financial-integrity gap — unlike the quote-acceptance path (server-computed and correct), this path's commission and payout figures are only as trustworthy as an unverified client-submitted value.
 - **Existing Capability:** **Verified** — the correct pattern already exists and works in the quote-acceptance path; this is a consistency gap, not a missing capability.
@@ -102,6 +114,9 @@
 - **Suggested Implementation Order: 8**
 
 ### REG-06 — Correct `.env.example` Stripe price variable names
+
+> **STATUS: Shipped, commit `833b989`.** See completion report.
+
 - **Description:** `.env.example` still lists the old `STRIPE_PRO_MONTHLY_PRICE_ID` naming and has no entry for the Premium tier vars the live code actually requires.
 - **Business Problem:** A fresh environment provisioned from this file would silently reintroduce the exact platform-wide checkout failure already fixed once in production (commit `9811021`).
 - **Existing Capability:** **Verified** — the live checkout code itself is already fixed; only the reference/documentation file is stale.
