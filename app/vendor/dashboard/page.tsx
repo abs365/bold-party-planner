@@ -267,29 +267,19 @@ export default async function VendorDashboardPage() {
         </div>
 
         {/* ─── Your Public Page ─────────────────────────────────── */}
+        {/* Views/quotes/active-bookings stats were removed here (Commercial
+            Implementation Programme, WP2) — they duplicated
+            MarketplaceActivityPanel and BusinessOperationsPanel in the
+            Business Control Centre above, with identical formulas and less
+            context. This panel's unique value is the share link/QR/social
+            tools below, kept as-is. */}
         {vendor.status === "approved" && vendor.slug && (
           <div className="bg-[#0d1b3e] border border-[rgba(201,168,76,0.2)] rounded-2xl p-5 animate-fade-in-up">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-xs text-slate-400 mb-1 uppercase tracking-wide font-medium">Your public profile</p>
-                <p className="text-sm font-semibold text-white mb-3 truncate">
-                  elbold.com/vendors/{vendor.slug}
-                </p>
-                <VendorSharePanel slug={vendor.slug} businessName={vendor.business_name} />
-              </div>
-              <div className="flex gap-6 flex-shrink-0 sm:text-right">
-                {[
-                  { label: "Views (30d)", value: profileViews },
-                  { label: "Quotes (30d)", value: quoteRequests },
-                  { label: "Active Bookings", value: confirmed.length },
-                ].map(({ label, value }) => (
-                  <div key={label}>
-                    <div className="text-xl font-bold text-white">{value}</div>
-                    <div className="text-xs text-slate-500">{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <p className="text-xs text-slate-400 mb-1 uppercase tracking-wide font-medium">Your public profile</p>
+            <p className="text-sm font-semibold text-white mb-3 truncate">
+              elbold.com/vendors/{vendor.slug}
+            </p>
+            <VendorSharePanel slug={vendor.slug} businessName={vendor.business_name} />
           </div>
         )}
 
