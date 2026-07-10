@@ -176,6 +176,10 @@ export default async function VendorProfilePage({
       .from("reviews")
       .select("id, rating, comment, created_at, response, response_at, profile:profiles(full_name, avatar_url)")
       .eq("vendor_id", vendorData.id)
+      // REG-04: this query had no moderation filter — an admin "remove" or
+      // "flag" action (app/api/admin/reviews/route.ts) only ever updated
+      // moderation_status; it never actually hid the review from public view.
+      .eq("moderation_status", "approved")
       .order("created_at", { ascending: false })
       .limit(20),
     supabase.auth.getUser(),
