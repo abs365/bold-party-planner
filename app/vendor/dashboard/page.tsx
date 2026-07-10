@@ -53,7 +53,7 @@ export default async function VendorDashboardPage() {
   const cutoff30 = new Date();
   cutoff30.setDate(cutoff30.getDate() - 30);
 
-  const [bookingsRes, reviewsRes, analyticsRes, quotesRes, unreadRes, unreadMsgRes, availabilityRes] = await Promise.all([
+  const [bookingsRes, reviewsRes, analyticsRes, quotesRes, unreadRes, unreadMsgRes, availabilityRes, contactsRes] = await Promise.all([
     supabase
       .from("bookings")
       .select("id, status, payment_status, total_amount, vendor_payout, deposit_amount, created_at, event:events(title, date, city, guest_count), customer:profiles(full_name, email, avatar_url)")
@@ -94,6 +94,15 @@ export default async function VendorDashboardPage() {
       .select("id", { count: "exact", head: true })
       .eq("vendor_id", vendor.id)
       .limit(1),
+    // WP-B5 — active CRM contact count, feeds the Daily Highest-Impact
+    // Action candidate pool so a zero-marketplace-activity vendor is
+    // pointed at a controllable business-platform action instead of only
+    // marketplace-dependent ones.
+    supabase
+      .from("manual_contacts")
+      .select("id", { count: "exact", head: true })
+      .eq("vendor_id", vendor.id)
+      .eq("is_archived", false),
   ]);
 
   const allBookings  = (bookingsRes.data ?? []) as unknown as Booking[];
@@ -104,6 +113,7 @@ export default async function VendorDashboardPage() {
   const unreadCount  = unreadRes.count ?? 0;
   const unreadMessageCount = unreadMsgRes.count ?? 0;
   const hasAvailabilityRow = (availabilityRes.count ?? 0) > 0;
+  const contactCount = contactsRes.count ?? 0;
 
   const pending   = allBookings.filter((b) => b.status === "pending");
   const awaitingPayment = allBookings.filter((b) => b.status === "pending_payment");
@@ -196,6 +206,7 @@ export default async function VendorDashboardPage() {
     quotes: allQuotes as unknown as ControlCentreQuote[],
     unreadMessageCount,
     hasAvailability: hasAvailabilityRow,
+    contactCount,
     analyticsEvents: { profileViews, quoteRequests, mediaViews, contactClicks, packageViews },
     completion,
     rankScore: { total: rankScore, tier: calculateVendorScore({ ...vendor, packages: (vendor as Vendor & { packages?: unknown[] }).packages ?? [] }).tier },

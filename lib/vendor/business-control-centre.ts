@@ -55,6 +55,7 @@ export interface ControlCentreInput {
   quotes: ControlCentreQuote[];
   unreadMessageCount: number;
   hasAvailability: boolean;
+  contactCount: number;
   analyticsEvents: {
     profileViews: number;
     quoteRequests: number;
@@ -382,6 +383,21 @@ function computeDailyHighestImpactAction(
   activePriorityMessage: string,
 ): DailyHighestImpactAction {
   const candidates: DailyHighestImpactAction[] = [];
+
+  // 0. Zero marketplace activity — every other candidate below is either
+  // gated on marketplace signals (profile views, bookings) or a generic
+  // catch-all; a genuinely zero-activity vendor has no controllable next
+  // step from any of them. Point at the CRM instead — fully within the
+  // vendor's control regardless of marketplace volume (WP-B5, EDP-02 §7 /
+  // EDP-03 Cluster 2).
+  if (input.allBookings.length === 0 && input.quotes.length === 0 && input.contactCount < 3) {
+    candidates.push({
+      message: "No marketplace activity yet — that's normal early on. Add your existing customer contacts to your CRM so nothing from Instagram, WhatsApp or referrals falls through the cracks.",
+      ctaLabel: "Add a contact",
+      ctaHref: "/vendor/contacts",
+      measurableClaim: `${input.contactCount}/3 contacts added`,
+    });
+  }
 
   // 1. Subscription upside — free plan only
   if (input.vendor.subscription_plan === "free" || input.vendor.subscription_plan == null) {
