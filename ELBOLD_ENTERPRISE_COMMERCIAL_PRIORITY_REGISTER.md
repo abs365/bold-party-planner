@@ -149,6 +149,9 @@
 - **Suggested Implementation Order: 6**
 
 ### REG-08 — Reposition the vendor Payouts "Beta" disclosure
+
+> **STATUS: Shipped, commit `7e8f769` — Programme C, WP-C1.** See `ELBOLD_PROGRAMME_C_VENDOR_OPERATING_PLATFORM_COMPLETION_REPORT.md`.
+
 - **Description:** The Payouts page's best-in-class commission-transparency content is currently preceded by a leading amber "Payout System Beta / manual processing" banner.
 - **Business Problem:** Undercuts trust on the single most money-sensitive page in the vendor product, ahead of content independently assessed as best-in-class fintech transparency.
 - **Existing Capability:** **Verified** — the transparency content itself (exact 90/10 split, audited ledger tags) is correctly built and must not be redesigned.
@@ -265,6 +268,9 @@
 - **Suggested Implementation Order: 18**
 
 ### REG-17 — Elevate CRM and analytics visibility inside the daily dashboard
+
+> **STATUS: Shipped, commits `f1d526a` (Programme B, WP-B5 — CRM half) + `1e71ff9` (Programme C, WP-C2 — analytics half).** Both halves complete.
+
 - **Description:** Two independent, already-real capabilities (CRM, Analytics) are each independently described in source documents as under-surfaced relative to their actual commercial importance.
 - **Business Problem:** A vendor cannot feel a capability is indispensable if they don't know it's there — both capabilities are fully built and correctly working, but not prioritised in the Business Control Centre's daily-action logic relative to marketplace-dependent prompts.
 - **Existing Capability:** **Verified** — both CRM and Analytics are fully real (`capability_truth_audit.md` Capabilities 2, 15); the Business Control Centre's priority logic is also real and branching (Capability 1).
@@ -277,6 +283,9 @@
 - **Suggested Implementation Order: 10**
 
 ### REG-18 — Build/verify pre-renewal "what you've gained" retention summary
+
+> **STATUS: Verified missing, deliberately deferred — Programme C, WP-C4.** Confirmed genuinely unbuilt (no cron reads `current_period_end`, no proactive renewal email exists — only reactive cancellation-flow and payment-failure copy). Production has 0 total and 0 active subscriptions as of 2026-07-10 — building a new cron + email template now would be speculative engineering for zero current beneficiaries, which Programme C's rules explicitly rule out. Revisit once real paying subscriptions exist. See `ELBOLD_PROGRAMME_C_VENDOR_OPERATING_PLATFORM_COMPLETION_REPORT.md`.
+
 - **Description:** `ELBOLD_2030_STRATEGY.md` §4.3 specifies this exact mechanism (show what improved, what's coming, before renewal); implementation status was not confirmed by the capability-truth audit.
 - **Business Problem:** Month-2/3 is the highest-risk churn window (`ELBOLD_EDP_05` Month 2-3) — this is the named, already-designed mechanism for it.
 - **Existing Capability:** **Assumption** — specified in governing strategy, not confirmed built or unbuilt in the fresh audit; requires direct verification before scoping further work.
@@ -289,6 +298,9 @@
 - **Suggested Implementation Order: 13**
 
 ### REG-19 — Verify/build early-warning churn triggers (no login 7d, no CRM contact 14d)
+
+> **STATUS: Partially shipped, commit `a8aeeca` — Programme C, WP-C3.** Verified neither trigger existed. Built the "no CRM contact in 14 days" half via the existing Daily Summary email cron. Deliberately deferred the "no login in 7 days" half — Supabase's `last_sign_in_at` lives in the protected `auth` schema, not queried anywhere in application code; building it would mean new schema/auth-admin integration, crossing into new-capability territory Programme C rules out. Revisit if essential at higher vendor volume.
+
 - **Description:** `ELBOLD_2030_STRATEGY.md` §4.3 specifies these triggers; implementation status unconfirmed.
 - **Business Problem:** Same churn-prevention gap as REG-18, earlier in the funnel (Week 1-2 rather than Month 2-3).
 - **Existing Capability:** **Assumption** — specified, not confirmed.
@@ -301,6 +313,9 @@
 - **Suggested Implementation Order: 19**
 
 ### REG-20 — Channel-specific share/QR attribution
+
+> **STATUS: Shipped, commit `99e5cfa` — Programme C, WP-C5.** Includes migration 073 (applied to production). See completion report.
+
 - **Description:** Extend the already-working `?ref=share` parameter pattern to distinguish QR scans, link copies, and native shares.
 - **Business Problem:** A vendor who prints a QR code on business cards currently has no way to know whether it's working — the zero-cost acquisition channel `ELBOLD_2030_STRATEGY.md` §6.3 names as a flywheel acceleration point is unmeasurable.
 - **Existing Capability:** **Verified** — the `?ref=share` mechanism already exists, works, and is already read by the destination page (competitor-suppression use case); this proposal extends an existing, proven pattern.
