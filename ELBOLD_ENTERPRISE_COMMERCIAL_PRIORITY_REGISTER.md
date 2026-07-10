@@ -134,6 +134,9 @@
 *The acquisition and trust-page contradictions that undermine the subscription thesis this entire programme exists to establish, plus the specific trust/consistency bugs found on customer- and vendor-facing surfaces.*
 
 ### REG-07 — Rewrite vendor acquisition commercial framing (homepage + Founding Vendor Programme + application form)
+
+> **STATUS: Shipped, commits `09bf513` (framing rewrite) + `9496c39` (already-using-a-system content, §2.5) + `45772c8` (approval/first-week copy) + `f1d526a` (CRM-priority logic for zero-activity vendors) — Programme B, WP-B1/B2/B3/B5.** See `ELBOLD_PROGRAMME_B_VENDOR_CONVERSION_COMPLETION_REPORT.md`.
+
 - **Description:** Merges three separately-flagged instances of the same root problem: the homepage's vendor-recruitment section, `/founding-vendors`' opening benefit and closing CTA, and the application form's "what happens next" sidebar all currently lead with "no required subscription... we earn only when you do" / "start receiving enquiries" framing.
 - **Business Problem:** This is the single most repeated friction point found across the entire programme — a prospective vendor encounters commission-only, lead-marketplace framing up to four times before reaching any evidence that Elbold is a business platform, directly contradicting the thesis every governing strategy document argues for.
 - **Existing Capability:** **Verified** — the underlying business-platform capabilities (CRM, verification, analytics) this copy should be leading with are already real and well-built (`capability_truth_audit.md`); this is a messaging-sequencing fix, not a capability gap.
@@ -158,6 +161,9 @@
 - **Suggested Implementation Order: 9**
 
 ### REG-09 — Fix `PhoneVerifyModal` SMS/email mislabeling
+
+> **STATUS: Shipped, commit `5acfba9` — Programme B, WP-B4.** Renamed (email OTP is the real mechanism); did not implement real SMS, which would be a new capability. See completion report.
+
 - **Description:** Titled "Verify Phone Number" but its own copy discloses the code is sent by email, not SMS.
 - **Business Problem:** A naming/mechanism mismatch on the exact page whose purpose is building vendor credibility.
 - **Existing Capability:** **Verified** — the underlying email-OTP mechanism works correctly; only the label is wrong.
