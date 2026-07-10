@@ -181,3 +181,43 @@ export function computeVendorSLA(vendor: Pick<HealthInput, "response_rate" | "ca
                 "low",
   };
 }
+
+// ── At-risk summary (WP-D1, Programme D) ────────────────────────────────────
+//
+// Governance's own page (app/admin/governance/page.tsx) computes this same
+// at-risk filter inline, per-vendor, alongside a full warnings/health-factor
+// breakdown it needs for its detailed view. This function extracts just the
+// count Founder Dashboard needs (a single summary tile) from the same
+// underlying logic (calculateVendorHealthScore + suspicious_flag), so Founder
+// Dashboard reuses the real computation rather than re-deriving a second,
+// looser definition of "at risk". Governance's own page is untouched — this
+// is a new, additional caller of the same scoring function, not a refactor
+// of the existing one.
+export interface AtRiskVendorSummary {
+  atRiskCount: number;
+  criticalCount: number;
+  totalApproved: number;
+}
+
+export async function computeAtRiskVendorSummary(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts either the typed admin client or a plain SupabaseClient; matches the existing pattern in lib/vendor/commercial-metrics.ts
+  db: any
+): Promise<AtRiskVendorSummary> {
+  const { data: vendors } = await db
+    .from("vendors")
+    .select("rating, review_count, response_rate, cancellation_rate, completed_jobs_count, suspicious_flag, last_active_at, created_at")
+    .eq("status", "approved")
+    .limit(500);
+
+  const rows = (vendors ?? []) as HealthInput[];
+  let atRiskCount = 0;
+  let criticalCount = 0;
+
+  for (const v of rows) {
+    const health = calculateVendorHealthScore(v);
+    if (health.isAtRisk || v.suspicious_flag) atRiskCount++;
+    if (health.tier === "critical") criticalCount++;
+  }
+
+  return { atRiskCount, criticalCount, totalApproved: rows.length };
+}

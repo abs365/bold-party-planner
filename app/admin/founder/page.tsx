@@ -4,12 +4,14 @@ import { requireAdminRole } from "@/lib/auth/guards";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { formatCurrency } from "@/lib/utils";
 import { computeCommercialMetrics } from "@/lib/vendor/commercial-metrics";
+import { computeAtRiskVendorSummary } from "@/lib/vendor/health";
+import { fetchVendorGrowthData } from "@/lib/admin/vendor-growth-data";
 import { withoutTestData } from "@/lib/test-vendors";
 import {
   CheckCircle2, Clock, Users, MessageSquare, ShoppingBag,
   CreditCard, TrendingUp, Target, ArrowRight, Shield,
   Star, AlertCircle, ChevronRight, DollarSign, TrendingDown, UserCheck,
-  Sunrise, Sparkles,
+  Sunrise, Sparkles, ShieldAlert, Activity, PieChart,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -102,6 +104,22 @@ export default async function FounderDashboardPage() {
   // function, one set of numbers, everywhere.
   const commercial = await computeCommercialMetrics(db, 30);
   const { mrr, at_risk_mrr: atRiskMRR, paid_conversion: paidConversion, paying_vendors: payingVendorsCount, cancelled_count: cancelledCount, past_due_count: pastDueCount } = commercial.summary;
+
+  // ── Executive signals (WP-D1, Programme D) ─────────────────────────────────
+  // Three reused signals a founder previously had to visit three separate
+  // pages to see: vendor quality risk (Governance), application velocity
+  // (Vendor Growth), and booking-status distribution (Analytics computes this
+  // client-side from a prop; no reusable server function existed for it, so
+  // it's queried directly here the same way the counts above already are).
+  const [atRiskSummary, growthData, { data: bookingStatusRows }] = await Promise.all([
+    computeAtRiskVendorSummary(db),
+    fetchVendorGrowthData(),
+    db.from("bookings").select("status"),
+  ]);
+  const bookingStatusCounts = (bookingStatusRows ?? []).reduce<Record<string, number>>((acc, b) => {
+    acc[b.status] = (acc[b.status] ?? 0) + 1;
+    return acc;
+  }, {});
 
   const missionSteps = [
     { label: "Customer requests a quote",          done: hasQuote,    href: "/admin/quotes" },
@@ -247,6 +265,62 @@ export default async function FounderDashboardPage() {
           {cancelledCount > 0 && (
             <p className="text-xs text-slate-500 mt-2">{cancelledCount} cancelled subscription{cancelledCount === 1 ? "" : "s"} to date</p>
           )}
+        </div>
+
+        {/* Executive Signals — reused from Governance, Vendor Growth, Analytics (Programme D, WP-D1) */}
+        <div>
+          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Executive Signals</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Link
+              href="/admin/governance"
+              className={`rounded-xl p-4 border transition-colors flex flex-col justify-between min-h-[90px] ${
+                atRiskSummary.atRiskCount > 0
+                  ? "bg-amber-500/8 border-amber-500/20 hover:border-amber-500/35"
+                  : "bg-white/4 border-white/6 hover:border-white/12"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-slate-500 leading-tight">At-Risk Vendors</span>
+                <ShieldAlert size={14} className={atRiskSummary.atRiskCount > 0 ? "text-amber-400" : "text-slate-500"} />
+              </div>
+              <div className="text-2xl font-bold text-white">{atRiskSummary.atRiskCount}</div>
+              <p className="text-xs text-slate-500 mt-1">
+                {atRiskSummary.criticalCount > 0 ? `${atRiskSummary.criticalCount} critical · ` : ""}
+                of {atRiskSummary.totalApproved} approved
+              </p>
+            </Link>
+
+            <Link
+              href="/admin/vendor-growth"
+              className="rounded-xl p-4 border bg-white/4 border-white/6 hover:border-white/12 transition-colors flex flex-col justify-between min-h-[90px]"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-slate-500 leading-tight">Applications This Week</span>
+                <Activity size={14} className="text-brand-400" />
+              </div>
+              <div className="text-2xl font-bold text-white">{growthData.appsThisWeek}</div>
+              <p className="text-xs text-slate-500 mt-1">{growthData.appsThisMonth} this month</p>
+            </Link>
+
+            <div className="rounded-xl p-4 border bg-white/4 border-white/6 flex flex-col justify-between min-h-[90px]">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-slate-500 leading-tight">Booking Status Mix</span>
+                <PieChart size={14} className="text-sky-400" />
+              </div>
+              <div className="text-xs text-slate-300 space-y-0.5">
+                {Object.entries(bookingStatusCounts).length === 0 ? (
+                  <span className="text-slate-500">No bookings yet</span>
+                ) : (
+                  Object.entries(bookingStatusCounts).map(([status, count]) => (
+                    <div key={status} className="flex items-center justify-between">
+                      <span className="capitalize text-slate-400">{status.replace(/_/g, " ")}</span>
+                      <span className="font-semibold text-white">{count}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* First Booking Mission */}
