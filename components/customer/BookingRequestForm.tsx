@@ -4,14 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Calendar, MapPin, Users, FileText, Loader2, CheckCircle2, CreditCard } from "lucide-react";
-import { cn, formatCurrency, formatPackagePrice, formatDate, calculateCommission, generateInvoiceNumber } from "@/lib/utils";
+import { cn, formatCurrency, formatPackagePrice, formatDate, calculateCommission } from "@/lib/utils";
 import { VENDOR_CATEGORIES, COMMISSION_RATE, type Vendor, type VendorPackage, type VendorMedia } from "@/types";
 import toast from "react-hot-toast";
 
 interface BookingRequestFormProps {
   vendor: Vendor & { packages: VendorPackage[]; media: VendorMedia[] };
   events: Array<{ id: string; title: string; date: string; city: string; guest_count: number; budget: number }>;
-  userId: string;
   preSelectedPackage?: string;
   preSelectedEvent?: string;
 }
@@ -19,7 +18,6 @@ interface BookingRequestFormProps {
 export function BookingRequestForm({
   vendor,
   events,
-  userId,
   preSelectedPackage,
   preSelectedEvent,
 }: BookingRequestFormProps) {
@@ -34,10 +32,12 @@ export function BookingRequestForm({
   const pkg = vendor.packages?.find((p) => p.id === selectedPackage);
   const event = events.find((e) => e.id === selectedEvent);
 
+  // Display-only — the actual figures used to create the booking are
+  // recomputed server-side in POST /api/bookings from the real package
+  // price, never trusted from the client (REG-05).
   const totalAmount = pkg?.price ?? vendor.min_price ?? 0;
   const depositAmount = totalAmount * 0.3;
   const commission = calculateCommission(totalAmount, COMMISSION_RATE);
-  const vendorPayout = totalAmount - commission;
 
   async function handleSubmit() {
     if (!selectedEvent || !totalAmount) {
@@ -46,52 +46,22 @@ export function BookingRequestForm({
     }
     setSubmitting(true);
     try {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-
-      const { data: booking, error } = await supabase
-        .from("bookings")
-        .insert({
+      // REG-05: price/commission/payout are computed server-side (from the
+      // real package price and availability) — this only sends identifiers,
+      // never the amounts shown above (those are display-only, computed
+      // client-side purely so the summary panel renders before submit).
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           event_id: selectedEvent,
           vendor_id: vendor.id,
           package_id: selectedPackage || null,
-          customer_id: userId,
-          status: "pending",
-          payment_status: "pending",
-          total_amount: totalAmount,
-          deposit_amount: depositAmount,
-          commission_amount: commission,
-          vendor_payout: vendorPayout,
           notes,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Create invoice
-      await supabase.from("invoices").insert({
-        booking_id: booking.id,
-        invoice_number: generateInvoiceNumber(),
-        customer_id: userId,
-        vendor_id: vendor.id,
-        line_items: pkg
-          ? [{ description: pkg.name, amount: pkg.price }]
-          : [{ description: vendor.business_name + " service", amount: totalAmount }],
-        subtotal: totalAmount,
-        commission,
-        total: totalAmount,
-        status: "draft",
+        }),
       });
-
-      // Notify vendor (fire and forget)
-      void supabase.rpc("notify_user", {
-        p_user_id: vendor.user_id,
-        p_title: "New Booking Request",
-        p_message: `You have a new booking request for ${event?.title ?? "an event"}`,
-        p_type: "booking",
-        p_link: `/vendor/bookings/${booking.id}`,
-      });
+      const booking = await res.json();
+      if (!res.ok) throw new Error(booking.error ?? "Failed to send booking request");
 
       toast.success("Booking request sent! Waiting for vendor confirmation.");
       router.push(`/dashboard/bookings/${booking.id}`);

@@ -41,7 +41,6 @@ export default async function NewBookingPage({
       <BookingRequestForm
         vendor={vendorRes.data}
         events={eventsRes.data ?? []}
-        userId={user.id}
         preSelectedPackage={params.package}
         preSelectedEvent={params.event}
       />
