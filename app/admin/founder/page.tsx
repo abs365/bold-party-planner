@@ -121,6 +121,63 @@ export default async function FounderDashboardPage() {
     return acc;
   }, {});
 
+  // ── Vendors Needing Attention (WP-D2, Programme D) ─────────────────────────
+  // Answers one executive question directly: "which vendors need my
+  // attention?" Cross-references quality risk (atRiskSummary.atRiskVendors,
+  // Governance's own scoring) against financial risk (commercial.churn_risk,
+  // Monetization's own scoring) - both already computed above, zero new
+  // queries or duplicated calculations. Where a vendor carries both risks,
+  // this merges them into one row instead of showing two separate,
+  // disconnected indicators for the same vendor.
+  interface UnifiedVendorRisk {
+    id: string;
+    business_name: string;
+    category: string | null;
+    qualityTierLabel: string | null;
+    qualityFlags: string[];
+    financialMRR: number | null;
+    financialReasons: string[];
+    severity: number;
+  }
+
+  const unifiedRiskMap = new Map<string, UnifiedVendorRisk>();
+
+  for (const v of atRiskSummary.atRiskVendors) {
+    unifiedRiskMap.set(v.id, {
+      id: v.id,
+      business_name: v.business_name,
+      category: v.category,
+      qualityTierLabel: v.tierLabel,
+      qualityFlags: v.riskFlags,
+      financialMRR: null,
+      financialReasons: [],
+      severity: v.tier === "critical" ? 3 : 1,
+    });
+  }
+  for (const c of commercial.churn_risk) {
+    const existing = unifiedRiskMap.get(c.vendor_id);
+    if (existing) {
+      existing.financialMRR = c.mrr;
+      existing.financialReasons = c.reasons;
+      existing.severity = 4; // both quality and financial risk present - highest priority
+    } else {
+      unifiedRiskMap.set(c.vendor_id, {
+        id: c.vendor_id,
+        business_name: c.business_name,
+        category: c.category,
+        qualityTierLabel: null,
+        qualityFlags: [],
+        financialMRR: c.mrr,
+        financialReasons: c.reasons,
+        severity: 2,
+      });
+    }
+  }
+
+  const vendorsNeedingAttention = Array.from(unifiedRiskMap.values())
+    .sort((a, b) => b.severity - a.severity)
+    .slice(0, 10);
+
   const missionSteps = [
     { label: "Customer requests a quote",          done: hasQuote,    href: "/admin/quotes" },
     { label: "Vendor responds to quote",           done: hasResponse, href: "/admin/quotes" },
@@ -322,6 +379,51 @@ export default async function FounderDashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Vendors Needing Attention — unified quality + financial risk (Programme D, WP-D2) */}
+        {vendorsNeedingAttention.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Vendors Needing Attention</h2>
+              <span className="text-xs text-slate-500">Quality risk (Governance) + financial risk (Monetization), combined</span>
+            </div>
+            <div className="bg-white/4 border border-white/6 rounded-2xl divide-y divide-white/4 overflow-hidden">
+              {vendorsNeedingAttention.map((v) => (
+                <div key={v.id} className="px-5 py-3.5 flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{v.business_name}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{v.category ?? "Uncategorised"}</p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {v.qualityTierLabel && (
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full border ${
+                          v.qualityTierLabel === "Critical"
+                            ? "bg-red-500/10 text-red-400 border-red-500/25"
+                            : "bg-amber-500/10 text-amber-400 border-amber-500/25"
+                        }`}
+                        title={v.qualityFlags.join(", ")}
+                      >
+                        {v.qualityTierLabel} health
+                      </span>
+                    )}
+                    {v.financialMRR !== null && (
+                      <span
+                        className="text-xs px-2 py-1 rounded-full border bg-orange-500/10 text-orange-400 border-orange-500/25"
+                        title={v.financialReasons.join(", ")}
+                      >
+                        {formatCurrency(v.financialMRR)} MRR at risk
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-slate-500 mt-2">
+              Sorted by combined severity — vendors with both a quality and a financial risk flag first.
+            </p>
+          </div>
+        )}
 
         {/* First Booking Mission */}
         <div className="bg-white/4 border border-white/6 rounded-2xl overflow-hidden">

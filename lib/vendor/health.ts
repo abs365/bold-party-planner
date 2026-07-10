@@ -193,11 +193,32 @@ export function computeVendorSLA(vendor: Pick<HealthInput, "response_rate" | "ca
 // looser definition of "at risk". Governance's own page is untouched — this
 // is a new, additional caller of the same scoring function, not a refactor
 // of the existing one.
+export interface AtRiskVendorDetail {
+  id: string;
+  business_name: string;
+  category: string | null;
+  tier: HealthTier;
+  tierLabel: string;
+  riskFlags: RiskFlag[];
+  isAtRisk: boolean;
+  suspicious_flag: boolean;
+}
+
 export interface AtRiskVendorSummary {
   atRiskCount: number;
   criticalCount: number;
   totalApproved: number;
+  // Full detail for the flagged subset only (WP-D2, Programme D) - lets
+  // Founder Dashboard cross-reference each at-risk vendor against financial
+  // risk (commercial-metrics.ts's churn_risk) without a second query or a
+  // second scoring pass; Governance's page still computes its own full list
+  // for its detailed view and is untouched by this addition.
+  atRiskVendors: AtRiskVendorDetail[];
 }
+
+const TIER_SEVERITY: Record<HealthTier, number> = {
+  critical: 4, poor: 3, fair: 2, good: 1, excellent: 0,
+};
 
 export async function computeAtRiskVendorSummary(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- accepts either the typed admin client or a plain SupabaseClient; matches the existing pattern in lib/vendor/commercial-metrics.ts
@@ -205,19 +226,35 @@ export async function computeAtRiskVendorSummary(
 ): Promise<AtRiskVendorSummary> {
   const { data: vendors } = await db
     .from("vendors")
-    .select("rating, review_count, response_rate, cancellation_rate, completed_jobs_count, suspicious_flag, last_active_at, created_at")
+    .select("id, business_name, category, rating, review_count, response_rate, cancellation_rate, completed_jobs_count, suspicious_flag, last_active_at, created_at")
     .eq("status", "approved")
     .limit(500);
 
-  const rows = (vendors ?? []) as HealthInput[];
+  const rows = (vendors ?? []) as (HealthInput & { id: string; business_name: string; category: string | null })[];
   let atRiskCount = 0;
   let criticalCount = 0;
+  const atRiskVendors: AtRiskVendorDetail[] = [];
 
   for (const v of rows) {
     const health = calculateVendorHealthScore(v);
-    if (health.isAtRisk || v.suspicious_flag) atRiskCount++;
+    const isFlagged = health.isAtRisk || v.suspicious_flag;
+    if (isFlagged) {
+      atRiskCount++;
+      atRiskVendors.push({
+        id: v.id,
+        business_name: v.business_name,
+        category: v.category,
+        tier: health.tier,
+        tierLabel: health.tierLabel,
+        riskFlags: health.riskFlags,
+        isAtRisk: health.isAtRisk,
+        suspicious_flag: v.suspicious_flag,
+      });
+    }
     if (health.tier === "critical") criticalCount++;
   }
 
-  return { atRiskCount, criticalCount, totalApproved: rows.length };
+  atRiskVendors.sort((a, b) => TIER_SEVERITY[b.tier] - TIER_SEVERITY[a.tier]);
+
+  return { atRiskCount, criticalCount, totalApproved: rows.length, atRiskVendors };
 }
