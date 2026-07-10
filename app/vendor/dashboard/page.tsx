@@ -618,7 +618,7 @@ export default async function VendorDashboardPage() {
                   <div>
                     <div className="font-semibold text-white text-sm mb-1">Upgrade to Pro</div>
                     <div className="text-xs text-slate-400 mb-3">
-                      Get priority placement, analytics, and more bookings with a Pro subscription.
+                      Pro gives you a +3 search ranking boost and standard-tier analytics — real plan differences, so more customers see you first.
                     </div>
                     <Link href="/vendor/subscription" className="btn-primary text-xs py-2 px-3">
                       View Plans
