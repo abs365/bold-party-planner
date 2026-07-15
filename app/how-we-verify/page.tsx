@@ -253,7 +253,7 @@ export default async function HowWeVerifyPage() {
               Verification Timeline
             </p>
             <h2 className="text-3xl font-light text-gray-900 tracking-tight">
-              From application to live listing
+              From application to live profile
             </h2>
           </div>
 

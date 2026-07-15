@@ -344,7 +344,7 @@ export default async function BookingProtectionPage() {
             <h2 className="text-lg font-light text-gray-900 tracking-tight">Vendor responsibilities</h2>
           </div>
           <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-            Vendors on Elbold agree to uphold these standards as a condition of their listing:
+            Vendors on Elbold agree to uphold these standards as a condition of their approval:
           </p>
           <div className="space-y-3">
             {VENDOR_RESPONSIBILITIES.map((point) => (

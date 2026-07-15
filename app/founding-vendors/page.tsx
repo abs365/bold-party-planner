@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Join as a Founding Vendor | List Your Services Free | Elbold",
+  title: "Join as a Founding Vendor | Grow Your Business Free | Elbold",
   description:
     "Be one of Elbold's first verified event professionals anywhere in the UK. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
   openGraph: {
@@ -44,7 +44,7 @@ const BENEFITS = [
     icon: Star,
     title: "Founding Vendor badge on your profile",
     description:
-      "Customers browsing Elbold see your Founding Vendor badge alongside your listing. Verified vendors with complete profiles typically receive more enquiries than incomplete listings at comparable prices.",
+      "Customers browsing Elbold see your Founding Vendor badge alongside your profile. Verified vendors with complete profiles typically receive more enquiries than incomplete profiles at comparable prices.",
   },
   {
     icon: TrendingUp,
@@ -260,10 +260,9 @@ export default async function FoundingVendorsPage() {
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
             Elbold connects event hosts with verified DJs, photographers, caterers,
-            decorators and more across the UK. List your services
-            free, receive enquiries from customers actively looking to book, and
-            build your reputation on a platform designed specifically for UK event
-            professionals.
+            decorators and more across the UK. Build your reputation on a platform
+            designed specifically for UK event professionals, receive enquiries from
+            customers actively looking to book, and create your profile free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">

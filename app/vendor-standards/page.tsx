@@ -27,7 +27,7 @@ const APPROVAL_CRITERIA = [
   { icon: Shield, label: "Identity", text: "A real business name and the ability to confirm that the applicant is the actual service provider. We reserve the right to request additional identity evidence." },
   { icon: Phone, label: "Reachability", text: "A working contact method and a commitment to respond to customer enquiries within 24 hours of receipt." },
   { icon: MessageSquare, label: "Communication", text: "An application that demonstrates professional communication. Vendors who are difficult to correspond with before approval are not approved." },
-  { icon: CheckCircle2, label: "Agreement to standards", text: "Explicit agreement to these Vendor Standards, our Terms of Service, and our dispute resolution process as a condition of listing." },
+  { icon: CheckCircle2, label: "Agreement to standards", text: "Explicit agreement to these Vendor Standards, our Terms of Service, and our dispute resolution process as a condition of approval." },
 ];
 
 const ONGOING_STANDARDS = [
@@ -79,7 +79,7 @@ const WARNING_LEVELS = [
       "Active dispute with customer that suggests professional misconduct",
       "Three or more substantiated complaints in a 6-month period",
     ],
-    outcome: "Profile suspended from public listings. Active bookings are not affected. Suspension review within 7 business days. Vendor may submit a response.",
+    outcome: "Profile suspended from the public platform. Active bookings are not affected. Suspension review within 7 business days. Vendor may submit a response.",
   },
   {
     level: "Stage 4: Permanent Removal",
@@ -123,8 +123,8 @@ export default async function VendorStandardsPage() {
             vendor. Published openly.
           </h1>
           <p className="text-base font-light max-w-2xl mx-auto leading-relaxed mb-10" style={{ color: "rgba(255,255,255,0.45)" }}>
-            These standards are not aspirational guidelines. They are the minimum requirements for listing
-            on Elbold and the criteria we use when issuing warnings, suspensions, and removals.
+            These standards are not aspirational guidelines. They are the minimum requirements for joining
+            Elbold and the criteria we use when issuing warnings, suspensions, and removals.
             Customers can read them. Vendors should know them.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
