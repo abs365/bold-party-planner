@@ -709,7 +709,7 @@ export default async function Home() {
                 className="text-3xl font-light tracking-tight mb-4"
                 style={{ color: "rgba(255,255,255,0.92)" }}
               >
-                A marketplace built on one principle.
+                A promise built on one principle.
                 <br />
                 <span style={{ color: "#D4AF37" }}>You should be able to trust it.</span>
               </h2>
