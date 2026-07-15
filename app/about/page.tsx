@@ -74,7 +74,7 @@ export default async function AboutPage() {
       >
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1571266028243-d220c6ceebff?auto=format&fit=crop&w=1920&q=80"
+            src="https://images.unsplash.com/photo-1642433706033-82b795d91fe3?auto=format&fit=crop&w=1920&q=80"
             alt="DJ performing at a professional event"
             fill priority quality={75}
             className="object-cover object-center"

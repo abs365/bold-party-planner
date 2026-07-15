@@ -37,7 +37,7 @@ const OCCASIONS = [
   {
     label: "Anniversaries",
     href: "/browse?event=anniversary",
-    photo: "https://images.unsplash.com/photo-1516589091380-5d8259b23548?auto=format&fit=crop&w=700&q=75",
+    photo: "https://images.unsplash.com/photo-1758874089745-72a5f308af86?auto=format&fit=crop&w=700&q=75",
   },
   {
     label: "Cultural Celebrations",
