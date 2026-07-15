@@ -84,6 +84,17 @@ const OCCASIONS = [
     gradient: "linear-gradient(160deg, #140820 0%, #281050 60%, #1a0838 100%)",
     overlay: "rgba(8,4,18,0.38)",
   },
+  {
+    // E4: closes the one occasion gap named across every EDP-01-descended
+    // document in this arc. Imagery/copy kept occasion-neutral (a decorated
+    // table) per the Homepage Transformation Blueprint §6 — no iconography
+    // specific to one faith tradition.
+    label: "Religious & Family Milestones",
+    href: "/browse?event=religious_family_milestone",
+    photo: "https://images.unsplash.com/photo-1681338764024-e6977bfd18db?auto=format&fit=crop&w=900&q=80",
+    gradient: "linear-gradient(160deg, #1a1408 0%, #3d2f10 60%, #241a0a 100%)",
+    overlay: "rgba(10,8,4,0.38)",
+  },
 ];
 
 const QUICK_STARTS = [
@@ -875,19 +886,25 @@ export default async function Home() {
         </section>
 
         {/* ── SECTION 10: FINAL CTA ─────────────────────────────────────────── */}
+        {/* E4: previously a verbatim repeat of the Hero's headline and
+            reassurance line (Homepage Transformation Blueprint §2, Section 9 —
+            "repeats the hero's language verbatim, adds nothing new"). Rewritten
+            as the closing beat of the same journey rather than a second copy
+            of its opening one — carries the "come back when you're ready"
+            belief the Hero doesn't, instead of restating it. */}
         <section className="py-24 px-4" style={{ background: "#ffffff" }}>
           <div className="max-w-3xl mx-auto text-center">
             <h2
               className="text-3xl font-light tracking-tight mb-5"
               style={{ color: "#0B1F4D" }}
             >
-              Every event deserves professionals
+              Whenever you&apos;re ready,
               <br />
-              you can trust completely.
+              we&apos;ll be here.
             </h2>
             <p className="text-base font-light mb-10" style={{ color: "#6b7280" }}>
-              Every professional is individually reviewed before they join.
-              Create your event, request quotes and book with complete confidence.
+              Come back any time to compare verified professionals, request free quotes,
+              and book only when it feels right.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
