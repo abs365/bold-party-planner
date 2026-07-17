@@ -16,14 +16,14 @@ const TRUST_LINKS = [
   { label: "Booking Protection", href: "/booking-protection" },
 ];
 
-const LOCATION_LINKS = [
-  { label: "Event Vendors in Essex", href: "/essex" },
-  { label: "Event Vendors in Kent", href: "/kent" },
-  { label: "Event Vendors in London", href: "/london" },
-  { label: "DJs in Essex", href: "/essex/djs" },
-  { label: "Photographers in London", href: "/london/photographers" },
-  { label: "Caterers in Kent", href: "/kent/caterers" },
-];
+// HOTFIX-001 (2026-07-17): the site-wide footer's regional link column was
+// removed as a brand-positioning correction — ELBOLD's public brand is
+// UK-wide, and a global footer repeating "Essex / Kent / London" on every
+// page contradicted that. This is distinct from, and does not change,
+// EDR-05's region-first growth *strategy*: the underlying regional SEO
+// landing pages (/essex, /kent, /london and their category sub-pages) are
+// untouched, still live, and still indexed via sitemap.ts. Only their
+// direct link from this global footer was removed.
 
 const VENDOR_LINKS = [
   { label: "Founding Vendor Programme", href: "/founding-vendors" },
@@ -52,7 +52,7 @@ export function Footer() {
   return (
     <footer style={{ background: "#091529", borderTop: "1px solid rgba(201,168,76,0.1)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-7 gap-8 mb-14">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8 mb-14">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
@@ -99,7 +99,6 @@ export function Footer() {
             { heading: "Platform", links: PLATFORM_LINKS },
             { heading: "Trust", links: TRUST_LINKS },
             { heading: "Vendors", links: VENDOR_LINKS },
-            { heading: "Locations", links: LOCATION_LINKS },
             { heading: "Legal", links: LEGAL_LINKS },
           ].map(({ heading, links }) => (
             <div key={heading}>
