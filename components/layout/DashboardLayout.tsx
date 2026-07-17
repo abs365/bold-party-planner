@@ -172,9 +172,9 @@ const ADMIN_NAV_GROUPS: NavGroup[] = [
     label: "Vendor Acquisition",
     items: [
       { href: "/admin/vendor-growth",      label: "Acquisition Dashboard", icon: Target },
-      { href: "/admin/vendor-acquisition", label: "Lead CRM",              icon: Users },
-      { href: "/admin/vendor-pipeline",    label: "Pipeline Board",        icon: GitBranch },
-      { href: "/admin/vendor-outreach",    label: "Outreach Queue",        icon: Send },
+      { href: "/admin/vendor-acquisition",                label: "Lead CRM",              icon: Users },
+      { href: "/admin/vendor-acquisition?view=pipeline",  label: "Pipeline Board",        icon: GitBranch },
+      { href: "/admin/vendor-acquisition?view=outreach",  label: "Outreach Queue",        icon: Send },
       { href: "/admin/vendor-coverage",    label: "Coverage Map",          icon: Map },
       { href: "/admin/vendor-activation",  label: "Vendor Activation",     icon: Zap },
     ],
