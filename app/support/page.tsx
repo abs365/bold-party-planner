@@ -89,7 +89,7 @@ const SECTIONS = [
       },
       {
         q: "How do I request a refund?",
-        a: "Email disputes@elbold.com with your booking reference and the reason for your request. We aim to respond within 1 working day. Approved refunds are processed within 5–10 business days.",
+        a: "Go to the booking in your dashboard and click \"Report a Problem\" with your reason for the request. We aim to respond within 1 working day. Approved refunds are processed within 5–10 business days.",
       },
       {
         q: "The vendor cancelled. When will I receive my refund?",
@@ -114,7 +114,7 @@ const SECTIONS = [
       },
       {
         q: "The service was not as described. What can I do?",
-        a: "Raise a dispute within 48 hours of your event by emailing disputes@elbold.com. Include your booking reference, a clear description of what was agreed vs delivered, and any supporting evidence (photos, messages, contracts). We will review both sides and reach a decision within 5 business days.",
+        a: "Raise a dispute within 48 hours of your event from the booking in your dashboard — click \"Report a Problem\" and describe what was agreed vs delivered. We will review both sides and reach a decision within 5 business days.",
       },
       {
         q: "I want to leave a review but can't.",
@@ -175,10 +175,10 @@ const SECTIONS = [
 ];
 
 const RESPONSE_TIMES = [
-  { channel: "support@elbold.com", sla: "Within 1 working day", use: "General booking, payment, and account questions" },
-  { channel: "disputes@elbold.com", sla: "Within 1 working day", use: "Refund requests and formal disputes" },
-  { channel: "safety@elbold.com", sla: "Within 1 working day", use: "Vendor conduct concerns and safety reports" },
-  { channel: "urgent@elbold.com", sla: "Priority (monitored daily)", use: "Vendor no-shows and day-of emergencies" },
+  { channel: "support@elbold.com", href: "mailto:support@elbold.com", sla: "Within 1 working day", use: "General booking, payment, and account questions" },
+  { channel: "Report a Problem (from your booking)", href: "/dashboard/bookings", sla: "Within 1 working day", use: "Refund requests and formal disputes" },
+  { channel: "safety@elbold.com", href: "mailto:safety@elbold.com", sla: "Within 1 working day", use: "Vendor conduct concerns and safety reports" },
+  { channel: "urgent@elbold.com", href: "mailto:urgent@elbold.com", sla: "Priority (monitored daily)", use: "Vendor no-shows and day-of emergencies" },
 ];
 
 export default async function SupportPage() {
@@ -246,14 +246,14 @@ export default async function SupportPage() {
             </h2>
           </div>
           <div className="divide-y divide-gray-100">
-            {RESPONSE_TIMES.map(({ channel, sla, use }) => (
+            {RESPONSE_TIMES.map(({ channel, href, sla, use }) => (
               <div key={channel} className="grid sm:grid-cols-3 gap-2 px-6 py-4 items-center">
-                <a
-                  href={`mailto:${channel}`}
+                <Link
+                  href={href}
                   className="text-sm font-semibold text-gray-900 hover:underline"
                 >
                   {channel}
-                </a>
+                </Link>
                 <span className="text-xs font-medium" style={{ color: "#059669" }}>{sla}</span>
                 <span className="text-xs text-gray-500">{use}</span>
               </div>
