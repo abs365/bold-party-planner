@@ -67,19 +67,19 @@ const CATEGORY_DATA: Record<string, { label: string; description: string; keywor
 
 export function buildLocationMetadata(location: string, category?: string): Metadata {
   const loc = LOCATION_DATA[location];
-  if (!loc) return { title: "Event Vendors | Elbold" };
+  if (!loc) return { title: "Event Vendors" };
 
   if (category) {
     const cat = CATEGORY_DATA[category];
-    if (!cat) return { title: `Event Vendors in ${loc.title} | Elbold` };
+    if (!cat) return { title: `Event Vendors in ${loc.title}` };
     return {
-      title: `${cat.label} in ${loc.title} | Verified Event Professionals | Elbold`,
+      title: `${cat.label} in ${loc.title} | Verified Event Professionals`,
       description: `Book trusted, verified ${cat.label.toLowerCase()} in ${loc.title}. ${cat.description} Every professional reviewed by Elbold.`,
     };
   }
 
   return {
-    title: `Event Vendors in ${loc.title} | Weddings, Birthdays & Corporate Events | Elbold`,
+    title: `Event Vendors in ${loc.title} | Weddings, Birthdays & Corporate Events`,
     description: `${loc.description} Book verified DJs, photographers, caterers, decorators and more. Every vendor individually reviewed.`,
   };
 }

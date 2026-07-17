@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Calendar, MapPin, CreditCard, CheckCircle2, Loader2,
-  ArrowLeft, Star, FileText, Package, AlertTriangle, XCircle,
+  ArrowLeft, Star, FileText, Package, AlertTriangle, XCircle, Flag,
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { VENDOR_CATEGORIES, type Payment } from "@/types";
@@ -33,6 +33,11 @@ export function CustomerBookingDetail({
   const [submittingReview, setSubmittingReview] = useState(false);
   const [review, setReview] = useState(existingReview);
   const [showReview, setShowReview] = useState(showReviewForm);
+  const [showDispute, setShowDispute] = useState(false);
+  const [disputeReason, setDisputeReason] = useState("");
+  const [disputeDescription, setDisputeDescription] = useState("");
+  const [submittingDispute, setSubmittingDispute] = useState(false);
+  const [disputeSubmitted, setDisputeSubmitted] = useState(false);
 
   const event = booking.event as Record<string, string>;
   const vendor = booking.vendor as Record<string, unknown>;
@@ -51,6 +56,8 @@ export function CustomerBookingDetail({
   const canPayDeposit = ["accepted", "confirmed", "pending_payment"].includes(status) && paymentStatus === "pending";
   const canPayFull = ["accepted", "confirmed", "pending_payment"].includes(status) && paymentStatus === "deposit_paid";
   const isCompleted = status === "completed";
+  const isDisputed = status === "disputed" || disputeSubmitted;
+  const canDispute = !isDisputed && status !== "rejected" && status !== "cancelled";
 
   async function handlePayment(type: "deposit" | "full") {
     setPayingType(type);
@@ -92,6 +99,32 @@ export function CustomerBookingDetail({
       toast.error(err instanceof Error ? err.message : "Failed to submit review");
     } finally {
       setSubmittingReview(false);
+    }
+  }
+
+  async function handleDispute() {
+    if (disputeReason.trim().length < 5) { toast.error("Please give a short summary (at least 5 characters)"); return; }
+    if (disputeDescription.trim().length < 20) { toast.error("Please describe the issue in a bit more detail (at least 20 characters)"); return; }
+    setSubmittingDispute(true);
+    try {
+      const res = await fetch("/api/disputes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          booking_id: booking.id,
+          reason: disputeReason,
+          description: disputeDescription,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to submit");
+      setDisputeSubmitted(true);
+      setShowDispute(false);
+      toast.success("Your report has been submitted. Our team will review it and get back to you.");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit your report");
+    } finally {
+      setSubmittingDispute(false);
     }
   }
 
@@ -295,6 +328,63 @@ export function CustomerBookingDetail({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Dispute / Report a Problem Section */}
+      {(canDispute || isDisputed) && (
+        <div className="bg-white/4 border border-white/6 rounded-xl p-6">
+          <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+            <Flag size={16} className="text-slate-400" />
+            {isDisputed ? "Report Submitted" : "Having a Problem?"}
+          </h3>
+
+          {isDisputed ? (
+            <p className="text-slate-400 text-sm">
+              Your report is under review. Our team will contact you with an update — no need to submit again.
+            </p>
+          ) : showDispute ? (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-slate-300 mb-1.5">What went wrong? *</label>
+                <input
+                  type="text"
+                  value={disputeReason}
+                  onChange={(e) => setDisputeReason(e.target.value)}
+                  placeholder="e.g. Vendor didn't show up, service didn't match what was booked..."
+                  maxLength={200}
+                  className="input-field"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-300 mb-1.5">Tell us more *</label>
+                <textarea
+                  value={disputeDescription}
+                  onChange={(e) => setDisputeDescription(e.target.value)}
+                  placeholder="Describe what happened in as much detail as you can — this helps us resolve it faster."
+                  rows={5}
+                  maxLength={2000}
+                  className="input-field resize-none"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button onClick={() => setShowDispute(false)} className="btn-secondary flex-1">Cancel</button>
+                <button onClick={handleDispute} disabled={submittingDispute} className="btn-primary flex-1">
+                  {submittingDispute ? <Loader2 size={15} className="animate-spin" /> : <Flag size={15} />}
+                  Submit Report
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-slate-400 text-sm mb-4">
+                If something went wrong with this booking, let us know and our team will help sort it out.
+              </p>
+              <button onClick={() => setShowDispute(true)} className="btn-secondary">
+                <Flag size={15} />Report a Problem
+              </button>
+            </div>
+          )}
         </div>
       )}
 

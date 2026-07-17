@@ -2,7 +2,7 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Refund Policy | Elbold",
+  title: "Refund Policy",
   description: "Elbold's cancellation, refund, and dispute resolution policy.",
 };
 

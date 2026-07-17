@@ -422,12 +422,12 @@ export default async function BookingProtectionPage() {
             >
               support@elbold.com
             </a>
-            <a
-              href="mailto:disputes@elbold.com"
+            <Link
+              href="/dashboard/bookings"
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
             >
-              disputes@elbold.com
-            </a>
+              Report a problem with a booking
+            </Link>
           </div>
         </div>
 

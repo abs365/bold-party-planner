@@ -11,7 +11,7 @@ import type { Vendor } from "@/types";
 import { TEST_VENDOR_EXCLUSION } from "@/lib/test-vendors";
 
 export const metadata: Metadata = {
-  title: "Discover Verified Event Professionals | Elbold",
+  title: "Discover Verified Event Professionals",
   description:
     "Discover and book verified DJs, photographers, caterers, decorators and entertainers for your celebration. Every vendor individually reviewed. Compare packages, read real reviews and book with Stripe-secured payments.",
   openGraph: {

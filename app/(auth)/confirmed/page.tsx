@@ -2,7 +2,7 @@
 import { CheckCircle2, Clock, ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Email Confirmed | Elbold",
+  title: "Email Confirmed",
 };
 
 export default function ConfirmedPage({

@@ -7,7 +7,7 @@ import { GUIDES } from "@/lib/guides";
 import { ArrowRight, Clock, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Planning Guides | Elbold",
+  title: "Event Planning Guides",
   description:
     "Free event planning guides for UK couples, families, and businesses. DJ costs, wedding checklists, how to choose a photographer, party planning — written by event professionals.",
 };

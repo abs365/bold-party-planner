@@ -2,7 +2,7 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Vendor Terms | Elbold",
+  title: "Vendor Terms",
   description: "Terms and conditions for vendors listing services on the Elbold marketplace.",
 };
 

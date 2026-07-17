@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ChevronDown, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Vendor FAQ | How Bookings, Payments and Verification Work | Elbold",
+  title: "Vendor FAQ | How Bookings, Payments and Verification Work",
   description:
     "Everything you need to know about how Elbold works for event professionals. How bookings are handled, how and when you get paid, what verification involves, and what happens if a customer cancels.",
 };

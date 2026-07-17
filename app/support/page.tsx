@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Support Centre | Elbold",
+  title: "Support Centre",
   description:
     "Get help with bookings, payments, refunds, vendor issues, and account questions. Elbold support responds within 1 working day.",
 };
@@ -354,7 +354,7 @@ export default async function SupportPage() {
           <p className="text-xs text-gray-400 mt-5">
             For vendor applications: <a href="mailto:support@elbold.com" className="underline">support@elbold.com</a>{" "}
             &nbsp;&middot;&nbsp;
-            For disputes: <a href="mailto:disputes@elbold.com" className="underline">disputes@elbold.com</a>
+            For disputes: <Link href="/dashboard/bookings" className="underline">report a problem from your booking</Link>
           </p>
         </div>
 

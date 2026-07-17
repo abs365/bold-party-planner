@@ -2,7 +2,7 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Elbold",
+  title: "Cookie Policy",
   description: "How Elbold uses cookies and similar technologies.",
 };
 

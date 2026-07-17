@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Join as a Founding Vendor | Grow Your Business Free | Elbold",
+  title: "Join as a Founding Vendor | Grow Your Business Free",
   description:
     "Be one of Elbold's first verified event professionals anywhere in the UK. Free profile, permanent priority placement, and the exclusive Founding Vendor badge. Reach customers actively searching for event professionals, not just browsing a social media feed.",
   openGraph: {
@@ -92,7 +92,7 @@ const STEPS = [
 // Comparison table: Elbold vs social media vs other directories
 const COMPARISON_ROWS = [
   {
-    feature: "Free to list",
+    feature: "Free to join",
     elbold: true,
     social: true,
     directories: false,

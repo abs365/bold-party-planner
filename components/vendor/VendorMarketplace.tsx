@@ -439,8 +439,36 @@ export function VendorMarketplace({
         </div>
       </div>
 
-      {/* Founding Vendor Empty State — directly below filters */}
-      {filtered.length === 0 && (
+      {/* No Match Empty State — a filter/search combination matched nothing, but vendors do exist elsewhere on the platform */}
+      {filtered.length === 0 && activeFilterCount > 0 && (
+        <section className="py-16 px-4">
+          <div className="max-w-xl mx-auto text-center">
+            <div
+              className="w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center"
+              style={{ background: "rgba(11,31,77,0.06)" }}
+            >
+              <Search size={24} style={{ color: "#0B1F4D" }} />
+            </div>
+            <h2 className="text-2xl font-light text-gray-900 tracking-tight mb-3">
+              No vendors match your search
+            </h2>
+            <p className="text-sm text-gray-500 font-light leading-relaxed max-w-md mx-auto mb-8">
+              Try broadening your search or clearing a filter — there may be more vendors available outside your current criteria.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button onClick={clearFilters} className="btn-luxury text-sm px-8 flex items-center justify-center gap-2">
+                Clear Filters
+              </button>
+              <Link href="/vendor/apply" className="btn-secondary-light text-sm px-8">
+                Join as a Vendor
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Founding Vendor Empty State — no filters applied, the platform genuinely has no vendors here yet */}
+      {filtered.length === 0 && activeFilterCount === 0 && (
         <section className="py-16 px-4">
           <div className="max-w-xl mx-auto text-center">
             <div
@@ -490,7 +518,7 @@ export function VendorMarketplace({
         <div className="px-4 pb-16 max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-5 pt-4 border-t border-gray-100">
             <p className="text-gray-500 text-sm">
-              <span className="text-gray-900 font-semibold">{filtered.length}</span> vendors
+              <span className="text-gray-900 font-semibold">{filtered.length}</span> {filtered.length === 1 ? "vendor" : "vendors"}
               {category && ` in ${VENDOR_CATEGORIES[category]?.label ?? category}`}
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-400">

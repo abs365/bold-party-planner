@@ -60,7 +60,7 @@ const TRUST_LINKS = [
   { icon: FileText,   label: "Vendor Standards",           href: "/vendor-standards",   desc: "Minimum requirements for every vendor on the platform, and how we enforce them." },
   { icon: Lock,       label: "Booking Protection",         href: "/booking-protection", desc: "How your deposit is protected, when it is released to vendors, and what happens in a dispute." },
   { icon: CheckCircle2, label: "Our Commitments",          href: "/our-commitments",    desc: "Specific, checkable promises we make to every customer, with honest limitations." },
-  { icon: AlertCircle, label: "Dispute Resolution",        href: "mailto:disputes@elbold.com", desc: "How to raise a dispute and what happens at each stage of the resolution process." },
+  { icon: AlertCircle, label: "Dispute Resolution",        href: "/dashboard/bookings", desc: "How to raise a dispute and what happens at each stage of the resolution process." },
   { icon: Shield,     label: "Privacy Policy",             href: "/privacy",            desc: "What data we collect, how we use it, and how we protect it." },
 ];
 
@@ -192,9 +192,9 @@ export default async function TrustPage() {
             or anything on the platform feels wrong, we want to know. Every report is reviewed by a real person.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="mailto:disputes@elbold.com" className="btn-luxury text-sm px-8">
+            <Link href="/dashboard/bookings" className="btn-luxury text-sm px-8">
               Report a Vendor Issue
-            </a>
+            </Link>
             <a href="mailto:support@elbold.com" className="btn-luxury-outline text-sm px-8">
               Contact Support
             </a>

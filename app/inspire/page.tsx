@@ -10,7 +10,7 @@ import { ArrowRight, BookOpen, Camera, Shield } from "lucide-react";
 import type { Profile } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Inspiration & Guides | Elbold",
+  title: "Inspiration & Guides",
   description:
     "Discover event ideas, browse real work from verified UK professionals, and read expert planning guides. Every photographer, decorator, DJ and caterer on Elbold is individually reviewed.",
 };

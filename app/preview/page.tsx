@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Version B Preview | Elbold",
+  title: "Version B Preview",
   description: "Internal design preview — not for public use.",
   robots: { index: false, follow: false },
 };

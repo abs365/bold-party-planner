@@ -2,7 +2,7 @@
 import { LegalPage } from "@/components/ui/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Community Guidelines | Elbold",
+  title: "Community Guidelines",
   description: "Elbold's community standards for customers and vendors.",
 };
 

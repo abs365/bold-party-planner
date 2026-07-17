@@ -216,11 +216,11 @@ export default async function OurCommitmentsPage() {
             <div className="space-y-3">
               {[
                 { label: "Support", href: "mailto:support@elbold.com", desc: "General questions and booking support" },
-                { label: "Disputes",   href: "mailto:disputes@elbold.com",   desc: "Raise a dispute about a vendor or booking" },
+                { label: "Disputes",   href: "/dashboard/bookings",   desc: "Raise a dispute about a vendor or booking" },
                 { label: "Commitments", href: "mailto:commitments@elbold.com", desc: "Report a breach of the commitments on this page" },
                 { label: "Quality",    href: "mailto:quality@elbold.com",    desc: "Report a vendor listing concern or review fraud" },
               ].map(({ label, href, desc }) => (
-                <a
+                <Link
                   key={label}
                   href={href}
                   className="flex items-center justify-between rounded-xl px-5 py-4 transition-all"
@@ -231,7 +231,7 @@ export default async function OurCommitmentsPage() {
                     <div className="text-xs font-light" style={{ color: "rgba(255,255,255,0.28)" }}>{desc}</div>
                   </div>
                   <ArrowRight size={13} style={{ color: "rgba(212,175,55,0.4)" }} />
-                </a>
+                </Link>
               ))}
             </div>
           </div>

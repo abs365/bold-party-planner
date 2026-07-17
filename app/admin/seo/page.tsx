@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { CheckCircle2, Clock, Circle, ArrowRight, MapPin, FileText, Star } from "lucide-react";
 
-export const metadata: Metadata = { title: "Local SEO Authority Roadmap | Elbold Admin" };
+export const metadata: Metadata = { title: "Local SEO Authority Roadmap" };
 export const dynamic = "force-dynamic";
 
 // ── Phase definitions ─────────────────────────────────────────────────────

@@ -2,7 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Navbar } from "@/components/layout/Navbar";
 
-export const metadata: Metadata = { title: "Brand Concepts | Elbold" };
+export const metadata: Metadata = { title: "Brand Concepts" };
 
 const CONCEPTS = [
   {

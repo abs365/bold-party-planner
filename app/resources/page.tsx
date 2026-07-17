@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, BookOpen, CheckSquare, Calculator, Calendar, MapPin, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Event Planning Resources | Guides, Checklists and Tools | Elbold",
+  title: "Event Planning Resources | Guides, Checklists and Tools",
   description:
     "Free event planning guides, checklists, budget templates and tools from Elbold. Plan your wedding, birthday, corporate event or celebration with expert resources.",
   openGraph: {

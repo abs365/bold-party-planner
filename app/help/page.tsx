@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Help Centre | Elbold",
+  title: "Help Centre",
   description: "Find answers to common questions about booking vendors, managing events, payments, and getting verified on Elbold.",
 };
 
