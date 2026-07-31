@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Founding Vendor Programme | Elbold",
     description:
-      "Free profile. Verified badge. Permanent top placement. 20 founding spaces available UK-wide.",
+      "Free profile. Verified badge. Permanent top placement.",
     images: [{ url: "/icons/icon-512.png", width: 512, height: 512 }],
   },
 };
@@ -44,13 +44,13 @@ const BENEFITS = [
     icon: Star,
     title: "Founding Vendor badge on your profile",
     description:
-      "Customers browsing Elbold see your Founding Vendor badge alongside your profile. Verified vendors with complete profiles typically receive more enquiries than incomplete profiles at comparable prices.",
+      "Customers browsing Elbold see your Founding Vendor badge alongside your profile.",
   },
   {
     icon: TrendingUp,
     title: "Permanent top-of-page placement",
     description:
-      "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you. Customers typically contact the first 3–5 vendors they see. That set is yours.",
+      "Your profile appears at the top of search results and category pages ahead of every vendor who joins after you.",
   },
   {
     icon: Shield,
@@ -245,7 +245,7 @@ export default async function FoundingVendorsPage() {
             }}
           >
             <Award size={12} />
-            Founding Vendor Programme &nbsp;·&nbsp; 20 places available
+            Founding Vendor Programme
           </div>
           <h1
             className="text-4xl sm:text-5xl font-light tracking-tight mb-6 leading-tight"
@@ -276,13 +276,13 @@ export default async function FoundingVendorsPage() {
             className="text-xs font-light mt-7"
             style={{ color: "rgba(255,255,255,0.25)" }}
           >
-            20 founding places available. No credit card required. Free to start. Cancel
+            No credit card required. Free to start. Cancel
             anytime.
           </p>
         </div>
       </section>
 
-      {/* ── WHY NOW — FOUNDING WINDOW ────────────────────────────────────── */}
+      {/* ── WHY NOW — FOUNDING VENDOR STATUS ─────────────────────────────── */}
       <section className="py-20 px-4" style={{ background: "#f8f7f5" }}>
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -294,21 +294,16 @@ export default async function FoundingVendorsPage() {
                 Why Now
               </p>
               <h2 className="text-3xl font-light text-gray-900 tracking-tight mb-5">
-                The founding window is real.
+                Founding Vendor status.
                 <br />
-                Once it closes, it closes.
+                Permanent.
               </h2>
               <p className="text-sm text-gray-500 font-light leading-relaxed mb-5">
-                The 20 Founding Vendor places exist because Elbold is building
+                Founding Vendor status exists because Elbold is building
                 something that requires trust from both sides: customers and
                 professionals. The vendors who join now help establish the
                 platform standard, and in return receive permanent advantages
                 that no later applicant can access.
-              </p>
-              <p className="text-sm text-gray-500 font-light leading-relaxed mb-7">
-                When the founding period closes, new vendor applications enter a
-                standard queue. No priority placement. No Founding Vendor badge.
-                No early access to features. The window is specific and finite. This is not a marketing tactic.
               </p>
               <div className="flex items-start gap-3 p-4 rounded-xl" style={{ background: "rgba(201,168,76,0.07)", border: "1px solid rgba(201,168,76,0.15)" }}>
                 <AlertCircle size={15} style={{ color: "#C9A84C", flexShrink: 0, marginTop: 1 }} />
@@ -323,7 +318,7 @@ export default async function FoundingVendorsPage() {
             <div className="space-y-4">
               {[
                 {
-                  title: "Before the window closes",
+                  title: "As a Founding Vendor",
                   items: [
                     "Founding Vendor badge on your profile. Permanent.",
                     "Permanent top placement in your category and city",
@@ -334,7 +329,7 @@ export default async function FoundingVendorsPage() {
                   positive: true,
                 },
                 {
-                  title: "After the window closes",
+                  title: "Standard Vendor",
                   items: [
                     "Standard placement, below all Founding Vendors",
                     "No founding badge",
@@ -851,7 +846,7 @@ export default async function FoundingVendorsPage() {
             className="text-xs tracking-[0.3em] font-semibold mb-6 uppercase"
             style={{ color: "rgba(201,168,76,0.55)" }}
           >
-            20 founding places · Applications open now
+            Applications open now
           </p>
           <h2
             className="text-3xl font-light tracking-tight mb-4"
@@ -864,8 +859,7 @@ export default async function FoundingVendorsPage() {
             style={{ color: "rgba(255,255,255,0.45)" }}
           >
             Apply in under 5 minutes. We review within 24–48 hours. Your profile
-            goes live immediately upon approval. Once the 20 founding places are
-            filled, new vendors join a standard queue.
+            goes live immediately upon approval.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/vendor/apply" className="btn-luxury">
