@@ -171,6 +171,29 @@ export async function POST(request: Request) {
     logger.warn("vendor.apply.no_profile_email", { userId: user.id, vendorId: vendor.id });
   }
 
+  // Master Growth OS Outreach -> Vendor Attribution Bridge — additive only.
+  // Never affects this request or the approval workflow: the response is
+  // sent below regardless, and any failure here is caught and logged, not
+  // surfaced to the applicant. Mirrors the Commercial Conversion Engine sync
+  // already established in app/api/quotes/route.ts.
+  if (profile?.email) {
+    void (async () => {
+      try {
+        const res = await fetch("https://master-growth-os.vercel.app/api/vendor-attribution/elbold", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: profile.email, vendor_id: vendor.id }),
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!res.ok) {
+          console.error("[vendor.apply] Master Growth OS attribution sync failed:", res.status, await res.text().catch(() => ""));
+        }
+      } catch (err) {
+        console.error("[vendor.apply] Master Growth OS attribution sync failed:", err);
+      }
+    })();
+  }
+
   void track({
     event: "vendor.registered",
     userId: user.id,
