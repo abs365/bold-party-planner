@@ -208,6 +208,31 @@ export async function POST(req: Request) {
         eventTitle
       );
     }
+
+    // Master Growth OS Commercial Conversion Engine — additive only. Never
+    // affects this request: the HTTP response was already sent by the time
+    // this fire-and-forget block runs, and any failure here is caught and
+    // logged, not surfaced to the customer or the rest of this workflow.
+    if (customerProfile?.email) {
+      try {
+        const budgetNote = rest.budget_max ? ` (budget up to £${rest.budget_max})` : "";
+        const res = await fetch("https://master-growth-os.vercel.app/api/enquiries/elbold", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: customerName,
+            email: customerProfile.email,
+            message: `Quote request to ${vendorBusiness} for ${rest.event_type ?? "an event"}${budgetNote}`,
+          }),
+          signal: AbortSignal.timeout(8000),
+        });
+        if (!res.ok) {
+          console.error("[quotes] Master Growth OS enquiry sync failed:", res.status, await res.text().catch(() => ""));
+        }
+      } catch (err) {
+        console.error("[quotes] Master Growth OS enquiry sync failed:", err);
+      }
+    }
   })();
 
   return NextResponse.json(data, {
