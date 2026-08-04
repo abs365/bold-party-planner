@@ -110,7 +110,7 @@ export function Footer() {
             className="text-xs font-light"
             style={{ color: "rgba(255,255,255,0.2)" }}
           >
-            &copy; {new Date().getFullYear()} ELBOLD Ltd (trading as Elbold). Registered in England and Wales.
+            &copy; {new Date().getFullYear()} Elbold. United Kingdom.
           </p>
           <div
             className="flex items-center gap-5 text-xs font-light"

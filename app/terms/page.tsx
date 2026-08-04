@@ -16,7 +16,7 @@ export default function TermsOfService() {
         {
           title: "1. Agreement to Terms",
           content: [
-            "The Platform is operated by ELBOLD Ltd (trading as Elbold), registered in England and Wales.",
+            "The Platform is operated by Elbold, based in the United Kingdom.",
             "By accessing or using Elbold ('the Platform'), you agree to be bound by these Terms of Service. If you do not agree, you must not use the Platform. These terms apply to all users including customers, vendors, and visitors.",
           ],
         },

@@ -16,7 +16,7 @@ export default function VendorTerms() {
         {
           title: "1. Vendor Status",
           content: [
-            "The marketplace is operated by ELBOLD Ltd (trading as Elbold), registered in England and Wales.",
+            "The marketplace is operated by Elbold, based in the United Kingdom.",
             "By applying as a vendor on Elbold, you agree to these Vendor Terms in addition to our general Terms of Service.",
             "Vendor status is granted at our discretion following an application review. We may decline applications without giving reasons.",
             "You are an independent business, not an employee, agent, or contractor of Elbold.",

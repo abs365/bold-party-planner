@@ -16,7 +16,7 @@ export default function RefundPolicy() {
         {
           title: "1. Overview",
           content: [
-            "This Refund Policy is issued by ELBOLD Ltd (trading as Elbold), registered in England and Wales.",
+            "This Refund Policy is issued by Elbold, based in the United Kingdom.",
             "All bookings made through Elbold are covered by this Refund Policy. We aim to be fair to both customers and vendors while maintaining a trustworthy marketplace.",
           ],
         },

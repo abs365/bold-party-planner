@@ -16,8 +16,8 @@ export default function PrivacyPolicy() {
         {
           title: "1. Who We Are",
           content: [
-            "ELBOLD Ltd (trading as Elbold), registered in England and Wales, operates the event planning marketplace at elbold.com.",
-            "In this policy, 'Elbold', 'we', 'us', and 'our' refer to ELBOLD Ltd.",
+            "Elbold, based in the United Kingdom, operates the event planning marketplace at elbold.com.",
+            "In this policy, 'Elbold', 'we', 'us', and 'our' refer to Elbold.",
             "We act as a data controller under the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.",
           ],
         },
