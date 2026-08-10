@@ -36,9 +36,9 @@ const BENEFITS = [
   },
   {
     icon: CheckCircle2,
-    title: "Start free, upgrade when you're ready to grow.",
+    title: "0% commission for your first six months.",
     description:
-      "Creating your profile and receiving enquiries costs nothing. Elbold earns a fair, transparent 10% commission on marketplace bookings — charged only when you've been paid — so our incentives are aligned with yours. Paid plans unlock deeper business tools whenever your business is ready for them.",
+      "Creating your profile and receiving enquiries costs nothing, and as a Founding Vendor, Elbold takes 0% commission on your bookings for your introductory first six months. After that, our standard, transparent 10% commission applies — charged only when you've been paid — so our incentives stay aligned with yours. This introductory offer is separate from your permanent Founding Vendor status below, which never expires. Paid plans unlock deeper business tools whenever your business is ready for them.",
   },
   {
     icon: Star,
@@ -62,7 +62,7 @@ const BENEFITS = [
     icon: Award,
     title: "Founding Vendor status. Permanent.",
     description:
-      "Founding Vendor is not a time-limited promotion. It stays on your profile permanently, distinguishing you from the vendors who joined after the launch period closed.",
+      "Your Founding Vendor badge and priority placement are not a time-limited promotion — they stay on your profile permanently, distinguishing you from vendors who join after the launch period closes. (Your six-month 0% introductory commission is separate and time-boxed — see above — but your Founding Vendor status itself never expires.)",
   },
 ];
 
