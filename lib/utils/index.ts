@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getApplicableCommissionRate, type CommissionVendorInput } from "@/lib/finance/commission";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,7 +42,16 @@ export function generateInvoiceNumber(): string {
   return `INV-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
 }
 
-export function calculateCommission(amount: number, rate = 0.1): number {
+// Commission amount for a given vendor/booking. The RATE is decided in
+// exactly one place — lib/finance/commission#getApplicableCommissionRate —
+// which weighs is_founding_vendor + founding_commission_expires_at + the
+// booking date. This function only does the arithmetic.
+export function calculateCommission(
+  amount: number,
+  vendor: CommissionVendorInput | null | undefined,
+  bookingDate: string | Date = new Date()
+): number {
+  const { rate } = getApplicableCommissionRate(vendor, bookingDate);
   return Math.round(amount * rate * 100) / 100;
 }
 

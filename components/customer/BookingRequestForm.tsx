@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Calendar, MapPin, Users, FileText, Loader2, CheckCircle2, CreditCard } from "lucide-react";
 import { cn, formatCurrency, formatPackagePrice, formatDate, calculateCommission } from "@/lib/utils";
-import { VENDOR_CATEGORIES, COMMISSION_RATE, type Vendor, type VendorPackage, type VendorMedia } from "@/types";
+import { VENDOR_CATEGORIES, type Vendor, type VendorPackage, type VendorMedia } from "@/types";
 import toast from "react-hot-toast";
 
 interface BookingRequestFormProps {
@@ -37,7 +37,12 @@ export function BookingRequestForm({
   // price, never trusted from the client (REG-05).
   const totalAmount = pkg?.price ?? vendor.min_price ?? 0;
   const depositAmount = totalAmount * 0.3;
-  const commission = calculateCommission(totalAmount, COMMISSION_RATE);
+  const commission = calculateCommission(totalAmount, vendor);
+  // Display-only percentage derived from the actual computed commission
+  // (which already reflects any active founding-vendor waiver), rather than
+  // a separately hardcoded rate that could drift from what the server
+  // actually charges.
+  const commissionRatePercent = totalAmount > 0 ? Math.round((commission / totalAmount) * 100) : 0;
 
   async function handleSubmit() {
     if (!selectedEvent || !totalAmount) {
@@ -218,7 +223,7 @@ export function BookingRequestForm({
                   <span>{formatCurrency(depositAmount)}</span>
                 </div>
                 <div className="flex justify-between text-slate-400">
-                  <span>Platform fee ({Math.round(COMMISSION_RATE * 100)}%)</span>
+                  <span>Platform fee ({commissionRatePercent}%)</span>
                   <span>{formatCurrency(commission)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-white pt-2 border-t border-white/8">

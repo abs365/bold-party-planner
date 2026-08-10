@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { calculateCommission, generateInvoiceNumber } from "@/lib/utils";
-import { COMMISSION_RATE } from "@/types";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 
@@ -60,7 +59,7 @@ export async function POST(req: Request) {
   // Vendor must be approved
   const { data: vendor } = await db
     .from("vendors")
-    .select("id, user_id, business_name, status, min_price")
+    .select("id, user_id, business_name, status, min_price, is_founding_vendor, founding_commission_expires_at")
     .eq("id", vendor_id)
     .maybeSingle();
   if (!vendor || vendor.status !== "approved") {
@@ -105,7 +104,10 @@ export async function POST(req: Request) {
   }
 
   const depositAmount = Math.round(totalAmount * 0.3 * 100) / 100;
-  const commission = calculateCommission(totalAmount, COMMISSION_RATE);
+  // Rate is decided once, centrally, in getApplicableCommissionRate — this
+  // vendor's founding status + waiver expiry are weighed against today's
+  // date (a brand-new booking, so "now" is the correct booking date).
+  const commission = calculateCommission(totalAmount, vendor);
   const vendorPayout = Math.round((totalAmount - commission) * 100) / 100;
 
   const { data: booking, error: bookErr } = await db

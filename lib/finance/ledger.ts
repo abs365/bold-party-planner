@@ -4,6 +4,7 @@
 // This ensures webhook processing and business logic are never blocked by audit failures.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { getApplicableCommissionRate, type CommissionVendorInput } from "@/lib/finance/commission";
 
 export type LedgerPaymentStatus = "pending" | "paid" | "refunded" | "partially_refunded" | "chargeback" | "failed";
 export type LedgerPayoutStatus  = "not_due" | "scheduled" | "paid" | "failed";
@@ -37,7 +38,13 @@ export interface CreateLedgerEntryParams {
   customerId:              string;
   vendorId:                string;
   grossAmount:             number;
-  commissionRate?:         number;   // defaults to 0.10 (10%)
+  // Founding-vendor status + waiver expiry for the rate decision — see
+  // getApplicableCommissionRate(). Omit → standard rate, same as today.
+  vendor?:                 CommissionVendorInput;
+  // Date the rate is evaluated against (i.e. against founding_commission_expires_at).
+  // Defaults to now; callers with an existing booking should pass its
+  // created_at so a delayed/retried webhook still resolves the same rate.
+  bookingDate?:            string | Date;
   currency?:               string;
   stripePaymentIntentId?:  string | null;
   stripeCheckoutSessionId?: string | null;
@@ -50,7 +57,13 @@ export async function createLedgerEntry(
   params: CreateLedgerEntryParams
 ): Promise<string | null> {
   try {
-    const rate       = params.commissionRate ?? 0.10;
+    const { rate, reason } = getApplicableCommissionRate(params.vendor, params.bookingDate ?? new Date());
+    if (reason !== "standard") {
+      // Non-default outcome (founding waiver active or just expired) — worth
+      // a log line even though ledger writes are otherwise silent on success,
+      // since this is the one place real money is affected by the waiver.
+      console.log(`[ledger] commission rate for booking ${params.bookingId}: ${rate} (${reason})`);
+    }
     const commission = Number((params.grossAmount * rate).toFixed(2));
     const vendor     = Number((params.grossAmount * (1 - rate)).toFixed(2));
 

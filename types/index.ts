@@ -113,6 +113,11 @@ export interface Vendor {
   starting_price: number;
   verified: boolean;
   is_founding_vendor: boolean;
+  // Founding 100: separate, time-boxed 0% commission waiver — NOT the same
+  // thing as the permanent is_founding_vendor badge above. NULL = no active
+  // waiver (true for every vendor today; migration 074, not yet applied).
+  // See lib/finance/commission.ts getApplicableCommissionRate().
+  founding_commission_expires_at?: string | null;
   featured: boolean;
   years_experience: number | null;
   instagram_url: string | null;

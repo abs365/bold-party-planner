@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     // Fetch the booking
     const { data: booking } = await supabase
       .from("bookings")
-      .select("*, vendor:vendors(user_id, business_name), event:events(title)")
+      .select("*, vendor:vendors(user_id, business_name, is_founding_vendor, founding_commission_expires_at), event:events(title)")
       .eq("id", bookingId)
       .maybeSingle();
 
@@ -113,11 +113,23 @@ export async function POST(request: Request) {
     // Create (or upsert if this is a second payment on same booking) ledger entry.
     // Non-fatal: a ledger failure never retries Stripe or blocks the response.
     void (async () => {
+      const ledgerVendor = booking.vendor as Record<string, unknown> | null;
       const ledgerId = await createLedgerEntry(supabase, {
         bookingId,
         customerId,
         vendorId: booking.vendor_id,
         grossAmount: amount,
+        // Rate is resolved once, centrally — see getApplicableCommissionRate.
+        // bookingDate is when this booking was created, not "now", so a
+        // delayed/retried webhook still resolves the same rate the booking
+        // was created under.
+        vendor: ledgerVendor
+          ? {
+              is_founding_vendor: ledgerVendor.is_founding_vendor as boolean | null,
+              founding_commission_expires_at: ledgerVendor.founding_commission_expires_at as string | null,
+            }
+          : undefined,
+        bookingDate: booking.created_at,
         stripePaymentIntentId:   session.payment_intent as string ?? null,
         stripeCheckoutSessionId: session.id,
         currency: session.currency ?? "gbp",

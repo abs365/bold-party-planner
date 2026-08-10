@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test": "echo 'No unit tests configured yet — add Jest/Vitest tests here'",
+    "test": "vitest run",
     "clean:dev": "rimraf .next/dev",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
@@ -60,6 +60,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }
