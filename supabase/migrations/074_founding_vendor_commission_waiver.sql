@@ -1,4 +1,9 @@
--- Migration 074: time-boxed "Founding 100" commission waiver (design/prep only — NOT applied to production as part of this change)
+-- Migration 074: time-boxed "Founding 100" commission waiver
+-- Founder-approved for deployment 2026-08-10 (Commercial Execution Validation
+-- Programme). Adding this column has zero commercial effect on its own — see
+-- the NULL-default note below. Activating a real vendor's waiver is a
+-- separate, later, explicitly-authorised action (a single UPDATE on that
+-- vendor's row), not part of this migration.
 --
 -- The Founder has approved, in principle, two DIFFERENT things that must
 -- never be conflated:
