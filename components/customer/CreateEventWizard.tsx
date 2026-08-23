@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EVENT_TYPES, VENDOR_CATEGORIES, type EventType, type VendorCategory, type AIEventPlan } from "@/types";
+import { getStoredAttributionClient } from "@/lib/attribution/shared";
 import toast from "react-hot-toast";
 
 const EVENT_MOOD: Record<EventType, { gradient: string; emoji: string; headline: string; sub: string; icon: React.ElementType }> = {
@@ -236,6 +237,10 @@ export function CreateEventWizard({ userId }: { userId: string }) {
 
       // Auto-generate RFQ quotes for selected vendor needs
       let quotesCreated = 0;
+      // Master Growth OS Commercial Operating Upgrade, Wave 5 (FD-19 Option A) —
+      // same first-touch attribution as app/api/quotes/route.ts, read here
+      // directly since this insert bypasses that API route.
+      const attribution = getStoredAttributionClient();
       if (data.vendor_needs.length > 0) {
         const rfqResults = await Promise.allSettled(
           data.vendor_needs.map(async (category) => {
@@ -271,6 +276,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
                 guest_count: data.guest_count,
                 budget_min: Math.floor(data.budget * 0.15),
                 budget_max: Math.floor(data.budget * 0.35),
+                attribution,
               }));
               await supabase.from("quotes").insert(inserts);
               return anyVendors.length;
@@ -288,6 +294,7 @@ export function CreateEventWizard({ userId }: { userId: string }) {
               guest_count: data.guest_count,
               budget_min: Math.floor(data.budget * 0.15),
               budget_max: Math.floor(data.budget * 0.35),
+              attribution,
             }));
             await supabase.from("quotes").insert(inserts);
             return topVendors.length;

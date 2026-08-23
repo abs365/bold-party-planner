@@ -20,6 +20,9 @@ export function CookieConsent() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ choice, at: Date.now() }));
     } catch { /* ignore */ }
+    // Lets AttributionCapture react immediately if analytics consent was
+    // just granted, rather than only capturing on a future visit.
+    window.dispatchEvent(new Event("bp-consent-changed"));
     setShow(false);
   }
 

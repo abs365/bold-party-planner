@@ -5,6 +5,7 @@ import { scoreLead } from "@/lib/ai/scoring";
 import { createAuditLog, ipFromRequest } from "@/lib/audit";
 import { track } from "@/lib/analytics";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { readStoredAttribution } from "@/lib/attribution/read";
 
 const quoteSchema = z.object({
   vendor_id:   z.string().uuid(),
@@ -116,6 +117,11 @@ export async function POST(req: Request) {
     event_date:  rest.event_date  ?? null,
   });
 
+  // Master Growth OS Commercial Operating Upgrade, Wave 5 (FD-19 Option A) —
+  // first-touch marketing attribution, if the visitor consented and one was
+  // captured. Additive only: null when no attribution was ever stored.
+  const attribution = await readStoredAttribution();
+
   const { data, error } = await supabase
     .from("quotes")
     .insert({
@@ -125,6 +131,7 @@ export async function POST(req: Request) {
       lead_score,
       status: "pending",
       routed_at: new Date().toISOString(),
+      attribution,
     })
     .select()
     .single();
@@ -145,7 +152,7 @@ export async function POST(req: Request) {
     ipAddress: ipFromRequest(req),
   });
   void track({ event: "quote.requested", userId: user.id,
-    properties: { vendor_id, event_id: rest.event_id ?? null, lead_score } });
+    properties: { vendor_id, event_id: rest.event_id ?? null, lead_score, attribution } });
 
   // In-app notification — vendor
   void supabase.rpc("notify_user", {
